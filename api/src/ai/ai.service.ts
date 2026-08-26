@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ContextBuilder } from './context.builder';
+import { AiContext, ContextBuilder } from './context.builder';
 import OpenAI from 'openai';
 
 @Injectable()
@@ -75,7 +75,7 @@ export class AiService {
 
       // Validation: Prevent Hallucination
       if (!resultJson.grounding || !resultJson.grounding.sources || resultJson.grounding.sources.length === 0) {
-         throw new Error('AI response lacked required grounding sources.');
+        throw new Error('AI response lacked required grounding sources.');
       }
 
       return {

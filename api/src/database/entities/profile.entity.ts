@@ -4,47 +4,47 @@ import { User } from './user.entity';
 @Entity('user_profiles')
 export class UserProfile {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @ManyToOne(() => User, user => user.profiles, { onDelete: 'CASCADE' })
-  user: User;
+  user!: User;
 
   @Column({ type: 'varchar', length: 255 })
-  name: string;
+  name!: string;
 
   // Birth Details
   @Column({ type: 'date' })
-  dob: Date;
+  dob!: Date;
 
   @Column({ type: 'time' })
-  birthTime: string;
+  birthTime!: string;
 
   @Column({ type: 'float' })
-  birthLatitude: number;
+  birthLatitude!: number;
 
   @Column({ type: 'float' })
-  birthLongitude: number;
+  birthLongitude!: number;
 
   @Column({ type: 'varchar', length: 100 })
-  birthTimeZone: string;
+  birthTimeZone!: string;
 
   // Current Location (for location-sensitive calculations)
   @Column({ type: 'float', nullable: true })
-  currentLatitude: number;
+  currentLatitude!: number;
 
   @Column({ type: 'float', nullable: true })
-  currentLongitude: number;
+  currentLongitude!: number;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  currentTimeZone: string;
+  currentTimeZone!: string;
 
   // User Focus (e.g., 'Career', 'Love', 'Money')
   @Column({ type: 'jsonb', default: {} })
-  focusWeights: Record<string, number>;
+  focusWeights!: Record<string, number>;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

@@ -4,20 +4,20 @@ import { UserProfile } from './profile.entity';
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'varchar', length: 255 })
-  email: string;
+  email!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  firebaseUid: string;
+  firebaseUid!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @OneToMany(() => UserProfile, profile => profile.user)
-  profiles: UserProfile[];
+  profiles!: UserProfile[];
 }

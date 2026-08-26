@@ -27,7 +27,7 @@ export class AstrologySyncProcessor extends WorkerHost {
         this.logger.log(`Successfully synced Planetary Positions for ${latitude}, ${longitude}`);
       }
     } catch (error) {
-      this.logger.error(`Failed to process job ${job.name}: ${error.message}`);
+      this.logger.error(`Failed to process job ${job.name}: ${(error as Error).message}`);
       throw error; // Let BullMQ retry
     }
   }

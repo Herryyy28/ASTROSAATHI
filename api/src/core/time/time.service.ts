@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { format, formatInTimeZone, utcToZonedTime } from 'date-fns-tz';
+import { format, formatInTimeZone, toZonedTime } from 'date-fns-tz';
 
 @Injectable()
 export class TimeService {
@@ -15,7 +15,7 @@ export class TimeService {
    */
   getCurrentLocalTime(timeZone: string): Date {
     const utcDate = this.getCurrentUtcTime();
-    return utcToZonedTime(utcDate, timeZone);
+    return toZonedTime(utcDate, timeZone);
   }
 
   /**

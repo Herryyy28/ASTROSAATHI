@@ -12,7 +12,7 @@ export class AstrologySyncService {
   constructor(
     @Inject('ASTROLOGY_PROVIDER') private readonly provider: AstrologyDataProvider,
     private configService: ConfigService,
-  ) {}
+  ) { }
 
   private getCacheKey(endpoint: string, location: LocationData, date: Date): string {
     const dStr = date.toISOString().split('T')[0];
@@ -21,7 +21,7 @@ export class AstrologySyncService {
 
   async syncPanchang(date: Date, location: LocationData): Promise<{ data: PanchangResponse; meta: ProviderMetadata }> {
     const cacheKey = this.getCacheKey('panchang', location, date);
-    
+
     // Check if we have valid cached data
     const cached = this.cache.get(cacheKey);
     if (cached) {
@@ -39,7 +39,7 @@ export class AstrologySyncService {
       this.cache.set(cacheKey, result);
       return result;
     } catch (error) {
-      this.logger.error(`Provider failed to get Panchang: ${error.message}`);
+      this.logger.error(`Provider failed to get Panchang: ${(error as Error).message}`);
       // Fallback to cache even if expired if we have no other choice
       if (cached) {
         this.logger.warn(`Serving stale Panchang from cache due to provider failure.`);
@@ -51,7 +51,7 @@ export class AstrologySyncService {
 
   async syncPlanetaryPositions(date: Date, location: LocationData): Promise<{ data: Record<string, PlanetaryPosition>; meta: ProviderMetadata }> {
     const cacheKey = this.getCacheKey('planets', location, date);
-    
+
     const cached = this.cache.get(cacheKey);
     if (cached) {
       const now = new Date();
@@ -65,7 +65,7 @@ export class AstrologySyncService {
       this.cache.set(cacheKey, result);
       return result;
     } catch (error) {
-      this.logger.error(`Provider failed to get Planets: ${error.message}`);
+      this.logger.error(`Provider failed to get Planets: ${(error as Error).message}`);
       if (cached) return cached;
       throw new Error('Planetary data unavailable.');
     }
@@ -77,7 +77,7 @@ export class AstrologySyncService {
       this.syncPanchang(date, location),
       this.syncPlanetaryPositions(date, location)
     ]);
-    
+
     return {
       panchang: panchang.data,
       planets: planets.data

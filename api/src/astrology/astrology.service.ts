@@ -154,7 +154,7 @@ export class AstrologyService {
     }
 
     const apiEndpoint = timeframe === 'daily' ? `sun_sign_prediction/daily/${sign.toLowerCase()}` : null;
-    let apiData = null;
+    let apiData: any = null;
     
     if (apiEndpoint) {
        // Note: the astrology API horoscope endpoints are usually GET, but we use POST fetchFromApi for simplicity
