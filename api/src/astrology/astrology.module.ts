@@ -12,6 +12,8 @@ import { MuhuratEngine } from './engines/muhurat.engine';
 import { UsersModule } from '../users/users.module';
 import { CoreModule } from '../core/core.module';
 
+import { MatchingService } from './matching.service';
+
 @Module({
   imports: [
     BullModule.registerQueue({
@@ -23,6 +25,7 @@ import { CoreModule } from '../core/core.module';
   providers: [
     AstrologyService,
     AstrologySyncService,
+    MatchingService,
     AstrologyApiProvider,
     MockAstrologyProvider,
     AstrologySyncProcessor,
@@ -35,6 +38,6 @@ import { CoreModule } from '../core/core.module';
     },
   ],
   controllers: [AstrologyController],
-  exports: [AstrologyService, AstrologySyncService, GamePlanEngine, MuhuratEngine],
+  exports: [AstrologyService, AstrologySyncService, MatchingService, GamePlanEngine, MuhuratEngine],
 })
 export class AstrologyModule { }

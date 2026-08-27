@@ -8,94 +8,119 @@ import 'astrology_engine.dart';
 class MockAstrologyEngine implements AstrologyEngine {
   @override
   Future<GamePlanData> calculateDailyGamePlan(String date, String location) async {
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future.delayed(const Duration(milliseconds: 400));
     
     return GamePlanData(
       date: date,
-      dayScore: 8.4,
+      dayScore: 8.7,
       doList: [
-        'Have important conversations today',
-        'Start planned work — energy is aligned',
-        'Focus on creative projects',
+        'Initiate key career discussions between 11:15 AM and 1:20 PM',
+        'Chant Gayatri Mantra or meditate at sunrise for mental clarity',
+        'Take leadership on strategic projects while Jupiter is strong',
       ],
       beCarefulList: [
-        'Avoid rushed decisions before 2 PM',
-        'Double-check financial details',
+        'Avoid making hasty financial commitments before 2 PM',
+        'Double-check contract terms and legal wording',
       ],
       avoidList: [
-        'Unnecessary arguments or confrontations',
-        'Starting new ventures after sunset',
+        'Avoid starting new long-term ventures during Rahu Kaal',
+        'Unnecessary arguments or emotional confrontations',
       ],
-      bestWindow: TimeWindow(start: '11:15 AM', end: '1:20 PM'),
+      bestWindow: TimeWindow(start: '11:15 AM', end: '01:20 PM'),
       categories: {
-        'Career': 8.8,
-        'Love': 7.4,
-        'Money': 8.1,
+        'Career': 8.9,
+        'Love': 7.8,
+        'Money': 8.5,
       },
     );
   }
 
   @override
   Future<PanchangData> calculatePanchang(String date, String location) async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 300));
     return PanchangData(
       tithi: 'Shukla Paksha Dashami',
-      vara: 'Wednesday',
-      nakshatra: 'Rohini',
-      yoga: 'Shiva',
+      vara: 'Thursday',
+      nakshatra: 'Rohini (Moon Ruled)',
+      yoga: 'Siddhi Yoga',
       karana: 'Taitila',
       sunrise: '06:12 AM',
       sunset: '06:45 PM',
-      rahuKaal: TimeWindow(start: '12:00 PM', end: '01:30 PM'),
+      rahuKaal: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
     );
   }
 
   @override
   Future<MuhuratResult> calculateMuhurat(MuhuratInput input) async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 300));
     return MuhuratResult(
       category: input.category,
       bestWindow: TimeWindow(start: '11:15 AM', end: '01:20 PM'),
-      strength: 'Excellent',
-      bestFor: 'Important professional discussions and decisions',
-      avoidWindow: TimeWindow(start: '02:10 PM', end: '03:25 PM'),
+      strength: 'Abhijit Muhurat (Highest Strength)',
+      bestFor: 'Crucial professional decisions, investments, and contracts',
+      avoidWindow: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
     );
   }
 
   @override
   Future<AstroBabaResponse> askAstroBaba(String question, String date, String location) async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 800));
 
+    final q = question.toLowerCase();
     String answer;
     List<String> actions;
+    List<String> warnings;
 
-    if (question.toLowerCase().contains('job') || question.toLowerCase().contains('career')) {
-      answer = 'The stars show a strong career alignment today. With your energy score at 8.4 and career aspect at 8.8, this is an excellent time to discuss promotions or new opportunities. The best window is between 11:15 AM and 1:20 PM.';
-      actions = ['Schedule important meetings during the best window', 'Update your resume or portfolio', 'Network with influential colleagues'];
-    } else if (question.toLowerCase().contains('meeting') || question.toLowerCase().contains('today')) {
-      answer = 'Today\'s planetary alignment favors productive discussions. Mercury\'s position strengthens communication — your words will carry more weight than usual. Use the morning hours wisely.';
-      actions = ['Prepare talking points before 11 AM', 'Listen more than you speak', 'Follow up by end of day'];
+    if (q.contains('job') || q.contains('career') || q.contains('promotion')) {
+      answer = '✦ Vedic Bhavishyavani Analysis: Jupiter (Guru) is transiting favorably over your 10th Karma house, creating a strong Mahabhagya alignment. This signifies high probability for career expansion and recognition. Your auspicious window today is between 11:15 AM and 1:20 PM.';
+      actions = [
+        'Schedule key promotional meetings during Abhijit Muhurat (11:15 AM - 1:20 PM)',
+        'Wear a Yellow Sapphire or gold accent on Thursday to boost Jupiter energy',
+        'Offer water to the rising Sun while chanting Surya Mantra',
+      ];
+      warnings = ['Avoid signing major binding contracts during Rahu Kaal (1:30 PM - 3:00 PM)'];
+    } else if (q.contains('love') || q.contains('marriage') || q.contains('partner')) {
+      answer = '✦ Vedic Relationship Analysis: Venus (Shukra) occupies your 7th house of partnerships alongside Moon in Rohini Nakshatra. This alignment fosters magnetic attraction, emotional warmth, and relationship resolution.';
+      actions = [
+        'Express gratitude to your partner during sunset',
+        'Perform Shukra Beej Mantra (Om Dram Dreem Drom Sah Shukraya Namah)',
+        'Wear white or light pastel attire on Fridays',
+      ];
+      warnings = ['Avoid heated debates when Moon transits 6th/8th house axis'];
+    } else if (q.contains('gemstone') || q.contains('remedy') || q.contains('shani')) {
+      answer = '✦ Vedic Remedy Insight: To balance planetary afflictions and strengthen weak grahas, focus on Mahadasha remedies. Yellow Sapphire (Pukhraj) boosts Jupiter, while Hanuman Chalisa chanting neutralizes Saturn (Shani) transits.';
+      actions = [
+        'Chant Hanuman Chalisa 7 times on Saturday evenings',
+        'Donate yellow sweets or books to deserving students',
+        'Use 108-bead Japa Counter for daily mantra discipline',
+      ];
+      warnings = ['Always test gemstones for 3 days under pillow before wearing permanently'];
     } else {
-      answer = 'Based on today\'s celestial map, the overall energy is highly favorable at 8.4/10. Rohini nakshatra brings stability and growth. Focus on what matters most to you and trust your intuition during the golden window of 11:15 AM to 1:20 PM.';
-      actions = ['Meditate for 5 minutes during sunrise', 'Journal your intentions for the day', 'Practice gratitude before bed'];
+      answer = '✦ Vedic Celestial Map Reading: Today\'s cosmic blueprint shows Siddhi Yoga active under Rohini Nakshatra. Your overall celestial energy score stands strong at 8.7/10, making this an empowered phase for manifestation and focused execution.';
+      actions = [
+        'Capitalize on your Golden Window between 11:15 AM and 1:20 PM',
+        'Practice 5 minutes of pranayama breathing at dawn',
+        'Keep a grain of turmeric or yellow handkerchief for luck',
+      ];
+      warnings = ['Steer clear of impulsive spending during evening hours'];
     }
 
     return AstroBabaResponse(
       answer: answer,
-      confidence: 'high',
+      confidence: '94% Authentic Astrological Match',
       actions: actions,
-      warnings: ['Avoid major decisions during Rahu Kaal (12:00 PM – 1:30 PM)'],
+      warnings: warnings,
     );
   }
 
   @override
   Future<HoroscopeData> getHoroscope(String sign, String timeframe) async {
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future.delayed(const Duration(milliseconds: 400));
 
     final readings = {
-      'daily': 'Today brings a powerful surge of energy for $sign. The moon\'s transit emphasizes your career sector, pushing you to take bold steps. Trust your instincts — the stars are aligned in your favor for important conversations and decisions.',
-      'weekly': 'This week, $sign will find balance in personal relationships. A planetary shift on Wednesday clears up misunderstandings. Financial prospects look promising towards the weekend — stay open to unexpected opportunities.',
-      'monthly': 'This month highlights financial growth and stability for $sign. Keep an eye out for long-term investments around the 15th. Romantic energy peaks mid-month, making it ideal for deepening connections or meeting someone special.',
+      'daily': '✦ Today\'s Real Bhavishyavani for $sign: The Moon\'s transit through friendly constellation Rohini provides high emotional clarity. Jupiter\'s aspect on your 10th house enhances career authority. Best window for important actions is 11:15 AM to 1:20 PM.',
+      'weekly': '✦ Weekly Planetary Outlook for $sign: Sun\'s alignment clears financial bottlenecks mid-week. Relationship harmony reaches a peak on Friday as Venus forms a beneficial Trine. Stay consistent with your goals.',
+      'monthly': '✦ Monthly Cosmic Trends for $sign: Mars in 10th House drives unprecedented career acceleration. Ensure financial prudence around the 18th during Saturn\'s retrograde shadow phase.',
     };
 
     return HoroscopeData(
@@ -103,7 +128,7 @@ class MockAstrologyEngine implements AstrologyEngine {
       timeframe: timeframe,
       reading: readings[timeframe] ?? readings['daily']!,
       luckyNumber: 7,
-      luckyColor: 'Gold',
+      luckyColor: 'Golden Yellow',
     );
   }
 }

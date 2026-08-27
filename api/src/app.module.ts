@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { NotificationsModule } from './notifications/notifications.module';
 
+import { ProfilesModule } from './profiles/profiles.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,6 +33,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     CoreModule,
     AuthModule,
     UsersModule,
+    ProfilesModule,
     NotificationsModule,
     AstrologyModule, 
     AiModule

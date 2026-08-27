@@ -5,14 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/engine/models/ai_data.dart';
 import '../providers/astro_baba_provider.dart';
 import '../../../../core/utils/responsive.dart';
-
 import '../../../../core/widgets/responsive_layout.dart';
+import '../widgets/cosmic_orb_painter.dart';
 
 class AstroBabaScreen extends ConsumerStatefulWidget {
   const AstroBabaScreen({super.key});
@@ -25,6 +24,14 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
+  bool _isListeningVoice = false;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   void _sendMessage(String text) async {
     if (text.trim().isEmpty) return;
@@ -47,6 +54,20 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
     });
   }
 
+  void _toggleVoiceInput() {
+    setState(() {
+      _isListeningVoice = !_isListeningVoice;
+    });
+    if (_isListeningVoice) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Listening... Ask Astro Baba anything!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final messages = ref.watch(astroBabaProvider);
@@ -60,7 +81,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
           child: ResponsiveLayout(
             child: Column(
               children: [
-                // ── App Bar ─────────────────────────────────────────
+                // ── Dynamic Glowing Orb Header ───────────────────────
                 _buildAppBar().fadeSlideUp(),
 
                 // ── Messages ────────────────────────────────────────
@@ -79,10 +100,10 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                   ),
                 ),
 
-                // ── Suggested Questions ─────────────────────────────
+                // ── Contextual Smart Prompt Chips ────────────────────
                 _buildSuggestedQuestions(),
 
-                // ── Input Area ──────────────────────────────────────
+                // ── Input Area with Mic & Send ──────────────────────
                 _buildInputArea(),
               ],
             ),
@@ -94,37 +115,26 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
 
   Widget _buildAppBar() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       child: Row(
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: AppColors.purpleGradient,
-              boxShadow: [
-                BoxShadow(color: AppColors.purpleGlow, blurRadius: 12),
-              ],
-            ),
-            child: const Icon(Icons.auto_awesome, color: Colors.white, size: 20),
-          ),
-          const SizedBox(width: 12),
+          CosmicOrbWidget(isSpeaking: _isLoading || _isListeningVoice, size: 48),
+          const SizedBox(width: 14),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Astro Baba',
+                'AI Astro Baba',
                 style: GoogleFonts.outfit(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: AppColors.textPrimaryDark,
                 ),
               ),
-              const Text(
-                'Your personal astrologer',
-                style: TextStyle(
-                  color: AppColors.textTertiaryDark,
+              Text(
+                _isLoading ? 'Analyzing transits & Dasha...' : 'Connected to Vedic Engine',
+                style: const TextStyle(
+                  color: AppColors.textSecondaryDark,
                   fontSize: 12,
                 ),
               ),
@@ -132,17 +142,19 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
           ),
           const Spacer(),
           Container(
-            width: 8,
-            height: 8,
-            decoration: const BoxDecoration(
-              color: AppColors.success,
-              shape: BoxShape.circle,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.success.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.success.withOpacity(0.4)),
             ),
-          ),
-          const SizedBox(width: 6),
-          const Text(
-            'Online',
-            style: TextStyle(color: AppColors.success, fontSize: 12, fontWeight: FontWeight.w500),
+            child: const Row(
+              children: [
+                Icon(Icons.circle, color: AppColors.success, size: 8),
+                SizedBox(width: 6),
+                Text('Active', style: TextStyle(color: AppColors.success, fontSize: 11, fontWeight: FontWeight.bold)),
+              ],
+            ),
           ),
         ],
       ),
@@ -158,28 +170,19 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
         margin: const EdgeInsets.only(bottom: 14),
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width *
-              context.responsive<double>(mobile: 0.78, tablet: 0.65, desktop: 0.55),
+              context.responsive<double>(mobile: 0.82, tablet: 0.65, desktop: 0.55),
         ),
         child: Column(
           crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            // Avatar + Bubble
             Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 if (!isUser)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8, bottom: 4),
-                    child: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: AppColors.purpleGradient,
-                      ),
-                      child: const Icon(Icons.auto_awesome, color: Colors.white, size: 14),
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.only(right: 8, bottom: 4),
+                    child: CosmicOrbWidget(size: 28),
                   ),
                 Flexible(
                   child: ClipRRect(
@@ -219,19 +222,16 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                             ),
                             if (message.aiData != null && message.aiData!.actions.isNotEmpty) ...[
                               const SizedBox(height: 14),
-                              Container(
-                                height: 0.5,
-                                color: AppColors.glassBorder,
-                              ),
+                              Container(height: 0.5, color: AppColors.glassBorder),
                               const SizedBox(height: 12),
-                              Row(
+                              const Row(
                                 children: [
-                                  Icon(Icons.lightbulb_outline_rounded, color: AppColors.success, size: 14),
-                                  const SizedBox(width: 6),
-                                  const Text(
-                                    'Suggested Actions',
+                                  Icon(Icons.auto_awesome_rounded, color: AppColors.primary, size: 14),
+                                  SizedBox(width: 6),
+                                  Text(
+                                    'Recommended Vedic Actions',
                                     style: TextStyle(
-                                      color: AppColors.success,
+                                      color: AppColors.primary,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
                                     ),
@@ -244,7 +244,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text('→ ', style: TextStyle(color: AppColors.textSecondaryDark, fontSize: 14)),
+                                    const Text('✦ ', style: TextStyle(color: AppColors.primary, fontSize: 12)),
                                     Expanded(
                                       child: Text(
                                         a,
@@ -259,6 +259,28 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                                 ),
                               )),
                             ],
+                            if (!isUser) ...[
+                              const SizedBox(height: 12),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withOpacity(0.12),
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 0.5),
+                                ),
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.analytics_outlined, color: AppColors.primary, size: 12),
+                                    SizedBox(width: 4),
+                                    Text(
+                                      'Analyzed: Kundli • Dasha • Transits • Panchang',
+                                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),
@@ -270,15 +292,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
           ],
         ),
       ),
-    )
-        .animate()
-        .fadeIn(duration: 300.ms)
-        .slideX(
-          begin: isUser ? 0.1 : -0.1,
-          end: 0,
-          duration: 300.ms,
-          curve: Curves.easeOutCubic,
-        );
+    ).animate().fadeIn(duration: 300.ms).slideX(begin: isUser ? 0.1 : -0.1);
   }
 
   Widget _buildTypingIndicator() {
@@ -287,16 +301,8 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 28,
-            height: 28,
-            margin: const EdgeInsets.only(right: 8),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: AppColors.purpleGradient,
-            ),
-            child: const Icon(Icons.auto_awesome, color: Colors.white, size: 14),
-          ),
+          const CosmicOrbWidget(size: 28, isSpeaking: true),
+          const SizedBox(width: 8),
           GlassCard(
             padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
             borderRadius: 18,
@@ -307,19 +313,15 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                   width: 8,
                   height: 8,
                   margin: const EdgeInsets.symmetric(horizontal: 3),
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primary,
                     shape: BoxShape.circle,
                   ),
-                )
-                    .animate(onPlay: (c) => c.repeat(reverse: true))
-                    .fadeIn(duration: 400.ms, delay: Duration(milliseconds: index * 150))
-                    .scale(
+                ).animate(onPlay: (c) => c.repeat(reverse: true)).scale(
                       begin: const Offset(0.6, 0.6),
                       end: const Offset(1.0, 1.0),
                       duration: 400.ms,
                       delay: Duration(milliseconds: index * 150),
-                      curve: Curves.easeInOut,
                     );
               }),
             ),
@@ -330,39 +332,44 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
   }
 
   Widget _buildSuggestedQuestions() {
-    if (ref.read(astroBabaProvider).length > 1) return const SizedBox.shrink();
+    if (ref.read(astroBabaProvider).length > 2) return const SizedBox.shrink();
+
+    final categoryPrompts = [
+      {'chip': '💼 Career', 'query': 'What is my career outlook & 10th House alignment this month?'},
+      {'chip': '❤️ Love', 'query': 'How is my relationship harmony & Venus transit today?'},
+      {'chip': '💰 Money', 'query': 'What are my financial trends under current Jupiter Mahadasha?'},
+      {'chip': '🧠 Mindset', 'query': 'How can I balance mental peace under today\'s Moon transit?'},
+      {'chip': '🚀 Business', 'query': 'Is today favorable for new business deals or negotiations?'},
+      {'chip': '💍 Marriage', 'query': 'Explain my 7th house partnership aspect & Gun Milan factors.'},
+    ];
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
       physics: const BouncingScrollPhysics(),
       child: Row(
-        children: [
-          'Should I change my job?',
-          'Is today good for a meeting?',
-          'Why does today feel difficult?',
-        ].asMap().entries.map((entry) {
+        children: categoryPrompts.map((item) {
           return Padding(
             padding: const EdgeInsets.only(right: 8),
             child: GestureDetector(
-              onTap: () => _sendMessage(entry.value),
+              onTap: () => _sendMessage(item['query']!),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
-                  color: AppColors.glassSurface,
+                  color: AppColors.primary.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.secondary.withOpacity(0.4), width: 0.5),
+                  border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
                 ),
                 child: Text(
-                  entry.value,
-                  style: GoogleFonts.inter(
-                    color: AppColors.textPrimaryDark,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                  item['chip']!,
+                  style: const TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
                   ),
                 ),
               ),
-            ).fadeSlideUp(delay: Duration(milliseconds: entry.key * 100)),
+            ),
           );
         }).toList(),
       ),
@@ -377,37 +384,52 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
           decoration: BoxDecoration(
             color: AppColors.surfaceDark.withOpacity(0.85),
-            border: const Border(
-              top: BorderSide(color: AppColors.glassBorder, width: 0.5),
-            ),
+            border: const Border(top: BorderSide(color: AppColors.glassBorder, width: 0.5)),
           ),
           child: SafeArea(
             top: false,
             child: Row(
               children: [
+                GestureDetector(
+                  onTap: _toggleVoiceInput,
+                  child: Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: _isListeningVoice ? AppColors.error.withOpacity(0.2) : AppColors.glassSurface,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: _isListeningVoice ? AppColors.error : AppColors.glassBorder,
+                      ),
+                    ),
+                    child: Icon(
+                      _isListeningVoice ? Icons.mic_rounded : Icons.mic_none_rounded,
+                      color: _isListeningVoice ? AppColors.error : AppColors.primary,
+                      size: 22,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    style: GoogleFonts.inter(
-                      color: AppColors.textPrimaryDark,
-                      fontSize: 15,
-                    ),
+                    style: GoogleFonts.inter(color: AppColors.textPrimaryDark, fontSize: 15),
                     decoration: InputDecoration(
                       hintText: 'Ask Astro Baba...',
-                      hintStyle: TextStyle(color: AppColors.textTertiaryDark),
+                      hintStyle: const TextStyle(color: AppColors.textTertiaryDark),
                       filled: true,
                       fillColor: AppColors.glassSurface,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide(color: AppColors.glassBorder, width: 0.5),
+                        borderSide: const BorderSide(color: AppColors.glassBorder, width: 0.5),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide(color: AppColors.glassBorder, width: 0.5),
+                        borderSide: const BorderSide(color: AppColors.glassBorder, width: 0.5),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(color: AppColors.secondary, width: 1),
+                        borderSide: const BorderSide(color: AppColors.primary, width: 1),
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                     ),
@@ -418,14 +440,11 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                 GestureDetector(
                   onTap: () => _sendMessage(_controller.text),
                   child: Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
+                    width: 44,
+                    height: 44,
+                    decoration: const BoxDecoration(
                       gradient: AppColors.goldGradient,
                       shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(color: AppColors.goldGlow, blurRadius: 12, spreadRadius: -4),
-                      ],
                     ),
                     child: const Icon(Icons.send_rounded, color: Colors.black, size: 20),
                   ),

@@ -9,6 +9,9 @@ import '../../../horoscope/presentation/screens/horoscope_screen.dart';
 import '../../../panchang/presentation/screens/panchang_screen.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
+import '../../../matching/presentation/screens/matching_screen.dart';
+import '../../../remedies/presentation/screens/remedy_hub_screen.dart';
+import '../../../profile/presentation/screens/my_kundlis_screen.dart';
 
 /// Provider for managing main navigation tab index globally
 final mainNavIndexProvider = StateProvider<int>((ref) => 0);
@@ -25,30 +28,32 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     HomeScreen(),
     HoroscopeScreen(),
     PanchangScreen(),
-    MuhuratScreen(),
+    MatchingScreen(),
+    RemedyHubScreen(),
     AstroBabaScreen(),
+    MyKundlisScreen(),
   ];
 
   static const List<_NavItem> _navItems = [
     _NavItem(icon: Icons.home_rounded, activeIcon: Icons.home_rounded, label: 'Game Plan'),
     _NavItem(icon: Icons.auto_awesome_mosaic_outlined, activeIcon: Icons.auto_awesome_mosaic_rounded, label: 'Horoscope'),
     _NavItem(icon: Icons.wb_sunny_outlined, activeIcon: Icons.wb_sunny_rounded, label: 'Panchang'),
-    _NavItem(icon: Icons.access_time_rounded, activeIcon: Icons.access_time_filled_rounded, label: 'Muhurat'),
+    _NavItem(icon: Icons.favorite_border_rounded, activeIcon: Icons.favorite_rounded, label: 'Matching'),
+    _NavItem(icon: Icons.auto_fix_high_rounded, activeIcon: Icons.auto_fix_high_rounded, label: 'Remedies'),
     _NavItem(icon: Icons.auto_awesome_outlined, activeIcon: Icons.auto_awesome, label: 'Astro Baba'),
+    _NavItem(icon: Icons.account_circle_outlined, activeIcon: Icons.account_circle_rounded, label: 'My Kundlis'),
   ];
 
   @override
   Widget build(BuildContext context) {
     final currentIndex = ref.watch(mainNavIndexProvider);
 
-    // Use side nav on tablet/desktop, bottom nav on mobile
     if (!context.isMobile) {
       return _buildWideLayout(context, currentIndex);
     }
     return _buildMobileLayout(context, currentIndex);
   }
 
-  // ── Mobile Layout: bottom nav bar ────────────────────────────────
   Widget _buildMobileLayout(BuildContext context, int currentIndex) {
     return Scaffold(
       body: AnimatedSwitcher(
@@ -62,7 +67,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  // ── Tablet/Desktop Layout: side rail ─────────────────────────────
   Widget _buildWideLayout(BuildContext context, int currentIndex) {
     final isDesktop = context.isDesktop;
     final railWidth = isDesktop ? 220.0 : 80.0;
@@ -72,10 +76,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         decoration: const BoxDecoration(gradient: AppColors.cosmicRadialGradient),
         child: Row(
           children: [
-            // ── Side Navigation Rail ──────────────────────────────
             _buildSideRail(context, isDesktop, railWidth, currentIndex),
-
-            // ── Main Content ──────────────────────────────────────
             Expanded(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
@@ -98,15 +99,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           width: width,
           decoration: const BoxDecoration(
             color: Color(0x1A0F1219),
-            border: Border(
-              right: BorderSide(color: AppColors.glassBorder, width: 0.5),
-            ),
+            border: Border(right: BorderSide(color: AppColors.glassBorder, width: 0.5)),
           ),
           child: SafeArea(
             child: Column(
               children: [
                 const SizedBox(height: 24),
-                // ── Logo / App name ──────────────────────────────
                 if (isDesktop) ...[
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -139,10 +137,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 ] else ...[
                   const SizedBox(height: 8),
                 ],
-                // ── Nav Items ────────────────────────────────────
-                ...List.generate(_navItems.length, (index) {
-                  return _buildSideNavItem(index, isDesktop, currentIndex);
-                }),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _navItems.length,
+                    itemBuilder: (context, index) {
+                      return _buildSideNavItem(index, isDesktop, currentIndex);
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -206,7 +208,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  // ── Bottom Nav (mobile) ───────────────────────────────────────────
   Widget _buildBottomNav(BuildContext context, int currentIndex) {
     return Container(
       decoration: BoxDecoration(
@@ -221,7 +222,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           child: SafeArea(
             top: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(_navItems.length, (index) {
@@ -249,21 +250,21 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOutCubic,
-              width: isActive ? 24 : 0,
+              width: isActive ? 18 : 0,
               height: 3,
-              margin: const EdgeInsets.only(bottom: 6),
+              margin: const EdgeInsets.only(bottom: 4),
               decoration: BoxDecoration(
                 color: isActive ? AppColors.primary : Colors.transparent,
                 borderRadius: BorderRadius.circular(2),
                 boxShadow: isActive
-                    ? [BoxShadow(color: AppColors.goldGlow, blurRadius: 8)]
+                    ? [const BoxShadow(color: AppColors.goldGlow, blurRadius: 8)]
                     : null,
               ),
             ),
@@ -274,14 +275,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               child: Icon(
                 isActive ? item.activeIcon : item.icon,
                 color: isActive ? AppColors.primary : AppColors.textTertiaryDark,
-                size: 24,
+                size: 20,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 3),
             Text(
               item.label,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 8.5,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
                 color: isActive ? AppColors.primary : AppColors.textTertiaryDark,
               ),

@@ -16,6 +16,7 @@ import '../../../../core/widgets/error_state_widget.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/engine/models/game_plan_data.dart';
+import '../../../../core/widgets/why_this_bottom_sheet.dart';
 import 'main_screen.dart';
 
 /// Provider that loads the user's name from SharedPreferences.
@@ -76,7 +77,7 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(height: 32),
 
                 // ── Energy Score Card ─────────────────────────────
-                _buildEnergyCard(plan).fadeSlideUp(delay: 100.ms),
+                _buildEnergyCard(context, plan).fadeSlideUp(delay: 100.ms),
                 const SizedBox(height: 28),
 
                 // ── Do / Careful / Avoid ──────────────────────────
@@ -209,7 +210,7 @@ class HomeScreen extends ConsumerWidget {
     return '${days[now.weekday - 1]} · ${now.day} ${months[now.month - 1]}';
   }
 
-  Widget _buildEnergyCard(GamePlanData plan) {
+  Widget _buildEnergyCard(BuildContext context, GamePlanData plan) {
     return GlassCard(
       padding: const EdgeInsets.all(28),
       glowColor: AppColors.goldGlow,
@@ -279,6 +280,26 @@ class HomeScreen extends ConsumerWidget {
               fontSize: 16,
               color: AppColors.textSecondaryDark,
             ),
+          ),
+          const SizedBox(height: 12),
+          OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: AppColors.primary, width: 0.8),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            ),
+            onPressed: () {
+              WhyThisBottomSheet.show(
+                context,
+                title: 'Daily Energy Alignment: ${plan.dayScore}/10',
+                planetFactor: 'Jupiter Transiting 10th House',
+                houseFactor: '1st Lagna & 10th Karma Axis',
+                transitFactor: 'Rohini Nakshatra (Moon)',
+                vedicInterpretation: 'Jupiter aspecting 10th Karma house provides executive clarity, career support, and strong intuitive decision making.',
+                practicalAction: 'Capitalize on the Golden Window (11:15 AM - 1:20 PM) for critical negotiations or client discussions.',
+              );
+            },
+            icon: const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 16),
+            label: const Text('Why this score?', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 12)),
           ),
         ],
       ),

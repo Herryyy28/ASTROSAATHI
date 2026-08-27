@@ -6,6 +6,8 @@ import { MuhuratEngine } from './engines/muhurat.engine';
 import { UsersService } from '../users/users.service';
 import { AuthGuard } from '../auth/auth.guard';
 
+import { MatchingService } from './matching.service';
+
 @Controller('astrology')
 export class AstrologyController {
   constructor(
@@ -14,6 +16,7 @@ export class AstrologyController {
     private readonly gamePlanEngine: GamePlanEngine,
     private readonly muhuratEngine: MuhuratEngine,
     private readonly usersService: UsersService,
+    private readonly matchingService: MatchingService,
   ) {}
 
   private parseLocation(dateStr: string, lat: string, lon: string, tz: string) {
@@ -83,5 +86,13 @@ export class AstrologyController {
     @Query('timeframe') timeframe: string,
   ) {
     return this.astrologyService.getHoroscope(sign || 'Aries', timeframe || 'daily');
+  }
+
+  @Get('match')
+  async getMatch(
+    @Query('p1Sign') p1Sign: string,
+    @Query('p2Sign') p2Sign: string,
+  ) {
+    return this.matchingService.calculateGunMilan(p1Sign || 'Aries', p2Sign || 'Leo');
   }
 }

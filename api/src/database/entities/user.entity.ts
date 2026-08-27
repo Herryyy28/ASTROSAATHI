@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { UserProfile } from './profile.entity';
+import { BirthProfile } from './birth_profile.entity';
 
 @Entity('users')
 export class User {
@@ -20,4 +21,7 @@ export class User {
 
   @OneToMany(() => UserProfile, profile => profile.user)
   profiles!: UserProfile[];
+
+  @OneToMany(() => BirthProfile, birthProfile => birthProfile.user)
+  birthProfiles!: BirthProfile[];
 }
