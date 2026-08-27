@@ -16,6 +16,7 @@ import '../../../../core/widgets/error_state_widget.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/engine/models/game_plan_data.dart';
+import 'main_screen.dart';
 
 /// Provider that loads the user's name from SharedPreferences.
 final userNameProvider = FutureProvider<String>((ref) async {
@@ -356,44 +357,51 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildBestWindow(GamePlanData plan) {
-    return GlassCard(
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.primary.withOpacity(0.12),
-            ),
-            child: const Icon(
-              Icons.wb_sunny_rounded,
-              color: AppColors.primary,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('BEST WINDOW', style: AppDecorations.sectionHeader()),
-                const SizedBox(height: 6),
-                Text(
-                  '${plan.bestWindow.start} — ${plan.bestWindow.end}',
-                  style: GoogleFonts.outfit(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryDark,
-                  ),
+    return Consumer(
+      builder: (context, ref, _) {
+        return GlassCard(
+          onTap: () {
+            ref.read(mainNavIndexProvider.notifier).state = 3; // Navigate to Muhurat tab
+          },
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primary.withOpacity(0.12),
                 ),
-              ],
-            ),
+                child: const Icon(
+                  Icons.wb_sunny_rounded,
+                  color: AppColors.primary,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('BEST WINDOW', style: AppDecorations.sectionHeader()),
+                    const SizedBox(height: 6),
+                    Text(
+                      '${plan.bestWindow.start} — ${plan.bestWindow.end}',
+                      style: GoogleFonts.outfit(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimaryDark,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.chevron_right_rounded, color: AppColors.textTertiaryDark),
+            ],
           ),
-          Icon(Icons.chevron_right_rounded, color: AppColors.textTertiaryDark),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -462,44 +470,50 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildAstroBabaPrompt() {
-    return GlassCard(
-      onTap: () {},
-      borderColor: AppColors.secondary.withOpacity(0.4),
-      glowColor: AppColors.purpleGlow,
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.secondary.withOpacity(0.15),
-            ),
-            child: const Icon(
-              Icons.auto_awesome,
-              color: AppColors.secondary,
-              size: 18,
-            ),
+    return Consumer(
+      builder: (context, ref, _) {
+        return GlassCard(
+          onTap: () {
+            ref.read(mainNavIndexProvider.notifier).state = 4; // Navigate to Astro Baba tab
+          },
+          borderColor: AppColors.secondary.withOpacity(0.4),
+          glowColor: AppColors.purpleGlow,
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.secondary.withOpacity(0.15),
+                ),
+                child: const Icon(
+                  Icons.auto_awesome,
+                  color: AppColors.secondary,
+                  size: 18,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Ask Astro Baba',
+                style: GoogleFonts.outfit(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimaryDark,
+                ),
+              ),
+              const Spacer(),
+              Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: AppColors.textTertiaryDark,
+                size: 16,
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Text(
-            'Ask Astro Baba',
-            style: GoogleFonts.outfit(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimaryDark,
-            ),
-          ),
-          const Spacer(),
-          Icon(
-            Icons.arrow_forward_ios_rounded,
-            color: AppColors.textTertiaryDark,
-            size: 16,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/responsive.dart';
@@ -10,16 +10,17 @@ import '../../../panchang/presentation/screens/panchang_screen.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
 
-class MainScreen extends StatefulWidget {
+/// Provider for managing main navigation tab index globally
+final mainNavIndexProvider = StateProvider<int>((ref) => 0);
+
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-
+class _MainScreenState extends ConsumerState<MainScreen> {
   final List<Widget> _screens = const [
     HomeScreen(),
     HoroscopeScreen(),
@@ -38,29 +39,31 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = ref.watch(mainNavIndexProvider);
+
     // Use side nav on tablet/desktop, bottom nav on mobile
     if (!context.isMobile) {
-      return _buildWideLayout(context);
+      return _buildWideLayout(context, currentIndex);
     }
-    return _buildMobileLayout(context);
+    return _buildMobileLayout(context, currentIndex);
   }
 
   // ── Mobile Layout: bottom nav bar ────────────────────────────────
-  Widget _buildMobileLayout(BuildContext context) {
+  Widget _buildMobileLayout(BuildContext context, int currentIndex) {
     return Scaffold(
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         switchInCurve: Curves.easeOut,
         switchOutCurve: Curves.easeIn,
-        child: _screens[_currentIndex],
+        child: _screens[currentIndex],
       ),
       extendBody: true,
-      bottomNavigationBar: _buildBottomNav(context),
+      bottomNavigationBar: _buildBottomNav(context, currentIndex),
     );
   }
 
   // ── Tablet/Desktop Layout: side rail ─────────────────────────────
-  Widget _buildWideLayout(BuildContext context) {
+  Widget _buildWideLayout(BuildContext context, int currentIndex) {
     final isDesktop = context.isDesktop;
     final railWidth = isDesktop ? 220.0 : 80.0;
 
@@ -70,7 +73,7 @@ class _MainScreenState extends State<MainScreen> {
         child: Row(
           children: [
             // ── Side Navigation Rail ──────────────────────────────
-            _buildSideRail(context, isDesktop, railWidth),
+            _buildSideRail(context, isDesktop, railWidth, currentIndex),
 
             // ── Main Content ──────────────────────────────────────
             Expanded(
@@ -78,7 +81,7 @@ class _MainScreenState extends State<MainScreen> {
                 duration: const Duration(milliseconds: 300),
                 switchInCurve: Curves.easeOut,
                 switchOutCurve: Curves.easeIn,
-                child: _screens[_currentIndex],
+                child: _screens[currentIndex],
               ),
             ),
           ],
@@ -87,7 +90,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildSideRail(BuildContext context, bool isDesktop, double width) {
+  Widget _buildSideRail(BuildContext context, bool isDesktop, double width, int currentIndex) {
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
@@ -138,7 +141,7 @@ class _MainScreenState extends State<MainScreen> {
                 ],
                 // ── Nav Items ────────────────────────────────────
                 ...List.generate(_navItems.length, (index) {
-                  return _buildSideNavItem(index, isDesktop);
+                  return _buildSideNavItem(index, isDesktop, currentIndex);
                 }),
               ],
             ),
@@ -148,13 +151,15 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildSideNavItem(int index, bool isDesktop) {
-    final isActive = _currentIndex == index;
+  Widget _buildSideNavItem(int index, bool isDesktop, int currentIndex) {
+    final isActive = currentIndex == index;
     final item = _navItems[index];
 
     return GestureDetector(
       onTap: () {
-        if (_currentIndex != index) setState(() => _currentIndex = index);
+        if (currentIndex != index) {
+          ref.read(mainNavIndexProvider.notifier).state = index;
+        }
       },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
@@ -202,7 +207,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   // ── Bottom Nav (mobile) ───────────────────────────────────────────
-  Widget _buildBottomNav(BuildContext context) {
+  Widget _buildBottomNav(BuildContext context, int currentIndex) {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surfaceDark.withOpacity(0.92),
@@ -220,7 +225,7 @@ class _MainScreenState extends State<MainScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(_navItems.length, (index) {
-                  return _buildBottomNavItem(index);
+                  return _buildBottomNavItem(index, currentIndex);
                 }),
               ),
             ),
@@ -230,13 +235,15 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget _buildBottomNavItem(int index) {
-    final isActive = _currentIndex == index;
+  Widget _buildBottomNavItem(int index, int currentIndex) {
+    final isActive = currentIndex == index;
     final item = _navItems[index];
 
     return GestureDetector(
       onTap: () {
-        if (_currentIndex != index) setState(() => _currentIndex = index);
+        if (currentIndex != index) {
+          ref.read(mainNavIndexProvider.notifier).state = index;
+        }
       },
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(

@@ -156,26 +156,56 @@ class HoroscopeScreen extends ConsumerWidget {
 
   Widget _buildSignDropdown(WidgetRef ref) {
     final currentSign = ref.watch(selectedSignProvider);
-    return GlassCard(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      borderRadius: 12,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            AppColors.zodiacEmojis[currentSign] ?? '⭐',
-            style: const TextStyle(fontSize: 18),
+    return PopupMenuButton<String>(
+      onSelected: (sign) {
+        ref.read(selectedSignProvider.notifier).state = sign;
+      },
+      color: AppColors.surfaceDark,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      itemBuilder: (context) => signs.map((sign) {
+        return PopupMenuItem<String>(
+          value: sign,
+          child: Row(
+            children: [
+              Text(
+                AppColors.zodiacEmojis[sign] ?? '⭐',
+                style: const TextStyle(fontSize: 18),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                sign,
+                style: TextStyle(
+                  color: sign == currentSign ? AppColors.primary : AppColors.textPrimaryDark,
+                  fontWeight: sign == currentSign ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 6),
-          Text(
-            currentSign,
-            style: GoogleFonts.inter(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.primary,
+        );
+      }).toList(),
+      child: GlassCard(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        borderRadius: 12,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              AppColors.zodiacEmojis[currentSign] ?? '⭐',
+              style: const TextStyle(fontSize: 18),
             ),
-          ),
-        ],
+            const SizedBox(width: 6),
+            Text(
+              currentSign,
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.primary, size: 18),
+          ],
+        ),
       ),
     );
   }
