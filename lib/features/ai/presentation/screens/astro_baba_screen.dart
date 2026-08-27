@@ -10,6 +10,7 @@ import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/engine/models/ai_data.dart';
 import '../providers/astro_baba_provider.dart';
+import '../../../../core/utils/responsive.dart';
 
 import '../../../../core/widgets/responsive_layout.dart';
 
@@ -156,7 +157,8 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 14),
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.78,
+          maxWidth: MediaQuery.of(context).size.width *
+              context.responsive<double>(mobile: 0.78, tablet: 0.65, desktop: 0.55),
         ),
         child: Column(
           crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,

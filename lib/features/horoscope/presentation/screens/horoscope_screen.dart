@@ -11,6 +11,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/zodiac_icon.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/widgets/responsive_layout.dart';
+import '../../../../core/utils/responsive.dart';
 
 final selectedSignProvider = StateProvider<String>((ref) => 'Aries');
 
@@ -43,7 +44,12 @@ class HoroscopeScreen extends ConsumerWidget {
                 children: [
                   // ── Header ────────────────────────────────────────
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                    padding: EdgeInsets.fromLTRB(
+                      context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
+                      20,
+                      context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
+                      0,
+                    ),
                     child: Row(
                       children: [
                         Text(

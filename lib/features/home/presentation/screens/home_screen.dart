@@ -14,6 +14,7 @@ import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/widgets/error_state_widget.dart';
 import '../../../../core/widgets/responsive_layout.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../core/engine/models/game_plan_data.dart';
 
 /// Provider that loads the user's name from SharedPreferences.
@@ -55,12 +56,13 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildGamePlanUI(BuildContext context, GamePlanData plan) {
+    final hPad = context.responsive<double>(mobile: 20, tablet: 32, desktop: 40);
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
+            padding: EdgeInsets.fromLTRB(hPad, 24, hPad, 100),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -397,61 +399,59 @@ class HomeScreen extends ConsumerWidget {
 
   Widget _buildCategories(GamePlanData plan) {
     final entries = plan.categories.entries.toList();
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final itemWidth =
-            (constraints.maxWidth - 12 * (entries.length - 1)) / entries.length;
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: entries.map((e) {
-            return SizedBox(
-              width: itemWidth,
-              child: GlassCard(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 16,
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      e.key.toUpperCase(),
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: AppColors.textSecondaryDark,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.5,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      e.value.toStringAsFixed(0),
-                      style: GoogleFonts.outfit(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimaryDark,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    // Mini progress bar
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(2),
-                      child: LinearProgressIndicator(
-                        value: e.value / 10,
-                        backgroundColor: AppColors.surfaceHighlightDark,
-                        color: _getCategoryColor(e.value),
-                        minHeight: 3,
-                      ),
-                    ),
-                  ],
-                ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
+      child: Row(
+        children: entries.map((e) {
+          return Container(
+            width: 105,
+            margin: const EdgeInsets.only(right: 12),
+            child: GlassCard(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 14,
               ),
-            );
-          }).toList(),
-        );
-      },
+              child: Column(
+                children: [
+                  Text(
+                    e.key.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: AppColors.textSecondaryDark,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    e.value.toStringAsFixed(0),
+                    style: GoogleFonts.outfit(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimaryDark,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Mini progress bar
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(2),
+                    child: LinearProgressIndicator(
+                      value: e.value / 10,
+                      backgroundColor: AppColors.surfaceHighlightDark,
+                      color: _getCategoryColor(e.value),
+                      minHeight: 3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 

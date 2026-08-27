@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
+import '../utils/responsive.dart';
 
-/// A wrapper widget that constrains the maximum width of the content 
-/// on large screens (tablets, desktop web) to make it look like a mobile app layout,
-/// while allowing the background to fill the screen.
+/// A wrapper widget that constrains the maximum width of the content
+/// on tablets and desktops, while allowing the background to fill the screen.
+/// On mobile it is a transparent pass-through.
 class ResponsiveLayout extends StatelessWidget {
   final Widget child;
-  final double maxWidth;
+  final double? maxWidth;
 
   const ResponsiveLayout({
     super.key,
     required this.child,
-    this.maxWidth = 550, // Standard max width for mobile-proportioned view
+    this.maxWidth,
   });
 
   @override
   Widget build(BuildContext context) {
+    final width = maxWidth ?? context.maxContentWidth;
+
+    if (context.isMobile) {
+      // On mobile just pass through — no constraint needed
+      return child;
+    }
+
     return Center(
       child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: maxWidth,
-        ),
+        constraints: BoxConstraints(maxWidth: width),
         child: child,
       ),
     );

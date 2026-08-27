@@ -11,6 +11,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/engine/models/panchang_data.dart';
 import '../../../../core/widgets/responsive_layout.dart';
+import '../../../../core/utils/responsive.dart';
 
 class PanchangScreen extends ConsumerWidget {
   const PanchangScreen({super.key});
@@ -50,12 +51,13 @@ class PanchangScreen extends ConsumerWidget {
   }
 
   Widget _buildPanchangUI(BuildContext context, PanchangData panchang) {
+    final hPad = context.responsive<double>(mobile: 20, tablet: 32, desktop: 40);
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
+            padding: EdgeInsets.fromLTRB(hPad, 24, hPad, 100),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

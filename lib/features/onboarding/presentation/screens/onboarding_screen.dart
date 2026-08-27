@@ -10,6 +10,7 @@ import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/responsive_layout.dart';
+import '../../../../core/utils/responsive.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -154,7 +155,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 // ── Custom Progress Indicator ──────────────────────
                 if (_currentIndex < 5)
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                    padding: EdgeInsets.fromLTRB(
+                      context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
+                      24,
+                      context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
+                      0,
+                    ),
                     child: _buildSegmentedProgress(),
                   ),
 
@@ -212,77 +218,89 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   // ── Welcome Step ────────────────────────────────────────────────
   Widget _buildWelcomeStep() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Spacer(flex: 2),
-          // Celestial icon
-          Center(
-            child: AnimatedBuilder(
-              animation: _pulseController,
-              builder: (context, child) {
-                return Transform.scale(
-                  scale: 1.0 + (_pulseController.value * 0.05),
-                  child: child,
-                );
-              },
-              child: Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: AppColors.goldSubtleGradient,
-                  border: Border.all(
-                    color: AppColors.primary.withOpacity(0.3),
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.goldGlow,
-                      blurRadius: 40,
-                      spreadRadius: -8,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Spacer(flex: 2),
+                    // Celestial icon
+                    Center(
+                      child: AnimatedBuilder(
+                        animation: _pulseController,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: 1.0 + (_pulseController.value * 0.05),
+                            child: child,
+                          );
+                        },
+                        child: Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: AppColors.goldSubtleGradient,
+                            border: Border.all(
+                              color: AppColors.primary.withOpacity(0.3),
+                              width: 1,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.goldGlow,
+                                blurRadius: 40,
+                                spreadRadius: -8,
+                              ),
+                            ],
+                          ),
+                          child: const Center(
+                            child: Text('✦', style: TextStyle(fontSize: 48)),
+                          ),
+                        ),
+                      ).fadeSlideUp(),
                     ),
+                    const SizedBox(height: 48),
+                    Text(
+                      'Your Personal\nAstrologer, Every Day.',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.outfit(
+                        fontSize: 34,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimaryDark,
+                        height: 1.2,
+                        letterSpacing: -0.5,
+                      ),
+                    ).fadeSlideUp(delay: 200.ms),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Discover what the stars have planned for you',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        color: AppColors.textSecondaryDark,
+                        height: 1.5,
+                      ),
+                    ).fadeSlideUp(delay: 350.ms),
+                    const Spacer(flex: 3),
+                    GradientButton(
+                      text: 'Begin Your Journey',
+                      icon: Icons.auto_awesome,
+                      onPressed: _nextPage,
+                    ).fadeSlideUp(delay: 500.ms),
+                    const SizedBox(height: 20),
                   ],
                 ),
-                child: const Center(
-                  child: Text('✦', style: TextStyle(fontSize: 48)),
-                ),
               ),
-            ).fadeSlideUp(),
+            ),
           ),
-          const SizedBox(height: 48),
-          Text(
-            'Your Personal\nAstrologer, Every Day.',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.outfit(
-              fontSize: 34,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimaryDark,
-              height: 1.2,
-              letterSpacing: -0.5,
-            ),
-          ).fadeSlideUp(delay: 200.ms),
-          const SizedBox(height: 16),
-          Text(
-            'Discover what the stars have planned for you',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.inter(
-              fontSize: 16,
-              color: AppColors.textSecondaryDark,
-              height: 1.5,
-            ),
-          ).fadeSlideUp(delay: 350.ms),
-          const Spacer(flex: 3),
-          GradientButton(
-            text: 'Begin Your Journey',
-            icon: Icons.auto_awesome,
-            onPressed: _nextPage,
-          ).fadeSlideUp(delay: 500.ms),
-          const SizedBox(height: 40),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -536,37 +554,49 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     required String subtitle,
     required Widget child,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(icon, style: const TextStyle(fontSize: 40)).fadeSlideUp(),
-          const SizedBox(height: 20),
-          Text(
-            title,
-            style: GoogleFonts.outfit(
-              fontSize: 32,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimaryDark,
-              height: 1.2,
-              letterSpacing: -0.5,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(icon, style: const TextStyle(fontSize: 40)).fadeSlideUp(),
+                    const SizedBox(height: 20),
+                    Text(
+                      title,
+                      style: GoogleFonts.outfit(
+                        fontSize: 32,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimaryDark,
+                        height: 1.2,
+                        letterSpacing: -0.5,
+                      ),
+                    ).fadeSlideUp(delay: 100.ms),
+                    const SizedBox(height: 12),
+                    Text(
+                      subtitle,
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        color: AppColors.textSecondaryDark,
+                        height: 1.5,
+                      ),
+                    ).fadeSlideUp(delay: 200.ms),
+                    const Spacer(),
+                    child.fadeSlideUp(delay: 300.ms),
+                    const Spacer(flex: 2),
+                  ],
+                ),
+              ),
             ),
-          ).fadeSlideUp(delay: 100.ms),
-          const SizedBox(height: 12),
-          Text(
-            subtitle,
-            style: GoogleFonts.inter(
-              fontSize: 16,
-              color: AppColors.textSecondaryDark,
-              height: 1.5,
-            ),
-          ).fadeSlideUp(delay: 200.ms),
-          const Spacer(),
-          child.fadeSlideUp(delay: 300.ms),
-          const Spacer(flex: 2),
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -11,6 +11,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/engine/models/muhurat_data.dart';
 import '../../../../core/widgets/responsive_layout.dart';
+import '../../../../core/utils/responsive.dart';
 
 final selectedCategoryProvider = StateProvider<String>((ref) => 'Business');
 
@@ -34,7 +35,12 @@ class MuhuratScreen extends ConsumerWidget {
           bottom: false,
           child: ResponsiveLayout(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+              padding: EdgeInsets.fromLTRB(
+                context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
+                24,
+                context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
+                0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
