@@ -79,7 +79,7 @@ class _GradientButtonState extends State<GradientButton>
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: [
               if (widget.icon != null) ...[
                 Icon(widget.icon, color: Colors.black, size: 20),

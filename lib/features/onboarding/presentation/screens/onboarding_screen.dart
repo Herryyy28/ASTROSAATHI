@@ -87,9 +87,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   void _generateChart() async {
     // Validate current step
     String? errorMessage;
-    if (_nameController.text.trim().isEmpty || 
-        _dobController.text.trim().isEmpty || 
-        _timeController.text.trim().isEmpty || 
+    if (_nameController.text.trim().isEmpty ||
+        _dobController.text.trim().isEmpty ||
+        _timeController.text.trim().isEmpty ||
         _placeController.text.trim().isEmpty) {
       errorMessage = 'Please complete all fields';
     }
@@ -114,17 +114,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
 
     try {
-      // In a full implementation, we'd add slider UI for these, but we'll mock the user input for now 
+      // In a full implementation, we'd add slider UI for these, but we'll mock the user input for now
       // as if they selected 80% Career, 20% Love on the UI.
-      final focusWeights = {
-        'Career': 1.2,
-        'Love': 0.8,
-        'Money': 1.0,
-      };
+      final focusWeights = {'Career': 1.2, 'Love': 0.8, 'Money': 1.0};
 
       // Ensure anonymous sign-in happens
       // await ref.read(authRepositoryProvider).signInAnonymously();
-      
+
       // Save profile to backend
       // await ref.read(authRepositoryProvider).saveProfileData(
       //   name: _nameController.text.trim(),
@@ -137,7 +133,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       // Save user name to SharedPreferences for local UI
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('user_name', _nameController.text.trim());
-
     } catch (e) {
       debugPrint('Failed to sync profile: $e');
     }
@@ -202,7 +197,9 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             margin: EdgeInsets.only(right: index < 4 ? 6 : 0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2),
-              color: isActive ? AppColors.primary : AppColors.surfaceHighlightDark,
+              color: isActive
+                  ? AppColors.primary
+                  : AppColors.surfaceHighlightDark,
               boxShadow: isCurrent
                   ? [BoxShadow(color: AppColors.goldGlow, blurRadius: 8)]
                   : null,
@@ -218,34 +215,43 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Spacer(flex: 2),
           // Celestial icon
-          AnimatedBuilder(
-            animation: _pulseController,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: 1.0 + (_pulseController.value * 0.05),
-                child: child,
-              );
-            },
-            child: Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: AppColors.goldSubtleGradient,
-                border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 1),
-                boxShadow: [
-                  BoxShadow(color: AppColors.goldGlow, blurRadius: 40, spreadRadius: -8),
-                ],
+          Center(
+            child: AnimatedBuilder(
+              animation: _pulseController,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: 1.0 + (_pulseController.value * 0.05),
+                  child: child,
+                );
+              },
+              child: Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: AppColors.goldSubtleGradient,
+                  border: Border.all(
+                    color: AppColors.primary.withOpacity(0.3),
+                    width: 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.goldGlow,
+                      blurRadius: 40,
+                      spreadRadius: -8,
+                    ),
+                  ],
+                ),
+                child: const Center(
+                  child: Text('✦', style: TextStyle(fontSize: 48)),
+                ),
               ),
-              child: const Center(
-                child: Text('✦', style: TextStyle(fontSize: 48)),
-              ),
-            ),
-          ).fadeSlideUp(),
+            ).fadeSlideUp(),
+          ),
           const SizedBox(height: 48),
           Text(
             'Your Personal\nAstrologer, Every Day.',
@@ -290,7 +296,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           TextField(
             controller: _nameController,
-            style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 18),
+            style: const TextStyle(
+              color: AppColors.textPrimaryDark,
+              fontSize: 18,
+            ),
             decoration: AppDecorations.premiumInput(
               hintText: 'Enter your name',
               prefixIcon: Icons.person_outline_rounded,
@@ -313,7 +322,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           TextField(
             controller: _dobController,
-            style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 18),
+            style: const TextStyle(
+              color: AppColors.textPrimaryDark,
+              fontSize: 18,
+            ),
             decoration: AppDecorations.premiumInput(
               hintText: 'DD / MM / YYYY',
               prefixIcon: Icons.calendar_today_rounded,
@@ -337,7 +349,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           TextField(
             controller: _timeController,
-            style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 18),
+            style: const TextStyle(
+              color: AppColors.textPrimaryDark,
+              fontSize: 18,
+            ),
             decoration: AppDecorations.premiumInput(
               hintText: 'HH : MM AM/PM',
               prefixIcon: Icons.access_time_rounded,
@@ -373,7 +388,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
         children: [
           TextField(
             controller: _placeController,
-            style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 18),
+            style: const TextStyle(
+              color: AppColors.textPrimaryDark,
+              fontSize: 18,
+            ),
             decoration: AppDecorations.premiumInput(
               hintText: 'City, Country',
               prefixIcon: Icons.location_on_outlined,
@@ -406,31 +424,31 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               children: [
                 // Outer ring
                 Container(
-                  width: 160,
-                  height: 160,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.primary.withOpacity(0.2), width: 2),
-                  ),
-                )
+                      width: 160,
+                      height: 160,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.primary.withOpacity(0.2),
+                          width: 2,
+                        ),
+                      ),
+                    )
                     .animate(onPlay: (c) => c.repeat(reverse: false))
-                    .rotate(
-                      duration: 8000.ms,
-                      curve: Curves.linear,
-                    ),
+                    .rotate(duration: 8000.ms, curve: Curves.linear),
                 // Inner dashed ring
                 Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.primary.withOpacity(0.4),
-                      width: 1,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                )
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.primary.withOpacity(0.4),
+                          width: 1,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                    )
                     .animate(onPlay: (c) => c.repeat(reverse: true))
                     .rotate(
                       duration: 2000.ms,
@@ -439,20 +457,23 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                       end: 0,
                     ),
                 // Center icon
-                const Text('✦', style: TextStyle(fontSize: 24, color: AppColors.primary)),
+                const Text(
+                  '✦',
+                  style: TextStyle(fontSize: 24, color: AppColors.primary),
+                ),
               ],
             ).fadeSlideUp(),
 
             const SizedBox(height: 40),
 
             Text(
-              'Reading your stars...',
-              style: GoogleFonts.outfit(
-                fontSize: 26,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryDark,
-              ),
-            )
+                  'Reading your stars...',
+                  style: GoogleFonts.outfit(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimaryDark,
+                  ),
+                )
                 .animate(onPlay: (c) => c.repeat(reverse: true))
                 .shimmer(
                   duration: 1500.ms,
@@ -460,45 +481,49 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                 )
                 .fade(duration: 800.ms),
 
-          const SizedBox(height: 32),
+            const SizedBox(height: 32),
 
-          // Animated checklist items
-          _buildCheckItem('Birth details processed', 0),
-          _buildCheckItem('Planetary positions calculated', 1),
-          _buildCheckItem('Today\'s energy mapped', 2),
-        ],
-      ),
+            // Animated checklist items
+            _buildCheckItem('Birth details processed', 0),
+            _buildCheckItem('Planetary positions calculated', 1),
+            _buildCheckItem('Today\'s energy mapped', 2),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildCheckItem(String text, int index) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 48),
-      child: Row(
-        children: [
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.success.withOpacity(0.15),
-              border: Border.all(color: AppColors.success.withOpacity(0.5)),
-            ),
-            child: const Icon(Icons.check_rounded, size: 14, color: AppColors.success),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 48),
+          child: Row(
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.success.withOpacity(0.15),
+                  border: Border.all(color: AppColors.success.withOpacity(0.5)),
+                ),
+                child: const Icon(
+                  Icons.check_rounded,
+                  size: 14,
+                  color: AppColors.success,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                text,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: AppColors.textSecondaryDark,
+                  height: 1.5,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 16,
-              color: AppColors.textSecondaryDark,
-              height: 1.5,
-            ),
-          ),
-        ],
-      ),
-    )
+        )
         .animate(delay: Duration(milliseconds: 500 + (index * 600)))
         .fadeIn(duration: 500.ms, curve: Curves.easeOut)
         .slideX(begin: 0.1, duration: 400.ms);
@@ -516,10 +541,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            icon,
-            style: const TextStyle(fontSize: 40),
-          ).fadeSlideUp(),
+          Text(icon, style: const TextStyle(fontSize: 40)).fadeSlideUp(),
           const SizedBox(height: 20),
           Text(
             title,

@@ -10,6 +10,7 @@ import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/engine/models/panchang_data.dart';
+import '../../../../core/widgets/responsive_layout.dart';
 
 class PanchangScreen extends ConsumerWidget {
   const PanchangScreen({super.key});
@@ -24,22 +25,24 @@ class PanchangScreen extends ConsumerWidget {
         decoration: const BoxDecoration(gradient: AppColors.cosmicRadialGradient),
         child: SafeArea(
           bottom: false,
-          child: panchangAsync.when(
-            loading: () => const Padding(
-              padding: EdgeInsets.all(24),
-              child: ShimmerLoader(itemCount: 5, itemHeight: 70),
-            ),
-            error: (error, stack) => Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, color: AppColors.error, size: 48),
-                  const SizedBox(height: 16),
-                  Text('Error loading Panchang', style: TextStyle(color: AppColors.error)),
-                ],
+          child: ResponsiveLayout(
+            child: panchangAsync.when(
+              loading: () => const Padding(
+                padding: EdgeInsets.all(24),
+                child: ShimmerLoader(itemCount: 5, itemHeight: 70),
               ),
+              error: (error, stack) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+                    const SizedBox(height: 16),
+                    Text('Error loading Panchang', style: TextStyle(color: AppColors.error)),
+                  ],
+                ),
+              ),
+              data: (panchang) => _buildPanchangUI(context, panchang),
             ),
-            data: (panchang) => _buildPanchangUI(context, panchang),
           ),
         ),
       ),

@@ -21,7 +21,7 @@ class BirthChartCard extends StatelessWidget {
     };
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppColors.surfaceHighlightDark.withOpacity(0.4),

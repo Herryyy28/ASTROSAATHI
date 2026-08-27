@@ -10,6 +10,7 @@ import { AstrologyRuleEngine } from './engines/astrology-rule.engine';
 import { GamePlanEngine } from './engines/game-plan.engine';
 import { MuhuratEngine } from './engines/muhurat.engine';
 import { UsersModule } from '../users/users.module';
+import { CoreModule } from '../core/core.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UsersModule } from '../users/users.module';
       name: 'astrology-sync',
     }),
     UsersModule,
+    CoreModule,
   ],
   providers: [
     AstrologyService,

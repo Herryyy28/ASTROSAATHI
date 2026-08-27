@@ -10,6 +10,7 @@ import '../../../../core/providers/astrology_provider.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/zodiac_icon.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
+import '../../../../core/widgets/responsive_layout.dart';
 
 final selectedSignProvider = StateProvider<String>((ref) => 'Aries');
 
@@ -37,64 +38,66 @@ class HoroscopeScreen extends ConsumerWidget {
           decoration: const BoxDecoration(gradient: AppColors.cosmicRadialGradient),
           child: SafeArea(
             bottom: false,
-            child: Column(
-              children: [
-                // ── Header ────────────────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Horoscope',
-                        style: GoogleFonts.outfit(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryDark,
+            child: ResponsiveLayout(
+              child: Column(
+                children: [
+                  // ── Header ────────────────────────────────────────
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Horoscope',
+                          style: GoogleFonts.outfit(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimaryDark,
+                          ),
                         ),
+                        const Spacer(),
+                        _buildSignDropdown(ref),
+                      ],
+                    ),
+                  ).fadeSlideUp(),
+
+                  const SizedBox(height: 16),
+
+                  // ── Zodiac Carousel ───────────────────────────────
+                  _buildZodiacCarousel(ref).fadeSlideUp(delay: 100.ms),
+
+                  const SizedBox(height: 20),
+
+                  // ── Tabs ──────────────────────────────────────────
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: GlassCard(
+                      padding: EdgeInsets.zero,
+                      borderRadius: 14,
+                      child: const TabBar(
+                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        tabs: [
+                          Tab(text: 'Daily'),
+                          Tab(text: 'Weekly'),
+                          Tab(text: 'Monthly'),
+                        ],
                       ),
-                      const Spacer(),
-                      _buildSignDropdown(ref),
-                    ],
-                  ),
-                ).fadeSlideUp(),
+                    ),
+                  ).fadeSlideUp(delay: 200.ms),
 
-                const SizedBox(height: 16),
+                  const SizedBox(height: 8),
 
-                // ── Zodiac Carousel ───────────────────────────────
-                _buildZodiacCarousel(ref).fadeSlideUp(delay: 100.ms),
-
-                const SizedBox(height: 20),
-
-                // ── Tabs ──────────────────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: GlassCard(
-                    padding: EdgeInsets.zero,
-                    borderRadius: 14,
-                    child: const TabBar(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      tabs: [
-                        Tab(text: 'Daily'),
-                        Tab(text: 'Weekly'),
-                        Tab(text: 'Monthly'),
+                  // ── Tab Content ───────────────────────────────────
+                  const Expanded(
+                    child: TabBarView(
+                      children: [
+                        _HoroscopeTabView(timeframe: 'daily'),
+                        _HoroscopeTabView(timeframe: 'weekly'),
+                        _HoroscopeTabView(timeframe: 'monthly'),
                       ],
                     ),
                   ),
-                ).fadeSlideUp(delay: 200.ms),
-
-                const SizedBox(height: 8),
-
-                // ── Tab Content ───────────────────────────────────
-                const Expanded(
-                  child: TabBarView(
-                    children: [
-                      _HoroscopeTabView(timeframe: 'daily'),
-                      _HoroscopeTabView(timeframe: 'weekly'),
-                      _HoroscopeTabView(timeframe: 'monthly'),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

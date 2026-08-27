@@ -41,7 +41,8 @@ export class AstrologyService {
 
       return await response.json();
     } catch (error) {
-      this.logger.error(`Failed to fetch from AstrologyAPI: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      this.logger.error(`Failed to fetch from AstrologyAPI: ${errorMessage}`);
       return null;
     }
   }

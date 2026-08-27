@@ -21,6 +21,11 @@ import { NotificationsModule } from './notifications/notifications.module';
         host: process.env.REDIS_HOST || 'localhost',
         port: parseInt(process.env.REDIS_PORT || '6379', 10),
       },
+      // Prevent crash if Redis is unavailable
+      defaultJobOptions: {
+        removeOnComplete: true,
+        attempts: 3,
+      },
     }),
     DatabaseModule,
     CoreModule,

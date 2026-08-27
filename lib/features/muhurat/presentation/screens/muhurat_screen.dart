@@ -10,6 +10,7 @@ import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/engine/models/muhurat_data.dart';
+import '../../../../core/widgets/responsive_layout.dart';
 
 final selectedCategoryProvider = StateProvider<String>((ref) => 'Business');
 
@@ -31,59 +32,61 @@ class MuhuratScreen extends ConsumerWidget {
         decoration: const BoxDecoration(gradient: AppColors.cosmicRadialGradient),
         child: SafeArea(
           bottom: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ── Header ────────────────────────────────────────
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Muhurat',
-                      style: GoogleFonts.outfit(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimaryDark,
+          child: ResponsiveLayout(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ── Header ────────────────────────────────────────
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Muhurat',
+                        style: GoogleFonts.outfit(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimaryDark,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'What are you planning?',
-                      style: GoogleFonts.inter(
-                        fontSize: 15,
-                        color: AppColors.textSecondaryDark,
+                      const SizedBox(height: 6),
+                      Text(
+                        'What are you planning?',
+                        style: GoogleFonts.inter(
+                          fontSize: 15,
+                          color: AppColors.textSecondaryDark,
+                        ),
                       ),
-                    ),
-                  ],
-                ).fadeSlideUp(),
+                    ],
+                  ).fadeSlideUp(),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                // ── Category Selector ─────────────────────────────
-                _buildCategorySelector(ref, selectedCategory).fadeSlideUp(delay: 100.ms),
+                  // ── Category Selector ─────────────────────────────
+                  _buildCategorySelector(ref, selectedCategory).fadeSlideUp(delay: 100.ms),
 
-                const SizedBox(height: 32),
+                  const SizedBox(height: 32),
 
-                // ── Result ────────────────────────────────────────
-                Expanded(
-                  child: muhuratAsync.when(
-                    loading: () => const ShimmerLoader(itemCount: 3, itemHeight: 90),
-                    error: (error, stack) => Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(Icons.error_outline, color: AppColors.error, size: 48),
-                          const SizedBox(height: 12),
-                          Text('Error finding Muhurat', style: TextStyle(color: AppColors.error)),
-                        ],
+                  // ── Result ────────────────────────────────────────
+                  Expanded(
+                    child: muhuratAsync.when(
+                      loading: () => const ShimmerLoader(itemCount: 3, itemHeight: 90),
+                      error: (error, stack) => Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+                            const SizedBox(height: 12),
+                            Text('Error finding Muhurat', style: TextStyle(color: AppColors.error)),
+                          ],
+                        ),
                       ),
+                      data: (result) => _buildMuhuratResult(result),
                     ),
-                    data: (result) => _buildMuhuratResult(result),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

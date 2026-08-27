@@ -11,6 +11,8 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/engine/models/ai_data.dart';
 import '../providers/astro_baba_provider.dart';
 
+import '../../../../core/widgets/responsive_layout.dart';
+
 class AstroBabaScreen extends ConsumerStatefulWidget {
   const AstroBabaScreen({super.key});
 
@@ -54,33 +56,35 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
         decoration: const BoxDecoration(gradient: AppColors.cosmicRadialGradient),
         child: SafeArea(
           bottom: false,
-          child: Column(
-            children: [
-              // ── App Bar ─────────────────────────────────────────
-              _buildAppBar().fadeSlideUp(),
+          child: ResponsiveLayout(
+            child: Column(
+              children: [
+                // ── App Bar ─────────────────────────────────────────
+                _buildAppBar().fadeSlideUp(),
 
-              // ── Messages ────────────────────────────────────────
-              Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: messages.length + (_isLoading ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index == messages.length) {
-                      return _buildTypingIndicator();
-                    }
-                    return _buildMessageBubble(messages[index], index);
-                  },
+                // ── Messages ────────────────────────────────────────
+                Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: messages.length + (_isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == messages.length) {
+                        return _buildTypingIndicator();
+                      }
+                      return _buildMessageBubble(messages[index], index);
+                    },
+                  ),
                 ),
-              ),
 
-              // ── Suggested Questions ─────────────────────────────
-              _buildSuggestedQuestions(),
+                // ── Suggested Questions ─────────────────────────────
+                _buildSuggestedQuestions(),
 
-              // ── Input Area ──────────────────────────────────────
-              _buildInputArea(),
-            ],
+                // ── Input Area ──────────────────────────────────────
+                _buildInputArea(),
+              ],
+            ),
           ),
         ),
       ),
