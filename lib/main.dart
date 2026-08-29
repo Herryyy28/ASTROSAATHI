@@ -2,33 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/providers/locale_provider.dart';
 
-import 'package:flutter/foundation.dart';
-
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Prevent unhandled error crashes in production
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
     debugPrint('Flutter Error: ${details.exception}');
   };
-  PlatformDispatcher.instance.onError = (error, stack) {
+  WidgetsBinding.instance.platformDispatcher.onError = (error, stack) {
     debugPrint('Platform Error: $error\n$stack');
     return true;
   };
 
-  // Enable Google Fonts runtime fetching for dynamic typography loading
+  // Allow runtime font fetching
   GoogleFonts.config.allowRuntimeFetching = true;
 
+  // Render main app immediately so UI opens instantly without waiting for ad SDK
   runApp(
     const ProviderScope(
       child: AstroSaathiApp(),
     ),
   );
+
+  // Initialize Mobile Ads asynchronously after UI renders
+  MobileAds.instance.initialize().catchError((e) {
+    debugPrint('MobileAds init error: $e');
+    return const InitializationStatus({});
+  });
 }
 
 class AstroSaathiApp extends ConsumerWidget {
@@ -57,7 +64,6 @@ class AstroSaathiApp extends ConsumerWidget {
       routerConfig: router,
       builder: (context, child) {
         final mediaQueryData = MediaQuery.of(context);
-        // Clamp text scale factor between 0.85x and 1.15x for universal pixel-perfect responsiveness across all screen sizes
         final clampedTextScaler = mediaQueryData.textScaler.clamp(
           minScaleFactor: 0.85,
           maxScaleFactor: 1.15,
