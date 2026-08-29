@@ -5,6 +5,7 @@ import { AstrologyController } from './astrology.controller';
 import { AstrologySyncService } from './astrology-sync.service';
 import { AstrologyApiProvider } from './providers/astrology-api.provider';
 import { MockAstrologyProvider } from './providers/mock-astrology.provider';
+import { LocalAstrologyProvider } from './providers/local-astrology.provider';
 import { AstrologySyncProcessor } from './processors/astrology-sync.processor';
 import { AstrologyRuleEngine } from './engines/astrology-rule.engine';
 import { GamePlanEngine } from './engines/game-plan.engine';
@@ -37,6 +38,7 @@ import { forwardRef } from '@nestjs/common';
     MatchingService,
     AstrologyApiProvider,
     MockAstrologyProvider,
+    LocalAstrologyProvider,
     // AstrologySyncProcessor,
     AstrologyRuleEngine,
     GamePlanEngine,
@@ -45,7 +47,7 @@ import { forwardRef } from '@nestjs/common';
     AstrologyDataIntegrityService,
     {
       provide: 'ASTROLOGY_PROVIDER',
-      useClass: process.env.USE_MOCK_PROVIDER === 'true' ? MockAstrologyProvider : AstrologyApiProvider,
+      useClass: process.env.USE_MOCK_PROVIDER === 'true' ? LocalAstrologyProvider : AstrologyApiProvider,
     },
   ],
   controllers: [AstrologyController],

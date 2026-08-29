@@ -10,5 +10,5 @@ abstract class AstrologyEngine {
   Future<MuhuratResult> calculateMuhurat(MuhuratInput input, {String languageCode = 'en'});
   Future<AstroBabaResponse> askAstroBaba(String question, String date, String location, {String languageCode = 'en'});
   Future<HoroscopeData> getHoroscope(String sign, String timeframe, {String languageCode = 'en'});
-  Future<Map<String, dynamic>> getBirthChart(String date, String time, String location, {String languageCode = 'en'});
+  Future<Map<String, dynamic>> getBirthChart(String date, String time, String location, {String languageCode = 'en', String? profileId});
 }

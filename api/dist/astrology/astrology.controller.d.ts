@@ -4,6 +4,7 @@ import { GamePlanEngine } from './engines/game-plan.engine';
 import { MuhuratEngine } from './engines/muhurat.engine';
 import { UsersService } from '../users/users.service';
 import { MatchingService } from './matching.service';
+import { CanonicalKundli } from './interfaces/canonical-kundli.interface';
 export declare class AstrologyController {
     private readonly astrologyService;
     private readonly syncService;
@@ -55,10 +56,7 @@ export declare class AstrologyController {
             } | null;
         };
     }>;
-    getBirthChart(dateStr: string, timeStr: string, lat: string, lon: string, tz: string): Promise<{
-        data: any;
-        meta: import("./interfaces/astrology-data-provider.interface").ProviderMetadata;
-    }>;
+    getBirthChart(profileId: string, dateStr: string, timeStr: string, lat: string, lon: string, tz: string): Promise<CanonicalKundli>;
     getHoroscope(sign: string, timeframe: string): Promise<any>;
     getMatch(p1Sign: string, p2Sign: string): Promise<import("./matching.service").AshtakootaMilanResult>;
 }

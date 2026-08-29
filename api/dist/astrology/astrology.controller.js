@@ -21,6 +21,7 @@ const muhurat_engine_1 = require("./engines/muhurat.engine");
 const users_service_1 = require("../users/users.service");
 const auth_guard_1 = require("../auth/auth.guard");
 const matching_service_1 = require("./matching.service");
+const kundli_data_validator_1 = require("./validators/kundli-data.validator");
 let AstrologyController = class AstrologyController {
     constructor(astrologyService, syncService, gamePlanEngine, muhuratEngine, usersService, matchingService) {
         this.astrologyService = astrologyService;
@@ -80,16 +81,59 @@ let AstrologyController = class AstrologyController {
         const { panchang } = await this.syncService.getCombinedData(date, location);
         return this.muhuratEngine.calculateMuhurat(category || 'General', date, location, panchang);
     }
-    async getBirthChart(dateStr, timeStr, lat, lon, tz) {
+    async getBirthChart(profileId, dateStr, timeStr, lat, lon, tz) {
         const { date, location } = this.parseLocation(dateStr, timeStr || '12:00', lat, lon, tz);
         const [chart, planets] = await Promise.all([
             this.syncService.syncBirthChart(date, timeStr || '12:00', location),
             this.syncService.syncPlanetaryPositions(date, location)
         ]);
-        if (chart && chart.data) {
-            chart.data.planets = planets.data;
+        const canonicalPlanets = [];
+        if (planets && planets.data) {
+            for (const [key, p] of Object.entries(planets.data)) {
+                canonicalPlanets.push({
+                    id: p.name.toLowerCase(),
+                    name: p.name,
+                    rashi: p.sign,
+                    rashiId: p.sign.toLowerCase(),
+                    house: chart?.data?.planets?.[p.name]?.house || p.house || 1,
+                    degree: p.degree,
+                    nakshatra: p.nakshatra,
+                    pada: p.pada,
+                    retrograde: p.isRetrograde || false,
+                });
+            }
         }
-        return chart;
+        const moonPlanet = canonicalPlanets.find(p => p.id === 'moon');
+        const canonicalKundli = {
+            profileId: profileId || 'unknown_profile',
+            birthDetails: {
+                date: dateStr,
+                time: timeStr || '12:00',
+                location: `${lat},${lon}`,
+                latitude: parseFloat(lat),
+                longitude: parseFloat(lon),
+                timezone: tz,
+            },
+            lagna: {
+                rashi: chart?.data?.ascendant || 'Aries',
+                degree: 0,
+            },
+            rashi: {
+                id: moonPlanet?.rashiId || 'aries',
+                name: moonPlanet?.rashi || 'Aries',
+                englishName: moonPlanet?.rashi || 'Aries',
+                degree: moonPlanet?.degree || 0,
+            },
+            planets: canonicalPlanets,
+            houses: chart?.data?.houses || [],
+            nakshatra: {},
+            dasha: {},
+            yogas: [],
+            aspects: [],
+            calculatedAt: planets?.meta?.calculatedAt || new Date().toISOString(),
+            calculationVersion: planets?.meta?.calculationVersion || '1.0',
+        };
+        return kundli_data_validator_1.KundliDataValidator.validate(canonicalKundli);
     }
     async getHoroscope(sign, timeframe) {
         return this.astrologyService.getHoroscope(sign || 'Aries', timeframe || 'daily');
@@ -134,13 +178,14 @@ __decorate([
 ], AstrologyController.prototype, "getMuhurat", null);
 __decorate([
     (0, common_1.Get)('birth-chart'),
-    __param(0, (0, common_1.Query)('date')),
-    __param(1, (0, common_1.Query)('time')),
-    __param(2, (0, common_1.Query)('lat')),
-    __param(3, (0, common_1.Query)('lon')),
-    __param(4, (0, common_1.Query)('tz')),
+    __param(0, (0, common_1.Query)('profileId')),
+    __param(1, (0, common_1.Query)('date')),
+    __param(2, (0, common_1.Query)('time')),
+    __param(3, (0, common_1.Query)('lat')),
+    __param(4, (0, common_1.Query)('lon')),
+    __param(5, (0, common_1.Query)('tz')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String, String, String]),
     __metadata("design:returntype", Promise)
 ], AstrologyController.prototype, "getBirthChart", null);
 __decorate([

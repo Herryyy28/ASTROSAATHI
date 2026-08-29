@@ -156,14 +156,18 @@ class ApiAstrologyEngine implements AstrologyEngine {
   }
 
   @override
-  Future<Map<String, dynamic>> getBirthChart(String date, String time, String location, {String languageCode = 'en'}) async {
+  Future<Map<String, dynamic>> getBirthChart(String date, String time, String location, {String languageCode = 'en', String? profileId}) async {
     final locData = _parseLocation(location);
+    final pId = profileId ?? 'default';
     final response = await http.get(
-      Uri.parse('$baseUrl/astrology/birth-chart?date=$date&time=$time&lat=${locData['lat']}&lon=${locData['lon']}&tz=${locData['tz']}&languageCode=$languageCode'),
+      Uri.parse('$baseUrl/astrology/birth-chart?profileId=$pId&date=$date&time=$time&lat=${locData['lat']}&lon=${locData['lon']}&tz=${locData['tz']}&languageCode=$languageCode'),
     ).timeout(const Duration(seconds: 10));
     
     if (response.statusCode == 200) {
-      return jsonDecode(response.body)['data'];
+      final jsonResponse = jsonDecode(response.body);
+      // Ensure we return the root object which has lagna, rashi, planets instead of just data. 
+      // NestJS might return it directly, or inside 'data'. If it's the canonical object, it should be the whole response.
+      return jsonResponse;
     }
     throw Exception('Failed to load Birth Chart: ${response.statusCode}');
   }

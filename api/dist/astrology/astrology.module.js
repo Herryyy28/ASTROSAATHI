@@ -13,6 +13,7 @@ const astrology_controller_1 = require("./astrology.controller");
 const astrology_sync_service_1 = require("./astrology-sync.service");
 const astrology_api_provider_1 = require("./providers/astrology-api.provider");
 const mock_astrology_provider_1 = require("./providers/mock-astrology.provider");
+const local_astrology_provider_1 = require("./providers/local-astrology.provider");
 const astrology_rule_engine_1 = require("./engines/astrology-rule.engine");
 const game_plan_engine_1 = require("./engines/game-plan.engine");
 const muhurat_engine_1 = require("./engines/muhurat.engine");
@@ -42,6 +43,7 @@ exports.AstrologyModule = AstrologyModule = __decorate([
             matching_service_1.MatchingService,
             astrology_api_provider_1.AstrologyApiProvider,
             mock_astrology_provider_1.MockAstrologyProvider,
+            local_astrology_provider_1.LocalAstrologyProvider,
             astrology_rule_engine_1.AstrologyRuleEngine,
             game_plan_engine_1.GamePlanEngine,
             muhurat_engine_1.MuhuratEngine,
@@ -49,7 +51,7 @@ exports.AstrologyModule = AstrologyModule = __decorate([
             astrology_data_integrity_service_1.AstrologyDataIntegrityService,
             {
                 provide: 'ASTROLOGY_PROVIDER',
-                useClass: process.env.USE_MOCK_PROVIDER === 'true' ? mock_astrology_provider_1.MockAstrologyProvider : astrology_api_provider_1.AstrologyApiProvider,
+                useClass: process.env.USE_MOCK_PROVIDER === 'true' ? local_astrology_provider_1.LocalAstrologyProvider : astrology_api_provider_1.AstrologyApiProvider,
             },
         ],
         controllers: [astrology_controller_1.AstrologyController],

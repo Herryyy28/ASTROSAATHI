@@ -8,6 +8,9 @@ import { AuthGuard } from '../auth/auth.guard';
 
 import { MatchingService } from './matching.service';
 
+import { KundliDataValidator } from './validators/kundli-data.validator';
+import { CanonicalKundli, CanonicalPlanet } from './interfaces/canonical-kundli.interface';
+
 @Controller('astrology')
 export class AstrologyController {
   constructor(
@@ -102,6 +105,7 @@ export class AstrologyController {
 
   @Get('birth-chart')
   async getBirthChart(
+    @Query('profileId') profileId: string,
     @Query('date') dateStr: string,
     @Query('time') timeStr: string,
     @Query('lat') lat: string,
@@ -110,18 +114,62 @@ export class AstrologyController {
   ) {
     const { date, location } = this.parseLocation(dateStr, timeStr || '12:00', lat, lon, tz);
 
-    // Fetch both astro details and planetary positions
     const [chart, planets] = await Promise.all([
       this.syncService.syncBirthChart(date, timeStr || '12:00', location),
       this.syncService.syncPlanetaryPositions(date, location)
     ]);
 
-    // Inject the real planets into the response so the UI Kundli can draw them!
-    if (chart && chart.data) {
-      chart.data.planets = planets.data;
+    // Construct CanonicalKundli
+    const canonicalPlanets: CanonicalPlanet[] = [];
+    if (planets && planets.data) {
+      for (const [key, p] of Object.entries<any>(planets.data)) {
+        canonicalPlanets.push({
+          id: p.name.toLowerCase(),
+          name: p.name,
+          rashi: p.sign,
+          rashiId: p.sign.toLowerCase(),
+          house: chart?.data?.planets?.[p.name]?.house || p.house || 1, // Get relative house from chart if available
+          degree: p.degree,
+          nakshatra: p.nakshatra,
+          pada: p.pada,
+          retrograde: p.isRetrograde || false,
+        });
+      }
     }
 
-    return chart;
+    const moonPlanet = canonicalPlanets.find(p => p.id === 'moon');
+
+    const canonicalKundli: CanonicalKundli = {
+      profileId: profileId || 'unknown_profile',
+      birthDetails: {
+        date: dateStr,
+        time: timeStr || '12:00',
+        location: `${lat},${lon}`,
+        latitude: parseFloat(lat),
+        longitude: parseFloat(lon),
+        timezone: tz,
+      },
+      lagna: {
+        rashi: chart?.data?.ascendant || 'Aries',
+        degree: 0,
+      },
+      rashi: {
+        id: moonPlanet?.rashiId || 'aries',
+        name: moonPlanet?.rashi || 'Aries',
+        englishName: moonPlanet?.rashi || 'Aries',
+        degree: moonPlanet?.degree || 0,
+      },
+      planets: canonicalPlanets,
+      houses: chart?.data?.houses || [],
+      nakshatra: {},
+      dasha: {},
+      yogas: [],
+      aspects: [],
+      calculatedAt: planets?.meta?.calculatedAt || new Date().toISOString(),
+      calculationVersion: planets?.meta?.calculationVersion || '1.0',
+    };
+
+    return KundliDataValidator.validate(canonicalKundli);
   }
 
   @Get('horoscope')

@@ -188,20 +188,85 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
               ),
             ),
             data: (chartData) {
-              final lagna = chartData['lagna'] as String? ?? 'Aries (Mesha)';
-              final currentLagna = selectedLagna ?? lagna;
-              final planetsMap =
-                  chartData['planets'] as Map<String, dynamic>? ?? {};
-
-              // Convert the API data format to the UI format {house: ['Planet']}
-              Map<int, List<String>> activePlanets = {};
-              planetsMap.forEach((key, value) {
-                final house = value['house'] as int? ?? 1;
-                if (!activePlanets.containsKey(house)) {
-                  activePlanets[house] = [];
+              final isCanonical = chartData.containsKey('profileId') && chartData.containsKey('lagna') && chartData['lagna'] is Map;
+              
+              final rawLagna = isCanonical 
+                  ? (chartData['lagna']['rashi'] ?? 'Aries')
+                  : (chartData['lagna'] as String? ?? chartData['ascendant'] as String? ?? 'Aries');
+              
+              String getNormalizedLagna(String lagna) {
+                final l = lagna.toLowerCase();
+                for (final item in lagnaList) {
+                  if (item.toLowerCase().contains(l) || l.contains(item.toLowerCase().split(' ')[0])) {
+                    return item;
+                  }
                 }
-                activePlanets[house]!.add(key);
-              });
+                return lagnaList.contains(lagna) ? lagna : 'Aries (Mesha)';
+              }
+
+              final lagna = getNormalizedLagna(rawLagna);
+              final currentLagna = selectedLagna ?? lagna;
+              final isExploring = selectedLagna != null && selectedLagna != lagna;
+
+              int getSignIndex(String signName) {
+                final s = signName.toLowerCase();
+                if (s.contains('aries') || s.contains('mesha')) return 1;
+                if (s.contains('taurus') || s.contains('vrishabha')) return 2;
+                if (s.contains('gemini') || s.contains('mithuna')) return 3;
+                if (s.contains('cancer') || s.contains('karka')) return 4;
+                if (s.contains('leo') || s.contains('simha')) return 5;
+                if (s.contains('virgo') || s.contains('kanya')) return 6;
+                if (s.contains('libra') || s.contains('tula')) return 7;
+                if (s.contains('scorpio') || s.contains('vrishchika')) return 8;
+                if (s.contains('sagittarius') || s.contains('dhanu')) return 9;
+                if (s.contains('capricorn') || s.contains('makara')) return 10;
+                if (s.contains('aquarius') || s.contains('kumbha')) return 11;
+                if (s.contains('pisces') || s.contains('meena')) return 12;
+                return 1;
+              }
+
+              final lagnaIndex = getSignIndex(currentLagna);
+
+              // Map planets to houses based on the selected lagna (or actual lagna)
+              Map<int, List<String>> activePlanets = {};
+              
+              if (isCanonical) {
+                final List<dynamic> planetsList = chartData['planets'] ?? [];
+                for (var p in planetsList) {
+                  final planetName = p['name'] as String;
+                  final planetSign = p['rashi'] as String?;
+                  int house = p['house'] as int? ?? 1;
+                  
+                  if (planetSign != null) {
+                    final planetSignIndex = getSignIndex(planetSign);
+                    house = ((planetSignIndex - lagnaIndex) % 12) + 1;
+                    if (house <= 0) house += 12;
+                  }
+                  
+                  if (!activePlanets.containsKey(house)) {
+                    activePlanets[house] = [];
+                  }
+                  activePlanets[house]!.add(planetName);
+                }
+              } else {
+                final planetsMap = chartData['planets'] as Map<String, dynamic>? ?? {};
+                planetsMap.forEach((key, value) {
+                  final planetSign = value['sign'] as String?;
+                  int house = 1;
+                  if (planetSign != null) {
+                    final planetSignIndex = getSignIndex(planetSign);
+                    house = ((planetSignIndex - lagnaIndex) % 12) + 1;
+                    if (house <= 0) house += 12;
+                  } else {
+                    house = value['house'] as int? ?? 1;
+                  }
+
+                  if (!activePlanets.containsKey(house)) {
+                    activePlanets[house] = [];
+                  }
+                  activePlanets[house]!.add(key);
+                });
+              }
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -213,13 +278,42 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Authentic Kundli Bhavishyavani',
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimaryDark,
-                              ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    isExploring ? 'Rashi Bhavishya (Explorer)' : 'Authentic Kundli Bhavishyavani',
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: isExploring ? AppColors.accentDark : AppColors.textPrimaryDark,
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                  icon: const Icon(Icons.bug_report, color: AppColors.textTertiaryDark, size: 20),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        backgroundColor: AppColors.surfaceDark,
+                                        title: const Text('Kundli Data Inspector', style: TextStyle(color: AppColors.primary)),
+                                        content: SingleChildScrollView(
+                                          child: SelectableText(chartData.toString(), style: const TextStyle(color: AppColors.textSecondaryDark, fontSize: 12)),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context), 
+                                            child: const Text('Close')
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 4),
                             DropdownButton<String>(

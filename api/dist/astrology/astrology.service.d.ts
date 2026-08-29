@@ -12,5 +12,6 @@ export declare class AstrologyService {
     getDailyGamePlan(date: string, location: string): Promise<any>;
     getPanchang(date: string, location: string): Promise<any>;
     getMuhurat(category: string, date: string, location: string): Promise<any>;
+    private generatePlanetaryStateHash;
     getHoroscope(sign: string, timeframe: string): Promise<any>;
 }

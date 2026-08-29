@@ -133,10 +133,34 @@ export class AstrologyService {
     return result;
   }
 
+  private generatePlanetaryStateHash(sign: string, timeframe: string): string {
+    // In a full implementation, we'd hash the canonical kundli object
+    // For now, we hash the sign, timeframe and current day to guarantee uniqueness per day per sign
+    const today = new Date().toISOString().split('T')[0];
+    return require('crypto').createHash('md5').update(`${sign}-${timeframe}-${today}`).digest('hex');
+  }
+
   async getHoroscope(sign: string, timeframe: string) {
-    const cacheKey = this.getCacheKey(`horoscope-${sign}`, { timeframe });
+    const planetaryStateHash = this.generatePlanetaryStateHash(sign, timeframe);
+    const cacheKey = `horoscope-${sign}-${timeframe}-${planetaryStateHash}`;
+    
     if (this.cache.has(cacheKey)) {
       return this.cache.get(cacheKey);
+    }
+
+    if (this.configService.get<string>('USE_MOCK_PROVIDER') === 'true') {
+      const result = {
+        success: true,
+        data: {
+          sign,
+          timeframe,
+          reading: `According to your calculated birth chart, your personalized reading for ${sign} today shows positive transits. The underlying astrological context emphasizes grounding and focus.`,
+          luckyNumber: 7,
+          luckyColor: 'Blue',
+        },
+      };
+      this.cache.set(cacheKey, result);
+      return result;
     }
 
     const apiEndpoint = timeframe === 'daily' ? `sun_sign_prediction/daily/${sign.toLowerCase()}` : null;

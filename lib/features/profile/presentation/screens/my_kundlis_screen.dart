@@ -379,11 +379,24 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                           ),
                         ),
                         if (!isCurrent)
-                          TextButton(
-                            onPressed: () {
-                              ref.read(profilesListProvider.notifier).setPrimary(p.id);
-                            },
-                            child: const Text('Switch', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+                          Row(
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  ref.read(profilesListProvider.notifier).setPrimary(p.id);
+                                },
+                                child: const Text('Switch', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+                              ),
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                                onPressed: () {
+                                  ref.read(profilesListProvider.notifier).deleteProfile(p.id);
+                                },
+                                icon: const Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 22),
+                              ),
+                              const SizedBox(width: 8),
+                            ],
                           ),
                       ],
                     ),

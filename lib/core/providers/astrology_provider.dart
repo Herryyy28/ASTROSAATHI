@@ -5,17 +5,16 @@ import '../engine/models/game_plan_data.dart';
 import '../engine/models/panchang_data.dart';
 import '../engine/models/muhurat_data.dart';
 import 'locale_provider.dart';
-import 'user_profile_provider.dart';
+import 'profile_provider.dart';
 
 final astrologyEngineProvider = Provider<AstrologyEngine>((ref) {
   // Use ApiAstrologyEngine to connect to NestJS backend.
-  // Start the API server first: cd api && npm run start:dev
   return ApiAstrologyEngine();
 });
 
 String _getLocationString(ref) {
-  final profile = ref.watch(userProfileProvider);
-  return '${profile.latitude},${profile.longitude},${profile.timeZone}';
+  final profile = ref.watch(activeProfileProvider);
+  return '${profile.latitude},${profile.longitude},${profile.timezone}';
 }
 
 final dailyGamePlanProvider = FutureProvider<GamePlanData>((ref) async {
@@ -48,12 +47,12 @@ final muhuratProvider = FutureProvider.family<MuhuratResult, String>((ref, categ
 final birthChartProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final engine = ref.watch(astrologyEngineProvider);
   final lang = ref.watch(localeProvider);
-  final profile = ref.watch(userProfileProvider);
-  final location = '${profile.latitude},${profile.longitude},${profile.timeZone}';
+  final profile = ref.watch(activeProfileProvider);
+  final location = '${profile.latitude},${profile.longitude},${profile.timezone}';
   
-  // Use profile dob and time if available, otherwise fallback to current date
   final date = profile.dob.isNotEmpty ? profile.dob : DateTime.now().toIso8601String();
-  final time = profile.time.isNotEmpty ? profile.time : '12:00';
+  final time = profile.birthTime.isNotEmpty ? profile.birthTime : '12:00';
   
-  return await engine.getBirthChart(date, time, location, languageCode: lang.code);
+  // Create a map to pass extra parameters via engine or directly
+  return await engine.getBirthChart(date, time, location, languageCode: lang.code, profileId: profile.id);
 });
