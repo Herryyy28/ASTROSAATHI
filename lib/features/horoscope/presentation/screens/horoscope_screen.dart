@@ -322,28 +322,32 @@ class _HoroscopeTabView extends ConsumerWidget {
 
   Widget _buildInfoCard(String title, String value, IconData icon, Color accentColor) {
     return GlassCard(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Container(
-                width: 28,
-                height: 28,
+                width: 26,
+                height: 26,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: accentColor.withOpacity(0.12),
                 ),
                 child: Icon(icon, color: accentColor, size: 14),
               ),
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style: const TextStyle(
-                  color: AppColors.textSecondaryDark,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppColors.textSecondaryDark,
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -353,9 +357,11 @@ class _HoroscopeTabView extends ConsumerWidget {
             value,
             style: GoogleFonts.outfit(
               color: AppColors.textPrimaryDark,
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.w700,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

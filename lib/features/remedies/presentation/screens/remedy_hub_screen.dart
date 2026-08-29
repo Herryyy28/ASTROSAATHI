@@ -115,27 +115,33 @@ class _RemedyHubScreenState extends State<RemedyHubScreen> {
                       child: const Icon(Icons.auto_fix_high_rounded, color: Colors.white, size: 20),
                     ),
                     const SizedBox(width: 12),
-                    Consumer(
-                      builder: (context, ref, _) {
-                        final l10n = AppLocalizations.of(context, ref);
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.remediesTitle,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimaryDark,
+                    Expanded(
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          final l10n = AppLocalizations.of(context, ref);
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.remediesTitle,
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.textPrimaryDark,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                            Text(
-                              l10n.remediesSub,
-                              style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
-                            ),
-                          ],
-                        );
-                      },
+                              Text(
+                                l10n.remediesSub,
+                                style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),

@@ -356,12 +356,12 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                                 ),
                               ),
                             const SizedBox(height: 8),
-                            Row(
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 6,
                               children: [
                                 _InfoChip(label: 'Lagna', value: lagna.split(' ').first),
-                                const SizedBox(width: 8),
                                 _InfoChip(label: 'Rashi', value: rashiName),
-                                const SizedBox(width: 8),
                                 _InfoChip(label: 'Nakshatra', value: '$nakshatra P$pada'),
                               ],
                             ),

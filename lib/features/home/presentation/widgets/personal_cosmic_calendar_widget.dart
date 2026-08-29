@@ -194,32 +194,38 @@ class _PersonalCosmicCalendarWidgetState extends State<PersonalCosmicCalendarWid
                 child: const Icon(Icons.calendar_month_rounded, color: Colors.black, size: 20),
               ),
               const SizedBox(width: 12),
-              Consumer(
-                builder: (context, ref, _) {
-                  final l10n = AppLocalizations.of(context, ref);
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.cosmicCalendarTitle,
-                        style: GoogleFonts.outfit(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimaryDark,
+              Expanded(
+                child: Consumer(
+                  builder: (context, ref, _) {
+                    final l10n = AppLocalizations.of(context, ref);
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.cosmicCalendarTitle,
+                          style: GoogleFonts.outfit(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimaryDark,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      Text(
-                        l10n.cosmicCalendarSub,
-                        style: GoogleFonts.inter(
-                          fontSize: 11,
-                          color: AppColors.textSecondaryDark,
+                        Text(
+                          l10n.cosmicCalendarSub,
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            color: AppColors.textSecondaryDark,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
