@@ -169,22 +169,79 @@ export class LocalAstrologyProvider implements AstrologyDataProvider {
   }
 
   async getPanchang(date: Date, location: LocationData): Promise<{ data: PanchangResponse; meta: ProviderMetadata }> {
-    return {
-      data: {
-        tithi: 'Calculated Tithi',
-        vara: 'Calculated Vara',
-        nakshatra: 'Calculated Nakshatra',
-        yoga: 'Calculated Yoga',
-        karana: 'Calculated Karana',
-        sunrise: '06:00 AM',
-        sunset: '06:00 PM',
-        moonrise: '...',
-        moonset: '...',
-        rahuKaal: { start: '12:00', end: '13:30' },
-        yamaganda: { start: '07:30', end: '09:00' },
-        gulika: { start: '10:30', end: '12:00' },
-      },
-      meta: this.createMetadata(date),
-    };
+    try {
+      const observer = new Observer(location.latitude, location.longitude, 0);
+      const sunEq = Equator(Body.Sun, date, observer, true, true);
+      const sunEcl = Ecliptic(sunEq.vec);
+      const moonEq = Equator(Body.Moon, date, observer, true, true);
+      const moonEcl = Ecliptic(moonEq.vec);
+
+      let sunLon = sunEcl.elon;
+      if (sunLon < 0) sunLon += 360;
+      let moonLon = moonEcl.elon;
+      if (moonLon < 0) moonLon += 360;
+
+      const ayanamsa = 24.1;
+      const siderealMoon = (moonLon - ayanamsa + 360) % 360;
+      const siderealSun = (sunLon - ayanamsa + 360) % 360;
+
+      // Tithi (Lunar Day): Based on the angle between Moon and Sun
+      let diff = moonLon - sunLon;
+      if (diff < 0) diff += 360;
+      const tithiNum = Math.floor(diff / 12) + 1;
+      const tithiNames = [
+        'Prathama', 'Dwitiya', 'Tritiya', 'Chaturthi', 'Panchami', 'Shashti', 'Saptami', 'Ashtami',
+        'Navami', 'Dashami', 'Ekadashi', 'Dwadashi', 'Trayodashi', 'Chaturdashi', 'Purnima',
+        'Prathama', 'Dwitiya', 'Tritiya', 'Chaturthi', 'Panchami', 'Shashti', 'Saptami', 'Ashtami',
+        'Navami', 'Dashami', 'Ekadashi', 'Dwadashi', 'Trayodashi', 'Chaturdashi', 'Amavasya'
+      ];
+      const tithi = tithiNames[(tithiNum - 1) % 30];
+
+      // Vara (Weekday)
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const vara = days[date.getDay()];
+
+      // Nakshatra (Lunar Mansion)
+      const { nakshatra } = this.getNakshatra(moonLon);
+
+      // Yoga: (Sun Longitude + Moon Longitude) / 13°20'
+      const yogaSum = (siderealMoon + siderealSun) % 360;
+      const yogaNum = Math.floor(yogaSum / (360 / 27)) + 1;
+      const yogaNames = [
+        'Vishkumbha', 'Preeti', 'Ayushman', 'Saubhagya', 'Shobhana', 'Atiganda', 'Sukarma', 'Dhriti',
+        'Shoola', 'Ganda', 'Vriddhi', 'Dhruva', 'Vyaghata', 'Harshana', 'Vajra', 'Siddhi', 'Vyatipata',
+        'Variyana', 'Parigha', 'Shiva', 'Siddha', 'Sadhya', 'Shubha', 'Shukla', 'Brahma', 'Indra', 'Vaidhriti'
+      ];
+      const yoga = yogaNames[(yogaNum - 1) % 27];
+
+      // Karana (Half Tithi)
+      const karanaNum = Math.floor(diff / 6) + 1;
+      const karanaNames = ['Bava', 'Balava', 'Kaulava', 'Taitila', 'Gara', 'Vanija', 'Vishti', 'Shakuni', 'Chatushpada', 'Naga', 'Kintughna'];
+      let karana = 'Unknown';
+      if (karanaNum === 1) karana = 'Kintughna';
+      else if (karanaNum >= 2 && karanaNum <= 57) karana = karanaNames[(karanaNum - 2) % 7];
+      else karana = karanaNames[karanaNum - 51];
+
+      return {
+        data: {
+          tithi,
+          vara,
+          nakshatra,
+          yoga,
+          karana,
+          sunrise: '06:00 AM',
+          sunset: '06:00 PM',
+          moonrise: '...',
+          moonset: '...',
+          rahuKaal: { start: '12:00', end: '13:30' },
+          yamaganda: { start: '07:30', end: '09:00' },
+          gulika: { start: '10:30', end: '12:00' },
+        },
+        meta: this.createMetadata(date),
+      };
+    } catch (e) {
+      this.logger.error('Failed to calculate Panchang: ' + e);
+      throw e;
+    }
   }
 }

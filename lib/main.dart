@@ -34,7 +34,7 @@ void main() {
   // Initialize Mobile Ads asynchronously after UI renders
   MobileAds.instance.initialize().catchError((e) {
     debugPrint('MobileAds init error: $e');
-    return const InitializationStatus({});
+    return InitializationStatus(const {});
   });
 }
 

@@ -18,7 +18,7 @@ subprojects {
 subprojects {
     fun applyCompileSdk() {
         val android = project.extensions.findByName("android") as? com.android.build.gradle.BaseExtension
-        android?.compileSdkVersion(36)
+        android?.compileSdkVersion(35)
     }
 
     if (project.state.executed) {

@@ -4,9 +4,14 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+dependencies {
+    implementation("androidx.startup:startup-runtime:1.2.0")
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
+}
+
 android {
     namespace = "com.example.astrosaathi"
-    compileSdk = 36
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -19,8 +24,8 @@ android {
         applicationId = "com.example.astrosaathi"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 21
-        targetSdk = flutter.targetSdkVersion
+        minSdk = 24
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
