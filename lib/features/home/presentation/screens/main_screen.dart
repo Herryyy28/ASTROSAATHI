@@ -57,7 +57,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentIndex = ref.watch(mainNavIndexProvider);
+    final rawIndex = ref.watch(mainNavIndexProvider);
+    final currentIndex = (rawIndex >= 0 && rawIndex < _screens.length) ? rawIndex : 0;
 
     if (!context.isMobile) {
       return _buildWideLayout(context, currentIndex);

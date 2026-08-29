@@ -9,8 +9,8 @@ import 'core/providers/locale_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Disable dynamic runtime font network fetching to prevent Chrome CORS/network fetch crashes
-  GoogleFonts.config.allowRuntimeFetching = false;
+  // Enable Google Fonts runtime fetching for dynamic typography loading
+  GoogleFonts.config.allowRuntimeFetching = true;
 
   runApp(
     const ProviderScope(

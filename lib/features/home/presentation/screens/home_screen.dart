@@ -22,6 +22,7 @@ import '../../../../core/widgets/iphone_glass_menu.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../search/presentation/screens/astrology_search_screen.dart';
 import '../../../support/presentation/screens/trust_center_screen.dart';
+import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
 import 'main_screen.dart';
 
@@ -435,7 +436,10 @@ class HomeScreen extends ConsumerWidget {
       builder: (context, ref, _) {
         return GlassCard(
           onTap: () {
-            ref.read(mainNavIndexProvider.notifier).state = 3; // Navigate to Muhurat tab
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const MuhuratScreen()),
+            );
           },
           padding: const EdgeInsets.all(20),
           child: Row(
@@ -548,7 +552,7 @@ class HomeScreen extends ConsumerWidget {
       builder: (context, ref, _) {
         return GlassCard(
           onTap: () {
-            ref.read(mainNavIndexProvider.notifier).state = 4; // Navigate to Astro Baba tab
+            ref.read(mainNavIndexProvider.notifier).state = 2; // Navigate to Astro Baba tab (Index 2)
           },
           borderColor: AppColors.secondary.withOpacity(0.4),
           glowColor: AppColors.purpleGlow,
