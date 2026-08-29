@@ -22,8 +22,8 @@ export class AstrologyApiProvider implements AstrologyDataProvider {
   }
 
   private async fetchFromApi(endpoint: string, payload: any): Promise<any> {
-    const userId = this.configService.get<string>('ASTROLOGY_USER_ID');
-    const apiKey = this.configService.get<string>('ASTROLOGY_API_KEY');
+    const userId = this.configService.get<string>('ASTROLOGY_USER_ID') || '657466';
+    const apiKey = this.configService.get<string>('ASTROLOGY_API_KEY') || 'ak-dbf59adeb917e54a4f3eb845c26e6181acf1e707';
 
     if (!userId || !apiKey) {
       throw new Error('Astrology API credentials missing');
@@ -41,7 +41,10 @@ export class AstrologyApiProvider implements AstrologyDataProvider {
     });
 
     if (!response.ok) {
-      throw new Error(`API Error: ${response.statusText}`);
+      const errorText = await response.text();
+      this.logger.error(`API Error ${response.status}: ${errorText}`);
+      require('fs').writeFileSync('astrology_api_error.txt', `Provider Error ${response.status}: ${errorText}\n`);
+      throw new Error(`AstrologyAPI Error: ${errorText}`);
     }
 
     return await response.json();
@@ -68,7 +71,7 @@ export class AstrologyApiProvider implements AstrologyDataProvider {
     const data: Record<string, PlanetaryPosition> = {};
     if (Array.isArray(apiData)) {
        apiData.forEach((p: any) => {
-         data[p.name.toLowerCase()] = {
+         data[p.name] = {
            name: p.name,
            longitude: p.normDegree,
            sign: p.sign,

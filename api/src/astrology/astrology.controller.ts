@@ -17,7 +17,7 @@ export class AstrologyController {
     private readonly muhuratEngine: MuhuratEngine,
     private readonly usersService: UsersService,
     private readonly matchingService: MatchingService,
-  ) {}
+  ) { }
 
   private parseLocation(dateStr: string, lat: string, lon: string, tz: string) {
     const date = dateStr ? new Date(dateStr) : new Date();
@@ -40,19 +40,19 @@ export class AstrologyController {
   ) {
     const { date, location } = this.parseLocation(dateStr, lat, lon, tz);
     const { panchang, planets } = await this.syncService.getCombinedData(date, location);
-    
-    let focusWeights = { Career: 1.0, Love: 1.0, Money: 1.0 }; 
+
+    let focusWeights = { Career: 1.0, Love: 1.0, Money: 1.0 };
     try {
-       // req.user is injected by AuthGuard
-       const profile = await this.usersService.getProfile(req.user.uid);
-       if (profile && profile.focusWeights) {
-         focusWeights = profile.focusWeights as any;
-       }
+      // req.user is injected by AuthGuard
+      const profile = await this.usersService.getProfile(req.user.uid);
+      if (profile && profile.focusWeights) {
+        focusWeights = profile.focusWeights as any;
+      }
     } catch (e) {
-       // Fallback to default if profile not found
-       console.log('Profile not found, using default focus weights');
+      // Fallback to default if profile not found
+      console.log('Profile not found, using default focus weights');
     }
-    
+
     return this.gamePlanEngine.generateDailyGamePlan(date, planets, panchang, focusWeights);
   }
 
@@ -78,6 +78,30 @@ export class AstrologyController {
     const { date, location } = this.parseLocation(dateStr, lat, lon, tz);
     const { panchang } = await this.syncService.getCombinedData(date, location);
     return this.muhuratEngine.calculateMuhurat(category || 'General', date, location, panchang);
+  }
+
+  @Get('birth-chart')
+  async getBirthChart(
+    @Query('date') dateStr: string,
+    @Query('time') timeStr: string,
+    @Query('lat') lat: string,
+    @Query('lon') lon: string,
+    @Query('tz') tz: string,
+  ) {
+    const { date, location } = this.parseLocation(dateStr, lat, lon, tz);
+
+    // Fetch both astro details and planetary positions
+    const [chart, planets] = await Promise.all([
+      this.syncService.syncBirthChart(date, timeStr || '12:00', location),
+      this.syncService.syncPlanetaryPositions(date, location)
+    ]);
+
+    // Inject the real planets into the response so the UI Kundli can draw them!
+    if (chart && chart.data) {
+      chart.data.planets = planets.data;
+    }
+
+    return chart;
   }
 
   @Get('horoscope')

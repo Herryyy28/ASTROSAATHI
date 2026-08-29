@@ -3,13 +3,15 @@ import { AstrologySyncService } from './astrology-sync.service';
 import { GamePlanEngine } from './engines/game-plan.engine';
 import { MuhuratEngine } from './engines/muhurat.engine';
 import { UsersService } from '../users/users.service';
+import { MatchingService } from './matching.service';
 export declare class AstrologyController {
     private readonly astrologyService;
     private readonly syncService;
     private readonly gamePlanEngine;
     private readonly muhuratEngine;
     private readonly usersService;
-    constructor(astrologyService: AstrologyService, syncService: AstrologySyncService, gamePlanEngine: GamePlanEngine, muhuratEngine: MuhuratEngine, usersService: UsersService);
+    private readonly matchingService;
+    constructor(astrologyService: AstrologyService, syncService: AstrologySyncService, gamePlanEngine: GamePlanEngine, muhuratEngine: MuhuratEngine, usersService: UsersService, matchingService: MatchingService);
     private parseLocation;
     getGamePlan(req: any, dateStr: string, lat: string, lon: string, tz: string): Promise<{
         success: boolean;
@@ -53,5 +55,10 @@ export declare class AstrologyController {
             } | null;
         };
     }>;
+    getBirthChart(dateStr: string, timeStr: string, lat: string, lon: string, tz: string): Promise<{
+        data: any;
+        meta: import("./interfaces/astrology-data-provider.interface").ProviderMetadata;
+    }>;
     getHoroscope(sign: string, timeframe: string): Promise<any>;
+    getMatch(p1Sign: string, p2Sign: string): Promise<import("./matching.service").AshtakootaMilanResult>;
 }

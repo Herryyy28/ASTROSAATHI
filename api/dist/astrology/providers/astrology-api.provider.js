@@ -30,8 +30,8 @@ let AstrologyApiProvider = AstrologyApiProvider_1 = class AstrologyApiProvider {
         };
     }
     async fetchFromApi(endpoint, payload) {
-        const userId = this.configService.get('ASTROLOGY_USER_ID');
-        const apiKey = this.configService.get('ASTROLOGY_API_KEY');
+        const userId = this.configService.get('ASTROLOGY_USER_ID') || '657466';
+        const apiKey = this.configService.get('ASTROLOGY_API_KEY') || 'ak-dbf59adeb917e54a4f3eb845c26e6181acf1e707';
         if (!userId || !apiKey) {
             throw new Error('Astrology API credentials missing');
         }
@@ -45,7 +45,10 @@ let AstrologyApiProvider = AstrologyApiProvider_1 = class AstrologyApiProvider {
             body: JSON.stringify(payload),
         });
         if (!response.ok) {
-            throw new Error(`API Error: ${response.statusText}`);
+            const errorText = await response.text();
+            this.logger.error(`API Error ${response.status}: ${errorText}`);
+            require('fs').writeFileSync('astrology_api_error.txt', `Provider Error ${response.status}: ${errorText}\n`);
+            throw new Error(`AstrologyAPI Error: ${errorText}`);
         }
         return await response.json();
     }
@@ -67,7 +70,7 @@ let AstrologyApiProvider = AstrologyApiProvider_1 = class AstrologyApiProvider {
         const data = {};
         if (Array.isArray(apiData)) {
             apiData.forEach((p) => {
-                data[p.name.toLowerCase()] = {
+                data[p.name] = {
                     name: p.name,
                     longitude: p.normDegree,
                     sign: p.sign,

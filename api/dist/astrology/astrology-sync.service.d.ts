@@ -16,6 +16,10 @@ export declare class AstrologySyncService {
         data: Record<string, PlanetaryPosition>;
         meta: ProviderMetadata;
     }>;
+    syncBirthChart(date: Date, time: string, location: LocationData): Promise<{
+        data: any;
+        meta: ProviderMetadata;
+    }>;
     getCombinedData(date: Date, location: LocationData): Promise<{
         panchang: PanchangResponse;
         planets: Record<string, PlanetaryPosition>;

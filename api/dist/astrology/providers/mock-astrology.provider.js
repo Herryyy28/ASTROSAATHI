@@ -33,6 +33,17 @@ let MockAstrologyProvider = class MockAstrologyProvider {
         return {
             data: {
                 ascendant: 'Leo',
+                planets: {
+                    Sun: { name: 'Sun', house: 1, sign: 'Leo' },
+                    Moon: { name: 'Moon', house: 2, sign: 'Virgo' },
+                    Mars: { name: 'Mars', house: 4, sign: 'Scorpio' },
+                    Mercury: { name: 'Mercury', house: 1, sign: 'Leo' },
+                    Jupiter: { name: 'Jupiter', house: 9, sign: 'Aries' },
+                    Venus: { name: 'Venus', house: 12, sign: 'Cancer' },
+                    Saturn: { name: 'Saturn', house: 7, sign: 'Aquarius' },
+                    Rahu: { name: 'Rahu', house: 10, sign: 'Taurus' },
+                    Ketu: { name: 'Ketu', house: 4, sign: 'Scorpio' }
+                },
                 houses: [],
             },
             meta: this.createMetadata(dob, 'mock-1.0'),

@@ -39,7 +39,7 @@ export class UserProfile {
   currentTimeZone!: string;
 
   // User Focus (e.g., 'Career', 'Love', 'Money')
-  @Column({ type: 'jsonb', default: {} })
+  @Column({ type: 'simple-json', default: "{}" })
   focusWeights!: Record<string, number>;
 
   @CreateDateColumn()

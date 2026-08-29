@@ -20,13 +20,15 @@ const game_plan_engine_1 = require("./engines/game-plan.engine");
 const muhurat_engine_1 = require("./engines/muhurat.engine");
 const users_service_1 = require("../users/users.service");
 const auth_guard_1 = require("../auth/auth.guard");
+const matching_service_1 = require("./matching.service");
 let AstrologyController = class AstrologyController {
-    constructor(astrologyService, syncService, gamePlanEngine, muhuratEngine, usersService) {
+    constructor(astrologyService, syncService, gamePlanEngine, muhuratEngine, usersService, matchingService) {
         this.astrologyService = astrologyService;
         this.syncService = syncService;
         this.gamePlanEngine = gamePlanEngine;
         this.muhuratEngine = muhuratEngine;
         this.usersService = usersService;
+        this.matchingService = matchingService;
     }
     parseLocation(dateStr, lat, lon, tz) {
         const date = dateStr ? new Date(dateStr) : new Date();
@@ -61,8 +63,22 @@ let AstrologyController = class AstrologyController {
         const { panchang } = await this.syncService.getCombinedData(date, location);
         return this.muhuratEngine.calculateMuhurat(category || 'General', date, location, panchang);
     }
+    async getBirthChart(dateStr, timeStr, lat, lon, tz) {
+        const { date, location } = this.parseLocation(dateStr, lat, lon, tz);
+        const [chart, planets] = await Promise.all([
+            this.syncService.syncBirthChart(date, timeStr || '12:00', location),
+            this.syncService.syncPlanetaryPositions(date, location)
+        ]);
+        if (chart && chart.data) {
+            chart.data.planets = planets.data;
+        }
+        return chart;
+    }
     async getHoroscope(sign, timeframe) {
         return this.astrologyService.getHoroscope(sign || 'Aries', timeframe || 'daily');
+    }
+    async getMatch(p1Sign, p2Sign) {
+        return this.matchingService.calculateGunMilan(p1Sign || 'Aries', p2Sign || 'Leo');
     }
 };
 exports.AstrologyController = AstrologyController;
@@ -100,6 +116,17 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AstrologyController.prototype, "getMuhurat", null);
 __decorate([
+    (0, common_1.Get)('birth-chart'),
+    __param(0, (0, common_1.Query)('date')),
+    __param(1, (0, common_1.Query)('time')),
+    __param(2, (0, common_1.Query)('lat')),
+    __param(3, (0, common_1.Query)('lon')),
+    __param(4, (0, common_1.Query)('tz')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String, String, String]),
+    __metadata("design:returntype", Promise)
+], AstrologyController.prototype, "getBirthChart", null);
+__decorate([
     (0, common_1.Get)('horoscope'),
     __param(0, (0, common_1.Query)('sign')),
     __param(1, (0, common_1.Query)('timeframe')),
@@ -107,12 +134,21 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], AstrologyController.prototype, "getHoroscope", null);
+__decorate([
+    (0, common_1.Get)('match'),
+    __param(0, (0, common_1.Query)('p1Sign')),
+    __param(1, (0, common_1.Query)('p2Sign')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], AstrologyController.prototype, "getMatch", null);
 exports.AstrologyController = AstrologyController = __decorate([
     (0, common_1.Controller)('astrology'),
     __metadata("design:paramtypes", [astrology_service_1.AstrologyService,
         astrology_sync_service_1.AstrologySyncService,
         game_plan_engine_1.GamePlanEngine,
         muhurat_engine_1.MuhuratEngine,
-        users_service_1.UsersService])
+        users_service_1.UsersService,
+        matching_service_1.MatchingService])
 ], AstrologyController);
 //# sourceMappingURL=astrology.controller.js.map

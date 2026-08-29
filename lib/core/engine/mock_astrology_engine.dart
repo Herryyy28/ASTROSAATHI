@@ -176,7 +176,7 @@ class MockAstrologyEngine implements AstrologyEngine {
     final readings = {
       'daily': '✦ Today\'s Real Bhavishyavani for $sign: The Moon\'s transit through friendly constellation Rohini provides high emotional clarity. Jupiter\'s aspect on your 10th house enhances career authority. Best window for important actions is 11:15 AM to 1:20 PM.',
       'weekly': '✦ Weekly Planetary Outlook for $sign: Sun\'s alignment clears financial bottlenecks mid-week. Relationship harmony reaches a peak on Friday as Venus forms a beneficial Trine. Stay consistent with your goals.',
-      'monthly': '✦ Monthly Cosmic Trends for $sign: Mars in 10th House drives unprecedented career acceleration. Ensure financial prudence around the 18th during Saturn\'s retrograde shadow phase.',
+      'yearly': '✦ Yearly Horizon for $sign: The upcoming 12 months present a solid foundation for long-term investments. Saturn\'s stabilizing influence in your 9th house indicates slow but steady progress. Stay focused on your core objectives.',
     };
 
     return HoroscopeData(
@@ -184,7 +184,25 @@ class MockAstrologyEngine implements AstrologyEngine {
       timeframe: timeframe,
       reading: readings[timeframe] ?? readings['daily']!,
       luckyNumber: 7,
-      luckyColor: 'Golden Yellow',
+      luckyColor: 'Saffron',
     );
+  }
+
+  @override
+  Future<Map<String, dynamic>> getBirthChart(String date, String time, String location, {String languageCode = 'en'}) async {
+    return {
+      'lagna': 'Aries (Mesha)',
+      'planets': {
+        'Su': {'house': 1, 'longitude': 15.5},
+        'Mo': {'house': 7, 'longitude': 180.2},
+        'Ma': {'house': 4, 'longitude': 90.0},
+        'Me': {'house': 1, 'longitude': 20.0},
+        'Ju': {'house': 9, 'longitude': 240.5},
+        'Ve': {'house': 10, 'longitude': 270.0},
+        'Sa': {'house': 10, 'longitude': 280.0},
+        'Ra': {'house': 12, 'longitude': 330.0},
+        'Ke': {'house': 6, 'longitude': 150.0},
+      }
+    };
   }
 }

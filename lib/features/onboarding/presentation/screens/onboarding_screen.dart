@@ -13,17 +13,19 @@ import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/providers/locale_provider.dart';
+import '../../../../core/providers/user_profile_provider.dart';
+import '../../../../features/auth/data/auth_repository.dart';
 import '../../../../l10n/app_language.dart';
 import '../../../../l10n/app_localizations.dart';
 
-class OnboardingScreen extends StatefulWidget {
+class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen>
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     with TickerProviderStateMixin {
   final PageController _pageController = PageController();
   int _currentIndex = 0;
@@ -123,21 +125,30 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       // as if they selected 80% Career, 20% Love on the UI.
       final focusWeights = {'Career': 1.2, 'Love': 0.8, 'Money': 1.0};
 
+      // Save user profile locally first to trigger geocoding
+      await ref.read(userProfileProvider.notifier).updateProfile(
+        name: _nameController.text.trim(),
+        dob: _dobController.text.trim(),
+        time: _timeController.text.trim(),
+        place: _placeController.text.trim(),
+      );
+
+      final profile = ref.read(userProfileProvider);
+
       // Ensure anonymous sign-in happens
-      // await ref.read(authRepositoryProvider).signInAnonymously();
+      await ref.read(authRepositoryProvider).signInAnonymously();
 
-      // Save profile to backend
-      // await ref.read(authRepositoryProvider).saveProfileData(
-      //   name: _nameController.text.trim(),
-      //   dob: _dobController.text.trim(),
-      //   time: _timeController.text.trim(),
-      //   place: _placeController.text.trim(),
-      //   focusWeights: focusWeights,
-      // );
-
-      // Save user name to SharedPreferences for local UI
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_name', _nameController.text.trim());
+      // Save profile to backend with real coordinates
+      await ref.read(authRepositoryProvider).saveProfileData(
+        name: profile.name,
+        dob: profile.dob,
+        time: profile.time,
+        place: profile.place,
+        latitude: profile.latitude,
+        longitude: profile.longitude,
+        timeZone: profile.timeZone,
+        focusWeights: focusWeights,
+      );
     } catch (e) {
       debugPrint('Failed to sync profile: $e');
     }

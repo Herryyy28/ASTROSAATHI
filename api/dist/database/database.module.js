@@ -12,6 +12,11 @@ const typeorm_1 = require("@nestjs/typeorm");
 const config_1 = require("@nestjs/config");
 const user_entity_1 = require("./entities/user.entity");
 const profile_entity_1 = require("./entities/profile.entity");
+const knowledge_rashi_entity_1 = require("./entities/knowledge_rashi.entity");
+const knowledge_bhava_entity_1 = require("./entities/knowledge_bhava.entity");
+const knowledge_graha_entity_1 = require("./entities/knowledge_graha.entity");
+const birth_profile_entity_1 = require("./entities/birth_profile.entity");
+const astro_message_entity_1 = require("./entities/astro_message.entity");
 let DatabaseModule = class DatabaseModule {
 };
 exports.DatabaseModule = DatabaseModule;
@@ -26,7 +31,7 @@ exports.DatabaseModule = DatabaseModule = __decorate([
                         return {
                             type: 'sqlite',
                             database: 'database.sqlite',
-                            entities: [user_entity_1.User, profile_entity_1.UserProfile],
+                            entities: [user_entity_1.User, profile_entity_1.UserProfile, knowledge_rashi_entity_1.KnowledgeRashi, knowledge_bhava_entity_1.KnowledgeBhava, knowledge_graha_entity_1.KnowledgeGraha, birth_profile_entity_1.BirthProfile, astro_message_entity_1.AstroMessage],
                             synchronize: true,
                         };
                     }
@@ -37,13 +42,13 @@ exports.DatabaseModule = DatabaseModule = __decorate([
                         username: configService.get('DB_USERNAME', 'postgres'),
                         password: configService.get('DB_PASSWORD', 'postgres'),
                         database: configService.get('DB_DATABASE', 'astrosaathi'),
-                        entities: [user_entity_1.User, profile_entity_1.UserProfile],
+                        entities: [user_entity_1.User, profile_entity_1.UserProfile, knowledge_rashi_entity_1.KnowledgeRashi, knowledge_bhava_entity_1.KnowledgeBhava, knowledge_graha_entity_1.KnowledgeGraha, birth_profile_entity_1.BirthProfile, astro_message_entity_1.AstroMessage],
                         synchronize: true,
                     };
                 },
                 inject: [config_1.ConfigService],
             }),
-            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, profile_entity_1.UserProfile]),
+            typeorm_1.TypeOrmModule.forFeature([user_entity_1.User, profile_entity_1.UserProfile, knowledge_rashi_entity_1.KnowledgeRashi, knowledge_bhava_entity_1.KnowledgeBhava, knowledge_graha_entity_1.KnowledgeGraha, birth_profile_entity_1.BirthProfile, astro_message_entity_1.AstroMessage]),
         ],
         exports: [typeorm_1.TypeOrmModule],
     })

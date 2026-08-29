@@ -4,45 +4,45 @@ import { User } from './user.entity';
 @Entity('birth_profiles')
 export class BirthProfile {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @ManyToOne(() => User, (user) => user.birthProfiles, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  user: User;
+  user!: User;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ default: 'Self' })
-  relationship: string; // Self, Partner, Mother, Father, Child, Friend
+  relationship!: string; // Self, Partner, Mother, Father, Child, Friend
 
   @Column({ type: 'varchar' })
-  dob: string; // YYYY-MM-DD
+  dob!: string; // YYYY-MM-DD
 
   @Column({ type: 'varchar' })
-  birthTime: string; // HH:mm
+  birthTime!: string; // HH:mm
 
   @Column()
-  birthPlace: string;
+  birthPlace!: string;
 
   @Column('float')
-  latitude: number;
+  latitude!: number;
 
   @Column('float')
-  longitude: number;
+  longitude!: number;
 
   @Column({ default: '5.5' })
-  timezone: string;
+  timezone!: string;
 
   @Column({ default: false })
-  isPrimary: boolean;
+  isPrimary!: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

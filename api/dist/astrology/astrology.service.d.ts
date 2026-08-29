@@ -1,9 +1,11 @@
 import { ConfigService } from '@nestjs/config';
+import { AstrologyDataIntegrityService } from './astrology-data-integrity.service';
 export declare class AstrologyService {
     private configService;
+    private dataIntegrity;
     private readonly logger;
     private cache;
-    constructor(configService: ConfigService);
+    constructor(configService: ConfigService, dataIntegrity: AstrologyDataIntegrityService);
     private getCacheKey;
     private fetchFromApi;
     private getApiPayload;

@@ -13,15 +13,25 @@ const ai_service_1 = require("./ai.service");
 const context_builder_1 = require("./context.builder");
 const astrology_module_1 = require("../astrology/astrology.module");
 const core_module_1 = require("../core/core.module");
+const knowledge_retrieval_service_1 = require("./knowledge-retrieval.service");
+const common_2 = require("@nestjs/common");
+const typeorm_1 = require("@nestjs/typeorm");
+const knowledge_rashi_entity_1 = require("../database/entities/knowledge_rashi.entity");
+const knowledge_bhava_entity_1 = require("../database/entities/knowledge_bhava.entity");
+const knowledge_graha_entity_1 = require("../database/entities/knowledge_graha.entity");
 let AiModule = class AiModule {
 };
 exports.AiModule = AiModule;
 exports.AiModule = AiModule = __decorate([
     (0, common_1.Module)({
-        imports: [astrology_module_1.AstrologyModule, core_module_1.CoreModule],
+        imports: [
+            (0, common_2.forwardRef)(() => astrology_module_1.AstrologyModule),
+            core_module_1.CoreModule,
+            typeorm_1.TypeOrmModule.forFeature([knowledge_rashi_entity_1.KnowledgeRashi, knowledge_bhava_entity_1.KnowledgeBhava, knowledge_graha_entity_1.KnowledgeGraha])
+        ],
         controllers: [ai_controller_1.AiController],
-        providers: [ai_service_1.AiService, context_builder_1.ContextBuilder],
-        exports: [ai_service_1.AiService],
+        providers: [ai_service_1.AiService, context_builder_1.ContextBuilder, knowledge_retrieval_service_1.KnowledgeRetrievalService],
+        exports: [ai_service_1.AiService, knowledge_retrieval_service_1.KnowledgeRetrievalService],
     })
 ], AiModule);
 //# sourceMappingURL=ai.module.js.map

@@ -4,7 +4,7 @@ import { AstrologyModule } from './astrology/astrology.module';
 import { AiModule } from './ai/ai.module';
 import { DatabaseModule } from './database/database.module';
 import { CoreModule } from './core/core.module';
-import { BullModule } from '@nestjs/bullmq';
+// import { BullModule } from '@nestjs/bullmq';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -18,6 +18,7 @@ import { ProfilesModule } from './profiles/profiles.module';
       isGlobal: true,
     }),
     ScheduleModule.forRoot(),
+    /*
     BullModule.forRoot({
       connection: {
         host: process.env.REDIS_HOST || 'localhost',
@@ -29,6 +30,7 @@ import { ProfilesModule } from './profiles/profiles.module';
         attempts: 3,
       },
     }),
+    */
     DatabaseModule,
     CoreModule,
     AuthModule,

@@ -3,20 +3,20 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 @Entity('japa_sessions')
 export class JapaSession {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @Column()
-  mantraTitle: string;
+  mantraTitle!: string;
 
   @Column({ type: 'int', default: 108 })
-  count: number;
+  count!: number;
 
   @Column({ type: 'int', default: 1 })
-  completedRounds: number;
+  completedRounds!: number;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

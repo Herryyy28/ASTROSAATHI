@@ -13,9 +13,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AstrologyService = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
+const astrology_data_integrity_service_1 = require("./astrology-data-integrity.service");
 let AstrologyService = AstrologyService_1 = class AstrologyService {
-    constructor(configService) {
+    constructor(configService, dataIntegrity) {
         this.configService = configService;
+        this.dataIntegrity = dataIntegrity;
         this.logger = new common_1.Logger(AstrologyService_1.name);
         this.cache = new Map();
     }
@@ -24,11 +26,11 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
         return `${endpoint}-${today}-${JSON.stringify(params)}`;
     }
     async fetchFromApi(endpoint, data) {
-        const userId = this.configService.get('ASTROLOGY_USER_ID');
-        const apiKey = this.configService.get('ASTROLOGY_API_KEY');
+        const userId = this.configService.get('ASTROLOGY_USER_ID') || '657466';
+        const apiKey = this.configService.get('ASTROLOGY_API_KEY') || 'ak-dbf59adeb917e54a4f3eb845c26e6181acf1e707';
         if (!userId || !apiKey) {
-            this.logger.warn('Astrology API credentials missing. Falling back to mock data.');
-            return null;
+            this.logger.error('Astrology API credentials missing. Cannot fetch real data.');
+            throw new Error('Astrology API credentials missing.');
         }
         const auth = Buffer.from(`${userId}:${apiKey}`).toString('base64');
         try {
@@ -41,7 +43,10 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
                 body: JSON.stringify(data),
             });
             if (!response.ok) {
-                throw new Error(`API Error: ${response.statusText}`);
+                const errorText = await response.text();
+                this.logger.error(`API Error ${response.status}: ${errorText}`);
+                require('fs').writeFileSync('astrology_api_error.txt', `Service Error ${response.status}: ${errorText}\n`);
+                throw new Error(`AstrologyAPI Error: ${errorText}`);
             }
             return await response.json();
         }
@@ -69,17 +74,14 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey);
         }
+        const payload = this.getApiPayload(date, location);
+        const apiData = await this.fetchFromApi('game_plan', payload);
+        if (!apiData) {
+            throw new Error('Failed to retrieve daily game plan data');
+        }
         const result = {
             success: true,
-            data: {
-                date,
-                dayScore: 8.4,
-                doList: ['Important conversations', 'Start planned work'],
-                beCarefulList: ['Avoid rushed decisions'],
-                avoidList: ['Unnecessary arguments'],
-                bestWindow: { start: '11:15 AM', end: '1:20 PM' },
-                categories: { Career: 8.8, Love: 7.4, Money: 8.1 },
-            },
+            data: this.dataIntegrity.normalizeGamePlan(apiData, date)
         };
         this.cache.set(cacheKey, result);
         return result;
@@ -91,31 +93,10 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
         }
         const payload = this.getApiPayload(date, location);
         const apiData = await this.fetchFromApi('advanced_panchang', payload);
-        let resultData;
-        if (apiData) {
-            resultData = {
-                tithi: apiData.tithi.details.tithi_name,
-                vara: apiData.day,
-                nakshatra: apiData.nakshatra.details.nak_name,
-                yoga: apiData.yoga.details.yoga_name,
-                karana: apiData.karana.details.karana_name,
-                sunrise: apiData.sunrise,
-                sunset: apiData.sunset,
-                rahuKaal: { start: apiData.rahukaal.start, end: apiData.rahukaal.end },
-            };
+        if (!apiData) {
+            throw new Error('Failed to fetch Panchang data');
         }
-        else {
-            resultData = {
-                tithi: 'Shukla Paksha Dashami',
-                vara: 'Wednesday',
-                nakshatra: 'Rohini',
-                yoga: 'Shiva',
-                karana: 'Taitila',
-                sunrise: '06:12 AM',
-                sunset: '06:45 PM',
-                rahuKaal: { start: '12:00 PM', end: '01:30 PM' },
-            };
-        }
+        const resultData = this.dataIntegrity.normalizePanchang(apiData);
         const result = { success: true, data: resultData };
         this.cache.set(cacheKey, result);
         return result;
@@ -125,15 +106,14 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey);
         }
+        const payload = this.getApiPayload(date, location);
+        const apiData = await this.fetchFromApi('muhurat', payload);
+        if (!apiData) {
+            throw new Error('Failed to retrieve Muhurat data');
+        }
         const result = {
             success: true,
-            data: {
-                category,
-                bestWindow: { start: '11:15 AM', end: '01:20 PM' },
-                strength: 'Excellent',
-                bestFor: 'Important professional discussions',
-                avoidWindow: { start: '02:10 PM', end: '03:25 PM' },
-            },
+            data: this.dataIntegrity.normalizeMuhurat(apiData, category)
         };
         this.cache.set(cacheKey, result);
         return result;
@@ -146,25 +126,19 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
         const apiEndpoint = timeframe === 'daily' ? `sun_sign_prediction/daily/${sign.toLowerCase()}` : null;
         let apiData = null;
         if (apiEndpoint) {
+            apiData = await this.fetchFromApi(apiEndpoint, {});
         }
-        let reading = '';
-        if (timeframe === 'daily') {
-            reading = `Today brings a powerful surge of energy for ${sign}. The moon's transit emphasizes your career sector, pushing you to take bold steps.`;
-        }
-        else if (timeframe === 'weekly') {
-            reading = `This week, ${sign} will find balance in personal relationships. A planetary shift on Wednesday clears up misunderstandings.`;
-        }
-        else {
-            reading = `This month highlights financial growth and stability for ${sign}. Keep an eye out for long-term investments around the 15th.`;
+        if (!apiData) {
+            throw new Error('Failed to retrieve Horoscope data');
         }
         const result = {
             success: true,
             data: {
                 sign,
                 timeframe,
-                reading: apiData?.prediction || reading,
-                luckyNumber: Math.floor(Math.random() * 9) + 1,
-                luckyColor: ['Blue', 'Red', 'Green', 'Gold', 'Silver'][Math.floor(Math.random() * 5)],
+                reading: apiData.prediction,
+                luckyNumber: apiData.lucky_number || 7,
+                luckyColor: apiData.lucky_color || 'White',
             },
         };
         this.cache.set(cacheKey, result);
@@ -174,6 +148,7 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
 exports.AstrologyService = AstrologyService;
 exports.AstrologyService = AstrologyService = AstrologyService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [config_1.ConfigService])
+    __metadata("design:paramtypes", [config_1.ConfigService,
+        astrology_data_integrity_service_1.AstrologyDataIntegrityService])
 ], AstrologyService);
 //# sourceMappingURL=astrology.service.js.map

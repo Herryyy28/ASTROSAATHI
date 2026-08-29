@@ -3,23 +3,23 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 @Entity('astro_messages')
 export class AstroMessage {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @Column()
-  conversationId: string;
+  conversationId!: string;
 
   @Column({ type: 'text' })
-  userQuestion: string;
+  userQuestion!: string;
 
   @Column({ type: 'text' })
-  aiAnswer: string;
+  aiAnswer!: string;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ type: 'simple-json', nullable: true })
   contextData: any;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

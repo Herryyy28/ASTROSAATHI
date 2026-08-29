@@ -1,6 +1,8 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:geocoding/geocoding.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/cosmic_particle_background.dart';
 import '../../../../core/providers/profile_provider.dart';
@@ -19,6 +21,8 @@ class MyKundlisScreen extends ConsumerStatefulWidget {
 class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
   final _nameController = TextEditingController();
   final _placeController = TextEditingController(text: 'New Delhi, India');
+  final _dobController = TextEditingController();
+  final _timeController = TextEditingController();
   String _selectedRelationship = 'Partner';
 
   final List<String> _relationships = ['Partner', 'Mother', 'Father', 'Brother', 'Sister', 'Child', 'Friend'];
@@ -27,6 +31,8 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
   void dispose() {
     _nameController.dispose();
     _placeController.dispose();
+    _dobController.dispose();
+    _timeController.dispose();
     super.dispose();
   }
 
@@ -45,97 +51,163 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
               borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
               border: Border.all(color: AppColors.glassBorder),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Add New Birth Profile',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.primary),
-                    ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close_rounded, color: AppColors.textSecondaryDark),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: _nameController,
-                  style: const TextStyle(color: AppColors.textPrimaryDark),
-                  decoration: InputDecoration(
-                    labelText: 'Full Name',
-                    labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
-                    filled: true,
-                    fillColor: AppColors.surfaceHighlightDark,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Add New Birth Profile',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.primary),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(Icons.close_rounded, color: AppColors.textSecondaryDark),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 12),
-                DropdownButtonFormField<String>(
-                  value: _selectedRelationship,
-                  dropdownColor: AppColors.surfaceDark,
-                  style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
-                  decoration: InputDecoration(
-                    labelText: 'Relationship',
-                    labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
-                    filled: true,
-                    fillColor: AppColors.surfaceHighlightDark,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                  ),
-                  items: _relationships.map((r) => DropdownMenuItem(value: r, child: Text(r))).toList(),
-                  onChanged: (val) {
-                    if (val != null) setState(() => _selectedRelationship = val);
-                  },
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: _placeController,
-                  style: const TextStyle(color: AppColors.textPrimaryDark),
-                  decoration: InputDecoration(
-                    labelText: 'Birth Location',
-                    labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
-                    filled: true,
-                    fillColor: AppColors.surfaceHighlightDark,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  const SizedBox(height: 16),
+                  TextField(
+                    controller: _nameController,
+                    style: const TextStyle(color: AppColors.textPrimaryDark),
+                    decoration: InputDecoration(
+                      labelText: 'Full Name',
+                      labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
+                      filled: true,
+                      fillColor: AppColors.surfaceHighlightDark,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
                     ),
-                    onPressed: () {
-                      if (_nameController.text.trim().isNotEmpty) {
-                        ref.read(profilesListProvider.notifier).addProfile(
-                              BirthProfileData(
-                                id: 'p-${DateTime.now().millisecondsSinceEpoch}',
-                                name: _nameController.text.trim(),
-                                relationship: _selectedRelationship,
-                                dob: '1995-10-10',
-                                birthTime: '10:00',
-                                birthPlace: _placeController.text.trim(),
-                                latitude: 28.6139,
-                                longitude: 77.2090,
-                                timezone: '5.5',
-                              ),
-                            );
-                        _nameController.clear();
-                        Navigator.pop(context);
+                  ),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    value: _selectedRelationship,
+                    dropdownColor: AppColors.surfaceDark,
+                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+                    decoration: InputDecoration(
+                      labelText: 'Relationship',
+                      labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
+                      filled: true,
+                      fillColor: AppColors.surfaceHighlightDark,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                    ),
+                    items: _relationships.map((r) => DropdownMenuItem(value: r, child: Text(r))).toList(),
+                    onChanged: (val) {
+                      if (val != null) setState(() => _selectedRelationship = val);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _dobController,
+                    readOnly: true,
+                    onTap: () async {
+                      final date = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime(2000),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now(),
+                      );
+                      if (date != null) {
+                        _dobController.text = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
                       }
                     },
-                    child: const Text('Save Birth Profile', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    style: const TextStyle(color: AppColors.textPrimaryDark),
+                    decoration: InputDecoration(
+                      labelText: 'Date of Birth (YYYY-MM-DD)',
+                      labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
+                      filled: true,
+                      fillColor: AppColors.surfaceHighlightDark,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _timeController,
+                    readOnly: true,
+                    onTap: () async {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: const TimeOfDay(hour: 12, minute: 0),
+                      );
+                      if (time != null) {
+                        if (!context.mounted) return;
+                        _timeController.text = '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+                      }
+                    },
+                    style: const TextStyle(color: AppColors.textPrimaryDark),
+                    decoration: InputDecoration(
+                      labelText: 'Time of Birth (HH:MM)',
+                      labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
+                      filled: true,
+                      fillColor: AppColors.surfaceHighlightDark,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _placeController,
+                    style: const TextStyle(color: AppColors.textPrimaryDark),
+                    decoration: InputDecoration(
+                      labelText: 'Birth Location',
+                      labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
+                      filled: true,
+                      fillColor: AppColors.surfaceHighlightDark,
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                      onPressed: () async {
+                        if (_nameController.text.trim().isNotEmpty && 
+                            _dobController.text.isNotEmpty && 
+                            _timeController.text.isNotEmpty) {
+                          final place = _placeController.text.trim();
+                          double lat = 28.6139;
+                          double lon = 77.2090;
+                          try {
+                            final locations = await locationFromAddress(place);
+                            if (locations.isNotEmpty) {
+                              lat = locations.first.latitude;
+                              lon = locations.first.longitude;
+                            }
+                          } catch (e) {
+                            debugPrint('Geocoding failed for $place: $e');
+                          }
+                          
+                          ref.read(profilesListProvider.notifier).addProfile(
+                                BirthProfileData(
+                                  id: 'p-${DateTime.now().millisecondsSinceEpoch}',
+                                  name: _nameController.text.trim(),
+                                  relationship: _selectedRelationship,
+                                  dob: _dobController.text,
+                                  birthTime: _timeController.text,
+                                  birthPlace: place,
+                                  latitude: lat,
+                                  longitude: lon,
+                                  timezone: '5.5',
+                                ),
+                              );
+                          _nameController.clear();
+                          _dobController.clear();
+                          _timeController.clear();
+                          if (context.mounted) Navigator.pop(context);
+                        }
+                      },
+                      child: const Text('Save Birth Profile', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -205,51 +277,57 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                 const SizedBox(height: 24),
 
                 // Active Profile Highlight Card
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: AppColors.goldSubtleGradient,
-                    borderRadius: BorderRadius.circular(28),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.5)),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 52,
-                        height: 52,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: AppColors.goldGradient,
-                        ),
-                        child: const Center(child: Text('✦', style: TextStyle(fontSize: 24, color: Colors.black))),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(28),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: AppColors.goldSubtleGradient,
+                        borderRadius: BorderRadius.circular(28),
+                        border: Border.all(color: AppColors.primary.withOpacity(0.5)),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Active Kundli Profile', style: TextStyle(fontSize: 11, color: AppColors.textSecondaryDark)),
-                            const SizedBox(height: 2),
-                            Text(
-                              activeProfile.name,
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.primary),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 52,
+                            height: 52,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: AppColors.goldGradient,
                             ),
-                            Text(
-                              '${activeProfile.birthPlace} • ${activeProfile.dob}',
-                              style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                            child: const Center(child: Text('✦', style: TextStyle(fontSize: 24, color: Colors.black))),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Active Kundli Profile', style: TextStyle(fontSize: 11, color: AppColors.textSecondaryDark)),
+                                const SizedBox(height: 2),
+                                Text(
+                                  activeProfile.name,
+                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.primary),
+                                ),
+                                Text(
+                                  '${activeProfile.birthPlace} • ${activeProfile.dob}',
+                                  style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppColors.success.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Text('Active', style: TextStyle(color: AppColors.success, fontWeight: FontWeight.bold, fontSize: 11)),
+                          ),
+                        ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.success.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Text('Active', style: TextStyle(color: AppColors.success, fontWeight: FontWeight.bold, fontSize: 11)),
-                      ),
-                    ],
+                    ),
                   ),
                 ).animate().fade().slideY(begin: 0.1),
                 const SizedBox(height: 24),

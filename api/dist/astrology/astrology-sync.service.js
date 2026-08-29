@@ -75,6 +75,16 @@ let AstrologySyncService = AstrologySyncService_1 = class AstrologySyncService {
             throw new Error('Planetary data unavailable.');
         }
     }
+    async syncBirthChart(date, time, location) {
+        try {
+            const result = await this.provider.getBirthChart(date, time, location);
+            return result;
+        }
+        catch (error) {
+            this.logger.error(`Provider failed to get Birth Chart: ${error.message}`);
+            throw new Error('Birth Chart data unavailable.');
+        }
+    }
     async getCombinedData(date, location) {
         const [panchang, planets] = await Promise.all([
             this.syncPanchang(date, location),

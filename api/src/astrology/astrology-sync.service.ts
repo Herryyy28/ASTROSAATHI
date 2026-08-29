@@ -71,6 +71,16 @@ export class AstrologySyncService {
     }
   }
 
+  async syncBirthChart(date: Date, time: string, location: LocationData) {
+    try {
+      const result = await this.provider.getBirthChart(date, time, location);
+      return result;
+    } catch (error) {
+      this.logger.error(`Provider failed to get Birth Chart: ${(error as Error).message}`);
+      throw new Error('Birth Chart data unavailable.');
+    }
+  }
+
   // To be used by Controller / GamePlanEngine
   async getCombinedData(date: Date, location: LocationData) {
     const [panchang, planets] = await Promise.all([

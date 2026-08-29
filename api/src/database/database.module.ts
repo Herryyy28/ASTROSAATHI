@@ -3,6 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from './entities/user.entity';
 import { UserProfile } from './entities/profile.entity';
+import { KnowledgeRashi } from './entities/knowledge_rashi.entity';
+import { KnowledgeBhava } from './entities/knowledge_bhava.entity';
+import { KnowledgeGraha } from './entities/knowledge_graha.entity';
+import { BirthProfile } from './entities/birth_profile.entity';
+import { AstroMessage } from './entities/astro_message.entity';
 
 @Module({
   imports: [
@@ -15,7 +20,7 @@ import { UserProfile } from './entities/profile.entity';
           return {
             type: 'sqlite',
             database: 'database.sqlite',
-            entities: [User, UserProfile],
+            entities: [User, UserProfile, KnowledgeRashi, KnowledgeBhava, KnowledgeGraha, BirthProfile, AstroMessage],
             synchronize: true,
           };
         }
@@ -27,13 +32,13 @@ import { UserProfile } from './entities/profile.entity';
           username: configService.get<string>('DB_USERNAME', 'postgres'),
           password: configService.get<string>('DB_PASSWORD', 'postgres'),
           database: configService.get<string>('DB_DATABASE', 'astrosaathi'),
-          entities: [User, UserProfile],
+          entities: [User, UserProfile, KnowledgeRashi, KnowledgeBhava, KnowledgeGraha, BirthProfile, AstroMessage],
           synchronize: true,
         };
       },
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([User, UserProfile]),
+    TypeOrmModule.forFeature([User, UserProfile, KnowledgeRashi, KnowledgeBhava, KnowledgeGraha, BirthProfile, AstroMessage]),
   ],
   exports: [TypeOrmModule],
 })

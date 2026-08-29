@@ -13,11 +13,11 @@ const astrology_module_1 = require("./astrology/astrology.module");
 const ai_module_1 = require("./ai/ai.module");
 const database_module_1 = require("./database/database.module");
 const core_module_1 = require("./core/core.module");
-const bullmq_1 = require("@nestjs/bullmq");
 const schedule_1 = require("@nestjs/schedule");
 const auth_module_1 = require("./auth/auth.module");
 const users_module_1 = require("./users/users.module");
 const notifications_module_1 = require("./notifications/notifications.module");
+const profiles_module_1 = require("./profiles/profiles.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,20 +28,11 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
             }),
             schedule_1.ScheduleModule.forRoot(),
-            bullmq_1.BullModule.forRoot({
-                connection: {
-                    host: process.env.REDIS_HOST || 'localhost',
-                    port: parseInt(process.env.REDIS_PORT || '6379', 10),
-                },
-                defaultJobOptions: {
-                    removeOnComplete: true,
-                    attempts: 3,
-                },
-            }),
             database_module_1.DatabaseModule,
             core_module_1.CoreModule,
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
+            profiles_module_1.ProfilesModule,
             notifications_module_1.NotificationsModule,
             astrology_module_1.AstrologyModule,
             ai_module_1.AiModule

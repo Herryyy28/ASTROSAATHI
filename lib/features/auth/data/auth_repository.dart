@@ -51,6 +51,9 @@ class AuthRepository {
     required String dob,
     required String time,
     required String place,
+    required double latitude,
+    required double longitude,
+    required String timeZone,
     required Map<String, double> focusWeights,
   }) async {
     try {
@@ -66,10 +69,9 @@ class AuthRepository {
           'name': name,
           'dob': dob,
           'birthTime': time,
-          'birthLatitude':
-              28.6139, // In production, reverse geocode the 'place' string
-          'birthLongitude': 77.2090,
-          'birthTimeZone': '5.5',
+          'birthLatitude': latitude,
+          'birthLongitude': longitude,
+          'birthTimeZone': timeZone,
           'focusWeights': focusWeights,
         }),
       );

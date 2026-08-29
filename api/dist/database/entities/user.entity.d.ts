@@ -1,4 +1,5 @@
 import { UserProfile } from './profile.entity';
+import { BirthProfile } from './birth_profile.entity';
 export declare class User {
     id: string;
     email: string;
@@ -6,4 +7,5 @@ export declare class User {
     createdAt: Date;
     updatedAt: Date;
     profiles: UserProfile[];
+    birthProfiles: BirthProfile[];
 }
