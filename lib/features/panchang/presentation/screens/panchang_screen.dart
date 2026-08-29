@@ -11,6 +11,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/engine/models/panchang_data.dart';
 import '../../../../core/widgets/responsive_layout.dart';
+import '../../../../core/widgets/why_this_bottom_sheet.dart';
 import '../../../../core/theme/utils/responsive.dart';
 
 class PanchangScreen extends ConsumerWidget {
@@ -61,53 +62,125 @@ class PanchangScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ── Header ────────────────────────────────────────
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                // ── Header with Navigation Arrows ──────────────────
+                Row(
                   children: [
-                    Text(
-                      'Daily Panchang',
-                      style: GoogleFonts.outfit(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimaryDark,
+                    if (Navigator.canPop(context))
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 22),
+                        onPressed: () => Navigator.pop(context),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'The astrological map for today',
-                      style: GoogleFonts.inter(
-                        fontSize: 15,
-                        color: AppColors.textSecondaryDark,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.surfaceHighlightDark.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.sync, size: 12, color: AppColors.textTertiaryDark),
-                          const SizedBox(width: 4),
                           Text(
-                            'Calculated for New Delhi • Live', // In production, this binds to actual location state
+                            'Daily Panchang',
+                            style: GoogleFonts.outfit(
+                              fontSize: 28,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textPrimaryDark,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'The astronomical map for today',
                             style: GoogleFonts.inter(
-                              fontSize: 11,
-                              color: AppColors.textTertiaryDark,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: AppColors.textSecondaryDark,
                             ),
                           ),
                         ],
                       ),
                     ),
                   ],
-                ).fadeSlideUp(),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceHighlightDark.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.sync, size: 12, color: AppColors.textTertiaryDark),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Calculated for New Delhi • Live',
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: AppColors.textTertiaryDark,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
 
-                const SizedBox(height: 28),
+                // ── Date Navigation Card (Backward & Forward Arrows) ──
+                Consumer(
+                  builder: (context, ref, _) {
+                    final selectedDate = ref.watch(selectedPanchangDateProvider);
+                    final isToday = selectedDate.year == DateTime.now().year &&
+                        selectedDate.month == DateTime.now().month &&
+                        selectedDate.day == DateTime.now().day;
+                    final formattedDate =
+                        '${selectedDate.day} ${_monthName(selectedDate.month)} ${selectedDate.year}';
+
+                    return GlassCard(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 18),
+                            tooltip: 'Previous Day',
+                            onPressed: () {
+                              ref.read(selectedPanchangDateProvider.notifier).state =
+                                  selectedDate.subtract(const Duration(days: 1));
+                            },
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                isToday ? 'Today ($formattedDate)' : formattedDate,
+                                style: GoogleFonts.outfit(
+                                  color: AppColors.textPrimaryDark,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              if (!isToday)
+                                TextButton(
+                                  onPressed: () {
+                                    ref.read(selectedPanchangDateProvider.notifier).state = DateTime.now();
+                                  },
+                                  style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: const Size(0, 20)),
+                                  child: Text(
+                                    'Reset to Today',
+                                    style: GoogleFonts.inter(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.primary, size: 18),
+                            tooltip: 'Next Day',
+                            onPressed: () {
+                              ref.read(selectedPanchangDateProvider.notifier).state =
+                                  selectedDate.add(const Duration(days: 1));
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 24),
 
                 // ── Sunrise / Sunset ──────────────────────────────
                 _buildSunMoonTimings(panchang).fadeSlideUp(delay: 100.ms),
@@ -133,11 +206,11 @@ class PanchangScreen extends ConsumerWidget {
                 ).fadeSlideUp(delay: 180.ms),
                 const SizedBox(height: 16),
 
-                _buildElementCard('Tithi', panchang.tithi, 'Lunar day', '🌙', 0),
-                _buildElementCard('Vara', panchang.vara, 'Day of the week', '📅', 1),
-                _buildElementCard('Nakshatra', panchang.nakshatra, 'Lunar mansion', '⭐', 2),
-                _buildElementCard('Yoga', panchang.yoga, 'Sun-Moon angle', '🔮', 3),
-                _buildElementCard('Karana', panchang.karana, 'Half lunar day', '☯️', 4),
+                _buildElementCard(context, 'Tithi', panchang.tithi, 'Lunar day', '🌙', 0),
+                _buildElementCard(context, 'Vara', panchang.vara, 'Day of the week', '📅', 1),
+                _buildElementCard(context, 'Nakshatra', panchang.nakshatra, 'Lunar mansion', '⭐', 2),
+                _buildElementCard(context, 'Yoga', panchang.yoga, 'Sun-Moon angle', '🔮', 3),
+                _buildElementCard(context, 'Karana', panchang.karana, 'Half lunar day', '☯️', 4),
 
                 const SizedBox(height: 28),
 
@@ -208,68 +281,87 @@ class PanchangScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildElementCard(String name, String value, String description, String emoji, int index) {
+  Widget _buildElementCard(BuildContext context, String name, String value, String description, String emoji, int index) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
-      child: GlassCard(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: AppColors.secondary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Text(emoji, style: const TextStyle(fontSize: 18)),
-              ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: const TextStyle(
-                      color: AppColors.textSecondaryDark,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    value,
-                    style: GoogleFonts.outfit(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimaryDark,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              decoration: BoxDecoration(
-                color: AppColors.glassSurface,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                description,
-                style: const TextStyle(
-                  color: AppColors.textTertiaryDark,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
+      child: GestureDetector(
+        onTap: () {
+          WhyThisBottomSheet.show(
+            context,
+            title: '$name: $value',
+            planetFactor: name,
+            houseFactor: 'Panchang Element ${index + 1}',
+            transitFactor: 'Real-time Moon & Sun degree',
+            vedicInterpretation: 'In Vedic Astrology, $name ($value) is a fundamental pillar of $description influencing daily vital energy and Muhurat strength.',
+            practicalAction: 'Favorable for aligned spiritual routines and mindful decision-making.',
+          );
+        },
+        child: GlassCard(
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: AppColors.secondary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: Text(emoji, style: const TextStyle(fontSize: 18)),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                        color: AppColors.textSecondaryDark,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      value,
+                      style: GoogleFonts.outfit(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimaryDark,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: AppColors.glassSurface,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  description,
+                  style: const TextStyle(
+                    color: AppColors.textTertiaryDark,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: AppColors.primary,
+                size: 14,
+              ),
+            ],
+          ),
         ),
-      ).fadeSlideUp(delay: Duration(milliseconds: 240 + (index * 80))),
-    );
+      ),
+    ).fadeSlideUp(delay: Duration(milliseconds: 240 + (index * 80)));
   }
 
   Widget _buildInauspiciousTimings(PanchangData panchang) {
@@ -348,5 +440,10 @@ class PanchangScreen extends ConsumerWidget {
         ).fadeSlideUp(delay: 720.ms),
       ],
     );
+  }
+
+  String _monthName(int month) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[(month - 1) % 12];
   }
 }

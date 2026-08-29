@@ -28,9 +28,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   final List<Widget> _screens = const [
     HomeScreen(),
     HoroscopeScreen(),
-    PanchangScreen(),
-    MatchingScreen(),
-    RemedyHubScreen(),
     AstroBabaScreen(),
     MyKundlisScreen(),
   ];
@@ -38,9 +35,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   static const List<_NavItem> _navItems = [
     _NavItem(icon: Icons.home_rounded, activeIcon: Icons.home_rounded, label: 'Game Plan'),
     _NavItem(icon: Icons.auto_awesome_mosaic_outlined, activeIcon: Icons.auto_awesome_mosaic_rounded, label: 'Horoscope'),
-    _NavItem(icon: Icons.wb_sunny_outlined, activeIcon: Icons.wb_sunny_rounded, label: 'Panchang'),
-    _NavItem(icon: Icons.favorite_border_rounded, activeIcon: Icons.favorite_rounded, label: 'Matching'),
-    _NavItem(icon: Icons.auto_fix_high_rounded, activeIcon: Icons.auto_fix_high_rounded, label: 'Remedies'),
     _NavItem(icon: Icons.auto_awesome_outlined, activeIcon: Icons.auto_awesome, label: 'Astro Baba'),
     _NavItem(icon: Icons.account_circle_outlined, activeIcon: Icons.account_circle_rounded, label: 'My Kundlis'),
   ];
@@ -53,14 +47,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       case 1:
         return l10n.navHoroscope;
       case 2:
-        return l10n.navPanchang;
-      case 3:
-        return l10n.navMatching;
-      case 4:
-        return l10n.navRemedies;
-      case 5:
         return l10n.navAstroBaba;
-      case 6:
+      case 3:
         return l10n.navMyKundlis;
       default:
         return _navItems[index].label;
@@ -79,11 +67,81 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   Widget _buildMobileLayout(BuildContext context, int currentIndex) {
     return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        switchInCurve: Curves.easeOut,
-        switchOutCurve: Curves.easeIn,
-        child: _screens[currentIndex],
+      body: Stack(
+        children: [
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            switchInCurve: Curves.easeOut,
+            switchOutCurve: Curves.easeIn,
+            child: _screens[currentIndex],
+          ),
+          
+          // Backward Arrow (Left Side)
+          if (currentIndex > 0)
+            Positioned(
+              left: 0,
+              top: MediaQuery.of(context).size.height * 0.45,
+              child: SafeArea(
+                child: GestureDetector(
+                  onTap: () {
+                    ref.read(mainNavIndexProvider.notifier).state = currentIndex - 1;
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceDark.withOpacity(0.85),
+                      borderRadius: const BorderRadius.horizontal(right: Radius.circular(16)),
+                      border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.2),
+                          blurRadius: 10,
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: AppColors.primary,
+                      size: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+          // Forward Arrow (Right Side)
+          if (currentIndex < _screens.length - 1)
+            Positioned(
+              right: 0,
+              top: MediaQuery.of(context).size.height * 0.45,
+              child: SafeArea(
+                child: GestureDetector(
+                  onTap: () {
+                    ref.read(mainNavIndexProvider.notifier).state = currentIndex + 1;
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceDark.withOpacity(0.85),
+                      borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
+                      border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.2),
+                          blurRadius: 10,
+                        ),
+                      ],
+                    ),
+                    child: const Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: AppColors.primary,
+                      size: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
       extendBody: true,
       bottomNavigationBar: _buildBottomNav(context, currentIndex),
@@ -101,11 +159,53 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           children: [
             _buildSideRail(context, isDesktop, railWidth, currentIndex),
             Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 300),
-                switchInCurve: Curves.easeOut,
-                switchOutCurve: Curves.easeIn,
-                child: _screens[currentIndex],
+              child: Stack(
+                children: [
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    switchInCurve: Curves.easeOut,
+                    switchOutCurve: Curves.easeIn,
+                    child: _screens[currentIndex],
+                  ),
+                  if (currentIndex > 0)
+                    Positioned(
+                      left: 12,
+                      top: MediaQuery.of(context).size.height * 0.45,
+                      child: GestureDetector(
+                        onTap: () {
+                          ref.read(mainNavIndexProvider.notifier).state = currentIndex - 1;
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceDark.withOpacity(0.85),
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
+                          ),
+                          child: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 18),
+                        ),
+                      ),
+                    ),
+                  if (currentIndex < _screens.length - 1)
+                    Positioned(
+                      right: 12,
+                      top: MediaQuery.of(context).size.height * 0.45,
+                      child: GestureDetector(
+                        onTap: () {
+                          ref.read(mainNavIndexProvider.notifier).state = currentIndex + 1;
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: AppColors.surfaceDark.withOpacity(0.85),
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
+                          ),
+                          child: const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.primary, size: 18),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           ],

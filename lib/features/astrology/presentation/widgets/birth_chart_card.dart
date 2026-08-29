@@ -220,19 +220,21 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
               final rashiName = isCanonical
                   ? (chartData['rashi']?['name'] as String? ?? '—')
                   : '—';
-              final moonPlanet = isCanonical
-                  ? () {
-                      final list = chartData['planets'] as List<dynamic>? ?? [];
-                      for (final p in list) {
-                        final map = p as Map<String, dynamic>;
-                        if (map['id'] == 'moon') return map;
-                      }
-                      return null;
-                    }()
-                  : null;
+              final moonPlanet = () {
+                final list = chartData['planets'];
+                if (list is List) {
+                  for (final p in list) {
+                    if (p is Map) {
+                      final name = (p['name'] ?? p['code'] ?? p['id'] ?? '').toString().toLowerCase();
+                      if (name.contains('moon') || name == 'mo') return p;
+                    }
+                  }
+                }
+                return null;
+              }();
               final nakshatra = moonPlanet?['nakshatra'] as String? ?? '—';
               final pada = moonPlanet?['pada']?.toString() ?? '—';
-              final calculatedAt = chartData['calculatedAt'] as String?;
+              final calculatedAt = chartData['metadata']?['calculatedAt'] as String? ?? chartData['calculatedAt'] as String?;
 
               int getSignIndex(String signName) {
                 final s = signName.toLowerCase();
@@ -256,41 +258,44 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
               // Map planets to houses based on the selected lagna (or actual lagna)
               Map<int, List<String>> activePlanets = {};
               
-              if (isCanonical) {
-                final List<dynamic> planetsList = chartData['planets'] ?? [];
-                for (var p in planetsList) {
-                  final planetName = p['name'] as String;
-                  final planetSign = p['rashi'] as String?;
-                  int house = p['house'] as int? ?? 1;
-                  
-                  if (planetSign != null) {
-                    final planetSignIndex = getSignIndex(planetSign);
-                    house = ((planetSignIndex - lagnaIndex) % 12) + 1;
-                    if (house <= 0) house += 12;
+              final rawPlanets = chartData['planets'];
+              if (rawPlanets is List) {
+                for (var p in rawPlanets) {
+                  if (p is Map) {
+                    final planetName = (p['name'] ?? p['code'] ?? 'Planet').toString();
+                    final planetSign = p['rashi'] as String? ?? p['sign'] as String?;
+                    int house = (p['house'] as num?)?.toInt() ?? 1;
+                    
+                    if (planetSign != null) {
+                      final planetSignIndex = getSignIndex(planetSign);
+                      house = ((planetSignIndex - lagnaIndex) % 12) + 1;
+                      if (house <= 0) house += 12;
+                    }
+                    
+                    if (!activePlanets.containsKey(house)) {
+                      activePlanets[house] = [];
+                    }
+                    activePlanets[house]!.add(planetName);
                   }
-                  
-                  if (!activePlanets.containsKey(house)) {
-                    activePlanets[house] = [];
-                  }
-                  activePlanets[house]!.add(planetName);
                 }
-              } else {
-                final planetsMap = chartData['planets'] as Map<String, dynamic>? ?? {};
-                planetsMap.forEach((key, value) {
-                  final planetSign = value['sign'] as String?;
-                  int house = 1;
-                  if (planetSign != null) {
-                    final planetSignIndex = getSignIndex(planetSign);
-                    house = ((planetSignIndex - lagnaIndex) % 12) + 1;
-                    if (house <= 0) house += 12;
-                  } else {
-                    house = value['house'] as int? ?? 1;
-                  }
+              } else if (rawPlanets is Map) {
+                rawPlanets.forEach((key, value) {
+                  if (value is Map) {
+                    final planetSign = value['sign'] as String? ?? value['rashi'] as String?;
+                    int house = 1;
+                    if (planetSign != null) {
+                      final planetSignIndex = getSignIndex(planetSign);
+                      house = ((planetSignIndex - lagnaIndex) % 12) + 1;
+                      if (house <= 0) house += 12;
+                    } else {
+                      house = (value['house'] as num?)?.toInt() ?? 1;
+                    }
 
-                  if (!activePlanets.containsKey(house)) {
-                    activePlanets[house] = [];
+                    if (!activePlanets.containsKey(house)) {
+                      activePlanets[house] = [];
+                    }
+                    activePlanets[house]!.add(key.toString());
                   }
-                  activePlanets[house]!.add(key);
                 });
               }
 
@@ -411,53 +416,58 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                   ),
                   const SizedBox(height: 24),
                   AspectRatio(
-                        aspectRatio: 1.0,
-                        child: GestureDetector(
-                          onTapUp: (details) {
-                            final RenderBox box =
-                                context.findRenderObject() as RenderBox;
-                            final size = box.size;
-                            final local = details.localPosition;
-                            final dx = local.dx / size.width;
-                            final dy = local.dy / size.height;
+                    aspectRatio: 1.0,
+                    child: InteractiveViewer(
+                      minScale: 1.0,
+                      maxScale: 3.5,
+                      clipBehavior: Clip.none,
+                      child: GestureDetector(
+                        onTapUp: (details) {
+                          final RenderBox box =
+                              context.findRenderObject() as RenderBox;
+                          final size = box.size;
+                          final local = details.localPosition;
+                          final dx = local.dx / size.width;
+                          final dy = local.dy / size.height;
 
-                            int house = 1;
-                            if (dy < 0.33) {
-                              if (dx < 0.33)
-                                house = 2;
-                              else if (dx > 0.66)
-                                house = 12;
-                              else
-                                house = 1;
-                            } else if (dy > 0.66) {
-                              if (dx < 0.33)
-                                house = 6;
-                              else if (dx > 0.66)
-                                house = 8;
-                              else
-                                house = 7;
-                            } else {
-                              if (dx < 0.33)
-                                house = 4;
-                              else if (dx > 0.66)
-                                house = 10;
-                              else
-                                house = 9;
-                            }
-                            _showHouseDetails(context, house, activePlanets);
-                          },
-                          child: CustomPaint(
-                            painter: VedicChartPainter(
-                              housePlanets: activePlanets,
-                            ),
+                          int house = 1;
+                          if (dy < 0.33) {
+                            if (dx < 0.33)
+                              house = 2;
+                            else if (dx > 0.66)
+                              house = 12;
+                            else
+                              house = 1;
+                          } else if (dy > 0.66) {
+                            if (dx < 0.33)
+                              house = 6;
+                            else if (dx > 0.66)
+                              house = 8;
+                            else
+                              house = 7;
+                          } else {
+                            if (dx < 0.33)
+                              house = 4;
+                            else if (dx > 0.66)
+                              house = 10;
+                            else
+                              house = 9;
+                          }
+                          _showHouseDetails(context, house, activePlanets);
+                        },
+                        child: CustomPaint(
+                          painter: VedicChartPainter(
+                            housePlanets: activePlanets,
                           ),
                         ),
-                      )
-                      .animate(onPlay: (c) => c.repeat(reverse: true))
-                      .shimmer(
-                        duration: 3000.ms,
-                        color: AppColors.primaryLight.withOpacity(0.2),
                       ),
+                    ),
+                  )
+                  .animate(onPlay: (c) => c.repeat(reverse: true))
+                  .shimmer(
+                    duration: 3000.ms,
+                    color: AppColors.primaryLight.withOpacity(0.2),
+                  ),
                   const SizedBox(height: 24),
                   const DashaTimelineWidget(),
                 ],

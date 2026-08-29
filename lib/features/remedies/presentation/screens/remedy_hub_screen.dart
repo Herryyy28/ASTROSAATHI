@@ -99,16 +99,21 @@ class _RemedyHubScreenState extends State<RemedyHubScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
+                // Header with Back Arrow
                 Row(
                   children: [
+                    if (Navigator.canPop(context))
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 22),
+                        onPressed: () => Navigator.pop(context),
+                      ),
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
-                        gradient: AppColors.goldGradient,
+                        gradient: AppColors.purpleGradient,
                       ),
-                      child: const Icon(Icons.wb_incandescent_rounded, color: Colors.black, size: 20),
+                      child: const Icon(Icons.auto_fix_high_rounded, color: Colors.white, size: 20),
                     ),
                     const SizedBox(width: 12),
                     Consumer(

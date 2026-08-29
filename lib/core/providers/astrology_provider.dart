@@ -20,15 +20,19 @@ final dailyGamePlanProvider = FutureProvider<GamePlanData>((ref) async {
   final engine = ref.watch(astrologyEngineProvider);
   final lang = ref.watch(localeProvider);
   final location = _getLocationString(ref);
-  final date = DateTime.now().toIso8601String();
+  final now = DateTime.now();
+  final date = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
   return await engine.calculateDailyGamePlan(date, location, languageCode: lang.code);
 });
+
+final selectedPanchangDateProvider = StateProvider<DateTime>((ref) => DateTime.now());
 
 final panchangProvider = FutureProvider<PanchangData>((ref) async {
   final engine = ref.watch(astrologyEngineProvider);
   final lang = ref.watch(localeProvider);
   final location = _getLocationString(ref);
-  final date = DateTime.now().toIso8601String();
+  final selectedDate = ref.watch(selectedPanchangDateProvider);
+  final date = '${selectedDate.year}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}';
   return await engine.calculatePanchang(date, location, languageCode: lang.code);
 });
 
@@ -36,7 +40,8 @@ final muhuratProvider = FutureProvider.family<MuhuratResult, String>((ref, categ
   final engine = ref.watch(astrologyEngineProvider);
   final lang = ref.watch(localeProvider);
   final location = _getLocationString(ref);
-  final date = DateTime.now().toIso8601String();
+  final now = DateTime.now();
+  final date = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
   return await engine.calculateMuhurat(
     MuhuratInput(date: date, location: location, category: category),
     languageCode: lang.code,
@@ -49,9 +54,10 @@ final birthChartProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final profile = ref.watch(activeProfileProvider);
   final location = '${profile.latitude},${profile.longitude},${profile.timezone}';
   
-  final date = profile.dob.isNotEmpty ? profile.dob : DateTime.now().toIso8601String();
+  final now = DateTime.now();
+  final defaultDate = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+  final date = profile.dob.isNotEmpty ? profile.dob : defaultDate;
   final time = profile.birthTime.isNotEmpty ? profile.birthTime : '12:00';
   
-  // Create a map to pass extra parameters via engine or directly
   return await engine.getBirthChart(date, time, location, languageCode: lang.code, profileId: profile.id);
 });

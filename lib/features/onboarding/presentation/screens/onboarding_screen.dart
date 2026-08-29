@@ -16,6 +16,8 @@ import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/user_profile_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../features/auth/data/auth_repository.dart';
+import '../../../../core/widgets/location_permission_dialog.dart';
+import '../../../../core/routing/app_router.dart';
 import '../../../../l10n/app_language.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -122,11 +124,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     );
 
     try {
-      // In a full implementation, we'd add slider UI for these, but we'll mock the user input for now
-      // as if they selected 80% Career, 20% Love on the UI.
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_name', _nameController.text.trim());
+      await prefs.setString('user_dob', _dobController.text.trim());
+      await prefs.setString('user_time', _timeController.text.trim());
+      await prefs.setString('user_place', _placeController.text.trim());
+
       final focusWeights = {'Career': 1.2, 'Love': 0.8, 'Money': 1.0};
 
-      // Save user profile locally (legacy prefs + geocoding)
+      // Save user profile locally
       await ref.read(userProfileProvider.notifier).updateProfile(
         name: _nameController.text.trim(),
         dob: _dobController.text.trim(),
@@ -136,7 +142,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
       final profile = ref.read(userProfileProvider);
 
-      // Unified profile store — single source of truth for all astrology features
+      // Unified profile store
       await ref.read(profilesListProvider.notifier).upsertPrimaryProfile(
         name: profile.name,
         dob: profile.dob,
@@ -147,27 +153,30 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         timezone: profile.timeZone,
       );
 
-      // Ensure anonymous sign-in happens
-      await ref.read(authRepositoryProvider).signInAnonymously();
-
-      // Save profile to backend with real coordinates
-      await ref.read(authRepositoryProvider).saveProfileData(
-        name: profile.name,
-        dob: profile.dob,
-        time: profile.time,
-        place: profile.place,
-        latitude: profile.latitude,
-        longitude: profile.longitude,
-        timeZone: profile.timeZone,
-        focusWeights: focusWeights,
-      );
+      // Non-blocking async backend sync with 2-second timeout
+      try {
+        await ref.read(authRepositoryProvider).signInAnonymously().timeout(const Duration(seconds: 2));
+        await ref.read(authRepositoryProvider).saveProfileData(
+          name: profile.name,
+          dob: profile.dob,
+          time: profile.time,
+          place: profile.place,
+          latitude: profile.latitude,
+          longitude: profile.longitude,
+          timeZone: profile.timeZone,
+          focusWeights: focusWeights,
+        ).timeout(const Duration(seconds: 2));
+      } catch (_) {}
     } catch (e) {
       debugPrint('Failed to sync profile: $e');
     }
 
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) context.go('/');
-    });
+    ref.invalidate(onboardingCompleteProvider);
+
+    await Future.delayed(const Duration(milliseconds: 1200));
+    if (mounted) {
+      context.go('/');
+    }
   }
 
   @override
@@ -502,7 +511,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               prefixIcon: Icons.location_on_outlined,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 12),
+          TextButton.icon(
+            onPressed: () async {
+              final accepted = await LocationPermissionDialog.show(context);
+              if (accepted == true) {
+                setState(() {
+                  _placeController.text = 'New Delhi, India';
+                });
+              }
+            },
+            icon: const Icon(Icons.my_location_rounded, color: AppColors.primary, size: 18),
+            label: Text(
+              'Use Current Location (Disclosed)',
+              style: GoogleFonts.inter(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.w600),
+            ),
+          ),
+          const SizedBox(height: 24),
           GradientButton(
             text: 'Generate Chart',
             icon: Icons.auto_awesome,

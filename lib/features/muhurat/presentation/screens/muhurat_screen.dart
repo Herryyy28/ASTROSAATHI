@@ -44,24 +44,35 @@ class MuhuratScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ── Header ────────────────────────────────────────
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  // ── Header with Back Arrow ────────────────────────
+                  Row(
                     children: [
-                      Text(
-                        'Muhurat',
-                        style: GoogleFonts.outfit(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryDark,
+                      if (Navigator.canPop(context))
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 22),
+                          onPressed: () => Navigator.pop(context),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'What are you planning?',
-                        style: GoogleFonts.inter(
-                          fontSize: 15,
-                          color: AppColors.textSecondaryDark,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Muhurat',
+                              style: GoogleFonts.outfit(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textPrimaryDark,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'What are you planning?',
+                              style: GoogleFonts.inter(
+                                fontSize: 14,
+                                color: AppColors.textSecondaryDark,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],

@@ -3,11 +3,13 @@ import 'models/panchang_data.dart';
 import 'models/muhurat_data.dart';
 import 'models/ai_data.dart';
 import 'models/horoscope_data.dart';
+import 'models/astrology_validation.dart';
 import 'astrology_engine.dart';
 
 class MockAstrologyEngine implements AstrologyEngine {
   @override
   Future<GamePlanData> calculateDailyGamePlan(String date, String location, {String languageCode = 'en'}) async {
+    AstrologyValidator.validateDate(date);
     await Future.delayed(const Duration(milliseconds: 400));
     
     return GamePlanData(
@@ -171,39 +173,93 @@ class MockAstrologyEngine implements AstrologyEngine {
 
   @override
   Future<HoroscopeData> getHoroscope(String sign, String timeframe, {String languageCode = 'en'}) async {
-    await Future.delayed(const Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    final cleanSign = sign.toLowerCase();
+
+    final rashiAttributes = {
+      'aries': {'num': 9, 'color': 'Crimson Red', 'planet': 'Mars'},
+      'mesha': {'num': 9, 'color': 'Crimson Red', 'planet': 'Mars'},
+      'taurus': {'num': 6, 'color': 'Lotus Pink', 'planet': 'Venus'},
+      'vrishabha': {'num': 6, 'color': 'Lotus Pink', 'planet': 'Venus'},
+      'gemini': {'num': 5, 'color': 'Emerald Green', 'planet': 'Mercury'},
+      'mithuna': {'num': 5, 'color': 'Emerald Green', 'planet': 'Mercury'},
+      'cancer': {'num': 2, 'color': 'Pearl White', 'planet': 'Moon'},
+      'karka': {'num': 2, 'color': 'Pearl White', 'planet': 'Moon'},
+      'leo': {'num': 1, 'color': 'Royal Gold', 'planet': 'Sun'},
+      'simha': {'num': 1, 'color': 'Royal Gold', 'planet': 'Sun'},
+      'virgo': {'num': 5, 'color': 'Olive Green', 'planet': 'Mercury'},
+      'kanya': {'num': 5, 'color': 'Olive Green', 'planet': 'Mercury'},
+      'libra': {'num': 6, 'color': 'Sky Blue', 'planet': 'Venus'},
+      'tula': {'num': 6, 'color': 'Sky Blue', 'planet': 'Venus'},
+      'scorpio': {'num': 9, 'color': 'Deep Maroon', 'planet': 'Mars'},
+      'vrishchika': {'num': 9, 'color': 'Deep Maroon', 'planet': 'Mars'},
+      'sagittarius': {'num': 3, 'color': 'Bright Yellow', 'planet': 'Jupiter'},
+      'dhanu': {'num': 3, 'color': 'Bright Yellow', 'planet': 'Jupiter'},
+      'capricorn': {'num': 8, 'color': 'Dark Sapphire', 'planet': 'Saturn'},
+      'makara': {'num': 8, 'color': 'Dark Sapphire', 'planet': 'Saturn'},
+      'aquarius': {'num': 8, 'color': 'Electric Cyan', 'planet': 'Saturn'},
+      'kumbha': {'num': 8, 'color': 'Electric Cyan', 'planet': 'Saturn'},
+      'pisces': {'num': 3, 'color': 'Sea Green', 'planet': 'Jupiter'},
+      'meena': {'num': 3, 'color': 'Sea Green', 'planet': 'Jupiter'},
+    };
+
+    Map<String, Object>? foundAttr;
+    for (final entry in rashiAttributes.entries) {
+      if (cleanSign.contains(entry.key)) {
+        foundAttr = entry.value;
+        break;
+      }
+    }
+
+    final luckyNum = (foundAttr?['num'] as int?) ?? 7;
+    final luckyColor = (foundAttr?['color'] as String?) ?? 'Golden Yellow';
+    final rulingPlanet = (foundAttr?['planet'] as String?) ?? 'Jupiter';
 
     final readings = {
-      'daily': '✦ Today\'s Real Bhavishyavani for $sign: The Moon\'s transit through friendly constellation Rohini provides high emotional clarity. Jupiter\'s aspect on your 10th house enhances career authority. Best window for important actions is 11:15 AM to 1:20 PM.',
-      'weekly': '✦ Weekly Planetary Outlook for $sign: Sun\'s alignment clears financial bottlenecks mid-week. Relationship harmony reaches a peak on Friday as Venus forms a beneficial Trine. Stay consistent with your goals.',
-      'yearly': '✦ Yearly Horizon for $sign: The upcoming 12 months present a solid foundation for long-term investments. Saturn\'s stabilizing influence in your 9th house indicates slow but steady progress. Stay focused on your core objectives.',
+      'daily': '✦ Today\'s Vedic Bhavishyavani for $sign: Ruled by $rulingPlanet, your cosmic energy is amplified today. Transit Moon enhances intuition and executive focus. Lucky hours are between 11:15 AM and 1:20 PM.',
+      'weekly': '✦ Weekly Planetary Outlook for $sign: With $rulingPlanet forming favorable aspects, financial growth accelerates mid-week. Focus on long-term strategy.',
+      'yearly': '✦ Yearly Horizon for $sign: Major transits over your key houses bring expansion, spiritual wisdom, and career breakthroughs. Align actions with daily muhurat.',
     };
 
     return HoroscopeData(
       sign: sign,
       timeframe: timeframe,
       reading: readings[timeframe] ?? readings['daily']!,
-      luckyNumber: 7,
-      luckyColor: 'Saffron',
+      luckyNumber: luckyNum,
+      luckyColor: luckyColor,
     );
   }
 
   @override
   Future<Map<String, dynamic>> getBirthChart(String date, String time, String location, {String languageCode = 'en', String? profileId}) async {
-    return {
+    AstrologyValidator.validateDate(date);
+    AstrologyValidator.validateTime(time);
+
+    final chart = {
       'lagna': 'Aries (Mesha)',
-      'planets': {
-        'Su': {'house': 1, 'longitude': 15.5},
-        'Mo': {'house': 7, 'longitude': 180.2},
-        'Ma': {'house': 4, 'longitude': 90.0},
-        'Me': {'house': 1, 'longitude': 20.0},
-        'Ju': {'house': 9, 'longitude': 240.5},
-        'Ve': {'house': 10, 'longitude': 270.0},
-        'Sa': {'house': 10, 'longitude': 280.0},
-        'Ra': {'house': 12, 'longitude': 330.0},
-        'Ke': {'house': 6, 'longitude': 150.0},
-      }
+      'planets': [
+        {'name': 'Sun', 'code': 'Su', 'house': 1, 'longitude': 15.5, 'nakshatra': 'Ashwini', 'pada': 1},
+        {'name': 'Moon', 'code': 'Mo', 'house': 7, 'longitude': 180.2, 'nakshatra': 'Swati', 'pada': 2},
+        {'name': 'Mars', 'code': 'Ma', 'house': 4, 'longitude': 90.0, 'nakshatra': 'Punarvasu', 'pada': 4},
+        {'name': 'Mercury', 'code': 'Me', 'house': 1, 'longitude': 20.0, 'nakshatra': 'Bharani', 'pada': 3},
+        {'name': 'Jupiter', 'code': 'Ju', 'house': 9, 'longitude': 240.5, 'nakshatra': 'Mula', 'pada': 1},
+        {'name': 'Venus', 'code': 'Ve', 'house': 10, 'longitude': 270.0, 'nakshatra': 'Uttara Ashadha', 'pada': 1},
+        {'name': 'Saturn', 'code': 'Sa', 'house': 10, 'longitude': 280.0, 'nakshatra': 'Shravana', 'pada': 2},
+        {'name': 'Rahu', 'code': 'Ra', 'house': 12, 'longitude': 330.0, 'nakshatra': 'Purva Bhadrapada', 'pada': 3},
+        {'name': 'Ketu', 'code': 'Ke', 'house': 6, 'longitude': 150.0, 'nakshatra': 'Uttara Phalguni', 'pada': 1},
+      ],
+      'metadata': DataQualityMetadata(
+        calculatedAt: 'Calculated at ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
+        timezone: '+05:30',
+        latitude: 28.6139,
+        longitude: 77.2090,
+        profileId: profileId ?? 'default',
+      ).toJson(),
     };
+
+    AstrologyValidator.validateBirthChartOutput(chart);
+    return chart;
   }
 }
 

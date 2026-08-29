@@ -17,7 +17,11 @@ import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../../../core/engine/models/game_plan_data.dart';
 import '../../../../core/widgets/why_this_bottom_sheet.dart';
+import '../../../../core/widgets/data_freshness_badge.dart';
+import '../../../../core/widgets/iphone_glass_menu.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../search/presentation/screens/astrology_search_screen.dart';
+import '../../../support/presentation/screens/trust_center_screen.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
 import 'main_screen.dart';
 
@@ -49,6 +53,7 @@ class HomeScreen extends ConsumerWidget {
                 child: ShimmerLoader(itemCount: 5, itemHeight: 100),
               ),
               error: (error, stack) => ErrorStateWidget(
+                message: error.toString().replaceFirst('Exception: ', ''),
                 onRetry: () => ref.invalidate(dailyGamePlanProvider),
               ),
               data: (plan) => _buildGamePlanUI(context, plan),
@@ -183,15 +188,46 @@ class HomeScreen extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                IconButton(
+                  icon: const Icon(Icons.search_rounded, color: AppColors.primary, size: 24),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const AstrologySearchScreen()),
+                    );
+                  },
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 0.8),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.more_vert_rounded, color: AppColors.primary, size: 22),
+                    onPressed: () {
+                      IPhoneGlassMenu.show(context, ref);
+                    },
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 6),
-            Text(
-              _formatDate(),
-              style: GoogleFonts.inter(
-                fontSize: 15,
-                color: AppColors.textSecondaryDark,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _formatDate(),
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    color: AppColors.textSecondaryDark,
+                  ),
+                ),
+                DataFreshnessBadge(
+                  timeString: 'Calculated at ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
+                ),
+              ],
             ),
           ],
         );

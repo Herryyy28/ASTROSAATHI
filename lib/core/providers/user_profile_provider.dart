@@ -80,17 +80,17 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
     double lat = 28.6139;
     double lon = 77.2090;
     
-    // Attempt geocoding
+    // Attempt geocoding with timeout
     try {
       if (place.isNotEmpty) {
-        List<Location> locations = await locationFromAddress(place);
+        List<Location> locations = await locationFromAddress(place).timeout(const Duration(seconds: 2));
         if (locations.isNotEmpty) {
           lat = locations.first.latitude;
           lon = locations.first.longitude;
         }
       }
     } catch (e) {
-      // Ignore geocoding errors, fallback to default
+      // Ignore geocoding errors/timeouts, fallback to default
       print('Geocoding error for place: $place - $e');
     }
 
