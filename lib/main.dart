@@ -6,9 +6,21 @@ import 'core/routing/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/providers/locale_provider.dart';
 
+import 'package:flutter/foundation.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
+  // Prevent unhandled error crashes in production
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    debugPrint('Flutter Error: ${details.exception}');
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    debugPrint('Platform Error: $error\n$stack');
+    return true;
+  };
+
   // Enable Google Fonts runtime fetching for dynamic typography loading
   GoogleFonts.config.allowRuntimeFetching = true;
 

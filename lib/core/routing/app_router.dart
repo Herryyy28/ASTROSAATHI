@@ -8,21 +8,58 @@ import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 
 /// Provider that checks if the user has completed onboarding.
 final onboardingCompleteProvider = FutureProvider<bool>((ref) async {
-  final prefs = await SharedPreferences.getInstance();
-  final name = prefs.getString('user_name');
-  return name != null && name.isNotEmpty;
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString('user_name');
+    return name != null && name.isNotEmpty;
+  } catch (_) {
+    return false;
+  }
+});
+
+class RouterNotifier extends ChangeNotifier {
+  final Ref _ref;
+
+  RouterNotifier(this._ref) {
+    _ref.listen<AsyncValue<bool>>(
+      onboardingCompleteProvider,
+      (previous, next) {
+        notifyListeners();
+      },
+    );
+  }
+
+  String? redirect(BuildContext context, GoRouterState state) {
+    final onboardingAsync = _ref.read(onboardingCompleteProvider);
+
+    return onboardingAsync.when(
+      data: (isDone) {
+        final isOnboardingLocation = state.matchedLocation == '/onboarding';
+        if (!isDone && !isOnboardingLocation) {
+          return '/onboarding';
+        }
+        if (isDone && isOnboardingLocation) {
+          return '/';
+        }
+        return null;
+      },
+      loading: () => null,
+      error: (_, __) => null,
+    );
+  }
+}
+
+final routerNotifierProvider = Provider<RouterNotifier>((ref) {
+  return RouterNotifier(ref);
 });
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final onboardingDone = ref.watch(onboardingCompleteProvider);
-
-  // Determine initial location based on onboarding status
-  final initialLocation = onboardingDone.whenOrNull(
-    data: (done) => done ? '/' : '/onboarding',
-  ) ?? '/onboarding';
+  final notifier = ref.read(routerNotifierProvider);
 
   return GoRouter(
-    initialLocation: initialLocation,
+    initialLocation: '/onboarding',
+    refreshListenable: notifier,
+    redirect: notifier.redirect,
     routes: [
       GoRoute(
         path: '/onboarding',
