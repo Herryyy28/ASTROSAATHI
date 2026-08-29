@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { AstrologyDataProvider, PanchangResponse, PlanetaryPosition, ProviderMetadata } from '../interfaces/astrology-data-provider.interface';
 import { LocationData } from '../../core/location/location.service';
 import { startOfDay, endOfDay } from 'date-fns';
-import { Astronomy, Body } from 'astronomy-engine';
+import { Body, Equator, Ecliptic, Observer } from 'astronomy-engine';
 
 @Injectable()
 export class LocalAstrologyProvider implements AstrologyDataProvider {
@@ -50,9 +50,9 @@ export class LocalAstrologyProvider implements AstrologyDataProvider {
   }
 
   private calculatePlanet(body: Body, date: Date, observer: any): PlanetaryPosition {
-    const eq = Astronomy.Equator(body, date, observer, true, true);
-    const ecl = Astronomy.Ecliptic(eq.vec);
-    let longitude = ecl.lon;
+    const eq = Equator(body, date, observer, true, true);
+    const ecl = Ecliptic(eq.vec);
+    let longitude = ecl.elon;
     if (longitude < 0) longitude += 360;
 
     const { sign, signIndex } = this.getSignDetails(longitude);
@@ -82,7 +82,7 @@ export class LocalAstrologyProvider implements AstrologyDataProvider {
 
   async getPlanetaryPositions(date: Date, location: LocationData): Promise<{ data: Record<string, PlanetaryPosition>; meta: ProviderMetadata }> {
     try {
-      const observer = Astronomy.MakeObserver(location.latitude, location.longitude, 0);
+      const observer = new Observer(location.latitude, location.longitude, 0);
       
       const bodies = [Body.Sun, Body.Moon, Body.Mars, Body.Mercury, Body.Jupiter, Body.Venus, Body.Saturn];
       const data: Record<string, PlanetaryPosition> = {};
@@ -92,9 +92,9 @@ export class LocalAstrologyProvider implements AstrologyDataProvider {
         data[planetInfo.name.toLowerCase()] = planetInfo;
       }
       
-      const sunEcl = Astronomy.Ecliptic(Astronomy.Equator(Body.Sun, date, observer, true, true).vec);
-      const moonEcl = Astronomy.Ecliptic(Astronomy.Equator(Body.Moon, date, observer, true, true).vec);
-      const rahuLon = (moonEcl.lon + 180) % 360;
+      const sunEcl = Ecliptic(Equator(Body.Sun, date, observer, true, true).vec);
+      const moonEcl = Ecliptic(Equator(Body.Moon, date, observer, true, true).vec);
+      const rahuLon = (moonEcl.elon + 180) % 360;
       const ketuLon = (rahuLon + 180) % 360;
       
       data['rahu'] = {
@@ -129,7 +129,7 @@ export class LocalAstrologyProvider implements AstrologyDataProvider {
   }
 
   async getBirthChart(dob: Date, time: string, location: LocationData): Promise<{ data: any; meta: ProviderMetadata }> {
-    const observer = Astronomy.MakeObserver(location.latitude, location.longitude, 0);
+    const observer = new Observer(location.latitude, location.longitude, 0);
     const sunPos = this.calculatePlanet(Body.Sun, dob, observer);
     
     let hours = dob.getHours() + (dob.getMinutes() / 60);

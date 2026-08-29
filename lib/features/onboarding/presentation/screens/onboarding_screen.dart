@@ -14,6 +14,7 @@ import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/user_profile_provider.dart';
+import '../../../../core/providers/profile_provider.dart';
 import '../../../../features/auth/data/auth_repository.dart';
 import '../../../../l10n/app_language.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -125,7 +126,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       // as if they selected 80% Career, 20% Love on the UI.
       final focusWeights = {'Career': 1.2, 'Love': 0.8, 'Money': 1.0};
 
-      // Save user profile locally first to trigger geocoding
+      // Save user profile locally (legacy prefs + geocoding)
       await ref.read(userProfileProvider.notifier).updateProfile(
         name: _nameController.text.trim(),
         dob: _dobController.text.trim(),
@@ -134,6 +135,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       );
 
       final profile = ref.read(userProfileProvider);
+
+      // Unified profile store — single source of truth for all astrology features
+      await ref.read(profilesListProvider.notifier).upsertPrimaryProfile(
+        name: profile.name,
+        dob: profile.dob,
+        birthTime: profile.time,
+        birthPlace: profile.place,
+        latitude: profile.latitude,
+        longitude: profile.longitude,
+        timezone: profile.timeZone,
+      );
 
       // Ensure anonymous sign-in happens
       await ref.read(authRepositoryProvider).signInAnonymously();

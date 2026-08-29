@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers/astrology_provider.dart';
 import '../../../../core/providers/locale_provider.dart';
-import '../../../../core/providers/user_profile_provider.dart';
+import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/engine/models/ai_data.dart';
 import '../../../../l10n/app_language.dart';
 
@@ -31,8 +31,8 @@ class AstroBabaNotifier extends StateNotifier<List<ChatMessage>> {
     try {
       final engine = ref.read(astrologyEngineProvider);
       final lang = ref.read(localeProvider);
-      final profile = ref.read(userProfileProvider);
-      final location = '${profile.latitude},${profile.longitude},${profile.timeZone}';
+      final profile = ref.read(activeProfileProvider);
+      final location = '${profile.latitude},${profile.longitude},${profile.timezone}';
       final date = DateTime.now().toIso8601String();
       
       final response = await engine.askAstroBaba(text, date, location, languageCode: lang.code);

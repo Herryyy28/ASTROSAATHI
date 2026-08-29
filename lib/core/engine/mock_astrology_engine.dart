@@ -189,7 +189,7 @@ class MockAstrologyEngine implements AstrologyEngine {
   }
 
   @override
-  Future<Map<String, dynamic>> getBirthChart(String date, String time, String location, {String languageCode = 'en'}) async {
+  Future<Map<String, dynamic>> getBirthChart(String date, String time, String location, {String languageCode = 'en', String? profileId}) async {
     return {
       'lagna': 'Aries (Mesha)',
       'planets': {
@@ -206,3 +206,4 @@ class MockAstrologyEngine implements AstrologyEngine {
     };
   }
 }
+

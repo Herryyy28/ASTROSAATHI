@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../engine/astrology_engine.dart';
-import '../engine/api_astrology_engine.dart';
+import '../engine/mock_astrology_engine.dart';
 import '../engine/models/game_plan_data.dart';
 import '../engine/models/panchang_data.dart';
 import '../engine/models/muhurat_data.dart';
@@ -8,8 +8,7 @@ import 'locale_provider.dart';
 import 'profile_provider.dart';
 
 final astrologyEngineProvider = Provider<AstrologyEngine>((ref) {
-  // Use ApiAstrologyEngine to connect to NestJS backend.
-  return ApiAstrologyEngine();
+  return MockAstrologyEngine();
 });
 
 String _getLocationString(ref) {

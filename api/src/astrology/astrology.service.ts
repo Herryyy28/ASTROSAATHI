@@ -149,12 +149,17 @@ export class AstrologyService {
     }
 
     if (this.configService.get<string>('USE_MOCK_PROVIDER') === 'true') {
+      const readings: Record<string, string> = {
+        daily: `Personalized ${sign} daily forecast based on current planetary transits. Focus on grounding your energy and making deliberate choices today.`,
+        weekly: `Weekly outlook for ${sign}: mid-week brings clarity in career matters. Relationship harmony peaks toward the weekend as Venus forms a supportive aspect.`,
+        monthly: `Monthly themes for ${sign}: steady progress in long-term goals. Saturn's influence encourages discipline; avoid impulsive financial decisions in the second half.`,
+      };
       const result = {
         success: true,
         data: {
           sign,
           timeframe,
-          reading: `According to your calculated birth chart, your personalized reading for ${sign} today shows positive transits. The underlying astrological context emphasizes grounding and focus.`,
+          reading: readings[timeframe] ?? readings.daily,
           luckyNumber: 7,
           luckyColor: 'Blue',
         },
