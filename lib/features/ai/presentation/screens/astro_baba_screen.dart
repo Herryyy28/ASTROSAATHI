@@ -12,6 +12,7 @@ import '../providers/astro_baba_provider.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../widgets/cosmic_orb_painter.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class AstroBabaScreen extends ConsumerStatefulWidget {
   const AstroBabaScreen({super.key});
@@ -114,6 +115,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
   }
 
   Widget _buildAppBar() {
+    final l10n = AppLocalizations.of(context, ref);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       child: Row(
@@ -124,7 +126,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'AI Astro Baba',
+                'AI ${l10n.navAstroBaba}',
                 style: GoogleFonts.outfit(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -132,7 +134,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                 ),
               ),
               Text(
-                _isLoading ? 'Analyzing transits & Dasha...' : 'Connected to Vedic Engine',
+                _isLoading ? l10n.loading : l10n.babaConnected,
                 style: const TextStyle(
                   color: AppColors.textSecondaryDark,
                   fontSize: 12,
@@ -148,11 +150,11 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.success.withOpacity(0.4)),
             ),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.circle, color: AppColors.success, size: 8),
-                SizedBox(width: 6),
-                Text('Active', style: TextStyle(color: AppColors.success, fontSize: 11, fontWeight: FontWeight.bold)),
+                const Icon(Icons.circle, color: AppColors.success, size: 8),
+                const SizedBox(width: 6),
+                Text(l10n.active, style: const TextStyle(color: AppColors.success, fontSize: 11, fontWeight: FontWeight.bold)),
               ],
             ),
           ),
@@ -333,14 +335,15 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
 
   Widget _buildSuggestedQuestions() {
     if (ref.read(astroBabaProvider).length > 2) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context, ref);
 
     final categoryPrompts = [
-      {'chip': '💼 Career', 'query': 'What is my career outlook & 10th House alignment this month?'},
-      {'chip': '❤️ Love', 'query': 'How is my relationship harmony & Venus transit today?'},
-      {'chip': '💰 Money', 'query': 'What are my financial trends under current Jupiter Mahadasha?'},
-      {'chip': '🧠 Mindset', 'query': 'How can I balance mental peace under today\'s Moon transit?'},
-      {'chip': '🚀 Business', 'query': 'Is today favorable for new business deals or negotiations?'},
-      {'chip': '💍 Marriage', 'query': 'Explain my 7th house partnership aspect & Gun Milan factors.'},
+      {'chip': l10n.translate('chip_career'), 'query': 'What is my career outlook & 10th House alignment this month?'},
+      {'chip': l10n.translate('chip_love'), 'query': 'How is my relationship harmony & Venus transit today?'},
+      {'chip': l10n.translate('chip_money'), 'query': 'What are my financial trends under current Jupiter Mahadasha?'},
+      {'chip': l10n.translate('chip_mindset'), 'query': 'How can I balance mental peace under today\'s Moon transit?'},
+      {'chip': l10n.translate('chip_business'), 'query': 'Is today favorable for new business deals or negotiations?'},
+      {'chip': l10n.translate('chip_marriage'), 'query': 'Explain my 7th house partnership aspect & Gun Milan factors.'},
     ];
 
     return SingleChildScrollView(
@@ -377,6 +380,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
   }
 
   Widget _buildInputArea() {
+    final l10n = AppLocalizations.of(context, ref);
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
@@ -415,7 +419,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                     controller: _controller,
                     style: GoogleFonts.inter(color: AppColors.textPrimaryDark, fontSize: 15),
                     decoration: InputDecoration(
-                      hintText: 'Ask Astro Baba...',
+                      hintText: l10n.askBabaHint,
                       hintStyle: const TextStyle(color: AppColors.textTertiaryDark),
                       filled: true,
                       fillColor: AppColors.glassSurface,

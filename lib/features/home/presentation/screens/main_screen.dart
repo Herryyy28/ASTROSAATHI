@@ -12,6 +12,7 @@ import '../../../ai/presentation/screens/astro_baba_screen.dart';
 import '../../../matching/presentation/screens/matching_screen.dart';
 import '../../../remedies/presentation/screens/remedy_hub_screen.dart';
 import '../../../profile/presentation/screens/my_kundlis_screen.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// Provider for managing main navigation tab index globally
 final mainNavIndexProvider = StateProvider<int>((ref) => 0);
@@ -43,6 +44,28 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     _NavItem(icon: Icons.auto_awesome_outlined, activeIcon: Icons.auto_awesome, label: 'Astro Baba'),
     _NavItem(icon: Icons.account_circle_outlined, activeIcon: Icons.account_circle_rounded, label: 'My Kundlis'),
   ];
+
+  String _getNavLabel(BuildContext context, int index) {
+    final l10n = AppLocalizations.of(context, ref);
+    switch (index) {
+      case 0:
+        return l10n.navGamePlan;
+      case 1:
+        return l10n.navHoroscope;
+      case 2:
+        return l10n.navPanchang;
+      case 3:
+        return l10n.navMatching;
+      case 4:
+        return l10n.navRemedies;
+      case 5:
+        return l10n.navAstroBaba;
+      case 6:
+        return l10n.navMyKundlis;
+      default:
+        return _navItems[index].label;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +217,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             if (isDesktop) ...[
               const SizedBox(width: 12),
               Text(
-                item.label,
+                _getNavLabel(context, index),
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
@@ -280,7 +303,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
             const SizedBox(height: 3),
             Text(
-              item.label,
+              _getNavLabel(context, index),
               style: TextStyle(
                 fontSize: 8.5,
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,

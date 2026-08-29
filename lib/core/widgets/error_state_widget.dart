@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_animations.dart';
+import '../../l10n/app_localizations.dart';
 import 'gradient_button.dart';
 
-class ErrorStateWidget extends StatelessWidget {
-  final String title;
-  final String message;
+class ErrorStateWidget extends ConsumerWidget {
+  final String? title;
+  final String? message;
   final VoidCallback onRetry;
 
   const ErrorStateWidget({
     super.key,
-    this.title = 'The Stars are Clouded',
-    this.message = 'Our servers are currently reconnecting to the celestial network. Please try again in a moment.',
+    this.title,
+    this.message,
     required this.onRetry,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context, ref);
+    final displayTitle = title ?? l10n.somethingWentWrong;
+    final displayMessage = message ?? l10n.error;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -46,7 +52,7 @@ class ErrorStateWidget extends StatelessWidget {
             const SizedBox(height: 32),
             
             Text(
-              title,
+              displayTitle,
               textAlign: TextAlign.center,
               style: GoogleFonts.outfit(
                 fontSize: 24,
@@ -58,7 +64,7 @@ class ErrorStateWidget extends StatelessWidget {
             const SizedBox(height: 16),
             
             Text(
-              message,
+              displayMessage,
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 fontSize: 16,
@@ -70,7 +76,7 @@ class ErrorStateWidget extends StatelessWidget {
             const SizedBox(height: 40),
             
             GradientButton(
-              text: 'Realign Stars',
+              text: l10n.retry,
               onPressed: onRetry,
             ),
           ],

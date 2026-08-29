@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/cosmic_particle_background.dart';
 import '../widgets/mantra_japa_counter_widget.dart';
+import '../../../../core/providers/locale_provider.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class RemedyHubScreen extends StatefulWidget {
   const RemedyHubScreen({super.key});
@@ -108,22 +111,27 @@ class _RemedyHubScreenState extends State<RemedyHubScreen> {
                       child: const Icon(Icons.wb_incandescent_rounded, color: Colors.black, size: 20),
                     ),
                     const SizedBox(width: 12),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Vedic Remedy Hub',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimaryDark,
-                          ),
-                        ),
-                        Text(
-                          'Authentic Gemstones, Mantras & Karma Upay',
-                          style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
-                        ),
-                      ],
+                    Consumer(
+                      builder: (context, ref, _) {
+                        final l10n = AppLocalizations.of(context, ref);
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              l10n.remediesTitle,
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textPrimaryDark,
+                              ),
+                            ),
+                            Text(
+                              l10n.remediesSub,
+                              style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ],
                 ),

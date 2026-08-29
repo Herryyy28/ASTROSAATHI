@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/providers/astrology_provider.dart';
+import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/engine/models/ai_data.dart';
+import '../../../../l10n/app_language.dart';
 
 class AstroBabaNotifier extends StateNotifier<List<ChatMessage>> {
   AstroBabaNotifier(this.ref) : super([
@@ -27,7 +29,8 @@ class AstroBabaNotifier extends StateNotifier<List<ChatMessage>> {
 
     try {
       final engine = ref.read(astrologyEngineProvider);
-      final response = await engine.askAstroBaba(text, 'Today', 'Current Location');
+      final lang = ref.read(localeProvider);
+      final response = await engine.askAstroBaba(text, 'Today', 'Current Location', languageCode: lang.code);
       
       state = [...state, ChatMessage(
         text: response.answer,

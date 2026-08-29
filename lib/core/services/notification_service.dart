@@ -49,4 +49,16 @@ class NotificationService {
     // Implementation to send token to backend API
     // e.g., http.post('/api/notifications/register-token', body: {'token': token})
   }
+
+  static String getLocalizedNotification(String languageCode) {
+    switch (languageCode.toLowerCase()) {
+      case 'hi':
+        return '🔮 आपका आज का कॉस्मिक गेम प्लान तैयार है।';
+      case 'gu':
+        return '🔮 તમારો આજનો કોસ્મિક ગેમ પ્લાન તૈયાર છે.';
+      case 'en':
+      default:
+        return '🔮 Your Daily Cosmic Game Plan is ready.';
+    }
+  }
 }

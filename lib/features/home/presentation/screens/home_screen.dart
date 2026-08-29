@@ -17,6 +17,8 @@ import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/utils/responsive.dart';
 import '../../../../core/engine/models/game_plan_data.dart';
 import '../../../../core/widgets/why_this_bottom_sheet.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../widgets/personal_cosmic_calendar_widget.dart';
 import 'main_screen.dart';
 
 /// Provider that loads the user's name from SharedPreferences.
@@ -80,29 +82,43 @@ class HomeScreen extends ConsumerWidget {
                 _buildEnergyCard(context, plan).fadeSlideUp(delay: 100.ms),
                 const SizedBox(height: 28),
 
+                // ── Personal Cosmic Calendar ──────────────────────
+                const PersonalCosmicCalendarWidget().fadeSlideUp(delay: 120.ms),
+                const SizedBox(height: 28),
+
                 // ── Do / Careful / Avoid ──────────────────────────
-                _buildActionSection(
-                  'DO',
-                  plan.doList,
-                  AppColors.success,
-                  Icons.check_circle_rounded,
-                  200,
-                ),
-                const SizedBox(height: 16),
-                _buildActionSection(
-                  'BE CAREFUL',
-                  plan.beCarefulList,
-                  AppColors.warning,
-                  Icons.warning_rounded,
-                  280,
-                ),
-                const SizedBox(height: 16),
-                _buildActionSection(
-                  'AVOID',
-                  plan.avoidList,
-                  AppColors.error,
-                  Icons.cancel_rounded,
-                  360,
+                Consumer(
+                  builder: (context, ref, _) {
+                    final l10n = AppLocalizations.of(context, ref);
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildActionSection(
+                          l10n.doTitle,
+                          plan.doList,
+                          AppColors.success,
+                          Icons.check_circle_rounded,
+                          200,
+                        ),
+                        const SizedBox(height: 16),
+                        _buildActionSection(
+                          l10n.beCarefulTitle,
+                          plan.beCarefulList,
+                          AppColors.warning,
+                          Icons.warning_rounded,
+                          280,
+                        ),
+                        const SizedBox(height: 16),
+                        _buildActionSection(
+                          l10n.avoidTitle,
+                          plan.avoidList,
+                          AppColors.error,
+                          Icons.cancel_rounded,
+                          360,
+                        ),
+                      ],
+                    );
+                  },
                 ),
                 const SizedBox(height: 28),
 
@@ -128,19 +144,20 @@ class HomeScreen extends ConsumerWidget {
     final hour = DateTime.now().hour;
     String greeting;
     String emoji;
-    if (hour < 12) {
-      greeting = 'Good morning';
-      emoji = '☀️';
-    } else if (hour < 17) {
-      greeting = 'Good afternoon';
-      emoji = '🌤️';
-    } else {
-      greeting = 'Good evening';
-      emoji = '🌙';
-    }
-
     return Consumer(
       builder: (context, ref, _) {
+        final l10n = AppLocalizations.of(context, ref);
+        if (hour < 12) {
+          greeting = l10n.goodMorning;
+          emoji = '☀️';
+        } else if (hour < 17) {
+          greeting = l10n.goodAfternoon;
+          emoji = '🌤️';
+        } else {
+          greeting = l10n.goodEvening;
+          emoji = '🌙';
+        }
+
         final nameAsync = ref.watch(userNameProvider);
         final userName = nameAsync.whenOrNull(data: (name) => name) ?? '';
         final displayGreeting = userName.isNotEmpty
@@ -518,7 +535,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               const SizedBox(width: 12),
               Text(
-                'Ask Astro Baba',
+                AppLocalizations.of(context, ref).askAstroBabaBtn,
                 style: GoogleFonts.outfit(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,

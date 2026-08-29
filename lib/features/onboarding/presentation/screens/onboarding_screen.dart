@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_animations.dart';
@@ -11,6 +12,9 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/utils/responsive.dart';
+import '../../../../core/providers/locale_provider.dart';
+import '../../../../l10n/app_language.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -265,29 +269,89 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         ),
                       ).fadeSlideUp(),
                     ),
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 28),
                     Text(
                       'Your Personal\nAstrologer, Every Day.',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.outfit(
-                        fontSize: 34,
+                        fontSize: 30,
                         fontWeight: FontWeight.w700,
                         color: AppColors.textPrimaryDark,
                         height: 1.2,
                         letterSpacing: -0.5,
                       ),
                     ).fadeSlideUp(delay: 200.ms),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     Text(
-                      'Discover what the stars have planned for you',
+                      'Choose Your Language / भाषा / ભાષા',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
-                        fontSize: 16,
+                        fontSize: 14,
                         color: AppColors.textSecondaryDark,
-                        height: 1.5,
                       ),
                     ).fadeSlideUp(delay: 350.ms),
-                    const Spacer(flex: 3),
+                    const SizedBox(height: 16),
+
+                    // Language Cards
+                    Consumer(
+                      builder: (context, ref, _) {
+                        final currentLang = ref.watch(localeProvider);
+                        final languages = [
+                          AppLanguage.english,
+                          AppLanguage.hindi,
+                          AppLanguage.gujarati,
+                        ];
+
+                        return Column(
+                          children: languages.map((lang) {
+                            final isSelected = currentLang == lang;
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: GestureDetector(
+                                onTap: () {
+                                  ref.read(localeProvider.notifier).setLanguage(lang);
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? AppColors.primary.withOpacity(0.18)
+                                        : AppColors.surfaceDark.withOpacity(0.6),
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(
+                                      color: isSelected ? AppColors.primary : AppColors.glassBorder,
+                                      width: isSelected ? 1.5 : 0.8,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(lang.flagEmoji, style: const TextStyle(fontSize: 20)),
+                                      const SizedBox(width: 12),
+                                      Text(
+                                        '${lang.nativeName} (${lang.englishName})',
+                                        style: GoogleFonts.outfit(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: isSelected ? AppColors.primary : AppColors.textPrimaryDark,
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      if (isSelected)
+                                        const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 20)
+                                      else
+                                        Icon(Icons.circle_outlined, color: AppColors.textTertiaryDark, size: 18),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    ).fadeSlideUp(delay: 400.ms),
+
+                    const Spacer(),
                     GradientButton(
                       text: 'Begin Your Journey',
                       icon: Icons.auto_awesome,

@@ -18,10 +18,10 @@ class ApiAstrologyEngine implements AstrologyEngine {
   final MockAstrologyEngine _fallback = MockAstrologyEngine();
 
   @override
-  Future<GamePlanData> calculateDailyGamePlan(String date, String location) async {
+  Future<GamePlanData> calculateDailyGamePlan(String date, String location, {String languageCode = 'en'}) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/astrology/game-plan?date=$date&lat=28.6139&lon=77.2090&tz=5.5'),
+        Uri.parse('$baseUrl/astrology/game-plan?date=$date&lat=28.6139&lon=77.2090&tz=5.5&languageCode=$languageCode'),
       ).timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body)['data'];
@@ -40,14 +40,14 @@ class ApiAstrologyEngine implements AstrologyEngine {
     } catch (e) {
       debugPrint('API unreachable for game-plan, using fallback: $e');
     }
-    return _fallback.calculateDailyGamePlan(date, location);
+    return _fallback.calculateDailyGamePlan(date, location, languageCode: languageCode);
   }
 
   @override
-  Future<PanchangData> calculatePanchang(String date, String location) async {
+  Future<PanchangData> calculatePanchang(String date, String location, {String languageCode = 'en'}) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/astrology/panchang?date=$date&lat=28.6139&lon=77.2090&tz=5.5'),
+        Uri.parse('$baseUrl/astrology/panchang?date=$date&lat=28.6139&lon=77.2090&tz=5.5&languageCode=$languageCode'),
       ).timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body)['data'];
@@ -67,14 +67,14 @@ class ApiAstrologyEngine implements AstrologyEngine {
     } catch (e) {
       debugPrint('API unreachable for panchang, using fallback: $e');
     }
-    return _fallback.calculatePanchang(date, location);
+    return _fallback.calculatePanchang(date, location, languageCode: languageCode);
   }
 
   @override
-  Future<MuhuratResult> calculateMuhurat(MuhuratInput input) async {
+  Future<MuhuratResult> calculateMuhurat(MuhuratInput input, {String languageCode = 'en'}) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/astrology/muhurat?category=${input.category}&date=${input.date}&lat=28.6139&lon=77.2090&tz=5.5'),
+        Uri.parse('$baseUrl/astrology/muhurat?category=${input.category}&date=${input.date}&lat=28.6139&lon=77.2090&tz=5.5&languageCode=$languageCode'),
       ).timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body)['data'];
@@ -91,11 +91,16 @@ class ApiAstrologyEngine implements AstrologyEngine {
     } catch (e) {
       debugPrint('API unreachable for muhurat, using fallback: $e');
     }
-    return _fallback.calculateMuhurat(input);
+    return _fallback.calculateMuhurat(input, languageCode: languageCode);
   }
 
   @override
-  Future<AstroBabaResponse> askAstroBaba(String question, String date, String location) async {
+  Future<AstroBabaResponse> askAstroBaba(
+    String question,
+    String date,
+    String location, {
+    String languageCode = 'en',
+  }) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/ai/ask-astro-baba'),
@@ -105,7 +110,8 @@ class ApiAstrologyEngine implements AstrologyEngine {
           'date': date,
           'lat': 28.6139,
           'lon': 77.2090,
-          'tz': '5.5'
+          'tz': '5.5',
+          'languageCode': languageCode,
         }),
       ).timeout(const Duration(seconds: 10));
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -120,14 +126,14 @@ class ApiAstrologyEngine implements AstrologyEngine {
     } catch (e) {
       debugPrint('API unreachable for astro-baba, using fallback: $e');
     }
-    return _fallback.askAstroBaba(question, date, location);
+    return _fallback.askAstroBaba(question, date, location, languageCode: languageCode);
   }
 
   @override
-  Future<HoroscopeData> getHoroscope(String sign, String timeframe) async {
+  Future<HoroscopeData> getHoroscope(String sign, String timeframe, {String languageCode = 'en'}) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/astrology/horoscope?sign=$sign&timeframe=$timeframe'),
+        Uri.parse('$baseUrl/astrology/horoscope?sign=$sign&timeframe=$timeframe&languageCode=$languageCode'),
       ).timeout(const Duration(seconds: 5));
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body)['data'];
@@ -142,6 +148,6 @@ class ApiAstrologyEngine implements AstrologyEngine {
     } catch (e) {
       debugPrint('API unreachable for horoscope, using fallback: $e');
     }
-    return _fallback.getHoroscope(sign, timeframe);
+    return _fallback.getHoroscope(sign, timeframe, languageCode: languageCode);
   }
 }

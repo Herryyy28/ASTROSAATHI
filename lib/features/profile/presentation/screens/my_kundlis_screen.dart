@@ -4,6 +4,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/cosmic_particle_background.dart';
 import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/widgets/language_selection_modal.dart';
+import '../../../../core/providers/locale_provider.dart';
+import '../../../../l10n/app_language.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class MyKundlisScreen extends ConsumerStatefulWidget {
   const MyKundlisScreen({super.key});
@@ -307,6 +311,70 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                     ),
                   );
                 }),
+                const SizedBox(height: 24),
+
+                // App Settings & Language Selection
+                Consumer(
+                  builder: (context, ref, _) {
+                    final currentLang = ref.watch(localeProvider);
+                    final l10n = AppLocalizations.of(context, ref);
+
+                    return Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceDark.withOpacity(0.85),
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                        boxShadow: [
+                          BoxShadow(color: AppColors.primary.withOpacity(0.08), blurRadius: 16),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.profileSettings,
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.primary),
+                          ),
+                          const SizedBox(height: 14),
+                          GestureDetector(
+                            onTap: () => LanguageSelectionModal.show(context),
+                            child: Container(
+                              padding: const EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                color: AppColors.surfaceHighlightDark,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: AppColors.glassBorder),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(currentLang.flagEmoji, style: const TextStyle(fontSize: 22)),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          l10n.languageSetting,
+                                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                                        ),
+                                        Text(
+                                          '${currentLang.nativeName} (${currentLang.englishName})',
+                                          style: const TextStyle(fontSize: 12, color: AppColors.primary),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.primary, size: 16),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
