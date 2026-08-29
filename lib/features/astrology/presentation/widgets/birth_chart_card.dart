@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/providers/astrology_provider.dart';
-import '../../../../core/providers/user_profile_provider.dart';
+import '../../../../core/providers/profile_provider.dart';
 import 'vedic_chart_painter.dart';
 import 'dasha_timeline_widget.dart';
 import 'dart:ui';
@@ -157,6 +157,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
   @override
   Widget build(BuildContext context) {
     final birthChartAsync = ref.watch(birthChartProvider);
+    final activeProfile = ref.watch(activeProfileProvider);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
@@ -182,9 +183,17 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
               child: CircularProgressIndicator(color: AppColors.primary),
             ),
             error: (e, st) => Center(
-              child: Text(
-                'Error loading chart: $e',
-                style: const TextStyle(color: Colors.red),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.red, size: 32),
+                  const SizedBox(height: 8),
+                  Text(
+                    e.toString().replaceFirst('Exception: ', ''),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.red, fontSize: 13),
+                  ),
+                ],
               ),
             ),
             data: (chartData) {
@@ -207,6 +216,23 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
               final lagna = getNormalizedLagna(rawLagna);
               final currentLagna = selectedLagna ?? lagna;
               final isExploring = selectedLagna != null && selectedLagna != lagna;
+
+              final rashiName = isCanonical
+                  ? (chartData['rashi']?['name'] as String? ?? '—')
+                  : '—';
+              final moonPlanet = isCanonical
+                  ? () {
+                      final list = chartData['planets'] as List<dynamic>? ?? [];
+                      for (final p in list) {
+                        final map = p as Map<String, dynamic>;
+                        if (map['id'] == 'moon') return map;
+                      }
+                      return null;
+                    }()
+                  : null;
+              final nakshatra = moonPlanet?['nakshatra'] as String? ?? '—';
+              final pada = moonPlanet?['pada']?.toString() ?? '—';
+              final calculatedAt = chartData['calculatedAt'] as String?;
 
               int getSignIndex(String signName) {
                 final s = signName.toLowerCase();
@@ -316,6 +342,35 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                               ],
                             ),
                             const SizedBox(height: 4),
+                            if (activeProfile.name.isNotEmpty)
+                              Text(
+                                activeProfile.name,
+                                style: const TextStyle(
+                                  color: AppColors.textSecondaryDark,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                _InfoChip(label: 'Lagna', value: lagna.split(' ').first),
+                                const SizedBox(width: 8),
+                                _InfoChip(label: 'Rashi', value: rashiName),
+                                const SizedBox(width: 8),
+                                _InfoChip(label: 'Nakshatra', value: '$nakshatra P$pada'),
+                              ],
+                            ),
+                            if (calculatedAt != null) ...[
+                              const SizedBox(height: 6),
+                              Text(
+                                'Calculated ${_formatCalculatedAt(calculatedAt)}',
+                                style: const TextStyle(
+                                  color: AppColors.textTertiaryDark,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                            const SizedBox(height: 4),
                             DropdownButton<String>(
                               value: currentLagna,
                               isDense: true,
@@ -412,5 +467,44 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
         ),
       ),
     ).animate().fade(duration: 800.ms).slideY(begin: 0.1);
+  }
+
+  String _formatCalculatedAt(String iso) {
+    try {
+      final dt = DateTime.parse(iso).toLocal();
+      final h = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
+      final m = dt.minute.toString().padLeft(2, '0');
+      final ampm = dt.hour >= 12 ? 'PM' : 'AM';
+      return '${dt.day}/${dt.month}/${dt.year} at $h:$m $ampm';
+    } catch (_) {
+      return iso;
+    }
+  }
+}
+
+class _InfoChip extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _InfoChip({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: AppColors.primary.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.primary.withOpacity(0.25)),
+      ),
+      child: Text(
+        '$label: $value',
+        style: const TextStyle(
+          color: AppColors.primary,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
   }
 }
