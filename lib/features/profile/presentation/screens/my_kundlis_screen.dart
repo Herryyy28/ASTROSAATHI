@@ -8,7 +8,6 @@ import '../../../../core/widgets/cosmic_particle_background.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/widgets/language_selection_modal.dart';
 import '../../../../core/providers/locale_provider.dart';
-import '../../../../l10n/app_language.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class MyKundlisScreen extends ConsumerStatefulWidget {
