@@ -1,0 +1,1 @@
+Provider Error 405: {"status":false,"msg":"Request data validation failed. Kindly check your request data again.","error":[{"message":"\"day\" must be a number","path":["day"],"type":"number.base","context":{"label":"day","value":null,"key":"day"}}]}

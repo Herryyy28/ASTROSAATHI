@@ -70,23 +70,30 @@ let AstrologyApiProvider = AstrologyApiProvider_1 = class AstrologyApiProvider {
         const data = {};
         if (Array.isArray(apiData)) {
             apiData.forEach((p) => {
-                data[p.name] = {
-                    name: p.name,
-                    longitude: p.normDegree,
-                    sign: p.sign,
-                    degree: p.normDegree,
-                    house: p.house,
-                    isRetrograde: p.isRetro === 'true',
-                    nakshatra: p.nakshatra,
-                    pada: p.nakshatra_pada,
-                    speed: p.speed,
-                };
+                if (p.name !== 'Ascendant') {
+                    data[p.name] = {
+                        name: p.name,
+                        longitude: p.normDegree,
+                        sign: p.sign,
+                        degree: p.normDegree,
+                        house: p.house,
+                        isRetrograde: p.isRetro === 'true',
+                        nakshatra: p.nakshatra,
+                        pada: p.nakshatra_pada,
+                        speed: p.speed,
+                    };
+                }
             });
         }
         return { data, meta: this.createMetadata(date) };
     }
     async getBirthChart(dob, time, location) {
         const payload = this.getApiPayload(dob, location);
+        if (time && time.includes(':')) {
+            const parts = time.split(':');
+            payload.hour = parseInt(parts[0], 10) || payload.hour;
+            payload.min = parseInt(parts[1], 10) || payload.min;
+        }
         const apiData = await this.fetchFromApi('astro_details', payload);
         return { data: apiData, meta: this.createMetadata(dob) };
     }

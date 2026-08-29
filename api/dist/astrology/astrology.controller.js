@@ -30,8 +30,25 @@ let AstrologyController = class AstrologyController {
         this.usersService = usersService;
         this.matchingService = matchingService;
     }
-    parseLocation(dateStr, lat, lon, tz) {
-        const date = dateStr ? new Date(dateStr) : new Date();
+    parseLocation(dateStr, timeStr, lat, lon, tz) {
+        let date = new Date();
+        if (dateStr) {
+            date = new Date(dateStr);
+            if (isNaN(date.getTime())) {
+                const parts = dateStr.split(/[-/]/);
+                if (parts.length === 3) {
+                    date = new Date(`${parts[2]}-${parts[1]}-${parts[0]}T00:00:00`);
+                }
+            }
+            if (isNaN(date.getTime())) {
+                date = new Date();
+            }
+        }
+        if (timeStr && timeStr.includes(':')) {
+            const [hh, mm] = timeStr.split(':');
+            date.setHours(parseInt(hh, 10) || 12);
+            date.setMinutes(parseInt(mm, 10) || 0);
+        }
         const location = {
             latitude: parseFloat(lat) || 28.6139,
             longitude: parseFloat(lon) || 77.2090,
@@ -40,7 +57,7 @@ let AstrologyController = class AstrologyController {
         return { date, location };
     }
     async getGamePlan(req, dateStr, lat, lon, tz) {
-        const { date, location } = this.parseLocation(dateStr, lat, lon, tz);
+        const { date, location } = this.parseLocation(dateStr, '12:00', lat, lon, tz);
         const { panchang, planets } = await this.syncService.getCombinedData(date, location);
         let focusWeights = { Career: 1.0, Love: 1.0, Money: 1.0 };
         try {
@@ -55,16 +72,16 @@ let AstrologyController = class AstrologyController {
         return this.gamePlanEngine.generateDailyGamePlan(date, planets, panchang, focusWeights);
     }
     async getPanchang(dateStr, lat, lon, tz) {
-        const { date, location } = this.parseLocation(dateStr, lat, lon, tz);
+        const { date, location } = this.parseLocation(dateStr, '12:00', lat, lon, tz);
         return this.syncService.syncPanchang(date, location);
     }
     async getMuhurat(category, dateStr, lat, lon, tz) {
-        const { date, location } = this.parseLocation(dateStr, lat, lon, tz);
+        const { date, location } = this.parseLocation(dateStr, '12:00', lat, lon, tz);
         const { panchang } = await this.syncService.getCombinedData(date, location);
         return this.muhuratEngine.calculateMuhurat(category || 'General', date, location, panchang);
     }
     async getBirthChart(dateStr, timeStr, lat, lon, tz) {
-        const { date, location } = this.parseLocation(dateStr, lat, lon, tz);
+        const { date, location } = this.parseLocation(dateStr, timeStr || '12:00', lat, lon, tz);
         const [chart, planets] = await Promise.all([
             this.syncService.syncBirthChart(date, timeStr || '12:00', location),
             this.syncService.syncPlanetaryPositions(date, location)

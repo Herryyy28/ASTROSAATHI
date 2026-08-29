@@ -71,17 +71,19 @@ export class AstrologyApiProvider implements AstrologyDataProvider {
     const data: Record<string, PlanetaryPosition> = {};
     if (Array.isArray(apiData)) {
        apiData.forEach((p: any) => {
-         data[p.name] = {
-           name: p.name,
-           longitude: p.normDegree,
-           sign: p.sign,
-           degree: p.normDegree,
-           house: p.house,
-           isRetrograde: p.isRetro === 'true',
-           nakshatra: p.nakshatra,
-           pada: p.nakshatra_pada,
-           speed: p.speed,
-         };
+         if (p.name !== 'Ascendant') {
+           data[p.name] = {
+             name: p.name,
+             longitude: p.normDegree,
+             sign: p.sign,
+             degree: p.normDegree,
+             house: p.house,
+             isRetrograde: p.isRetro === 'true',
+             nakshatra: p.nakshatra,
+             pada: p.nakshatra_pada,
+             speed: p.speed,
+           };
+         }
        });
     }
 
@@ -90,6 +92,14 @@ export class AstrologyApiProvider implements AstrologyDataProvider {
 
   async getBirthChart(dob: Date, time: string, location: LocationData): Promise<{ data: any; meta: ProviderMetadata }> {
     const payload = this.getApiPayload(dob, location);
+    
+    // Inject the actual birth time if provided (format HH:mm)
+    if (time && time.includes(':')) {
+      const parts = time.split(':');
+      payload.hour = parseInt(parts[0], 10) || payload.hour;
+      payload.min = parseInt(parts[1], 10) || payload.min;
+    }
+    
     const apiData = await this.fetchFromApi('astro_details', payload);
     return { data: apiData, meta: this.createMetadata(dob) };
   }
