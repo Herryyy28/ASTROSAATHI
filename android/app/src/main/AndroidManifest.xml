@@ -14,11 +14,17 @@
         android:requestLegacyExternalStorage="true"
         android:hardwareAccelerated="true">
 
-        <!-- Completely disable startup initialization to bypass WorkDatabase crash -->
+        <!-- Disable only WorkManager startup to prevent WorkDatabase IO errors -->
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            tools:node="remove" />
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
 
         <activity
             android:name=".MainActivity"
