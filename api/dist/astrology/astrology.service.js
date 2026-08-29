@@ -56,14 +56,14 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
             return null;
         }
     }
-    getApiPayload(dateStr, locationStr) {
-        const date = new Date();
+    getApiPayload(date) {
+        const d = date || new Date();
         return {
-            day: date.getDate(),
-            month: date.getMonth() + 1,
-            year: date.getFullYear(),
-            hour: date.getHours(),
-            min: date.getMinutes(),
+            day: d.getDate(),
+            month: d.getMonth() + 1,
+            year: d.getFullYear(),
+            hour: d.getHours(),
+            min: d.getMinutes(),
             lat: 28.6139,
             lon: 77.2090,
             tzone: 5.5,
@@ -74,7 +74,7 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey);
         }
-        const payload = this.getApiPayload(date, location);
+        const payload = this.getApiPayload(new Date(date));
         const apiData = await this.fetchFromApi('game_plan', payload);
         if (!apiData) {
             throw new Error('Failed to retrieve daily game plan data');
@@ -91,7 +91,7 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey);
         }
-        const payload = this.getApiPayload(date, location);
+        const payload = this.getApiPayload(new Date(date));
         const apiData = await this.fetchFromApi('advanced_panchang', payload);
         if (!apiData) {
             throw new Error('Failed to fetch Panchang data');
@@ -106,7 +106,7 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
         if (this.cache.has(cacheKey)) {
             return this.cache.get(cacheKey);
         }
-        const payload = this.getApiPayload(date, location);
+        const payload = this.getApiPayload(new Date(date));
         const apiData = await this.fetchFromApi('muhurat', payload);
         if (!apiData) {
             throw new Error('Failed to retrieve Muhurat data');
@@ -145,7 +145,8 @@ let AstrologyService = AstrologyService_1 = class AstrologyService {
         const apiEndpoint = timeframe === 'daily' ? `sun_sign_prediction/daily/${sign.toLowerCase()}` : null;
         let apiData = null;
         if (apiEndpoint) {
-            apiData = await this.fetchFromApi(apiEndpoint, {});
+            const payload = this.getApiPayload();
+            apiData = await this.fetchFromApi(apiEndpoint, payload);
         }
         if (!apiData) {
             throw new Error('Failed to retrieve Horoscope data');

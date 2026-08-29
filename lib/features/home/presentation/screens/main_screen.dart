@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/utils/responsive.dart';
+import '../../../../core/theme/utils/responsive.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../horoscope/presentation/screens/horoscope_screen.dart';
 import '../../../panchang/presentation/screens/panchang_screen.dart';

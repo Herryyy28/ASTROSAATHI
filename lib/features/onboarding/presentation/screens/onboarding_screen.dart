@@ -11,7 +11,7 @@ import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/responsive_layout.dart';
-import '../../../../core/utils/responsive.dart';
+import '../../../../core/theme/utils/responsive.dart';
 import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/user_profile_provider.dart';
 import '../../../../features/auth/data/auth_repository.dart';

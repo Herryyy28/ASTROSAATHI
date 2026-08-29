@@ -5,39 +5,41 @@ AstroSaathi is a premium, AI-powered astrology application that blends determini
 This project is built using a modern full-stack architecture:
 - **Frontend**: Flutter (Cross-platform Mobile & Web)
 - **Backend**: NestJS (TypeScript, Node.js)
-- **Database**: PostgreSQL (Prisma ORM)
-- **Message Queue**: Redis (BullMQ for background jobs)
+- **Database**: PostgreSQL (Production) / SQLite (Development) using TypeORM
+- **AI Integration**: OpenAI & Gemini for personalized interpretations
+- **Astrology Engine**: Astronomy Engine (Swiss Ephemeris equivalent) & AstrologyAPI.com integration
+- **Message Queue**: Redis (BullMQ for background data pre-calculation)
 
 ## 📁 Project Structure
 
-The repository is structured as a monorepo containing both the backend API and the Flutter application. 
+The repository is structured as a monorepo containing both the NestJS API and the Flutter application. 
 
 ```text
 ASTROSAATHI/
 ├── api/                  # NestJS Backend Application
 │   ├── src/
-│   │   ├── ai/           # Generative AI integration (Gemini/OpenAI)
-│   │   ├── astrology/    # Core deterministic math engine (Swiss Ephemeris/Rules)
-│   │   ├── auth/         # JWT and Firebase Authentication guards
-│   │   ├── core/         # Shared utilities (Time, Location, etc.)
-│   │   ├── database/     # Prisma client and Postgres connections
-│   │   ├── notifications/# Background CRON jobs and FCM Push Notifications
-│   │   └── users/        # User profile and preferences management
+│   │   ├── ai/           # Generative AI (OpenAI) & RAG logic
+│   │   ├── astrology/    # Core engines, Muhurat, and Panchang logic
+│   │   ├── auth/         # JWT and Firebase Authentication
+│   │   ├── database/     # TypeORM entities and migrations (Postgres/SQLite)
+│   │   ├── notifications/# BullMQ workers and FCM Push Notifications
+│   │   └── users/        # User and Profile management
 │   └── package.json
 │
 ├── lib/                  # Flutter Frontend Application
 │   ├── core/
-│   │   ├── engine/       # Local representations of backend data models
-│   │   ├── providers/    # Riverpod state management providers
-│   │   ├── theme/        # Cosmic Glassmorphism design system (Colors, Animations)
-│   │   └── widgets/      # Reusable UI components (GlassCard, ZodiacIcon, etc.)
+│   │   ├── engine/       # API client and local data processing
+│   │   ├── providers/    # Riverpod state management
+│   │   ├── theme/        # Cosmic Glassmorphism design system
+│   │   └── widgets/      # Shared UI components (GlassCard, etc.)
 │   └── features/
-│       ├── ai/           # "Ask Astro Baba" conversational interface
-│       ├── astrology/    # Visual Birth Chart (Kundli) canvas painters
-│       ├── auth/         # Onboarding and login screens
-│       ├── home/         # Daily Dashboard and Energy Scores
-│       ├── horoscope/    # Daily/Weekly/Monthly Zodiac forecasts
-│       └── panchang/     # Daily Hindu calendar and planetary times
+│       ├── ai/           # "Ask Astro Baba" AI Chat
+│       ├── astrology/    # Birth Chart (Kundli) rendering
+│       ├── horoscope/    # Daily/Weekly forecasts
+│       ├── matching/     # Kundli Matching (Gun Milan)
+│       ├── panchang/     # Vedic Calendar & planetary transits
+│       ├── remedies/     # Personalized astrological suggestions
+│       └── onboarding/   # User registration and birth detail entry
 │
 ├── pubspec.yaml          # Flutter dependencies
 └── README.md             # This file
@@ -46,14 +48,16 @@ ASTROSAATHI/
 ## 🛠️ Architecture Overview
 
 ### Frontend (Flutter)
-- **State Management**: We use `flutter_riverpod` for robust, reactive state management and dependency injection.
-- **Routing**: Handled by `go_router` for deep linking and declarative navigation.
-- **Design System**: A custom "Cosmic Glassmorphism" UI system. It utilizes `flutter_animate` for rich micro-interactions and custom `BackdropFilter` implementations for frosted glass effects.
+- **State Management**: `flutter_riverpod` for reactive data flow.
+- **Routing**: `go_router` for deep linking support.
+- **Animations**: `flutter_animate` for high-quality cosmic micro-interactions.
+- **Rendering**: Custom Canvas painters for complex Astrological charts.
 
 ### Backend (NestJS)
-- **Domain-Driven Design**: The backend is split into isolated modules (`ai`, `astrology`, `users`).
-- **Astrology Engine**: Uses a rule-based engine (`astrology-rule.engine.ts`, `muhurat.engine.ts`) to calculate deterministic scores for Career, Love, and Health based on current planetary transits against the user's natal chart.
-- **Background Jobs**: A nightly CRON job utilizes `BullMQ` (Redis) to pre-calculate the "Daily Game Plan" for all users at midnight, preventing database strain during peak morning hours.
+- **Modularity**: Isolated domain modules follow Feature-First architecture.
+- **Engines**: Deterministic math via `astronomy-engine` and third-party API integration for high-accuracy ephemeris data.
+- **Optimization**: Nightly background jobs via `BullMQ` pre-calculate daily horoscopes and "Game Plans" to minimize morning API latency.
+- **Storage**: Hybrid TypeORM setup supporting both local SQLite for rapid development and PostgreSQL for production.
 
 ## 🚀 Getting Started
 

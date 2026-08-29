@@ -286,7 +286,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                                     style: TextStyle(
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold,
-                                      color: isExploring ? AppColors.accentDark : AppColors.textPrimaryDark,
+                                      color: isExploring ? AppColors.secondary : AppColors.textPrimaryDark,
                                     ),
                                   ),
                                 ),

@@ -11,7 +11,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/engine/models/muhurat_data.dart';
 import '../../../../core/widgets/responsive_layout.dart';
-import '../../../../core/utils/responsive.dart';
+import '../../../../core/theme/utils/responsive.dart';
 
 final selectedCategoryProvider = StateProvider<String>((ref) => 'Business');
 

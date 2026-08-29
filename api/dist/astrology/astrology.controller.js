@@ -130,7 +130,9 @@ let AstrologyController = class AstrologyController {
             dasha: {},
             yogas: [],
             aspects: [],
-            calculatedAt: planets?.meta?.calculatedAt || new Date().toISOString(),
+            calculatedAt: planets?.meta?.calculatedAt instanceof Date
+                ? planets.meta.calculatedAt.toISOString()
+                : (planets?.meta?.calculatedAt || new Date().toISOString()),
             calculationVersion: planets?.meta?.calculationVersion || '1.0',
         };
         return kundli_data_validator_1.KundliDataValidator.validate(canonicalKundli);

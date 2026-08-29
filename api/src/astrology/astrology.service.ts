@@ -55,15 +55,15 @@ export class AstrologyService {
   }
 
   // Parse location and date into AstrologyAPI required format
-  private getApiPayload(dateStr: string, locationStr: string) {
-    const date = new Date(); // In a real app, parse dateStr properly
+  private getApiPayload(date?: Date) {
+    const d = date || new Date();
     return {
-      day: date.getDate(),
-      month: date.getMonth() + 1,
-      year: date.getFullYear(),
-      hour: date.getHours(),
-      min: date.getMinutes(),
-      lat: 28.6139, // Default to New Delhi if location string can't be geocoded easily
+      day: d.getDate(),
+      month: d.getMonth() + 1,
+      year: d.getFullYear(),
+      hour: d.getHours(),
+      min: d.getMinutes(),
+      lat: 28.6139, // Default to New Delhi for general horoscope
       lon: 77.2090,
       tzone: 5.5,
     };
@@ -75,7 +75,7 @@ export class AstrologyService {
       return this.cache.get(cacheKey);
     }
 
-    const payload = this.getApiPayload(date, location);
+    const payload = this.getApiPayload(new Date(date));
     const apiData = await this.fetchFromApi('game_plan', payload);
     
     if (!apiData) {
@@ -97,7 +97,7 @@ export class AstrologyService {
       return this.cache.get(cacheKey);
     }
 
-    const payload = this.getApiPayload(date, location);
+    const payload = this.getApiPayload(new Date(date));
     const apiData = await this.fetchFromApi('advanced_panchang', payload);
 
     if (!apiData) {
@@ -117,7 +117,7 @@ export class AstrologyService {
       return this.cache.get(cacheKey);
     }
 
-    const payload = this.getApiPayload(date, location);
+    const payload = this.getApiPayload(new Date(date));
     const apiData = await this.fetchFromApi('muhurat', payload);
 
     if (!apiData) {
@@ -167,7 +167,8 @@ export class AstrologyService {
     let apiData: any = null;
     
     if (apiEndpoint) {
-       apiData = await this.fetchFromApi(apiEndpoint, {});
+       const payload = this.getApiPayload();
+       apiData = await this.fetchFromApi(apiEndpoint, payload);
     }
 
     if (!apiData) {

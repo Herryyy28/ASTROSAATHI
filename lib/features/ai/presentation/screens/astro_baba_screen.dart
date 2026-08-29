@@ -9,7 +9,7 @@ import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/engine/models/ai_data.dart';
 import '../providers/astro_baba_provider.dart';
-import '../../../../core/utils/responsive.dart';
+import '../../../../core/theme/utils/responsive.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../widgets/cosmic_orb_painter.dart';
 import '../../../../l10n/app_localizations.dart';
