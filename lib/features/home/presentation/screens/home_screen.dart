@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/providers/astrology_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
@@ -27,12 +26,6 @@ import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../subscription/presentation/widgets/vip_badge_button.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
 import 'main_screen.dart';
-
-/// Provider that loads the user's name from SharedPreferences.
-final userNameProvider = FutureProvider<String>((ref) async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('user_name') ?? '';
-});
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -173,10 +166,7 @@ class HomeScreen extends ConsumerWidget {
         }
 
         final activeProfile = ref.watch(activeProfileProvider);
-        final nameAsync = ref.watch(userNameProvider);
-        final userName = activeProfile.name.isNotEmpty
-            ? activeProfile.name
-            : (nameAsync.whenOrNull(data: (name) => name) ?? '');
+        final userName = activeProfile.name;
         final displayGreeting = userName.isNotEmpty
             ? '$greeting, $userName'
             : greeting;

@@ -7,23 +7,19 @@ import '../../features/home/presentation/screens/main_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 
+import '../../core/providers/profile_provider.dart';
+
 /// Provider that checks if the user has completed onboarding.
-final onboardingCompleteProvider = FutureProvider<bool>((ref) async {
-  try {
-    final prefs = await SharedPreferences.getInstance();
-    final name = prefs.getString('user_name');
-    final finished = prefs.getBool('onboarding_finished_flag') ?? false;
-    return (name != null && name.isNotEmpty) || finished;
-  } catch (_) {
-    return false;
-  }
+final onboardingCompleteProvider = Provider<bool>((ref) {
+  final profiles = ref.watch(profilesListProvider);
+  return profiles.any((p) => p.isPrimary && p.name.isNotEmpty);
 });
 
 class RouterNotifier extends ChangeNotifier {
   final Ref _ref;
 
   RouterNotifier(this._ref) {
-    _ref.listen<AsyncValue<bool>>(
+    _ref.listen<bool>(
       onboardingCompleteProvider,
       (previous, next) {
         notifyListeners();
@@ -32,22 +28,16 @@ class RouterNotifier extends ChangeNotifier {
   }
 
   String? redirect(BuildContext context, GoRouterState state) {
-    final onboardingAsync = _ref.read(onboardingCompleteProvider);
+    final isDone = _ref.read(onboardingCompleteProvider);
 
-    return onboardingAsync.when(
-      data: (isDone) {
-        final isSplashLocation = state.matchedLocation == '/splash';
-        if (isSplashLocation) return null; // Allow splash screen to show initially
+    final isSplashLocation = state.matchedLocation == '/splash';
+    if (isSplashLocation) return null; // Allow splash screen to show initially
 
-        final isOnboardingLocation = state.matchedLocation == '/onboarding';
-        if (!isDone && !isOnboardingLocation) {
-          return '/onboarding';
-        }
-        return null;
-      },
-      loading: () => null,
-      error: (_, __) => null,
-    );
+    final isOnboardingLocation = state.matchedLocation == '/onboarding';
+    if (!isDone && !isOnboardingLocation) {
+      return '/onboarding';
+    }
+    return null;
   }
 }
 

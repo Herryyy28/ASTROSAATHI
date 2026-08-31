@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
@@ -14,6 +15,9 @@ class LocationPermissionDialog extends StatelessWidget {
   });
 
   static Future<bool?> show(BuildContext context) {
+    if (!Platform.isAndroid && !Platform.isIOS) {
+      return Future.value(false);
+    }
     return showDialog<bool>(
       context: context,
       barrierDismissible: false,

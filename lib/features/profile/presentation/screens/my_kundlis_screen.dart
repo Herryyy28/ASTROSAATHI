@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -793,11 +794,13 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                     double lat = 28.6139;
                                     double lon = 77.2090;
                                     try {
-                                      final locations =
-                                          await locationFromAddress(place);
-                                      if (locations.isNotEmpty) {
-                                        lat = locations.first.latitude;
-                                        lon = locations.first.longitude;
+                                      if (place.isNotEmpty && (Platform.isAndroid || Platform.isIOS)) {
+                                        final locations =
+                                            await locationFromAddress(place).timeout(const Duration(seconds: 2));
+                                        if (locations.isNotEmpty) {
+                                          lat = locations.first.latitude;
+                                          lon = locations.first.longitude;
+                                        }
                                       }
                                     } catch (e) {
                                       debugPrint(

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geocoding/geocoding.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
@@ -12,7 +14,6 @@ import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../../../core/providers/locale_provider.dart';
-import '../../../../core/providers/user_profile_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../features/auth/data/auth_repository.dart';
 import '../../../../core/widgets/location_permission_dialog.dart';
@@ -170,30 +171,46 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     }
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('user_name', name);
-      await prefs.setString('user_dob', dob);
-      await prefs.setString('user_time', fullTime);
-      await prefs.setString('user_place', place);
-
       final focusWeights = {'Career': 1.2, 'Love': 0.8, 'Money': 1.0};
 
-      await ref
-          .read(userProfileProvider.notifier)
-          .updateProfile(name: name, dob: dob, time: fullTime, place: place);
+      // Direct geocoding with platform guards and timeout
+      double lat = 28.6139;
+      double lon = 77.2090;
+      try {
+        if (place.isNotEmpty && (Platform.isAndroid || Platform.isIOS)) {
+          final locations = await locationFromAddress(place).timeout(const Duration(seconds: 2));
+          if (locations.isNotEmpty) {
+            lat = locations.first.latitude;
+            lon = locations.first.longitude;
+          }
+        }
+      } catch (e) {
+        debugPrint('Geocoding failed during onboarding for $place: $e');
+      }
 
-      final profile = ref.read(userProfileProvider);
+      final profile = BirthProfileData(
+        id: 'primary',
+        name: name,
+        relationship: 'Self',
+        dob: dob,
+        birthTime: fullTime,
+        birthPlace: place,
+        latitude: lat,
+        longitude: lon,
+        timezone: '5.5',
+        isPrimary: true,
+      );
 
       await ref
           .read(profilesListProvider.notifier)
           .upsertPrimaryProfile(
             name: profile.name,
             dob: profile.dob,
-            birthTime: profile.time,
-            birthPlace: profile.place,
+            birthTime: profile.birthTime,
+            birthPlace: profile.birthPlace,
             latitude: profile.latitude,
             longitude: profile.longitude,
-            timezone: profile.timeZone,
+            timezone: profile.timezone,
           );
 
       try {
@@ -206,11 +223,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             .saveProfileData(
               name: profile.name,
               dob: profile.dob,
-              time: profile.time,
-              place: profile.place,
+              time: profile.birthTime,
+              place: profile.birthPlace,
               latitude: profile.latitude,
               longitude: profile.longitude,
-              timeZone: profile.timeZone,
+              timeZone: profile.timezone,
               focusWeights: focusWeights,
             )
             .timeout(const Duration(milliseconds: 500));
@@ -218,10 +235,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     } catch (e) {
       debugPrint('Failed to sync profile: $e');
     } finally {
-      // Set a flag that onboarding is strictly finished
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('onboarding_finished_flag', true);
-
       ref.invalidate(onboardingCompleteProvider);
       ref.invalidate(profilesListProvider);
       

@@ -155,6 +155,8 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                               fontWeight: FontWeight.bold,
                               color: AppColors.textPrimaryDark,
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             l10n.gunaScore,
@@ -162,12 +164,19 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                           ),
                           const SizedBox(height: 3),
                           Row(
-                            children: const [
-                              Icon(Icons.auto_awesome, color: AppColors.primary, size: 10),
-                              SizedBox(width: 4),
-                              Text(
-                                'AI Calculated Ashtakoota Guna Score (Out of 36)',
-                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary),
+                            children: [
+                              const Icon(Icons.auto_awesome, color: AppColors.primary, size: 10),
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  'AI Calculated Ashtakoota Score (Out of 36)',
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primary,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ],
                           ),
@@ -244,17 +253,26 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                       SizedBox(
                         width: double.infinity,
                         height: 48,
-                        child: ElevatedButton.icon(
+                        child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: Colors.black,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                           ),
                           onPressed: _calculateMatch,
-                          icon: const Icon(Icons.auto_awesome, size: 18),
-                          label: const Text(
-                            'Calculate Authentic Bhavishyavani Match',
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.auto_awesome, size: 18),
+                              SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  'Calculate Authentic Match',
+                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
