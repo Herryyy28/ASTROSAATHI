@@ -179,8 +179,8 @@ class ProfilesNotifier extends StateNotifier<List<BirthProfileData>> {
 
   static const int maxProfiles = 5;
 
-  Future<bool> addProfile(BirthProfileData profile) async {
-    if (state.length >= maxProfiles) {
+  Future<bool> addProfile(BirthProfileData profile, {bool isPremium = false}) async {
+    if (!isPremium && state.length >= maxProfiles) {
       return false;
     }
     state = [...state, profile];

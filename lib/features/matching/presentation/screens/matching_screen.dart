@@ -5,7 +5,10 @@ import '../../../../core/widgets/cosmic_particle_background.dart';
 import '../widgets/guna_radar_painter.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/providers/locale_provider.dart';
+import '../../../../core/providers/subscription_provider.dart';
+import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class MatchingScreen extends ConsumerStatefulWidget {
@@ -352,29 +355,36 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                 const SizedBox(height: 28),
 
                 // Radar Chart Container
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceHighlightDark.withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(32),
-                    border: Border.all(color: AppColors.glassBorder),
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        '8-Dimension Guna Breakdown',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                Consumer(
+                  builder: (context, ref, _) {
+                    final isPremium = ref.watch(isPremiumProvider);
+                    if (!isPremium) return const SizedBox.shrink();
+
+                    return Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: AppColors.surfaceHighlightDark.withOpacity(0.4),
+                        borderRadius: BorderRadius.circular(32),
+                        border: Border.all(color: AppColors.glassBorder),
                       ),
-                      const SizedBox(height: 24),
-                      SizedBox(
-                        height: 240,
-                        width: double.infinity,
-                        child: CustomPaint(
-                          painter: GunaRadarPainter(scores: normalizedScores),
-                        ),
+                      child: Column(
+                        children: [
+                          const Text(
+                            '8-Dimension Guna Breakdown',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                          ),
+                          const SizedBox(height: 24),
+                          SizedBox(
+                            height: 240,
+                            width: double.infinity,
+                            child: CustomPaint(
+                              painter: GunaRadarPainter(scores: normalizedScores),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ).animate().fade(delay: 200.ms).slideY(begin: 0.1),
               ],
             ),

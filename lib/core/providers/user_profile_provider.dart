@@ -90,8 +90,7 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
         }
       }
     } catch (e) {
-      // Ignore geocoding errors/timeouts, fallback to default
-      print('Geocoding error for place: $place - $e');
+      // Ignore geocoding errors/timeouts on unsupported platforms, fallback to default
     }
 
     final newProfile = UserProfile(

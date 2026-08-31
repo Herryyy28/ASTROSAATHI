@@ -42,9 +42,6 @@ class RouterNotifier extends ChangeNotifier {
         if (!isDone && !isOnboardingLocation) {
           return '/onboarding';
         }
-        if (isDone && isOnboardingLocation) {
-          return '/';
-        }
         return null;
       },
       loading: () => null,

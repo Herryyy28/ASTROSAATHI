@@ -20,10 +20,11 @@ import '../../../../core/engine/models/game_plan_data.dart';
 import '../../../../core/widgets/why_this_bottom_sheet.dart';
 import '../../../../core/widgets/data_freshness_badge.dart';
 import '../../../../core/widgets/iphone_glass_menu.dart';
-import '../../../../core/widgets/ad_banner_widget.dart';
+
 import '../../../../l10n/app_localizations.dart';
 import '../../../search/presentation/screens/astrology_search_screen.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
+import '../../../subscription/presentation/widgets/vip_badge_button.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
 import 'main_screen.dart';
 
@@ -67,7 +68,11 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildGamePlanUI(BuildContext context, GamePlanData plan) {
-    final hPad = context.responsive<double>(mobile: 20, tablet: 32, desktop: 40);
+    final hPad = context.responsive<double>(
+      mobile: 20,
+      tablet: 32,
+      desktop: 40,
+    );
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -94,8 +99,6 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(height: 20),
 
                 // ── Ad / Sponsored Banner UI ───────────────────────
-                const AdBannerWidget(placement: 'home'),
-                const SizedBox(height: 24),
 
                 // ── Do / Careful / Avoid ──────────────────────────
                 Consumer(
@@ -189,20 +192,32 @@ class HomeScreen extends ConsumerWidget {
                   child: Text(
                     displayGreeting,
                     style: GoogleFonts.outfit(
-                      fontSize: context.responsive<double>(mobile: 24, tablet: 28, desktop: 32),
+                      fontSize: context.responsive<double>(
+                        mobile: 19,
+                        tablet: 24,
+                        desktop: 28,
+                      ),
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimaryDark,
                       letterSpacing: -0.3,
+                      height: 1.1,
                     ),
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.search_rounded, color: AppColors.primary, size: 24),
+                  icon: const Icon(
+                    Icons.search_rounded,
+                    color: AppColors.primary,
+                    size: 24,
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const AstrologySearchScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const AstrologySearchScreen(),
+                      ),
                     );
                   },
                 ),
@@ -211,10 +226,17 @@ class HomeScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: AppColors.primary.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 0.8),
+                    border: Border.all(
+                      color: AppColors.primary.withOpacity(0.3),
+                      width: 0.8,
+                    ),
                   ),
                   child: IconButton(
-                    icon: const Icon(Icons.more_vert_rounded, color: AppColors.primary, size: 22),
+                    icon: const Icon(
+                      Icons.more_vert_rounded,
+                      color: AppColors.primary,
+                      size: 22,
+                    ),
                     onPressed: () {
                       IPhoneGlassMenu.show(context, ref);
                     },
@@ -238,7 +260,8 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 DataFreshnessBadge(
-                  timeString: 'Calculated at ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
+                  timeString:
+                      'Calculated at ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
                 ),
               ],
             ),
@@ -315,7 +338,8 @@ class HomeScreen extends ConsumerWidget {
                     child: CircularProgressIndicator(
                       value: animatedValue / 10,
                       strokeWidth: 7,
-                      backgroundColor: AppColors.surfaceHighlightDark.withOpacity(0.5),
+                      backgroundColor: AppColors.surfaceHighlightDark
+                          .withOpacity(0.5),
                       color: AppColors.primary,
                       strokeCap: StrokeCap.round,
                     ),
@@ -373,18 +397,25 @@ class HomeScreen extends ConsumerWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.auto_awesome, color: AppColors.primary, size: 14),
+                const Icon(
+                  Icons.auto_awesome,
+                  color: AppColors.primary,
+                  size: 14,
+                ),
                 const SizedBox(width: 6),
                 Consumer(
                   builder: (context, ref, _) {
                     final lang = ref.watch(localeProvider);
                     String text = 'AI Generated Cosmic Insight';
                     if (lang == AppLanguage.hindi) {
-                      text = 'एआई जनरेटेड कॉस्मिक स्कोर (${plan.dayScore} / 10)';
+                      text =
+                          'एआई जनरेटेड कॉस्मिक स्कोर (${plan.dayScore} / 10)';
                     } else if (lang == AppLanguage.gujarati) {
-                      text = 'એઆઈ જનરેટેડ કોસ્મિક સ્કોર (${plan.dayScore} / 10)';
+                      text =
+                          'એઆઈ જનરેટેડ કોસ્મિક સ્કોર (${plan.dayScore} / 10)';
                     } else {
-                      text = 'AI Generated Cosmic Score (${plan.dayScore} / 10)';
+                      text =
+                          'AI Generated Cosmic Score (${plan.dayScore} / 10)';
                     }
                     return Flexible(
                       child: Text(
@@ -411,21 +442,41 @@ class HomeScreen extends ConsumerWidget {
               return OutlinedButton.icon(
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: AppColors.primary, width: 0.8),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
                 onPressed: () {
                   WhyThisBottomSheet.show(
                     context,
                     title: 'Daily Energy Alignment: ${plan.dayScore}/10',
-                    planetFactor: plan.planetFactor ?? 'Jupiter Transiting Benefic House',
-                    houseFactor: plan.houseFactor ?? '1st Lagna & 10th Karma Axis',
-                    transitFactor: plan.transitFactor ?? 'Moon Nakshatra Transit',
-                    vedicInterpretation: plan.vedicInterpretation ?? 'Benefic transit over key astrological axes provides high executive clarity and decision confidence.',
-                    practicalAction: plan.practicalAction ?? 'Capitalize on the Golden Window (11:15 AM - 1:20 PM) for critical negotiations or client discussions.',
+                    planetFactor:
+                        plan.planetFactor ?? 'Jupiter Transiting Benefic House',
+                    houseFactor:
+                        plan.houseFactor ?? '1st Lagna & 10th Karma Axis',
+                    transitFactor:
+                        plan.transitFactor ?? 'Moon Nakshatra Transit',
+                    vedicInterpretation:
+                        plan.vedicInterpretation ??
+                        'Benefic transit over key astrological axes provides high executive clarity and decision confidence.',
+                    practicalAction:
+                        plan.practicalAction ??
+                        'Capitalize on the Golden Window (11:15 AM - 1:20 PM) for critical negotiations or client discussions.',
                   );
                 },
-                icon: const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 16),
-                label: Text(l10n.whyThis, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 12)),
+                icon: const Icon(
+                  Icons.info_outline_rounded,
+                  color: AppColors.primary,
+                  size: 16,
+                ),
+                label: Text(
+                  l10n.whyThis,
+                  style: const TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
               );
             },
           ),
@@ -549,7 +600,10 @@ class HomeScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l10n.bestWindow.toUpperCase(), style: AppDecorations.sectionHeader()),
+                    Text(
+                      l10n.bestWindow.toUpperCase(),
+                      style: AppDecorations.sectionHeader(),
+                    ),
                     const SizedBox(height: 6),
                     Text(
                       '${plan.bestWindow.start} — ${plan.bestWindow.end}',
@@ -562,7 +616,10 @@ class HomeScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, color: AppColors.textTertiaryDark),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.textTertiaryDark,
+              ),
             ],
           ),
         );
@@ -581,10 +638,7 @@ class HomeScreen extends ConsumerWidget {
             width: 105,
             margin: const EdgeInsets.only(right: 12),
             child: GlassCard(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 14,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
               child: Column(
                 children: [
                   Text(
@@ -639,7 +693,8 @@ class HomeScreen extends ConsumerWidget {
       builder: (context, ref, _) {
         return GlassCard(
           onTap: () {
-            ref.read(mainNavIndexProvider.notifier).state = 2; // Navigate to Astro Baba tab (Index 2)
+            ref.read(mainNavIndexProvider.notifier).state =
+                2; // Navigate to Astro Baba tab (Index 2)
           },
           borderColor: AppColors.secondary.withOpacity(0.4),
           glowColor: AppColors.purpleGlow,

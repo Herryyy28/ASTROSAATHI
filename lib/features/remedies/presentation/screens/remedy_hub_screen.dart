@@ -7,6 +7,8 @@ import '../widgets/mantra_japa_counter_widget.dart';
 import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/providers/locale_provider.dart';
+import '../../../../core/providers/subscription_provider.dart';
+import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
 
 class RemedyHubScreen extends ConsumerStatefulWidget {
   const RemedyHubScreen({super.key});
@@ -299,10 +301,17 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
                   child: Row(
-                    children: planetKeys.asMap().entries.map((entry) {
+                    children: planetKeys.asMap().entries.where((entry) {
+                      final idx = entry.key;
+                      final isPremium = ref.watch(isPremiumProvider);
+                      // Only show Jupiter (index 0) for non-premium
+                      if (!isPremium && idx != 0) return false;
+                      return true;
+                    }).map((entry) {
                       final idx = entry.key;
                       final planetName = entry.value;
                       final isSelected = idx == _selectedPlanetIndex;
+
                       return Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: ChoiceChip(
@@ -316,7 +325,9 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                             fontSize: 12,
                           ),
                           onSelected: (selected) {
-                            if (selected) setState(() => _selectedPlanetIndex = idx);
+                            if (selected) {
+                              setState(() => _selectedPlanetIndex = idx);
+                            }
                           },
                         ),
                       );

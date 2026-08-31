@@ -11,11 +11,13 @@ import '../../../../core/widgets/zodiac_icon.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/theme/utils/responsive.dart';
-import '../../../../core/widgets/ad_banner_widget.dart';
 
 final selectedSignProvider = StateProvider<String>((ref) => 'Aries');
 
-final horoscopeProvider = FutureProvider.family<dynamic, String>((ref, timeframe) async {
+final horoscopeProvider = FutureProvider.family<dynamic, String>((
+  ref,
+  timeframe,
+) async {
   final engine = ref.watch(astrologyEngineProvider);
   final sign = ref.watch(selectedSignProvider);
   return await engine.getHoroscope(sign, timeframe);
@@ -25,8 +27,18 @@ class HoroscopeScreen extends ConsumerWidget {
   const HoroscopeScreen({super.key});
 
   static const List<String> signs = [
-    'Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo',
-    'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces',
+    'Aries',
+    'Taurus',
+    'Gemini',
+    'Cancer',
+    'Leo',
+    'Virgo',
+    'Libra',
+    'Scorpio',
+    'Sagittarius',
+    'Capricorn',
+    'Aquarius',
+    'Pisces',
   ];
 
   @override
@@ -36,7 +48,9 @@ class HoroscopeScreen extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(
-          decoration: const BoxDecoration(gradient: AppColors.cosmicRadialGradient),
+          decoration: const BoxDecoration(
+            gradient: AppColors.cosmicRadialGradient,
+          ),
           child: SafeArea(
             bottom: false,
             child: ResponsiveLayout(
@@ -45,9 +59,17 @@ class HoroscopeScreen extends ConsumerWidget {
                   // ── Header ────────────────────────────────────────
                   Padding(
                     padding: EdgeInsets.fromLTRB(
-                      context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
+                      context.responsive<double>(
+                        mobile: 20,
+                        tablet: 32,
+                        desktop: 40,
+                      ),
                       20,
-                      context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
+                      context.responsive<double>(
+                        mobile: 20,
+                        tablet: 32,
+                        desktop: 40,
+                      ),
                       0,
                     ),
                     child: Row(
@@ -56,7 +78,11 @@ class HoroscopeScreen extends ConsumerWidget {
                           child: Text(
                             'Horoscope',
                             style: GoogleFonts.outfit(
-                              fontSize: context.responsive<double>(mobile: 22, tablet: 28, desktop: 32),
+                              fontSize: context.responsive<double>(
+                                mobile: 22,
+                                tablet: 28,
+                                desktop: 32,
+                              ),
                               fontWeight: FontWeight.w700,
                               color: AppColors.textPrimaryDark,
                             ),
@@ -83,7 +109,10 @@ class HoroscopeScreen extends ConsumerWidget {
                       padding: EdgeInsets.zero,
                       borderRadius: 14,
                       child: const TabBar(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         tabs: [
                           Tab(text: 'Daily'),
                           Tab(text: 'Weekly'),
@@ -134,18 +163,18 @@ class HoroscopeScreen extends ConsumerWidget {
               },
               child: Column(
                 children: [
-                  ZodiacIcon(
-                    sign: sign,
-                    size: 36,
-                    isSelected: isSelected,
-                  ),
+                  ZodiacIcon(sign: sign, size: 36, isSelected: isSelected),
                   const SizedBox(height: 4),
                   Text(
                     sign.substring(0, 3),
                     style: TextStyle(
                       fontSize: 9,
-                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                      color: isSelected ? AppColors.primary : AppColors.textTertiaryDark,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w400,
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.textTertiaryDark,
                     ),
                   ),
                 ],
@@ -178,8 +207,12 @@ class HoroscopeScreen extends ConsumerWidget {
               Text(
                 sign,
                 style: TextStyle(
-                  color: sign == currentSign ? AppColors.primary : AppColors.textPrimaryDark,
-                  fontWeight: sign == currentSign ? FontWeight.bold : FontWeight.normal,
+                  color: sign == currentSign
+                      ? AppColors.primary
+                      : AppColors.textPrimaryDark,
+                  fontWeight: sign == currentSign
+                      ? FontWeight.bold
+                      : FontWeight.normal,
                 ),
               ),
             ],
@@ -206,7 +239,11 @@ class HoroscopeScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.primary, size: 18),
+            const Icon(
+              Icons.keyboard_arrow_down_rounded,
+              color: AppColors.primary,
+              size: 18,
+            ),
           ],
         ),
       ),
@@ -302,9 +339,6 @@ class _HoroscopeTabView extends ConsumerWidget {
                   ),
                 ],
               ).fadeSlideUp(delay: 200.ms),
-
-              const SizedBox(height: 16),
-              const AdBannerWidget(placement: 'horoscope'),
             ],
           ),
         );
@@ -326,7 +360,12 @@ class _HoroscopeTabView extends ConsumerWidget {
     );
   }
 
-  Widget _buildInfoCard(String title, String value, IconData icon, Color accentColor) {
+  Widget _buildInfoCard(
+    String title,
+    String value,
+    IconData icon,
+    Color accentColor,
+  ) {
     return GlassCard(
       padding: const EdgeInsets.all(16),
       child: Column(

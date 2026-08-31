@@ -33,7 +33,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController(text: '07:30');
+  final TextEditingController _timeController = TextEditingController(
+    text: '07:30',
+  );
   final TextEditingController _placeController = TextEditingController();
 
   String _selectedAmPm = 'AM';
@@ -176,16 +178,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
       final focusWeights = {'Career': 1.2, 'Love': 0.8, 'Money': 1.0};
 
-      await ref.read(userProfileProvider.notifier).updateProfile(
-            name: name,
-            dob: dob,
-            time: fullTime,
-            place: place,
-          );
+      await ref
+          .read(userProfileProvider.notifier)
+          .updateProfile(name: name, dob: dob, time: fullTime, place: place);
 
       final profile = ref.read(userProfileProvider);
 
-      await ref.read(profilesListProvider.notifier).upsertPrimaryProfile(
+      await ref
+          .read(profilesListProvider.notifier)
+          .upsertPrimaryProfile(
             name: profile.name,
             dob: profile.dob,
             birthTime: profile.time,
@@ -196,8 +197,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
           );
 
       try {
-        await ref.read(authRepositoryProvider).signInAnonymously().timeout(const Duration(seconds: 2));
-        await ref.read(authRepositoryProvider).saveProfileData(
+        await ref
+            .read(authRepositoryProvider)
+            .signInAnonymously()
+            .timeout(const Duration(seconds: 2));
+        await ref
+            .read(authRepositoryProvider)
+            .saveProfileData(
               name: profile.name,
               dob: profile.dob,
               time: profile.time,
@@ -206,12 +212,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               longitude: profile.longitude,
               timeZone: profile.timeZone,
               focusWeights: focusWeights,
-            ).timeout(const Duration(seconds: 2));
+            )
+            .timeout(const Duration(seconds: 2));
       } catch (_) {}
     } catch (e) {
       debugPrint('Failed to sync profile: $e');
     } finally {
       ref.invalidate(onboardingCompleteProvider);
+      // Eagerly await the refreshed provider so GoRouter's redirect has access to completed onboarding state
+      try {
+        await ref.read(onboardingCompleteProvider.future);
+      } catch (_) {}
 
       // Wait 1.5s for the checklist animations to complete smoothly
       await Future.delayed(const Duration(milliseconds: 1500));
@@ -233,9 +244,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 if (_currentIndex < 3)
                   Padding(
                     padding: EdgeInsets.fromLTRB(
-                      context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
+                      context.responsive<double>(
+                        mobile: 20,
+                        tablet: 32,
+                        desktop: 40,
+                      ),
                       20,
-                      context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
+                      context.responsive<double>(
+                        mobile: 20,
+                        tablet: 32,
+                        desktop: 40,
+                      ),
                       0,
                     ),
                     child: _buildSegmentedProgress(),
@@ -298,7 +317,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: IntrinsicHeight(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 20,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -334,9 +356,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                             child: Image.asset(
                               'assets/icon/app_icon.png',
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => const Center(
-                                child: Text('✦', style: TextStyle(fontSize: 48, color: AppColors.primary)),
-                              ),
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Center(
+                                    child: Text(
+                                      '✦',
+                                      style: TextStyle(
+                                        fontSize: 48,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
+                                  ),
                             ),
                           ),
                         ),
@@ -381,24 +410,36 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                               padding: const EdgeInsets.only(bottom: 8),
                               child: GestureDetector(
                                 onTap: () {
-                                  ref.read(localeProvider.notifier).setLanguage(lang);
+                                  ref
+                                      .read(localeProvider.notifier)
+                                      .setLanguage(lang);
                                 },
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 200),
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 12,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: isSelected
                                         ? AppColors.primary.withOpacity(0.18)
-                                        : AppColors.surfaceDark.withOpacity(0.6),
+                                        : AppColors.surfaceDark.withOpacity(
+                                            0.6,
+                                          ),
                                     borderRadius: BorderRadius.circular(16),
                                     border: Border.all(
-                                      color: isSelected ? AppColors.primary : AppColors.glassBorder,
+                                      color: isSelected
+                                          ? AppColors.primary
+                                          : AppColors.glassBorder,
                                       width: isSelected ? 1.5 : 0.8,
                                     ),
                                   ),
                                   child: Row(
                                     children: [
-                                      Text(lang.flagEmoji, style: const TextStyle(fontSize: 20)),
+                                      Text(
+                                        lang.flagEmoji,
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
                                       const SizedBox(width: 12),
                                       Expanded(
                                         child: Text(
@@ -406,15 +447,25 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                                           style: GoogleFonts.outfit(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
-                                            color: isSelected ? AppColors.primary : AppColors.textPrimaryDark,
+                                            color: isSelected
+                                                ? AppColors.primary
+                                                : AppColors.textPrimaryDark,
                                             height: 1.35,
                                           ),
                                         ),
                                       ),
                                       if (isSelected)
-                                        const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 20)
+                                        const Icon(
+                                          Icons.check_circle_rounded,
+                                          color: AppColors.primary,
+                                          size: 20,
+                                        )
                                       else
-                                        Icon(Icons.circle_outlined, color: AppColors.textTertiaryDark, size: 18),
+                                        Icon(
+                                          Icons.circle_outlined,
+                                          color: AppColors.textTertiaryDark,
+                                          size: 18,
+                                        ),
                                     ],
                                   ),
                                 ),
@@ -474,7 +525,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               ),
               child: Row(
                 children: [
-                  Text(_detectedZodiac!.symbol, style: const TextStyle(fontSize: 22)),
+                  Text(
+                    _detectedZodiac!.symbol,
+                    style: const TextStyle(fontSize: 22),
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -502,7 +556,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               ),
             ).fadeSlideUp(),
           const SizedBox(height: 28),
-          GradientButton(text: 'Continue to Birth Details', onPressed: _nextPage),
+          GradientButton(
+            text: 'Continue to Birth Details',
+            onPressed: _nextPage,
+          ),
         ],
       ),
     );
@@ -512,7 +569,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     return _buildInputStep(
       icon: '✨',
       title: 'Enter Birth Details',
-      subtitle: 'Date, exact time, and location generate your authentic Kundli.',
+      subtitle:
+          'Date, exact time, and location generate your authentic Kundli.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -534,7 +592,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 });
               }
             },
-            style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 16),
+            style: const TextStyle(
+              color: AppColors.textPrimaryDark,
+              fontSize: 16,
+            ),
             decoration: AppDecorations.premiumInput(
               hintText: 'Date of Birth (YYYY-MM-DD)',
               prefixIcon: Icons.calendar_today_rounded,
@@ -556,16 +617,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       initialTime: const TimeOfDay(hour: 7, minute: 30),
                     );
                     if (time != null) {
-                      final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+                      final hour = time.hourOfPeriod == 0
+                          ? 12
+                          : time.hourOfPeriod;
                       final minute = time.minute.toString().padLeft(2, '0');
                       final period = time.period == DayPeriod.am ? 'AM' : 'PM';
                       setState(() {
-                        _timeController.text = '${hour.toString().padLeft(2, '0')}:$minute';
+                        _timeController.text =
+                            '${hour.toString().padLeft(2, '0')}:$minute';
                         _selectedAmPm = period;
                       });
                     }
                   },
-                  style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 16),
+                  style: const TextStyle(
+                    color: AppColors.textPrimaryDark,
+                    fontSize: 16,
+                  ),
                   decoration: AppDecorations.premiumInput(
                     hintText: 'Time (HH:MM)',
                     prefixIcon: Icons.access_time_rounded,
@@ -595,7 +662,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                         height: 1.2,
                       ),
                       items: ['AM', 'PM']
-                          .map((val) => DropdownMenuItem(value: val, child: Text(val)))
+                          .map(
+                            (val) =>
+                                DropdownMenuItem(value: val, child: Text(val)),
+                          )
                           .toList(),
                       onChanged: (val) {
                         if (val != null) setState(() => _selectedAmPm = val);
@@ -619,23 +689,35 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                value: _popularCities.contains(_selectedCity) ? _selectedCity : 'Custom Location',
+                value: _popularCities.contains(_selectedCity)
+                    ? _selectedCity
+                    : 'Custom Location',
                 isExpanded: true,
                 dropdownColor: AppColors.surfaceDark,
                 alignment: Alignment.centerLeft,
-                style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 15, height: 1.2),
+                style: const TextStyle(
+                  color: AppColors.textPrimaryDark,
+                  fontSize: 15,
+                  height: 1.2,
+                ),
                 items: _popularCities
-                    .map((city) => DropdownMenuItem(
-                          value: city,
-                          child: Text(
-                            city,
-                            style: TextStyle(
-                              color: city == 'Custom Location' ? AppColors.primary : AppColors.textPrimaryDark,
-                              fontWeight: city == 'Custom Location' ? FontWeight.bold : FontWeight.normal,
-                              height: 1.2,
-                            ),
+                    .map(
+                      (city) => DropdownMenuItem(
+                        value: city,
+                        child: Text(
+                          city,
+                          style: TextStyle(
+                            color: city == 'Custom Location'
+                                ? AppColors.primary
+                                : AppColors.textPrimaryDark,
+                            fontWeight: city == 'Custom Location'
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            height: 1.2,
                           ),
-                        ))
+                        ),
+                      ),
+                    )
                     .toList(),
                 onChanged: (val) {
                   if (val != null) {
@@ -656,7 +738,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             const SizedBox(height: 10),
             TextField(
               controller: _placeController,
-              style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 16),
+              style: const TextStyle(
+                color: AppColors.textPrimaryDark,
+                fontSize: 16,
+              ),
               decoration: AppDecorations.premiumInput(
                 hintText: 'Enter City, Country',
                 prefixIcon: Icons.location_on_outlined,
@@ -676,10 +761,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                   });
                 }
               },
-              icon: const Icon(Icons.my_location_rounded, color: AppColors.primary, size: 16),
+              icon: const Icon(
+                Icons.my_location_rounded,
+                color: AppColors.primary,
+                size: 16,
+              ),
               label: Text(
                 'Detect Location',
-                style: GoogleFonts.inter(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w600),
+                style: GoogleFonts.inter(
+                  color: AppColors.primary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
@@ -696,77 +789,78 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
   Widget _buildGeneratingStep() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 50),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Container(
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.primary.withOpacity(0.3),
-                      width: 2,
-                    ),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      child: Center(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.primary.withOpacity(0.3),
+                            width: 2,
+                          ),
+                        ),
+                      )
+                      .animate(onPlay: (c) => c.repeat(reverse: false))
+                      .rotate(duration: 8000.ms, curve: Curves.linear),
+                  Container(
+                        width: 90,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.primary.withOpacity(0.5),
+                            width: 1.5,
+                          ),
+                        ),
+                      )
+                      .animate(onPlay: (c) => c.repeat(reverse: true))
+                      .rotate(
+                        duration: 3000.ms,
+                        curve: Curves.linear,
+                        begin: 1,
+                        end: 0,
+                      ),
+                  const Text(
+                    '✦',
+                    style: TextStyle(fontSize: 28, color: AppColors.primary),
                   ),
-                )
-                    .animate(onPlay: (c) => c.repeat(reverse: false))
-                    .rotate(duration: 8000.ms, curve: Curves.linear),
-                Container(
-                  width: 110,
-                  height: 110,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.primary.withOpacity(0.5),
-                      width: 1.5,
+                ],
+              ).fadeSlideUp(),
+              const SizedBox(height: 24),
+              Text(
+                    'Reading your stars...',
+                    style: GoogleFonts.outfit(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimaryDark,
+                      height: 1.3,
                     ),
+                  )
+                  .animate(onPlay: (c) => c.repeat(reverse: true))
+                  .shimmer(
+                    duration: 1500.ms,
+                    color: AppColors.primaryLight.withOpacity(0.5),
                   ),
-                )
-                    .animate(onPlay: (c) => c.repeat(reverse: true))
-                    .rotate(duration: 3000.ms, curve: Curves.linear, begin: 1, end: 0),
-                const Text('✦', style: TextStyle(fontSize: 32, color: AppColors.primary)),
-              ],
-            ).fadeSlideUp(),
-            const SizedBox(height: 36),
-            Text(
-              'Reading your stars...',
-              style: GoogleFonts.outfit(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textPrimaryDark,
-                height: 1.3,
+              const SizedBox(height: 20),
+              _buildCheckItem('Name & Nam Rashi mapped', 0),
+              _buildCheckItem(
+                'Birth details & planetary positions calculated',
+                1,
               ),
-            )
-                .animate(onPlay: (c) => c.repeat(reverse: true))
-                .shimmer(duration: 1500.ms, color: AppColors.primaryLight.withOpacity(0.5)),
-            const SizedBox(height: 28),
-            _buildCheckItem('Name & Nam Rashi mapped', 0),
-            _buildCheckItem('Birth details & planetary positions calculated', 1),
-            _buildCheckItem('Vedic Kundli & daily guidance ready', 2),
-            const SizedBox(height: 36),
-            ElevatedButton.icon(
-              onPressed: () => context.go('/'),
-              icon: const Icon(Icons.arrow_forward_rounded, size: 18),
-              label: Text(
-                'Enter Main App',
-                style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                elevation: 4,
-              ),
-            ).fadeSlideUp(delay: 1200.ms),
-          ],
+              _buildCheckItem('Vedic Kundli & daily guidance ready', 2),
+            ],
+          ),
         ),
       ),
     );
@@ -774,33 +868,40 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
   Widget _buildCheckItem(String text, int index) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-      child: Row(
-        children: [
-          Container(
-            width: 24,
-            height: 24,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.success.withOpacity(0.15),
-              border: Border.all(color: AppColors.success.withOpacity(0.5)),
-            ),
-            child: const Icon(Icons.check_rounded, size: 14, color: AppColors.success),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(
-                fontSize: 14,
-                color: AppColors.textSecondaryDark,
-                height: 1.35,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+          child: Row(
+            children: [
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.success.withOpacity(0.15),
+                  border: Border.all(color: AppColors.success.withOpacity(0.5)),
+                ),
+                child: const Icon(
+                  Icons.check_rounded,
+                  size: 14,
+                  color: AppColors.success,
+                ),
               ),
-            ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  text,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textSecondaryDark,
+                    height: 1.35,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    ).animate(delay: Duration(milliseconds: 400 + (index * 400))).fadeIn(duration: 400.ms).slideX(begin: 0.1);
+        )
+        .animate(delay: Duration(milliseconds: 400 + (index * 400)))
+        .fadeIn(duration: 400.ms)
+        .slideX(begin: 0.1);
   }
 
   Widget _buildInputStep({
@@ -817,11 +918,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: IntrinsicHeight(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 20,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(icon, style: const TextStyle(fontSize: 36)).fadeSlideUp(),
+                    Text(
+                      icon,
+                      style: const TextStyle(fontSize: 36),
+                    ).fadeSlideUp(),
                     const SizedBox(height: 16),
                     Text(
                       title,
