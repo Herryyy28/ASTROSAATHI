@@ -1,4 +1,4 @@
-import 'package:astrosaathi/features/astrology/presentation/widgets/birth_chart_card.dart';
+import 'package:AstroSaathi/features/astrology/presentation/widgets/birth_chart_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';

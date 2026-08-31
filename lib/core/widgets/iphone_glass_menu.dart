@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:astrosaathi/features/ai/presentation/screens/astro_baba_screen.dart';
+import 'package:AstroSaathi/features/ai/presentation/screens/astro_baba_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
