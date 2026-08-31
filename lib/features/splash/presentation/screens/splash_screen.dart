@@ -29,7 +29,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     bool isDone = false;
     try {
-      isDone = await ref.read(onboardingCompleteProvider.future);
+      isDone = ref.read(onboardingCompleteProvider);
     } catch (e) {
       debugPrint('Error checking onboarding status: $e');
     }

@@ -80,7 +80,7 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
 
                 // ── Visual Birth Chart ─────────────────────────────
-                const BirthChartCard(),
+                BirthChartCard(),
                 const SizedBox(height: 32),
 
                 // ── Energy Score Card ─────────────────────────────
