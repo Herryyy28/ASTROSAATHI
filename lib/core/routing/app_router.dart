@@ -12,7 +12,8 @@ final onboardingCompleteProvider = FutureProvider<bool>((ref) async {
   try {
     final prefs = await SharedPreferences.getInstance();
     final name = prefs.getString('user_name');
-    return name != null && name.isNotEmpty;
+    final finished = prefs.getBool('onboarding_finished_flag') ?? false;
+    return (name != null && name.isNotEmpty) || finished;
   } catch (_) {
     return false;
   }

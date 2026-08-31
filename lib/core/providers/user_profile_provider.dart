@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geocoding/geocoding.dart';
@@ -82,7 +83,7 @@ class UserProfileNotifier extends StateNotifier<UserProfile> {
     
     // Attempt geocoding with timeout
     try {
-      if (place.isNotEmpty) {
+      if (place.isNotEmpty && (Platform.isAndroid || Platform.isIOS)) {
         List<Location> locations = await locationFromAddress(place).timeout(const Duration(seconds: 2));
         if (locations.isNotEmpty) {
           lat = locations.first.latitude;

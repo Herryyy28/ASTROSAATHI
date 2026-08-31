@@ -176,22 +176,25 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
   bool canAskAiQuery() {
     if (state.isPremium) return true;
-    _checkDateReset();
-    return state.aiQueriesToday < freeAiQueryLimit;
+    final today = _todayDateString;
+    final currentQueries = (state.lastQueryDate == today) ? state.aiQueriesToday : 0;
+    return currentQueries < freeAiQueryLimit;
   }
 
   int get remainingFreeAiQueries {
     if (state.isPremium) return 999;
-    _checkDateReset();
-    final rem = freeAiQueryLimit - state.aiQueriesToday;
+    final today = _todayDateString;
+    final currentQueries = (state.lastQueryDate == today) ? state.aiQueriesToday : 0;
+    final rem = freeAiQueryLimit - currentQueries;
     return rem < 0 ? 0 : rem;
   }
 
   Future<void> recordAiQuery() async {
     if (state.isPremium) return;
-    _checkDateReset();
-    final newCount = state.aiQueriesToday + 1;
+    
     final today = _todayDateString;
+    final currentQueries = (state.lastQueryDate == today) ? state.aiQueriesToday : 0;
+    final newCount = currentQueries + 1;
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('ai_queries_today', newCount);

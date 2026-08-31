@@ -200,7 +200,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         await ref
             .read(authRepositoryProvider)
             .signInAnonymously()
-            .timeout(const Duration(seconds: 2));
+            .timeout(const Duration(milliseconds: 500));
         await ref
             .read(authRepositoryProvider)
             .saveProfileData(
@@ -213,19 +213,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               timeZone: profile.timeZone,
               focusWeights: focusWeights,
             )
-            .timeout(const Duration(seconds: 2));
+            .timeout(const Duration(milliseconds: 500));
       } catch (_) {}
     } catch (e) {
       debugPrint('Failed to sync profile: $e');
     } finally {
-      ref.invalidate(onboardingCompleteProvider);
-      // Eagerly await the refreshed provider so GoRouter's redirect has access to completed onboarding state
-      try {
-        await ref.read(onboardingCompleteProvider.future);
-      } catch (_) {}
+      // Set a flag that onboarding is strictly finished
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('onboarding_finished_flag', true);
 
-      // Wait 1.5s for the checklist animations to complete smoothly
-      await Future.delayed(const Duration(milliseconds: 1500));
+      ref.invalidate(onboardingCompleteProvider);
+      ref.invalidate(profilesListProvider);
+      
+      // Wait slightly for state to sync and animations to feel right
+      await Future.delayed(const Duration(milliseconds: 800));
+
       if (mounted) {
         context.go('/');
       }

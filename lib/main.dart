@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'core/routing/app_router.dart';
 import 'core/theme/app_colors.dart';
@@ -43,12 +42,6 @@ void main() {
       child: AstroSaathiApp(),
     ),
   );
-
-  // Initialize Mobile Ads asynchronously after UI renders
-  MobileAds.instance.initialize().catchError((e) {
-    debugPrint('MobileAds init error: $e');
-    return InitializationStatus(const {});
-  });
 }
 
 class AstroSaathiApp extends ConsumerWidget {

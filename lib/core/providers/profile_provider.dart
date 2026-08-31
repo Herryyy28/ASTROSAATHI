@@ -86,10 +86,10 @@ class BirthProfileData {
 
 class ProfilesNotifier extends StateNotifier<List<BirthProfileData>> {
   ProfilesNotifier() : super([]) {
-    _loadProfiles();
+    loadProfiles();
   }
 
-  Future<void> _loadProfiles() async {
+  Future<void> loadProfiles() async {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_profilesKey);
 
