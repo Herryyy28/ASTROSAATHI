@@ -13,6 +13,7 @@ import '../../../../core/theme/utils/responsive.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../widgets/cosmic_orb_painter.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/ad_banner_widget.dart';
 
 class AstroBabaScreen extends ConsumerStatefulWidget {
   const AstroBabaScreen({super.key});
@@ -99,6 +100,12 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                       return _buildMessageBubble(messages[index], index);
                     },
                   ),
+                ),
+
+                // ── Ad Banner ───────────────────────────────────────
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: AdBannerWidget(placement: 'astrobaba'),
                 ),
 
                 // ── Contextual Smart Prompt Chips ────────────────────

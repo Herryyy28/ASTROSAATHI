@@ -15,6 +15,7 @@ import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/utils/zodiac_sign_utils.dart';
 import '../../../../features/astrology/services/pdf_report_generator.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/ad_banner_widget.dart';
 
 class MyKundlisScreen extends ConsumerStatefulWidget {
   const MyKundlisScreen({super.key});
@@ -100,10 +101,20 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
     final canAdd = ref.read(canAddMoreProfilesProvider);
     if (!canAdd) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Maximum limit of 5 family profiles reached.'),
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 20),
+              const SizedBox(width: 10),
+              Text(
+                'Maximum limit of 5 family profiles reached.',
+                style: GoogleFonts.outfit(fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
           backgroundColor: AppColors.warning,
           behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         ),
       );
       return;
@@ -120,322 +131,572 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
             return Padding(
               padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Container(
-                padding: const EdgeInsets.all(24),
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.85,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.surfaceDark,
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-                  border: Border.all(color: AppColors.glassBorder),
+                  border: Border.all(color: AppColors.primary.withOpacity(0.35), width: 1.2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.goldGlow.withOpacity(0.2),
+                      blurRadius: 28,
+                      spreadRadius: 2,
+                    ),
+                  ],
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Top Drag Indicator
+                    const SizedBox(height: 12),
+                    Center(
+                      child: Container(
+                        width: 42,
+                        height: 4.5,
+                        decoration: BoxDecoration(
+                          color: AppColors.glassBorder,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Header Title Bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
                         children: [
+                          Container(
+                            width: 42,
+                            height: 42,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: AppColors.goldGradient,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withOpacity(0.3),
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
+                            child: const Center(
+                              child: Icon(Icons.person_add_alt_1_rounded, color: Colors.black, size: 22),
+                            ),
+                          ),
+                          const SizedBox(width: 14),
                           Expanded(
-                            child: Text(
-                              'Add Birth Profile (Up to 5)',
-                              style: GoogleFonts.outfit(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary,
-                              ),
-                              overflow: TextOverflow.ellipsis,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Add Birth Profile',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.textPrimaryDark,
+                                  ),
+                                ),
+                                Text(
+                                  'Store family & friends birth details for instant Kundli',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    color: AppColors.textSecondaryDark,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           IconButton(
                             onPressed: () => Navigator.pop(context),
-                            icon: const Icon(Icons.close_rounded, color: AppColors.textSecondaryDark),
+                            icon: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: AppColors.surfaceHighlightDark,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: AppColors.glassBorder),
+                              ),
+                              child: const Icon(Icons.close_rounded, size: 18, color: AppColors.textSecondaryDark),
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 14),
+                    ),
+                    const Divider(color: AppColors.glassBorder, height: 24),
 
-                      // Name Field with Auto-Capitalization
-                      TextField(
-                        controller: _nameController,
-                        textCapitalization: TextCapitalization.words,
-                        style: const TextStyle(color: AppColors.textPrimaryDark),
-                        onChanged: (val) {
-                          setModalState(() {
-                            _modalZodiac = ZodiacSignUtils.getZodiacFromName(val);
-                          });
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Full Name',
-                          labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
-                          filled: true,
-                          fillColor: AppColors.surfaceHighlightDark,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                        ),
-                      ),
-                      if (_modalZodiac != null) ...[
-                        const SizedBox(height: 10),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: AppColors.primary.withOpacity(0.3)),
-                          ),
-                          child: Row(
-                            children: [
-                              Text(_modalZodiac!.symbol, style: const TextStyle(fontSize: 20)),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  'Auto Nam Rashi: ${_modalZodiac!.englishName} (${_modalZodiac!.hindiName})',
-                                  style: GoogleFonts.outfit(
+                    // Scrollable Form Content
+                    Flexible(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // ── Section 1: Relationship Selector Chips ────
+                            Text(
+                              'RELATIONSHIP',
+                              style: GoogleFonts.outfit(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: _relationships.map((rel) {
+                                final isSelected = _selectedRelationship == rel;
+                                return ChoiceChip(
+                                  selected: isSelected,
+                                  showCheckmark: false,
+                                  label: Text(rel),
+                                  labelStyle: GoogleFonts.outfit(
                                     fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
-                                    height: 1.35,
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                    color: isSelected ? Colors.black : AppColors.textPrimaryDark,
                                   ),
+                                  selectedColor: AppColors.primary,
+                                  backgroundColor: AppColors.surfaceHighlightDark,
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    side: BorderSide(
+                                      color: isSelected ? AppColors.primary : AppColors.glassBorder,
+                                    ),
+                                  ),
+                                  onSelected: (selected) {
+                                    if (selected) {
+                                      setModalState(() => _selectedRelationship = rel);
+                                    }
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // ── Section 2: Full Name Input ─────────────
+                            Text(
+                              'FULL NAME',
+                              style: GoogleFonts.outfit(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            TextField(
+                              controller: _nameController,
+                              textCapitalization: TextCapitalization.words,
+                              style: GoogleFonts.outfit(
+                                color: AppColors.textPrimaryDark,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              onChanged: (val) {
+                                setModalState(() {
+                                  _modalZodiac = ZodiacSignUtils.getZodiacFromName(val);
+                                });
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Enter full name (e.g., Rajesh Sharma)',
+                                hintStyle: GoogleFonts.inter(color: AppColors.textTertiaryDark, fontSize: 13),
+                                prefixIcon: const Icon(Icons.person_rounded, color: AppColors.primary, size: 20),
+                                filled: true,
+                                fillColor: AppColors.surfaceHighlightDark,
+                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(color: AppColors.glassBorder),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(color: AppColors.glassBorder),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+                                ),
+                              ),
+                            ),
+
+                            // Auto-detected Nam Rashi Card
+                            if (_modalZodiac != null) ...[
+                              const SizedBox(height: 10),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      AppColors.primary.withOpacity(0.18),
+                                      AppColors.surfaceHighlightDark,
+                                    ],
+                                  ),
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primary.withOpacity(0.2),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Text(_modalZodiac!.symbol, style: const TextStyle(fontSize: 18)),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Auto Nam Rashi (Based on Name)',
+                                            style: GoogleFonts.inter(
+                                              fontSize: 10,
+                                              color: AppColors.textSecondaryDark,
+                                            ),
+                                          ),
+                                          Text(
+                                            '${_modalZodiac!.englishName} • ${_modalZodiac!.hindiName}',
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.primary,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: 12),
+                            const SizedBox(height: 20),
 
-                      // Relationship Dropdown
-                      DropdownButtonFormField<String>(
-                        value: _selectedRelationship,
-                        dropdownColor: AppColors.surfaceDark,
-                        style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, height: 1.2),
-                        decoration: InputDecoration(
-                          labelText: 'Relationship',
-                          labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
-                          filled: true,
-                          fillColor: AppColors.surfaceHighlightDark,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                        ),
-                        items: _relationships.map((r) => DropdownMenuItem(value: r, child: Text(r))).toList(),
-                        onChanged: (val) {
-                          if (val != null) setModalState(() => _selectedRelationship = val);
-                        },
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Date of Birth
-                      TextField(
-                        controller: _dobController,
-                        readOnly: true,
-                        onTap: () async {
-                          final date = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime(2000),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now(),
-                          );
-                          if (date != null) {
-                            setModalState(() {
-                              _dobController.text =
-                                  '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-                            });
-                          }
-                        },
-                        style: const TextStyle(color: AppColors.textPrimaryDark),
-                        decoration: InputDecoration(
-                          labelText: 'Date of Birth (YYYY-MM-DD)',
-                          labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
-                          filled: true,
-                          fillColor: AppColors.surfaceHighlightDark,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-
-                      // Time of Birth with AM/PM
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: TextField(
-                              controller: _timeController,
-                              readOnly: true,
-                              onTap: () async {
-                                final time = await showTimePicker(
-                                  context: context,
-                                  initialTime: const TimeOfDay(hour: 7, minute: 30),
-                                );
-                                if (time != null) {
-                                  final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
-                                  final minute = time.minute.toString().padLeft(2, '0');
-                                  final period = time.period == DayPeriod.am ? 'AM' : 'PM';
-                                  setModalState(() {
-                                    _timeController.text = '${hour.toString().padLeft(2, '0')}:$minute';
-                                    _selectedAmPm = period;
-                                  });
-                                }
-                              },
-                              style: const TextStyle(color: AppColors.textPrimaryDark),
-                              decoration: InputDecoration(
-                                labelText: 'Birth Time (HH:MM)',
-                                labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
-                                filled: true,
-                                fillColor: AppColors.surfaceHighlightDark,
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                            // ── Section 3: Date & Time of Birth ──────────
+                            Text(
+                              'DATE & TIME OF BIRTH',
+                              style: GoogleFonts.outfit(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                                letterSpacing: 1.2,
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              height: 54,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                // Date Picker Field
+                                Expanded(
+                                  flex: 5,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      final date = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime(2000),
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime.now(),
+                                        builder: (context, child) {
+                                          return Theme(
+                                            data: Theme.of(context).copyWith(
+                                              colorScheme: const ColorScheme.dark(
+                                                primary: AppColors.primary,
+                                                onPrimary: Colors.black,
+                                                surface: AppColors.surfaceDark,
+                                                onSurface: AppColors.textPrimaryDark,
+                                              ),
+                                            ),
+                                            child: child!,
+                                          );
+                                        },
+                                      );
+                                      if (date != null) {
+                                        setModalState(() {
+                                          _dobController.text =
+                                              '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.surfaceHighlightDark,
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(color: AppColors.glassBorder),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.calendar_month_rounded, color: AppColors.primary, size: 20),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Text(
+                                              _dobController.text.isEmpty ? 'Select Date' : _dobController.text,
+                                              style: GoogleFonts.outfit(
+                                                color: _dobController.text.isEmpty
+                                                    ? AppColors.textTertiaryDark
+                                                    : AppColors.textPrimaryDark,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+
+                                // Time Picker Field
+                                Expanded(
+                                  flex: 4,
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      final time = await showTimePicker(
+                                        context: context,
+                                        initialTime: const TimeOfDay(hour: 7, minute: 30),
+                                      );
+                                      if (time != null) {
+                                        final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+                                        final minute = time.minute.toString().padLeft(2, '0');
+                                        final period = time.period == DayPeriod.am ? 'AM' : 'PM';
+                                        setModalState(() {
+                                          _timeController.text = '${hour.toString().padLeft(2, '0')}:$minute';
+                                          _selectedAmPm = period;
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.surfaceHighlightDark,
+                                        borderRadius: BorderRadius.circular(16),
+                                        border: Border.all(color: AppColors.glassBorder),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.access_time_rounded, color: AppColors.primary, size: 20),
+                                          const SizedBox(width: 8),
+                                          Expanded(
+                                            child: Text(
+                                              _timeController.text,
+                                              style: GoogleFonts.outfit(
+                                                color: AppColors.textPrimaryDark,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+
+                                // AM/PM Segmented Toggle
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.surfaceHighlightDark,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(color: AppColors.glassBorder),
+                                  ),
+                                  child: Row(
+                                    children: ['AM', 'PM'].map((period) {
+                                      final isSelected = _selectedAmPm == period;
+                                      return GestureDetector(
+                                        onTap: () => setModalState(() => _selectedAmPm = period),
+                                        child: AnimatedContainer(
+                                          duration: const Duration(milliseconds: 180),
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
+                                          decoration: BoxDecoration(
+                                            color: isSelected ? AppColors.primary : Colors.transparent,
+                                            borderRadius: BorderRadius.circular(14),
+                                          ),
+                                          child: Text(
+                                            period,
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                              color: isSelected ? Colors.black : AppColors.textSecondaryDark,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+
+                            // ── Section 4: Birth Location ───────────────
+                            Text(
+                              'BIRTH LOCATION',
+                              style: GoogleFonts.outfit(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 14),
                               decoration: BoxDecoration(
                                 color: AppColors.surfaceHighlightDark,
                                 borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: AppColors.glassBorder),
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
-                                  value: _selectedAmPm,
+                                  value: _popularCities.contains(_selectedCity) ? _selectedCity : 'Custom Location',
+                                  isExpanded: true,
                                   dropdownColor: AppColors.surfaceDark,
-                                  alignment: Alignment.center,
-                                  style: GoogleFonts.outfit(
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                    height: 1.2,
-                                  ),
-                                  items: ['AM', 'PM']
-                                      .map((val) => DropdownMenuItem(value: val, child: Text(val)))
-                                      .toList(),
+                                  icon: const Icon(Icons.arrow_drop_down_rounded, color: AppColors.primary),
+                                  style: GoogleFonts.outfit(color: AppColors.textPrimaryDark, fontSize: 14),
+                                  items: _popularCities.map((city) {
+                                    return DropdownMenuItem(
+                                      value: city,
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.location_city_rounded, color: AppColors.primary, size: 18),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            city,
+                                            style: GoogleFonts.outfit(
+                                              color: city == 'Custom Location' ? AppColors.primary : AppColors.textPrimaryDark,
+                                              fontWeight: city == 'Custom Location' ? FontWeight.bold : FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
                                   onChanged: (val) {
-                                    if (val != null) setModalState(() => _selectedAmPm = val);
+                                    if (val != null) {
+                                      setModalState(() {
+                                        _selectedCity = val;
+                                        if (val != 'Custom Location') {
+                                          _placeController.text = val;
+                                        } else {
+                                          _placeController.clear();
+                                        }
+                                      });
+                                    }
                                   },
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
 
-                      // City Dropdown
-                      Container(
-                        height: 54,
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
-                        decoration: BoxDecoration(
-                          color: AppColors.surfaceHighlightDark,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: _popularCities.contains(_selectedCity) ? _selectedCity : 'Custom Location',
-                            isExpanded: true,
-                            dropdownColor: AppColors.surfaceDark,
-                            alignment: Alignment.centerLeft,
-                            style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 14, height: 1.2),
-                            items: _popularCities
-                                .map((city) => DropdownMenuItem(
-                                      value: city,
-                                      child: Text(
-                                        city,
-                                        style: TextStyle(
-                                          color: city == 'Custom Location' ? AppColors.primary : AppColors.textPrimaryDark,
-                                          fontWeight: city == 'Custom Location' ? FontWeight.bold : FontWeight.normal,
-                                          height: 1.2,
-                                        ),
-                                      ),
-                                    ))
-                                .toList(),
-                            onChanged: (val) {
-                              if (val != null) {
-                                setModalState(() {
-                                  _selectedCity = val;
-                                  if (val != 'Custom Location') {
-                                    _placeController.text = val;
-                                  } else {
-                                    _placeController.clear();
-                                  }
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                      if (_selectedCity == 'Custom Location') ...[
-                        const SizedBox(height: 10),
-                        TextField(
-                          controller: _placeController,
-                          style: const TextStyle(color: AppColors.textPrimaryDark),
-                          decoration: InputDecoration(
-                            labelText: 'Birth Location',
-                            labelStyle: const TextStyle(color: AppColors.textSecondaryDark),
-                            filled: true,
-                            fillColor: AppColors.surfaceHighlightDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          ),
-                          onPressed: () async {
-                            final name = ZodiacSignUtils.capitalizeName(_nameController.text.trim());
-                            if (name.isNotEmpty &&
-                                _dobController.text.isNotEmpty &&
-                                _timeController.text.isNotEmpty) {
-                              final place = _placeController.text.trim();
-                              double lat = 28.6139;
-                              double lon = 77.2090;
-                              try {
-                                final locations = await locationFromAddress(place);
-                                if (locations.isNotEmpty) {
-                                  lat = locations.first.latitude;
-                                  lon = locations.first.longitude;
-                                }
-                              } catch (e) {
-                                debugPrint('Geocoding failed for $place: $e');
-                              }
-
-                              final success = await ref.read(profilesListProvider.notifier).addProfile(
-                                    BirthProfileData(
-                                      id: 'p-${DateTime.now().millisecondsSinceEpoch}',
-                                      name: name,
-                                      relationship: _selectedRelationship,
-                                      dob: _dobController.text,
-                                      birthTime: '${_timeController.text} $_selectedAmPm',
-                                      birthPlace: place,
-                                      latitude: lat,
-                                      longitude: lon,
-                                      timezone: '5.5',
-                                    ),
-                                  );
-
-                              if (!success && context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Cannot add more than 5 family member profiles.'),
-                                    backgroundColor: AppColors.error,
+                            if (_selectedCity == 'Custom Location') ...[
+                              const SizedBox(height: 10),
+                              TextField(
+                                controller: _placeController,
+                                style: GoogleFonts.outfit(color: AppColors.textPrimaryDark),
+                                decoration: InputDecoration(
+                                  hintText: 'Enter City, Country (e.g., Jaipur, India)',
+                                  hintStyle: GoogleFonts.inter(color: AppColors.textTertiaryDark, fontSize: 13),
+                                  prefixIcon: const Icon(Icons.pin_drop_rounded, color: AppColors.primary, size: 20),
+                                  filled: true,
+                                  fillColor: AppColors.surfaceHighlightDark,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                    borderSide: BorderSide(color: AppColors.glassBorder),
                                   ),
-                                );
-                              }
+                                ),
+                              ),
+                            ],
+                            const SizedBox(height: 28),
 
-                              _nameController.clear();
-                              _dobController.clear();
-                              _timeController.clear();
-                              if (context.mounted) Navigator.pop(context);
-                            }
-                          },
-                          child: const Text('Save Birth Profile', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                            // ── Save CTA Button ─────────────────────────
+                            Container(
+                              width: double.infinity,
+                              height: 52,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: AppColors.goldGlowShadow,
+                              ),
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  foregroundColor: Colors.black,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                ),
+                                onPressed: () async {
+                                  final name = ZodiacSignUtils.capitalizeName(_nameController.text.trim());
+                                  if (name.isNotEmpty &&
+                                      _dobController.text.isNotEmpty &&
+                                      _timeController.text.isNotEmpty) {
+                                    final place = _placeController.text.trim();
+                                    double lat = 28.6139;
+                                    double lon = 77.2090;
+                                    try {
+                                      final locations = await locationFromAddress(place);
+                                      if (locations.isNotEmpty) {
+                                        lat = locations.first.latitude;
+                                        lon = locations.first.longitude;
+                                      }
+                                    } catch (e) {
+                                      debugPrint('Geocoding failed for $place: $e');
+                                    }
+
+                                    final success = await ref.read(profilesListProvider.notifier).addProfile(
+                                          BirthProfileData(
+                                            id: 'p-${DateTime.now().millisecondsSinceEpoch}',
+                                            name: name,
+                                            relationship: _selectedRelationship,
+                                            dob: _dobController.text,
+                                            birthTime: '${_timeController.text} $_selectedAmPm',
+                                            birthPlace: place,
+                                            latitude: lat,
+                                            longitude: lon,
+                                            timezone: '5.5',
+                                          ),
+                                        );
+
+                                    if (!success && context.mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Cannot add more than 5 family member profiles.', style: GoogleFonts.outfit()),
+                                          backgroundColor: AppColors.error,
+                                        ),
+                                      );
+                                    }
+
+                                    _nameController.clear();
+                                    _dobController.clear();
+                                    _timeController.clear();
+                                    if (context.mounted) Navigator.pop(context);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Please fill all required birth details.', style: GoogleFonts.outfit()),
+                                        backgroundColor: AppColors.warning,
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  }
+                                },
+                                icon: const Icon(Icons.auto_awesome_rounded, size: 20),
+                                label: Text(
+                                  'Save Birth Profile',
+                                  style: GoogleFonts.outfit(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -799,6 +1060,8 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                     ),
                   );
                 }),
+                const SizedBox(height: 20),
+                const AdBannerWidget(placement: 'kundli'),
                 const SizedBox(height: 24),
 
                 // Settings & Language Selector

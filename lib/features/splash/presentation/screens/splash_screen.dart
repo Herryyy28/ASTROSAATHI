@@ -27,7 +27,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     await Future.delayed(const Duration(milliseconds: 600));
     if (!mounted) return;
 
-    final isDone = ref.read(onboardingCompleteProvider).value ?? false;
+    bool isDone = false;
+    try {
+      isDone = await ref.read(onboardingCompleteProvider.future);
+    } catch (e) {
+      debugPrint('Error checking onboarding status: $e');
+    }
+
+    if (!mounted) return;
     if (isDone) {
       context.go('/');
     } else {

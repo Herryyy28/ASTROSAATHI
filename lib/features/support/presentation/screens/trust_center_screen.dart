@@ -53,30 +53,53 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
         ),
         title: Row(
           children: [
-            const Icon(Icons.warning_amber_rounded, color: AppColors.error, size: 28),
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: AppColors.error,
+              size: 28,
+            ),
             const SizedBox(width: 10),
             Text(
               'Delete Account & Data',
-              style: GoogleFonts.outfit(color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold, fontSize: 18),
+              style: GoogleFonts.outfit(
+                color: AppColors.textPrimaryDark,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
           ],
         ),
         content: Text(
           'Are you sure you want to permanently delete your account, birth profile, saved Kundlis, and app settings? This action cannot be undone.',
-          style: GoogleFonts.inter(color: AppColors.textSecondaryDark, fontSize: 14, height: 1.4),
+          style: GoogleFonts.inter(
+            color: AppColors.textSecondaryDark,
+            fontSize: 14,
+            height: 1.4,
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondaryDark)),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppColors.textSecondaryDark),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.error,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Permanently Delete', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            child: const Text(
+              'Permanently Delete',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -90,7 +113,9 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Your account and local data have been permanently erased.'),
+            content: Text(
+              'Your account and local data have been permanently erased.',
+            ),
             backgroundColor: AppColors.success,
           ),
         );
@@ -114,7 +139,9 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
     }
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Report submitted successfully! Thank you for helping improve data quality.'),
+        content: Text(
+          'Report submitted successfully! Thank you for helping improve data quality.',
+        ),
         backgroundColor: AppColors.success,
       ),
     );
@@ -129,7 +156,11 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
         backgroundColor: AppColors.surfaceDark,
         title: Text(
           'Trust, Privacy & Support Center',
-          style: GoogleFonts.outfit(color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold, fontSize: 18),
+          style: GoogleFonts.outfit(
+            color: AppColors.textPrimaryDark,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
         iconTheme: const IconThemeData(color: AppColors.textPrimaryDark),
         bottom: TabBar(
@@ -138,7 +169,10 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
           indicatorColor: AppColors.primary,
           labelColor: AppColors.primary,
           unselectedLabelColor: AppColors.textTertiaryDark,
-          labelStyle: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 13),
+          labelStyle: GoogleFonts.outfit(
+            fontWeight: FontWeight.bold,
+            fontSize: 13,
+          ),
           tabs: const [
             Tab(text: 'How It Works'),
             Tab(text: 'Privacy & Safety'),
@@ -222,17 +256,28 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
             children: [
               Row(
                 children: [
-                  const Icon(Icons.verified_user_outlined, color: AppColors.success, size: 24),
+                  const Icon(
+                    Icons.verified_user_outlined,
+                    color: AppColors.success,
+                    size: 24,
+                  ),
                   const SizedBox(width: 10),
                   Text(
-                    'Google Play Data Safety Declaration',
-                    style: GoogleFonts.outfit(color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold, fontSize: 16),
+                    'Google Play Data Safety',
+                    style: GoogleFonts.outfit(
+                      color: AppColors.textPrimaryDark,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
               _dataSafetyRow('Data Shared With 3rd Parties', 'None (0%)'),
-              _dataSafetyRow('Data Encrypted In Transit', 'Yes (HTTPS / TLS 1.3)'),
+              _dataSafetyRow(
+                'Data Encrypted In Transit',
+                'Yes (HTTPS / TLS 1.3)',
+              ),
               _dataSafetyRow('Data Collection', 'Optional Profile Details'),
               _dataSafetyRow('Account Deletion Provided', 'Yes (In-App & Web)'),
             ],
@@ -243,7 +288,11 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
         // Full Privacy Policy Text
         Text(
           'Privacy Policy Summary',
-          style: GoogleFonts.outfit(color: AppColors.primary, fontSize: 18, fontWeight: FontWeight.bold),
+          style: GoogleFonts.outfit(
+            color: AppColors.primary,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 10),
         Container(
@@ -255,7 +304,11 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
           ),
           child: Text(
             'AstroSaathi ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how your personal information is collected, used, and disclosed when you use our mobile application.\n\n1. Information Collection: We collect name, date of birth, time of birth, and location details strictly to generate astrological charts.\n2. Location Permission: Location access is requested to perform astronomical side-real calculations. We do not track your location in the background.\n3. Data Protection: All sensitive transmission uses secure encryption standards.\n4. User Rights: You have the right to inspect, edit, or delete your data at any time.',
-            style: GoogleFonts.inter(color: AppColors.textSecondaryDark, fontSize: 13, height: 1.5),
+            style: GoogleFonts.inter(
+              color: AppColors.textSecondaryDark,
+              fontSize: 13,
+              height: 1.5,
+            ),
           ),
         ),
       ],
@@ -272,25 +325,40 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
           decoration: BoxDecoration(
             color: AppColors.surfaceDark,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppColors.error.withOpacity(0.4), width: 1),
+            border: Border.all(
+              color: AppColors.error.withOpacity(0.4),
+              width: 1,
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  const Icon(Icons.delete_sweep_rounded, color: AppColors.error, size: 28),
+                  const Icon(
+                    Icons.delete_sweep_rounded,
+                    color: AppColors.error,
+                    size: 28,
+                  ),
                   const SizedBox(width: 12),
                   Text(
-                    'In-App Account & Data Deletion',
-                    style: GoogleFonts.outfit(color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold, fontSize: 18),
+                    'In-App Account & Deletion',
+                    style: GoogleFonts.outfit(
+                      color: AppColors.textPrimaryDark,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
               Text(
                 'Pursuant to Google Play Data Deletion Requirements, you can permanently erase your account and all associated birth profiles directly within the app.',
-                style: GoogleFonts.inter(color: AppColors.textSecondaryDark, fontSize: 13, height: 1.5),
+                style: GoogleFonts.inter(
+                  color: AppColors.textSecondaryDark,
+                  fontSize: 13,
+                  height: 1.5,
+                ),
               ),
               const SizedBox(height: 20),
               GradientButton(
@@ -316,23 +384,39 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
             children: [
               Row(
                 children: [
-                  const Icon(Icons.language_rounded, color: AppColors.primary, size: 24),
+                  const Icon(
+                    Icons.language_rounded,
+                    color: AppColors.primary,
+                    size: 24,
+                  ),
                   const SizedBox(width: 10),
                   Text(
                     'External Web Deletion Resource',
-                    style: GoogleFonts.outfit(color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold, fontSize: 16),
+                    style: GoogleFonts.outfit(
+                      color: AppColors.textPrimaryDark,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 10),
               Text(
                 'If you no longer have access to the app, you can request account and data deletion via our official web portal:',
-                style: GoogleFonts.inter(color: AppColors.textSecondaryDark, fontSize: 13, height: 1.4),
+                style: GoogleFonts.inter(
+                  color: AppColors.textSecondaryDark,
+                  fontSize: 13,
+                  height: 1.4,
+                ),
               ),
               const SizedBox(height: 12),
               SelectableText(
                 'https://astrosaathi.app/delete-account',
-                style: GoogleFonts.outfit(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 15),
+                style: GoogleFonts.outfit(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
               ),
             ],
           ),
@@ -348,12 +432,19 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
       children: [
         Text(
           'Report Incorrect Data / Bug',
-          style: GoogleFonts.outfit(color: AppColors.primary, fontSize: 18, fontWeight: FontWeight.bold),
+          style: GoogleFonts.outfit(
+            color: AppColors.primary,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 8),
         Text(
           'Notice an unexpected calculation or prediction discrepancy? Select a category and report it to our Vedic team.',
-          style: GoogleFonts.inter(color: AppColors.textSecondaryDark, fontSize: 13),
+          style: GoogleFonts.inter(
+            color: AppColors.textSecondaryDark,
+            fontSize: 13,
+          ),
         ),
         const SizedBox(height: 16),
 
@@ -384,15 +475,30 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
         TextField(
           controller: _reportController,
           maxLines: 4,
-          style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 14),
+          style: const TextStyle(
+            color: AppColors.textPrimaryDark,
+            fontSize: 14,
+          ),
           decoration: InputDecoration(
             hintText: 'Describe the calculation discrepancy or bug...',
-            hintStyle: const TextStyle(color: AppColors.textTertiaryDark, fontSize: 13),
+            hintStyle: const TextStyle(
+              color: AppColors.textTertiaryDark,
+              fontSize: 13,
+            ),
             filled: true,
             fillColor: AppColors.surfaceDark,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: AppColors.glassBorder)),
-            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: AppColors.glassBorder)),
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: AppColors.primary)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(color: AppColors.glassBorder),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(color: AppColors.glassBorder),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: const BorderSide(color: AppColors.primary),
+            ),
           ),
         ),
         const SizedBox(height: 16),
@@ -414,15 +520,32 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
           ),
           child: Row(
             children: [
-              const Icon(Icons.support_agent_rounded, color: AppColors.primary, size: 32),
+              const Icon(
+                Icons.support_agent_rounded,
+                color: AppColors.primary,
+                size: 32,
+              ),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Direct Support Contact', style: GoogleFonts.outfit(color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold, fontSize: 15)),
+                    Text(
+                      'Direct Support Contact',
+                      style: GoogleFonts.outfit(
+                        color: AppColors.textPrimaryDark,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
                     const SizedBox(height: 4),
-                    SelectableText('support@astrosaathi.app', style: GoogleFonts.inter(color: AppColors.primary, fontSize: 13)),
+                    SelectableText(
+                      'support@astrosaathi.app',
+                      style: GoogleFonts.inter(
+                        color: AppColors.primary,
+                        fontSize: 13,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -433,7 +556,11 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
     );
   }
 
-  Widget _explanationCard({required IconData icon, required String title, required String description}) {
+  Widget _explanationCard({
+    required IconData icon,
+    required String title,
+    required String description,
+  }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.all(16),
@@ -451,9 +578,23 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: GoogleFonts.outfit(color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold, fontSize: 15)),
+                Text(
+                  title,
+                  style: GoogleFonts.outfit(
+                    color: AppColors.textPrimaryDark,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
                 const SizedBox(height: 6),
-                Text(description, style: GoogleFonts.inter(color: AppColors.textSecondaryDark, fontSize: 13, height: 1.4)),
+                Text(
+                  description,
+                  style: GoogleFonts.inter(
+                    color: AppColors.textSecondaryDark,
+                    fontSize: 13,
+                    height: 1.4,
+                  ),
+                ),
               ],
             ),
           ),
@@ -471,12 +612,22 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
           Expanded(
             child: Text(
               label,
-              style: GoogleFonts.inter(color: AppColors.textSecondaryDark, fontSize: 13),
+              style: GoogleFonts.inter(
+                color: AppColors.textSecondaryDark,
+                fontSize: 13,
+              ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
           const SizedBox(width: 8),
-          Text(value, style: GoogleFonts.outfit(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 13)),
+          Text(
+            value,
+            style: GoogleFonts.outfit(
+              color: AppColors.primary,
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+            ),
+          ),
         ],
       ),
     );

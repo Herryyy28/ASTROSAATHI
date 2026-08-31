@@ -20,6 +20,7 @@ import '../../../../core/engine/models/game_plan_data.dart';
 import '../../../../core/widgets/why_this_bottom_sheet.dart';
 import '../../../../core/widgets/data_freshness_badge.dart';
 import '../../../../core/widgets/iphone_glass_menu.dart';
+import '../../../../core/widgets/ad_banner_widget.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../search/presentation/screens/astrology_search_screen.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
@@ -90,7 +91,11 @@ class HomeScreen extends ConsumerWidget {
 
                 // ── Personal Cosmic Calendar ──────────────────────
                 const PersonalCosmicCalendarWidget().fadeSlideUp(delay: 120.ms),
-                const SizedBox(height: 28),
+                const SizedBox(height: 20),
+
+                // ── Ad / Sponsored Banner UI ───────────────────────
+                const AdBannerWidget(placement: 'home'),
+                const SizedBox(height: 24),
 
                 // ── Do / Careful / Avoid ──────────────────────────
                 Consumer(

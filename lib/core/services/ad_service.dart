@@ -10,6 +10,11 @@ class AdService {
       ? 'ca-app-pub-3940256099942544/5224354917'
       : 'ca-app-pub-3940256099942544/1712485313';
 
+  // Banner ad unit ID getter (AstroSaathi production Ad Unit ID)
+  static String get bannerAdUnitId => defaultTargetPlatform == TargetPlatform.android
+      ? 'ca-app-pub-2130675826290872/7456657453'
+      : 'ca-app-pub-2130675826290872/7456657453';
+
   Future<void> init() async {
     await MobileAds.instance.initialize();
     _loadRewardedAd();

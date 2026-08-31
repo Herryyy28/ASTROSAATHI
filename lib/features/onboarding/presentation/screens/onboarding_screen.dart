@@ -160,10 +160,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     setState(() {
       _currentIndex = 3;
     });
-    _pageController.nextPage(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeOutCubic,
-    );
+    if (_pageController.hasClients) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOutCubic,
+      );
+    }
 
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -208,13 +210,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       } catch (_) {}
     } catch (e) {
       debugPrint('Failed to sync profile: $e');
-    }
+    } finally {
+      ref.invalidate(onboardingCompleteProvider);
 
-    ref.invalidate(onboardingCompleteProvider);
-
-    await Future.delayed(const Duration(milliseconds: 200));
-    if (mounted) {
-      context.go('/');
+      // Wait 1.5s for the checklist animations to complete smoothly
+      await Future.delayed(const Duration(milliseconds: 1500));
+      if (mounted) {
+        context.go('/');
+      }
     }
   }
 
@@ -747,6 +750,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             _buildCheckItem('Name & Nam Rashi mapped', 0),
             _buildCheckItem('Birth details & planetary positions calculated', 1),
             _buildCheckItem('Vedic Kundli & daily guidance ready', 2),
+            const SizedBox(height: 36),
+            ElevatedButton.icon(
+              onPressed: () => context.go('/'),
+              icon: const Icon(Icons.arrow_forward_rounded, size: 18),
+              label: Text(
+                'Enter Main App',
+                style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 15),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.black,
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                elevation: 4,
+              ),
+            ).fadeSlideUp(delay: 1200.ms),
           ],
         ),
       ),

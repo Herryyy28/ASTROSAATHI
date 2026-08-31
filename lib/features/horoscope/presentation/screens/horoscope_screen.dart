@@ -11,6 +11,7 @@ import '../../../../core/widgets/zodiac_icon.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/theme/utils/responsive.dart';
+import '../../../../core/widgets/ad_banner_widget.dart';
 
 final selectedSignProvider = StateProvider<String>((ref) => 'Aries');
 
@@ -301,6 +302,9 @@ class _HoroscopeTabView extends ConsumerWidget {
                   ),
                 ],
               ).fadeSlideUp(delay: 200.ms),
+
+              const SizedBox(height: 16),
+              const AdBannerWidget(placement: 'horoscope'),
             ],
           ),
         );
