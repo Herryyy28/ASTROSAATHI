@@ -6,11 +6,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../horoscope/presentation/screens/horoscope_screen.dart';
-import '../../../panchang/presentation/screens/panchang_screen.dart';
-import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
-import '../../../matching/presentation/screens/matching_screen.dart';
-import '../../../remedies/presentation/screens/remedy_hub_screen.dart';
 import '../../../profile/presentation/screens/my_kundlis_screen.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -68,84 +64,23 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   Widget _buildMobileLayout(BuildContext context, int currentIndex) {
     return Scaffold(
+      backgroundColor: AppColors.backgroundDark,
       body: Stack(
         children: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            switchInCurve: Curves.easeOut,
-            switchOutCurve: Curves.easeIn,
-            child: _screens[currentIndex],
+          IndexedStack(
+            index: currentIndex,
+            children: _screens,
           ),
-          
-          // Backward Arrow (Left Side)
-          if (currentIndex > 0)
-            Positioned(
-              left: 0,
-              top: MediaQuery.of(context).size.height * 0.45,
-              child: SafeArea(
-                child: GestureDetector(
-                  onTap: () {
-                    ref.read(mainNavIndexProvider.notifier).state = currentIndex - 1;
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceDark.withOpacity(0.85),
-                      borderRadius: const BorderRadius.horizontal(right: Radius.circular(16)),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.2),
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      color: AppColors.primary,
-                      size: 16,
-                    ),
-                  ),
-                ),
-              ),
-            ),
 
-          // Forward Arrow (Right Side)
-          if (currentIndex < _screens.length - 1)
-            Positioned(
-              right: 0,
-              top: MediaQuery.of(context).size.height * 0.45,
-              child: SafeArea(
-                child: GestureDetector(
-                  onTap: () {
-                    ref.read(mainNavIndexProvider.notifier).state = currentIndex + 1;
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceDark.withOpacity(0.85),
-                      borderRadius: const BorderRadius.horizontal(left: Radius.circular(16)),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withOpacity(0.2),
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: AppColors.primary,
-                      size: 16,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          // Floating Glass Bottom Navigation Bar
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _buildBottomNav(context, currentIndex),
+          ),
         ],
       ),
-      extendBody: true,
-      bottomNavigationBar: _buildBottomNav(context, currentIndex),
     );
   }
 
@@ -154,59 +89,16 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final railWidth = isDesktop ? 220.0 : 80.0;
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundDark,
       body: Container(
         decoration: const BoxDecoration(gradient: AppColors.cosmicRadialGradient),
         child: Row(
           children: [
             _buildSideRail(context, isDesktop, railWidth, currentIndex),
             Expanded(
-              child: Stack(
-                children: [
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    switchInCurve: Curves.easeOut,
-                    switchOutCurve: Curves.easeIn,
-                    child: _screens[currentIndex],
-                  ),
-                  if (currentIndex > 0)
-                    Positioned(
-                      left: 12,
-                      top: MediaQuery.of(context).size.height * 0.45,
-                      child: GestureDetector(
-                        onTap: () {
-                          ref.read(mainNavIndexProvider.notifier).state = currentIndex - 1;
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: AppColors.surfaceDark.withOpacity(0.85),
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
-                          ),
-                          child: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 18),
-                        ),
-                      ),
-                    ),
-                  if (currentIndex < _screens.length - 1)
-                    Positioned(
-                      right: 12,
-                      top: MediaQuery.of(context).size.height * 0.45,
-                      child: GestureDetector(
-                        onTap: () {
-                          ref.read(mainNavIndexProvider.notifier).state = currentIndex + 1;
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: AppColors.surfaceDark.withOpacity(0.85),
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
-                          ),
-                          child: const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.primary, size: 18),
-                        ),
-                      ),
-                    ),
-                ],
+              child: IndexedStack(
+                index: currentIndex,
+                children: _screens,
               ),
             ),
           ],
@@ -350,7 +242,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(_navItems.length, (index) {
-                  return _buildBottomNavItem(index, currentIndex);
+                  return Expanded(
+                    child: _buildBottomNavItem(index, currentIndex),
+                  );
                 }),
               ),
             ),
@@ -374,7 +268,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -410,6 +304,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
                 color: isActive ? AppColors.primary : AppColors.textTertiaryDark,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

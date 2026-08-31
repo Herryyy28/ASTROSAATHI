@@ -26,55 +26,60 @@ class AppTheme {
           fontSize: 34,
           fontWeight: FontWeight.w700,
           letterSpacing: -0.5,
-          height: 1.2,
+          height: 1.35,
         ),
         displayMedium: GoogleFonts.outfit(
           color: AppColors.textPrimaryDark,
           fontSize: 28,
           fontWeight: FontWeight.w600,
-          height: 1.25,
+          height: 1.35,
         ),
         titleLarge: GoogleFonts.outfit(
           color: AppColors.textPrimaryDark,
           fontSize: 22,
           fontWeight: FontWeight.w600,
-          height: 1.3,
+          height: 1.35,
         ),
         titleMedium: GoogleFonts.outfit(
           color: AppColors.textPrimaryDark,
           fontSize: 18,
           fontWeight: FontWeight.w600,
+          height: 1.35,
         ),
         bodyLarge: GoogleFonts.inter(
           color: AppColors.textPrimaryDark,
           fontSize: 16,
           fontWeight: FontWeight.w400,
-          height: 1.5,
+          height: 1.4,
         ),
         bodyMedium: GoogleFonts.inter(
           color: AppColors.textSecondaryDark,
           fontSize: 14,
           fontWeight: FontWeight.w400,
-          height: 1.5,
+          height: 1.4,
         ),
         bodySmall: GoogleFonts.inter(
           color: AppColors.textTertiaryDark,
           fontSize: 12,
           fontWeight: FontWeight.w400,
+          height: 1.35,
         ),
         labelLarge: GoogleFonts.inter(
           color: AppColors.textPrimaryDark,
           fontSize: 14,
           fontWeight: FontWeight.w600,
           letterSpacing: 0.5,
+          height: 1.3,
         ),
         labelSmall: GoogleFonts.inter(
           color: AppColors.textSecondaryDark,
           fontSize: 11,
           fontWeight: FontWeight.w500,
           letterSpacing: 1.2,
+          height: 1.3,
         ),
       ),
+
 
       // ── AppBar ────────────────────────────────────────────────────
       appBarTheme: AppBarTheme(

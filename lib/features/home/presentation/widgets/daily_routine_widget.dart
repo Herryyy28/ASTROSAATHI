@@ -35,20 +35,23 @@ class _DailyRoutineWidgetState extends State<DailyRoutineWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Today\'s 3-Minute Routine',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
-                  ),
-                  SizedBox(height: 2),
-                  Text(
-                    'Daily practice build cosmic clarity',
-                    style: TextStyle(fontSize: 11, color: AppColors.textSecondaryDark),
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Today\'s 3-Minute Routine',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                    ),
+                    const SizedBox(height: 2),
+                    const Text(
+                      'Daily practice build cosmic clarity',
+                      style: TextStyle(fontSize: 11, color: AppColors.textSecondaryDark),
+                    ),
+                  ],
+                ),
               ),
+              const SizedBox(width: 8),
 
               // Streak Counter Badge
               Container(

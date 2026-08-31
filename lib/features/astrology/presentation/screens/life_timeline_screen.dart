@@ -62,18 +62,24 @@ class _LifeTimelineScreenState extends State<LifeTimelineScreen> {
                       child: const Icon(Icons.timeline_rounded, color: Colors.white, size: 20),
                     ),
                     const SizedBox(width: 12),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Life Timeline & Dasha Phases',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
-                        ),
-                        Text(
-                          'Past → Present → Future Vimshottari Cycles',
-                          style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Life Timeline & Dasha Phases',
+                            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            'Past → Present → Future Vimshottari Cycles',
+                            style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -142,19 +148,28 @@ class _LifeTimelineScreenState extends State<LifeTimelineScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              phase['period'] as String,
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: themeColor),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                              decoration: BoxDecoration(
-                                color: themeColor.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                            Expanded(
                               child: Text(
-                                phase['status'] as String,
-                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: themeColor),
+                                phase['period'] as String,
+                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: themeColor),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: themeColor.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  phase['status'] as String,
+                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: themeColor),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ],

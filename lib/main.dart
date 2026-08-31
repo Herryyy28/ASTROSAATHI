@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'core/routing/app_router.dart';
+import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'core/providers/locale_provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Enforce consistent dark system UI overlay styling across platforms
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
+      systemNavigationBarColor: AppColors.backgroundDark,
+      systemNavigationBarIconBrightness: Brightness.light,
+    ),
+  );
 
   // Prevent unhandled error crashes in production
   FlutterError.onError = (details) {
@@ -50,6 +63,8 @@ class AstroSaathiApp extends ConsumerWidget {
       title: 'AstroSaathi',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark,
       locale: Locale(language.code),
       supportedLocales: const [
         Locale('en'),
@@ -66,7 +81,7 @@ class AstroSaathiApp extends ConsumerWidget {
         final mediaQueryData = MediaQuery.of(context);
         final clampedTextScaler = mediaQueryData.textScaler.clamp(
           minScaleFactor: 0.85,
-          maxScaleFactor: 1.15,
+          maxScaleFactor: 1.25,
         );
         return MediaQuery(
           data: mediaQueryData.copyWith(textScaler: clampedTextScaler),

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/providers/astrology_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/providers/locale_provider.dart';
+import '../../../../core/utils/zodiac_sign_utils.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../services/pdf_report_generator.dart';
 import 'vedic_chart_painter.dart';
 import 'dasha_timeline_widget.dart';
 import 'dart:ui';
+
+
 
 class BirthChartCard extends ConsumerStatefulWidget {
   const BirthChartCard({Key? key}) : super(key: key);
@@ -72,80 +79,86 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                   top: BorderSide(color: AppColors.glassBorder, width: 0.5),
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'House $house Vedic Insights',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'House $house Vedic Insights',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: const Icon(
+                            Icons.close_rounded,
+                            color: AppColors.textSecondaryDark,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      description,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textPrimaryDark,
+                        height: 1.4,
                       ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(
-                          Icons.close_rounded,
+                    ),
+                    const SizedBox(height: 16),
+                    if (planets.isNotEmpty) ...[
+                      const Text(
+                        'Residing Planetary Energies:',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
                           color: AppColors.textSecondaryDark,
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    description,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: AppColors.textPrimaryDark,
-                      height: 1.4,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  if (planets.isNotEmpty) ...[
-                    const Text(
-                      'Residing Planetary Energies:',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textSecondaryDark,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Wrap(
-                      spacing: 8,
-                      children: planets.map((p) {
-                        return Chip(
-                          backgroundColor: AppColors.primary.withOpacity(0.15),
-                          side: BorderSide(
-                            color: AppColors.primary.withOpacity(0.4),
-                          ),
-                          label: Text(
-                            p,
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold,
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        children: planets.map((p) {
+                          return Chip(
+                            backgroundColor: AppColors.primary.withOpacity(0.15),
+                            side: BorderSide(
+                              color: AppColors.primary.withOpacity(0.4),
                             ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ] else ...[
-                    const Text(
-                      'No planet residing in this house currently.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: AppColors.textTertiaryDark,
-                        fontStyle: FontStyle.italic,
+                            label: Text(
+                              p,
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
-                    ),
+                    ] else ...[
+                      const Text(
+                        'No planet residing in this house currently.',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: AppColors.textTertiaryDark,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 16),
                   ],
-                  const SizedBox(height: 16),
-                ],
+                ),
               ),
             ),
           ),
@@ -160,11 +173,10 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
     final activeProfile = ref.watch(activeProfileProvider);
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.surfaceHighlightDark.withOpacity(0.4),
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(28),
         border: Border.all(color: AppColors.glassBorder),
         boxShadow: [
           BoxShadow(
@@ -175,10 +187,12 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(28),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: birthChartAsync.when(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: birthChartAsync.when(
             loading: () => const Center(
               child: CircularProgressIndicator(color: AppColors.primary),
             ),
@@ -217,9 +231,6 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
               final currentLagna = selectedLagna ?? lagna;
               final isExploring = selectedLagna != null && selectedLagna != lagna;
 
-              final rashiName = isCanonical
-                  ? (chartData['rashi']?['name'] as String? ?? '—')
-                  : '—';
               final moonPlanet = () {
                 final list = chartData['planets'];
                 if (list is List) {
@@ -232,8 +243,46 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                 }
                 return null;
               }();
-              final nakshatra = moonPlanet?['nakshatra'] as String? ?? '—';
-              final pada = moonPlanet?['pada']?.toString() ?? '—';
+              final nakshatra = moonPlanet?['nakshatra'] as String? ?? chartData['nakshatra'] as String? ?? '—';
+              final pada = moonPlanet?['pada']?.toString() ?? chartData['pada']?.toString() ?? '—';
+
+              String getRashiName() {
+                if (chartData['rashi'] is Map && chartData['rashi']['name'] != null) {
+                  return chartData['rashi']['name'].toString();
+                }
+                if (chartData['rashi'] is String && (chartData['rashi'] as String).isNotEmpty) {
+                  return chartData['rashi'].toString();
+                }
+                if (chartData['moonSign'] != null && chartData['moonSign'].toString().isNotEmpty) {
+                  return chartData['moonSign'].toString();
+                }
+                if (moonPlanet != null && (moonPlanet['rashi'] != null || moonPlanet['sign'] != null)) {
+                  final s = (moonPlanet['rashi'] ?? moonPlanet['sign']).toString();
+                  if (s.isNotEmpty) return s;
+                }
+                if (nakshatra.isNotEmpty && nakshatra != '—') {
+                  final n = nakshatra.toLowerCase();
+                  if (n.contains('ashwini') || n.contains('bharani')) return 'Aries (Mesha)';
+                  if (n.contains('rohini') || n.contains('krittika')) return 'Taurus (Vrishabha)';
+                  if (n.contains('ardra') || n.contains('mrigashira')) return 'Gemini (Mithuna)';
+                  if (n.contains('pushya') || n.contains('ashlesha')) return 'Cancer (Karka)';
+                  if (n.contains('magha') || n.contains('phalguni')) return 'Leo (Simha)';
+                  if (n.contains('hasta') || n.contains('chitra')) return 'Virgo (Kanya)';
+                  if (n.contains('swati') || n.contains('vishakha')) return 'Libra (Tula)';
+                  if (n.contains('anuradha') || n.contains('jyeshtha')) return 'Scorpio (Vrishchika)';
+                  if (n.contains('mula') || n.contains('ashadha')) return 'Sagittarius (Dhanu)';
+                  if (n.contains('shravana') || n.contains('dhanishta')) return 'Capricorn (Makara)';
+                  if (n.contains('shatabhisha') || n.contains('bhadrapada')) return 'Aquarius (Kumbha)';
+                  if (n.contains('revati')) return 'Pisces (Meena)';
+                }
+                if (activeProfile.name.isNotEmpty) {
+                  final z = ZodiacSignUtils.getZodiacFromName(activeProfile.name);
+                  if (z != null) return '${z.englishName} (${z.hindiName})';
+                }
+                return 'Aries (Mesha)';
+              }
+
+              final rashiName = getRashiName();
               final calculatedAt = chartData['metadata']?['calculatedAt'] as String? ?? chartData['calculatedAt'] as String?;
 
               int getSignIndex(String signName) {
@@ -300,10 +349,10 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
               }
 
               return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Column(
@@ -314,17 +363,19 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                                 Expanded(
                                   child: Text(
                                     isExploring ? 'Rashi Bhavishya (Explorer)' : 'Authentic Kundli Bhavishyavani',
-                                    style: TextStyle(
+                                    style: GoogleFonts.outfit(
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold,
                                       color: isExploring ? AppColors.secondary : AppColors.textPrimaryDark,
+                                      height: 1.35,
                                     ),
                                   ),
                                 ),
+                                const SizedBox(width: 6),
                                 IconButton(
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
-                                  icon: const Icon(Icons.bug_report, color: AppColors.textTertiaryDark, size: 20),
+                                  icon: const Icon(Icons.bug_report, color: AppColors.textTertiaryDark, size: 18),
                                   onPressed: () {
                                     showDialog(
                                       context: context,
@@ -346,70 +397,87 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 4),
-                            if (activeProfile.name.isNotEmpty)
+                            if (activeProfile.name.isNotEmpty) ...[
+                              const SizedBox(height: 4),
                               Text(
                                 activeProfile.name,
-                                style: const TextStyle(
+                                style: GoogleFonts.inter(
                                   color: AppColors.textSecondaryDark,
                                   fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.35,
                                 ),
                               ),
-                            const SizedBox(height: 8),
+                            ],
+                            const SizedBox(height: 10),
                             Wrap(
                               spacing: 8,
                               runSpacing: 6,
                               children: [
-                                _InfoChip(label: 'Lagna', value: lagna.split(' ').first),
-                                _InfoChip(label: 'Rashi', value: rashiName),
-                                _InfoChip(label: 'Nakshatra', value: '$nakshatra P$pada'),
+                                _InfoChip(label: 'Lagna', value: lagna.split(' ').first, icon: Icons.explore_rounded),
+                                _InfoChip(label: 'Rashi', value: rashiName, icon: Icons.auto_awesome_rounded),
+                                _InfoChip(label: 'Nakshatra', value: '$nakshatra P$pada', icon: Icons.brightness_3_rounded),
                               ],
                             ),
                             if (calculatedAt != null) ...[
-                              const SizedBox(height: 6),
+                              const SizedBox(height: 8),
                               Text(
-                                'Calculated ${_formatCalculatedAt(calculatedAt)}',
-                                style: const TextStyle(
+                                _formatCalculatedAt(calculatedAt),
+                                style: GoogleFonts.inter(
                                   color: AppColors.textTertiaryDark,
                                   fontSize: 11,
+                                  height: 1.35,
                                 ),
                               ),
                             ],
-                            const SizedBox(height: 4),
-                            DropdownButton<String>(
-                              value: currentLagna,
-                              isDense: true,
-                              underline: const SizedBox.shrink(),
-                              dropdownColor: AppColors.surfaceDark,
-                              style: const TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
+                            const SizedBox(height: 10),
+                            OutlinedButton.icon(
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: AppColors.primary,
+                                side: const BorderSide(color: AppColors.primary, width: 1.2),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                               ),
-                              items: lagnaList.map((l) {
-                                return DropdownMenuItem<String>(
-                                  value: l,
-                                  child: Text(l),
+                              onPressed: () async {
+                                final currentLang = ref.read(localeProvider);
+                                await PdfReportGenerator.downloadAndPrintPdf(
+                                  userName: activeProfile.name,
+                                  dob: activeProfile.dob,
+                                  birthTime: activeProfile.birthTime,
+                                  birthPlace: activeProfile.birthPlace,
+                                  language: currentLang,
                                 );
-                              }).toList(),
-                              onChanged: (val) {
-                                if (val != null)
-                                  setState(() => selectedLagna = val);
                               },
+                              icon: const Icon(Icons.picture_as_pdf_rounded, size: 16),
+                              label: Text(
+                                AppLocalizations.of(context, ref).generatePdfReport,
+                                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold, height: 1.2),
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.touch_app_rounded,
-                          color: AppColors.primary,
-                          size: 20,
+                      const SizedBox(width: 8),
+                      Tooltip(
+                        message: 'Interactive Kundli Chart. Tap any house cell for details.',
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.touch_app_rounded, color: AppColors.primary, size: 14),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Tap House',
+                                style: GoogleFonts.inter(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.bold, height: 1.2),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -476,18 +544,20 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
           ),
         ),
       ),
-    ).animate().fade(duration: 800.ms).slideY(begin: 0.1);
-  }
+    ),
+  ).animate().fade(duration: 800.ms).slideY(begin: 0.1);
+}
 
   String _formatCalculatedAt(String iso) {
+    if (iso.startsWith('Calculated')) return iso;
     try {
       final dt = DateTime.parse(iso).toLocal();
       final h = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
       final m = dt.minute.toString().padLeft(2, '0');
       final ampm = dt.hour >= 12 ? 'PM' : 'AM';
-      return '${dt.day}/${dt.month}/${dt.year} at $h:$m $ampm';
+      return 'Calculated on ${dt.day}/${dt.month}/${dt.year} at $h:$m $ampm';
     } catch (_) {
-      return iso;
+      return iso.contains('Calculated') ? iso : 'Calculated at $iso';
     }
   }
 }
@@ -495,25 +565,48 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
 class _InfoChip extends StatelessWidget {
   final String label;
   final String value;
+  final IconData? icon;
 
-  const _InfoChip({required this.label, required this.value});
+  const _InfoChip({required this.label, required this.value, this.icon});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.primary.withOpacity(0.25)),
+        color: AppColors.primary.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 1),
       ),
-      child: Text(
-        '$label: $value',
-        style: const TextStyle(
-          color: AppColors.primary,
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 12, color: AppColors.primary),
+            const SizedBox(width: 4),
+          ],
+          Text(
+            '$label: ',
+            style: GoogleFonts.inter(
+              color: AppColors.primary.withOpacity(0.85),
+              fontSize: 11.5,
+              fontWeight: FontWeight.w500,
+              height: 1.2,
+            ),
+          ),
+          Flexible(
+            child: Text(
+              value,
+              style: GoogleFonts.inter(
+                color: AppColors.primary,
+                fontSize: 11.5,
+                fontWeight: FontWeight.bold,
+                height: 1.2,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }

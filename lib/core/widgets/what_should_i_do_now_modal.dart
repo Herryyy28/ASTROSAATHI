@@ -74,97 +74,108 @@ class _WhatShouldIDoNowModalState extends State<WhatShouldIDoNowModal> {
             color: AppColors.surfaceDark.withOpacity(0.95),
             border: const Border(top: BorderSide(color: AppColors.glassBorder, width: 0.5)),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Row(
-                    children: [
-                      Icon(Icons.explore_rounded, color: AppColors.primary, size: 22),
-                      SizedBox(width: 10),
-                      Text(
-                        'What should I do right now?',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.primary),
-                      ),
-                    ],
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close_rounded, color: AppColors.textSecondaryDark),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              // Categories Selector
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: categories.map((c) {
-                  final isSel = selectedCategory == c['label'];
-                  return ChoiceChip(
-                    label: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(c['icon'] as IconData, size: 14, color: isSel ? Colors.black : AppColors.primary),
-                        const SizedBox(width: 6),
-                        Text(c['label'] as String),
-                      ],
-                    ),
-                    selected: isSel,
-                    selectedColor: AppColors.primary,
-                    backgroundColor: AppColors.surfaceHighlightDark,
-                    labelStyle: TextStyle(
-                      color: isSel ? Colors.black : AppColors.textPrimaryDark,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                    onSelected: (val) {
-                      if (val) setState(() => selectedCategory = c['label'] as String);
-                    },
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 20),
-
-              // Status Result Box
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: statusColor.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: statusColor.withOpacity(0.5)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Icon(info['icon'] as IconData, color: statusColor, size: 28),
-                        const SizedBox(width: 12),
-                        Text(
-                          info['status'] as String,
-                          style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: statusColor),
-                        ),
-                      ],
+                    const Expanded(
+                      child: Row(
+                        children: [
+                          Icon(Icons.explore_rounded, color: AppColors.primary, size: 22),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              'What should I do right now?',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.primary),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      info['window'] as String,
-                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primaryLight),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      info['reason'] as String,
-                      style: const TextStyle(fontSize: 13, color: AppColors.textPrimaryDark, height: 1.4),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close_rounded, color: AppColors.textSecondaryDark),
                     ),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+
+                // Categories Selector
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: categories.map((c) {
+                    final isSel = selectedCategory == c['label'];
+                    return ChoiceChip(
+                      label: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(c['icon'] as IconData, size: 14, color: isSel ? Colors.black : AppColors.primary),
+                          const SizedBox(width: 6),
+                          Text(c['label'] as String),
+                        ],
+                      ),
+                      selected: isSel,
+                      selectedColor: AppColors.primary,
+                      backgroundColor: AppColors.surfaceHighlightDark,
+                      labelStyle: TextStyle(
+                        color: isSel ? Colors.black : AppColors.textPrimaryDark,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                      onSelected: (val) {
+                        if (val) setState(() => selectedCategory = c['label'] as String);
+                      },
+                    );
+                  }).toList(),
+                ),
+                const SizedBox(height: 20),
+
+                // Status Result Box
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: statusColor.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: statusColor.withOpacity(0.5)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(info['icon'] as IconData, color: statusColor, size: 28),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              info['status'] as String,
+                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: statusColor),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        info['window'] as String,
+                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primaryLight),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        info['reason'] as String,
+                        style: const TextStyle(fontSize: 13, color: AppColors.textPrimaryDark, height: 1.4),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

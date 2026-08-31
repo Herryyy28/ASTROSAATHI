@@ -56,6 +56,8 @@ class PersonalizationScoreWidget extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: AppColors.textPrimaryDark,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 2),
                 Text(
@@ -64,6 +66,8 @@ class PersonalizationScoreWidget extends StatelessWidget {
                     fontSize: 11,
                     color: AppColors.textSecondaryDark,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),

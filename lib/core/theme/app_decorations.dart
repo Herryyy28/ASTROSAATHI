@@ -3,62 +3,104 @@ import 'app_colors.dart';
 
 /// Reusable decoration presets for the AstroSaathi premium design system.
 class AppDecorations {
-  // ── Glassmorphic Card ───────────────────────────────────────────────
+  // ── Glassmorphic Card (iPhone Glass Aesthetic) ──────────────────────────────
   static BoxDecoration get glassCard => BoxDecoration(
-    color: AppColors.glassSurface,
-    borderRadius: BorderRadius.circular(20),
-    border: Border.all(color: AppColors.glassBorder, width: 0.5),
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Colors.white.withOpacity(0.12),
+        Colors.white.withOpacity(0.04),
+      ],
+    ),
+    borderRadius: BorderRadius.circular(24),
+    border: Border.all(color: Colors.white.withOpacity(0.18), width: 0.8),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.2),
+        blurRadius: 16,
+        offset: const Offset(0, 6),
+      ),
+    ],
   );
 
   static BoxDecoration glassCardCustom({
-    double radius = 20,
+    double radius = 24,
     Color? borderColor,
-    double borderWidth = 0.5,
+    double borderWidth = 0.8,
   }) => BoxDecoration(
-    color: AppColors.glassSurface,
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Colors.white.withOpacity(0.12),
+        Colors.white.withOpacity(0.04),
+      ],
+    ),
     borderRadius: BorderRadius.circular(radius),
     border: Border.all(
-      color: borderColor ?? AppColors.glassBorder,
+      color: borderColor ?? Colors.white.withOpacity(0.18),
       width: borderWidth,
     ),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black.withOpacity(0.2),
+        blurRadius: 16,
+        offset: const Offset(0, 6),
+      ),
+    ],
   );
 
   // ── Glowing Card ──────────────────────────────────────────────────
   static BoxDecoration glowCard({
     Color glowColor = const Color(0x40D4AF37),
-    double radius = 20,
+    double radius = 24,
   }) => BoxDecoration(
-    color: AppColors.surfaceDark,
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        AppColors.surfaceDark.withOpacity(0.9),
+        AppColors.surfaceHighlightDark.withOpacity(0.7),
+      ],
+    ),
     borderRadius: BorderRadius.circular(radius),
-    border: Border.all(color: glowColor.withOpacity(0.3), width: 0.5),
+    border: Border.all(color: glowColor.withOpacity(0.4), width: 0.8),
     boxShadow: [
-      BoxShadow(color: glowColor, blurRadius: 20, spreadRadius: -4),
+      BoxShadow(color: glowColor, blurRadius: 24, spreadRadius: -4),
     ],
   );
 
   // ── Gradient Card ─────────────────────────────────────────────────
   static BoxDecoration get gradientCard => BoxDecoration(
     gradient: AppColors.cardGradient,
-    borderRadius: BorderRadius.circular(20),
-    border: Border.all(color: AppColors.glassBorder, width: 0.5),
+    borderRadius: BorderRadius.circular(24),
+    border: Border.all(color: Colors.white.withOpacity(0.18), width: 0.8),
   );
 
   // ── Premium Energy Card ───────────────────────────────────────────
   static BoxDecoration get energyCard => BoxDecoration(
     gradient: AppColors.premiumGradient,
-    borderRadius: BorderRadius.circular(24),
-    border: Border.all(color: AppColors.glassBorder, width: 0.5),
+    borderRadius: BorderRadius.circular(28),
+    border: Border.all(color: Colors.white.withOpacity(0.2), width: 1.0),
     boxShadow: AppColors.goldGlowShadow,
   );
 
-  // ── Colored Accent Card (left border accent) ─────────────────────
+  // ── Colored Accent Card (iPhone Glass Style) ──────────────────────
   static BoxDecoration accentCard({
     required Color accentColor,
-    double radius = 16,
+    double radius = 20,
   }) => BoxDecoration(
-    color: AppColors.surfaceDark,
+    color: AppColors.surfaceHighlightDark.withOpacity(0.4),
     borderRadius: BorderRadius.circular(radius),
-    border: Border.all(color: AppColors.glassBorder, width: 0.5),
+    border: Border.all(color: accentColor.withOpacity(0.35), width: 0.8),
+    boxShadow: [
+      BoxShadow(
+        color: accentColor.withOpacity(0.08),
+        blurRadius: 12,
+        offset: const Offset(0, 4),
+      ),
+    ],
   );
 
   // ── Pulsing Glow Border (for warnings / important items) ─────────
@@ -93,8 +135,9 @@ class AppDecorations {
         : null,
     filled: true,
     fillColor: AppColors.surfaceDark,
-    hintStyle: const TextStyle(color: AppColors.textTertiaryDark),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+    isDense: false,
+    hintStyle: const TextStyle(color: AppColors.textTertiaryDark, height: 1.2),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(16),
       borderSide: BorderSide(color: AppColors.glassBorder, width: 0.5),

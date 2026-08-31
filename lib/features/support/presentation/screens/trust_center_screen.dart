@@ -468,7 +468,14 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: GoogleFonts.inter(color: AppColors.textSecondaryDark, fontSize: 13)),
+          Expanded(
+            child: Text(
+              label,
+              style: GoogleFonts.inter(color: AppColors.textSecondaryDark, fontSize: 13),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const SizedBox(width: 8),
           Text(value, style: GoogleFonts.outfit(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 13)),
         ],
       ),

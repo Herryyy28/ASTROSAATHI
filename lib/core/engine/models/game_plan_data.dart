@@ -13,6 +13,11 @@ class GamePlanData {
   final List<String> avoidList;
   final TimeWindow bestWindow;
   final Map<String, double> categories;
+  final String? planetFactor;
+  final String? houseFactor;
+  final String? transitFactor;
+  final String? vedicInterpretation;
+  final String? practicalAction;
 
   GamePlanData({
     required this.date,
@@ -22,5 +27,10 @@ class GamePlanData {
     required this.avoidList,
     required this.bestWindow,
     required this.categories,
+    this.planetFactor,
+    this.houseFactor,
+    this.transitFactor,
+    this.vedicInterpretation,
+    this.practicalAction,
   });
 }

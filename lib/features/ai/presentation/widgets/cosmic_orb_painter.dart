@@ -37,17 +37,19 @@ class _CosmicOrbWidgetState extends State<CosmicOrbWidget>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return CustomPaint(
-          size: Size(widget.size, widget.size),
-          painter: _OrbPainter(
-            progress: _controller.value,
-            isSpeaking: widget.isSpeaking,
-          ),
-        );
-      },
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return CustomPaint(
+            size: Size(widget.size, widget.size),
+            painter: _OrbPainter(
+              progress: _controller.value,
+              isSpeaking: widget.isSpeaking,
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -71,15 +73,15 @@ class _OrbPainter extends CustomPainter {
 
     // Outer aura glow
     final auraPaint = Paint()
-      ..color = AppColors.secondary.withOpacity(0.35)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 16.0);
-    canvas.drawCircle(center, currentRadius * 1.3, auraPaint);
+      ..color = AppColors.secondary.withOpacity(0.2)
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(center, currentRadius * 1.35, auraPaint);
 
     // Mid gold glow
     final goldGlow = Paint()
-      ..color = AppColors.primary.withOpacity(0.4)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8.0);
-    canvas.drawCircle(center, currentRadius * 1.1, goldGlow);
+      ..color = AppColors.primary.withOpacity(0.25)
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(center, currentRadius * 1.15, goldGlow);
 
     // Inner Core Gradient
     final coreGradient = RadialGradient(

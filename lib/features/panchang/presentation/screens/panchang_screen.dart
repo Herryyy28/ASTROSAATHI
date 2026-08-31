@@ -14,6 +14,8 @@ import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/widgets/why_this_bottom_sheet.dart';
 import '../../../../core/theme/utils/responsive.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 class PanchangScreen extends ConsumerWidget {
   const PanchangScreen({super.key});
 
@@ -43,7 +45,7 @@ class PanchangScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              data: (panchang) => _buildPanchangUI(context, panchang),
+              data: (panchang) => _buildPanchangUI(context, ref, panchang),
             ),
           ),
         ),
@@ -51,7 +53,8 @@ class PanchangScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPanchangUI(BuildContext context, PanchangData panchang) {
+  Widget _buildPanchangUI(BuildContext context, WidgetRef ref, PanchangData panchang) {
+    final l10n = AppLocalizations.of(context, ref);
     final hPad = context.responsive<double>(mobile: 20, tablet: 32, desktop: 40);
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
@@ -75,7 +78,7 @@ class PanchangScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Daily Panchang',
+                            l10n.panchangTitle,
                             style: GoogleFonts.outfit(
                               fontSize: 28,
                               fontWeight: FontWeight.w700,
@@ -84,7 +87,7 @@ class PanchangScreen extends ConsumerWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'The astronomical map for today',
+                            l10n.todaysPanchang,
                             style: GoogleFonts.inter(
                               fontSize: 14,
                               color: AppColors.textSecondaryDark,
@@ -336,18 +339,22 @@ class PanchangScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: AppColors.glassSurface,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  description,
-                  style: const TextStyle(
-                    color: AppColors.textTertiaryDark,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w500,
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: AppColors.glassSurface,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppColors.secondary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),

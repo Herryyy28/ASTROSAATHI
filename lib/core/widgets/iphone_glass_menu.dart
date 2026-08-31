@@ -2,14 +2,20 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../theme/app_colors.dart';
 import '../providers/locale_provider.dart';
+import '../providers/profile_provider.dart';
+import '../providers/astrology_provider.dart';
+import '../../features/ai/presentation/providers/astro_baba_provider.dart';
+import '../../features/astrology/services/pdf_report_generator.dart';
 import '../../features/search/presentation/screens/astrology_search_screen.dart';
 import '../../features/support/presentation/screens/trust_center_screen.dart';
 import '../../features/panchang/presentation/screens/panchang_screen.dart';
 import '../../features/matching/presentation/screens/matching_screen.dart';
 import '../../features/remedies/presentation/screens/remedy_hub_screen.dart';
 import '../../features/muhurat/presentation/screens/muhurat_screen.dart';
+import '../../features/ai/presentation/screens/astro_baba_screen.dart';
 
 class IPhoneGlassMenu {
   static void show(BuildContext context, WidgetRef ref) {
@@ -30,6 +36,7 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLang = ref.watch(localeProvider);
+    final activeProfile = ref.watch(activeProfileProvider);
 
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(36)),
@@ -38,7 +45,7 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
         child: Container(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 36),
           decoration: BoxDecoration(
-            color: const Color(0xEB0E121A), // Deep glass surface
+            color: const Color(0xEB0E121A),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(36)),
             border: Border.all(color: AppColors.glassBorder.withOpacity(0.8), width: 0.8),
             boxShadow: const [
@@ -50,10 +57,12 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
               ),
             ],
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // iPhone Sheet Handle
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+              // Sheet Handle Bar
               Container(
                 width: 42,
                 height: 5,
@@ -68,27 +77,32 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: AppColors.goldSubtleGradient,
-                          border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: AppColors.goldSubtleGradient,
+                            border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
+                          ),
+                          child: const Text('✦', style: TextStyle(color: AppColors.primary, fontSize: 16)),
                         ),
-                        child: const Text('✦', style: TextStyle(color: AppColors.primary, fontSize: 16)),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        'Cosmic Menu & Tools',
-                        style: GoogleFonts.outfit(
-                          color: AppColors.textPrimaryDark,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Cosmic Menu & Tools',
+                            style: GoogleFonts.outfit(
+                              color: AppColors.textPrimaryDark,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
@@ -98,15 +112,43 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
               ),
               const SizedBox(height: 20),
 
-              // 2-Column Grid of iPhone Glass Cards
+              // 2-Column Grid of Tools
               GridView.count(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
-                childAspectRatio: 2.2,
+                childAspectRatio: 1.85,
                 children: [
+                  _glassMenuItem(
+                    context,
+                    icon: Icons.picture_as_pdf_rounded,
+                    title: 'PDF Kundli',
+                    subtitle: 'Print & Download',
+                    color: AppColors.primary,
+                    onTap: () async {
+                      Navigator.pop(context);
+                      await PdfReportGenerator.downloadAndPrintPdf(
+                        userName: activeProfile.name,
+                        dob: activeProfile.dob,
+                        birthTime: activeProfile.birthTime,
+                        birthPlace: activeProfile.birthPlace,
+                        language: currentLang,
+                      );
+                    },
+                  ),
+                  _glassMenuItem(
+                    context,
+                    icon: Icons.psychology_rounded,
+                    title: 'Astro Baba AI',
+                    subtitle: 'Ask Any Question',
+                    color: Colors.cyanAccent,
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroBabaScreen()));
+                    },
+                  ),
                   _glassMenuItem(
                     context,
                     icon: Icons.wb_sunny_rounded,
@@ -154,8 +196,8 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
                   _glassMenuItem(
                     context,
                     icon: Icons.search_rounded,
-                    title: 'Search',
-                    subtitle: 'Astrology Glossary',
+                    title: 'Glossary',
+                    subtitle: 'Search Vedic Terms',
                     color: Colors.lightBlueAccent,
                     onTap: () {
                       Navigator.pop(context);
@@ -178,7 +220,7 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
 
               const SizedBox(height: 20),
 
-              // Language Selector Row inside Glass Menu
+              // Language Selector Row
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
@@ -194,29 +236,43 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
                       'Language',
                       style: GoogleFonts.outfit(color: AppColors.textPrimaryDark, fontWeight: FontWeight.w600, fontSize: 14),
                     ),
-                    const Spacer(),
-                    ...AppLanguage.values.map((lang) {
-                      final isSelected = currentLang == lang;
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 6),
-                        child: ChoiceChip(
-                          label: Text('${lang.flagEmoji} ${lang.code.toUpperCase()}'),
-                          selected: isSelected,
-                          selectedColor: AppColors.primary,
-                          backgroundColor: AppColors.surfaceHighlightDark,
-                          labelStyle: TextStyle(
-                            color: isSelected ? Colors.black : AppColors.textPrimaryDark,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                            fontSize: 11,
-                          ),
-                          onSelected: (sel) {
-                            if (sel) {
-                              ref.read(localeProvider.notifier).setLanguage(lang);
-                            }
-                          },
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ...AppLanguage.values.map((lang) {
+                              final isSelected = currentLang == lang;
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 6),
+                                child: ChoiceChip(
+                                  label: Text('${lang.flagEmoji} ${lang.code.toUpperCase()}'),
+                                  selected: isSelected,
+                                  selectedColor: AppColors.primary,
+                                  backgroundColor: AppColors.surfaceHighlightDark,
+                                  labelStyle: TextStyle(
+                                    color: isSelected ? Colors.black : AppColors.textPrimaryDark,
+                                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                    fontSize: 11,
+                                  ),
+                                  onSelected: (sel) {
+                                    if (sel) {
+                                      ref.read(localeProvider.notifier).setLanguage(lang);
+                                      ref.invalidate(dailyGamePlanProvider);
+                                      ref.invalidate(panchangProvider);
+                                      ref.invalidate(birthChartProvider);
+                                      ref.invalidate(astroBabaProvider);
+                                    }
+                                  },
+                                ),
+                              );
+                            }),
+                          ],
                         ),
-                      );
-                    }).toList(),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -224,8 +280,9 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _glassMenuItem(
     BuildContext context, {

@@ -9,7 +9,7 @@ class CosmicParticleBackground extends StatefulWidget {
   const CosmicParticleBackground({
     super.key,
     required this.child,
-    this.particleCount = 45,
+    this.particleCount = 28,
   });
 
   @override
@@ -27,7 +27,7 @@ class _CosmicParticleBackgroundState extends State<CosmicParticleBackground>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 15),
+      duration: const Duration(seconds: 18),
     )..repeat();
 
     _particles = List.generate(widget.particleCount, (index) => _generateParticle());
@@ -37,10 +37,10 @@ class _CosmicParticleBackgroundState extends State<CosmicParticleBackground>
     return _Particle(
       x: _random.nextDouble(),
       y: _random.nextDouble(),
-      radius: _random.nextDouble() * 2.2 + 0.8,
-      speed: _random.nextDouble() * 0.05 + 0.01,
-      opacity: _random.nextDouble() * 0.6 + 0.2,
-      pulseSpeed: _random.nextDouble() * 3.0 + 1.0,
+      radius: _random.nextDouble() * 2.0 + 0.8,
+      speed: _random.nextDouble() * 0.04 + 0.01,
+      opacity: _random.nextDouble() * 0.5 + 0.2,
+      pulseSpeed: _random.nextDouble() * 2.5 + 0.8,
       color: _random.nextBool()
           ? AppColors.primary
           : (_random.nextBool() ? AppColors.secondary : AppColors.tertiary),
@@ -55,17 +55,30 @@ class _CosmicParticleBackgroundState extends State<CosmicParticleBackground>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return CustomPaint(
-          painter: _ParticlePainter(
-            particles: _particles,
-            progress: _controller.value,
+    return Container(
+      color: AppColors.backgroundDark,
+      child: Stack(
+        children: [
+          // ── Isolated 60 FPS Particle Background Canvas ─────────────────
+          RepaintBoundary(
+            child: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) {
+                return CustomPaint(
+                  size: Size.infinite,
+                  painter: _ParticlePainter(
+                    particles: _particles,
+                    progress: _controller.value,
+                  ),
+                );
+              },
+            ),
           ),
-          child: widget.child,
-        );
-      },
+
+          // ── Screen Child UI Content (Isolated from particle repaints) ──
+          widget.child,
+        ],
+      ),
     );
   }
 }
@@ -104,22 +117,24 @@ class _ParticlePainter extends CustomPainter {
       final double posX = particle.x * size.width;
 
       final double pulseOpacity =
-          (sin(progress * 2 * pi * particle.pulseSpeed) + 1) / 2 * 0.5 + 0.3;
-      final double finalOpacity = (particle.opacity * pulseOpacity).clamp(0.1, 0.9);
+          (sin(progress * 2 * pi * particle.pulseSpeed) + 1) / 2 * 0.4 + 0.3;
+      final double finalOpacity = (particle.opacity * pulseOpacity).clamp(0.1, 0.85);
 
-      final paint = Paint()
+      final auraPaint = Paint()
+        ..color = particle.color.withOpacity(finalOpacity * 0.25)
+        ..style = PaintingStyle.fill;
+
+      final corePaint = Paint()
         ..color = particle.color.withOpacity(finalOpacity)
         ..style = PaintingStyle.fill;
 
-      final glowPaint = Paint()
-        ..color = particle.color.withOpacity(finalOpacity * 0.3)
-        ..maskFilter = MaskFilter.blur(BlurStyle.normal, particle.radius * 2);
-
-      canvas.drawCircle(Offset(posX, posY), particle.radius * 2.5, glowPaint);
-      canvas.drawCircle(Offset(posX, posY), particle.radius, paint);
+      final centerOffset = Offset(posX, posY);
+      canvas.drawCircle(centerOffset, particle.radius * 2.2, auraPaint);
+      canvas.drawCircle(centerOffset, particle.radius, corePaint);
     }
   }
 
   @override
-  bool shouldRepaint(covariant _ParticlePainter oldDelegate) => true;
+  bool shouldRepaint(covariant _ParticlePainter oldDelegate) =>
+      oldDelegate.progress != progress;
 }

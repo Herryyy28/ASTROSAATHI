@@ -3,6 +3,17 @@ import 'package:flutter/material.dart';
 /// Breakpoints for device categories
 enum DeviceType { mobile, tablet, desktop }
 
+/// Extended device classifications for precise layout targeting
+enum SubDeviceType {
+  smallMobile,     // 320px - 375px (iPhone SE, compact Androids)
+  standardMobile,  // 376px - 412px (iPhone 14/15/16, Pixel, Galaxy S)
+  largeMobile,     // 413px - 599px (iPhone Pro Max, Plus, Galaxy Ultra)
+  smallTablet,     // 600px - 767px (Foldables, iPad Mini)
+  standardTablet,  // 768px - 1023px (iPad Air, 10th Gen, Galaxy Tab)
+  largeTablet,     // 1024px - 1280px (iPad Pro, Surface, 13" Laptops)
+  desktop,         // 1281px+ (Desktops, 2K/4K Monitors)
+}
+
 /// Central responsive utility — use anywhere via `context.responsive`
 extension ResponsiveContext on BuildContext {
   double get screenWidth => MediaQuery.of(this).size.width;
@@ -14,9 +25,26 @@ extension ResponsiveContext on BuildContext {
     return DeviceType.desktop;
   }
 
+  SubDeviceType get subDeviceType {
+    if (screenWidth < 376) return SubDeviceType.smallMobile;
+    if (screenWidth < 413) return SubDeviceType.standardMobile;
+    if (screenWidth < 600) return SubDeviceType.largeMobile;
+    if (screenWidth < 768) return SubDeviceType.smallTablet;
+    if (screenWidth < 1024) return SubDeviceType.standardTablet;
+    if (screenWidth <= 1280) return SubDeviceType.largeTablet;
+    return SubDeviceType.desktop;
+  }
+
   bool get isMobile => deviceType == DeviceType.mobile;
   bool get isTablet => deviceType == DeviceType.tablet;
   bool get isDesktop => deviceType == DeviceType.desktop;
+
+  bool get isSmallMobile => subDeviceType == SubDeviceType.smallMobile;
+  bool get isStandardMobile => subDeviceType == SubDeviceType.standardMobile;
+  bool get isLargeMobile => subDeviceType == SubDeviceType.largeMobile;
+  bool get isSmallTablet => subDeviceType == SubDeviceType.smallTablet;
+  bool get isStandardTablet => subDeviceType == SubDeviceType.standardTablet;
+  bool get isLargeTablet => subDeviceType == SubDeviceType.largeTablet;
 
   /// Responsive value: pick one based on device type
   T responsive<T>({required T mobile, T? tablet, T? desktop}) {
@@ -27,6 +55,32 @@ extension ResponsiveContext on BuildContext {
         return tablet ?? mobile;
       case DeviceType.mobile:
         return mobile;
+    }
+  }
+
+  /// Fine-grained responsive picker for detailed device categories
+  T responsiveDetailed<T>({
+    required T mobile,
+    T? smallMobile,
+    T? largeMobile,
+    T? tablet,
+    T? largeTablet,
+    T? desktop,
+  }) {
+    switch (subDeviceType) {
+      case SubDeviceType.smallMobile:
+        return smallMobile ?? mobile;
+      case SubDeviceType.standardMobile:
+        return mobile;
+      case SubDeviceType.largeMobile:
+        return largeMobile ?? mobile;
+      case SubDeviceType.smallTablet:
+      case SubDeviceType.standardTablet:
+        return tablet ?? mobile;
+      case SubDeviceType.largeTablet:
+        return largeTablet ?? tablet ?? desktop ?? mobile;
+      case SubDeviceType.desktop:
+        return desktop ?? largeTablet ?? tablet ?? mobile;
     }
   }
 

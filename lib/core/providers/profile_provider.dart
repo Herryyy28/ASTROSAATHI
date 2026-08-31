@@ -177,9 +177,15 @@ class ProfilesNotifier extends StateNotifier<List<BirthProfileData>> {
     await _persist();
   }
 
-  Future<void> addProfile(BirthProfileData profile) async {
+  static const int maxProfiles = 5;
+
+  Future<bool> addProfile(BirthProfileData profile) async {
+    if (state.length >= maxProfiles) {
+      return false;
+    }
     state = [...state, profile];
     await _persist();
+    return true;
   }
 
   Future<void> setPrimary(String id) async {
@@ -204,13 +210,23 @@ final profilesListProvider =
   return ProfilesNotifier();
 });
 
+final canAddMoreProfilesProvider = Provider<bool>((ref) {
+  final profiles = ref.watch(profilesListProvider);
+  return profiles.length < ProfilesNotifier.maxProfiles;
+});
+
+final profileCapacityTextProvider = Provider<String>((ref) {
+  final count = ref.watch(profilesListProvider).length;
+  return '$count / ${ProfilesNotifier.maxProfiles} Profiles';
+});
+
 /// Default profile used when onboarding has not completed yet.
 final _emptyProfile = BirthProfileData(
   id: 'unset',
   name: '',
   relationship: 'Self',
   dob: '',
-  birthTime: '12:00',
+  birthTime: '12:00 AM',
   birthPlace: '',
   latitude: 28.6139,
   longitude: 77.2090,
@@ -231,3 +247,4 @@ final hasBirthProfileProvider = Provider<bool>((ref) {
   final profile = ref.watch(activeProfileProvider);
   return profile.dob.isNotEmpty && profile.name.isNotEmpty;
 });
+

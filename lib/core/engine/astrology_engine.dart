@@ -9,6 +9,9 @@ abstract class AstrologyEngine {
     String date,
     String location, {
     String languageCode = 'en',
+    String? profileName,
+    String? dob,
+    String? birthTime,
   });
 
   Future<PanchangData> calculatePanchang(

@@ -57,24 +57,26 @@ class RelationshipCenterScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Love & Synergy Score', style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark)),
-                          const SizedBox(height: 4),
-                          const Text('7.8 / 10', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.secondaryLight)),
-                          const SizedBox(height: 4),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AppColors.secondary.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Love & Synergy Score', style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark)),
+                            const SizedBox(height: 4),
+                            const Text('7.8 / 10', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.secondaryLight)),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppColors.secondary.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Text('✦ Warm Emotional Alignment', style: TextStyle(color: AppColors.secondaryLight, fontWeight: FontWeight.bold, fontSize: 11)),
                             ),
-                            child: const Text('✦ Warm Emotional Alignment', style: TextStyle(color: AppColors.secondaryLight, fontWeight: FontWeight.bold, fontSize: 11)),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: 8),
                       const Icon(Icons.volunteer_activism_rounded, color: AppColors.secondaryLight, size: 54),
                     ],
                   ),

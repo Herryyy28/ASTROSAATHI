@@ -275,9 +275,13 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                                   children: [
                                     Icon(Icons.analytics_outlined, color: AppColors.primary, size: 12),
                                     SizedBox(width: 4),
-                                    Text(
-                                      'Analyzed: Kundli • Dasha • Transits • Panchang',
-                                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary),
+                                    Flexible(
+                                      child: Text(
+                                        'Analyzed: Kundli • Dasha • Transits • Panchang',
+                                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
                                   ],
                                 ),

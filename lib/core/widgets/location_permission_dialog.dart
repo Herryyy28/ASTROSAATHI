@@ -34,105 +34,111 @@ class LocationPermissionDialog extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header Icon & Title
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.15),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.location_on_rounded,
-                    color: AppColors.primary,
-                    size: 28,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Text(
-                    'Location Disclosure',
-                    style: GoogleFonts.outfit(
-                      color: AppColors.textPrimaryDark,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header Icon & Title
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.location_on_rounded,
+                      color: AppColors.primary,
+                      size: 28,
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // Prominent Explanation Text (Google Play Requirement)
-            Text(
-              'AstroSaathi collects location data to enable precise astronomical calculations for your birth chart (Kundli), daily Panchang, Sunrise/Sunset, and Rahu Kaal hours even when the app is in use.',
-              style: GoogleFonts.inter(
-                color: AppColors.textPrimaryDark,
-                fontSize: 14,
-                height: 1.5,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.backgroundDark.withOpacity(0.6),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.glassBorder, width: 0.5),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _bulletPoint('Used strictly for local sidereal time & coordinates.'),
-                  _bulletPoint('Your location is NEVER sold or shared with third parties.'),
-                  _bulletPoint('Background tracking is NEVER performed.'),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      'Location Disclosure',
+                      style: GoogleFonts.outfit(
+                        color: AppColors.textPrimaryDark,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
-            ),
-            const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
-            // Action Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: onDeny,
-                  child: Text(
-                    'Not Now',
-                    style: GoogleFonts.inter(
-                      color: AppColors.textSecondaryDark,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+              // Prominent Explanation Text (Google Play Requirement)
+              Text(
+                'AstroSaathi collects location data to enable precise astronomical calculations for your birth chart (Kundli), daily Panchang, Sunrise/Sunset, and Rahu Kaal hours even when the app is in use.',
+                style: GoogleFonts.inter(
+                  color: AppColors.textPrimaryDark,
+                  fontSize: 14,
+                  height: 1.5,
+                  fontWeight: FontWeight.w500,
                 ),
-                const SizedBox(width: 12),
-                ElevatedButton(
-                  onPressed: onAccept,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  ),
-                  child: Text(
-                    'Continue',
-                    style: GoogleFonts.outfit(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                  ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundDark.withOpacity(0.6),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppColors.glassBorder, width: 0.5),
                 ),
-              ],
-            ),
-          ],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _bulletPoint('Used strictly for local sidereal time & coordinates.'),
+                    _bulletPoint('Your location is NEVER sold or shared with third parties.'),
+                    _bulletPoint('Background tracking is NEVER performed.'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Action Buttons
+              Wrap(
+                alignment: WrapAlignment.end,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 12,
+                runSpacing: 8,
+                children: [
+                  TextButton(
+                    onPressed: onDeny,
+                    child: Text(
+                      'Not Now',
+                      style: GoogleFonts.inter(
+                        color: AppColors.textSecondaryDark,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: onAccept,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    ),
+                    child: Text(
+                      'Continue',
+                      style: GoogleFonts.outfit(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

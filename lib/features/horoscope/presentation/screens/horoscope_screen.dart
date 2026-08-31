@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_animations.dart';
 import '../../../../core/providers/astrology_provider.dart';
 import '../../../../core/widgets/glass_card.dart';
@@ -52,15 +51,18 @@ class HoroscopeScreen extends ConsumerWidget {
                     ),
                     child: Row(
                       children: [
-                        Text(
-                          'Horoscope',
-                          style: GoogleFonts.outfit(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.textPrimaryDark,
+                        Expanded(
+                          child: Text(
+                            'Horoscope',
+                            style: GoogleFonts.outfit(
+                              fontSize: context.responsive<double>(mobile: 22, tablet: 28, desktop: 32),
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textPrimaryDark,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        const Spacer(),
+                        const SizedBox(width: 8),
                         _buildSignDropdown(ref),
                       ],
                     ),

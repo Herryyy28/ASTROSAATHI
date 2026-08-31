@@ -17,9 +17,8 @@ class VedicChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final glowPaint = Paint()
-      ..color = AppColors.primary.withOpacity(0.1)
-      ..strokeWidth = 4.0
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3.0)
+      ..color = AppColors.primary.withOpacity(0.15)
+      ..strokeWidth = 3.5
       ..style = PaintingStyle.stroke;
 
     // Draw the outer square
@@ -60,11 +59,12 @@ class VedicChartPainter extends CustomPainter {
         text: text,
         style: const TextStyle(
           color: AppColors.primary,
-          fontSize: 10,
+          fontSize: 9.5,
           fontWeight: FontWeight.bold,
+          height: 1.2,
         ),
       );
-      textPainter.layout();
+      textPainter.layout(maxWidth: width / 3.8);
       textPainter.paint(
         canvas,
         Offset(center.dx - textPainter.width / 2, center.dy - textPainter.height / 2),
@@ -93,5 +93,6 @@ class VedicChartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+  bool shouldRepaint(covariant VedicChartPainter oldDelegate) =>
+      oldDelegate.housePlanets != housePlanets;
 }

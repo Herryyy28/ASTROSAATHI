@@ -11,7 +11,7 @@ final astrologyEngineProvider = Provider<AstrologyEngine>((ref) {
   return MockAstrologyEngine();
 });
 
-String _getLocationString(ref) {
+String _getLocationString(Ref ref) {
   final profile = ref.watch(activeProfileProvider);
   return '${profile.latitude},${profile.longitude},${profile.timezone}';
 }
@@ -19,10 +19,18 @@ String _getLocationString(ref) {
 final dailyGamePlanProvider = FutureProvider<GamePlanData>((ref) async {
   final engine = ref.watch(astrologyEngineProvider);
   final lang = ref.watch(localeProvider);
+  final profile = ref.watch(activeProfileProvider);
   final location = _getLocationString(ref);
   final now = DateTime.now();
   final date = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-  return await engine.calculateDailyGamePlan(date, location, languageCode: lang.code);
+  return await engine.calculateDailyGamePlan(
+    date,
+    location,
+    languageCode: lang.code,
+    profileName: profile.name,
+    dob: profile.dob,
+    birthTime: profile.birthTime,
+  );
 });
 
 final selectedPanchangDateProvider = StateProvider<DateTime>((ref) => DateTime.now());
@@ -59,5 +67,6 @@ final birthChartProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final date = profile.dob.isNotEmpty ? profile.dob : defaultDate;
   final time = profile.birthTime.isNotEmpty ? profile.birthTime : '12:00';
   
-  return await engine.getBirthChart(date, time, location, languageCode: lang.code, profileId: profile.id);
+  final profileIdentifier = profile.name.isNotEmpty ? profile.name : profile.id;
+  return await engine.getBirthChart(date, time, location, languageCode: lang.code, profileId: profileIdentifier);
 });

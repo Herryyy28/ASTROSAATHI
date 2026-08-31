@@ -196,12 +196,15 @@ class MuhuratScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                '${result.bestWindow.start} — ${result.bestWindow.end}',
-                style: GoogleFonts.outfit(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primary,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '${result.bestWindow.start} — ${result.bestWindow.end}',
+                  style: GoogleFonts.outfit(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
             ],

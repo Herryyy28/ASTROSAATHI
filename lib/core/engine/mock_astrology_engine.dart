@@ -5,69 +5,200 @@ import 'models/ai_data.dart';
 import 'models/horoscope_data.dart';
 import 'models/astrology_validation.dart';
 import 'astrology_engine.dart';
+import '../utils/zodiac_sign_utils.dart';
 
 class MockAstrologyEngine implements AstrologyEngine {
   @override
-  Future<GamePlanData> calculateDailyGamePlan(String date, String location, {String languageCode = 'en'}) async {
+  Future<GamePlanData> calculateDailyGamePlan(
+    String date,
+    String location, {
+    String languageCode = 'en',
+    String? profileName,
+    String? dob,
+    String? birthTime,
+  }) async {
     AstrologyValidator.validateDate(date);
-    await Future.delayed(const Duration(milliseconds: 400));
-    
+
+    final name = (profileName != null && profileName.isNotEmpty) ? profileName : 'Herry Prajapati';
+    final userDob = (dob != null && dob.isNotEmpty) ? dob : '1998-05-15';
+    final userTime = (birthTime != null && birthTime.isNotEmpty) ? birthTime : '07:30 AM';
+
+    final astroProfile = ZodiacSignUtils.calculateAstroProfile(
+      name: name,
+      dob: userDob,
+      birthTime: userTime,
+    );
+
+    // Calculate unique, authentic, deterministic day score for THIS profile and THIS date
+    final dateHash = date.codeUnits.fold(0, (p, c) => p + c);
+    final profileHash = name.toLowerCase().codeUnits.fold(0, (p, c) => p + c);
+    final rawScore = 6.8 + (((astroProfile.moonLongitude * 1.73 + dateHash * 3.14 + profileHash) % 30) / 10.0);
+    final dayScore = double.parse((rawScore.clamp(6.2, 9.8)).toStringAsFixed(1));
+
+    final careerScore = double.parse((dayScore * 0.98).clamp(6.0, 9.9).toStringAsFixed(1));
+    final loveScore = double.parse((dayScore * 0.92).clamp(5.5, 9.7).toStringAsFixed(1));
+    final moneyScore = double.parse((dayScore * 0.95).clamp(5.8, 9.8).toStringAsFixed(1));
+
+    final lang = languageCode.toLowerCase();
+    List<String> doList;
+    List<String> beCarefulList;
+    List<String> avoidList;
+    String planetFactor;
+    String houseFactor;
+    String transitFactor;
+    String vedicInterpretation;
+    String practicalAction;
+
+    if (lang == 'hi') {
+      doList = [
+        '11:15 AM से 1:20 PM के बीच ${astroProfile.rulingPlanet} के अनुकूल संचरण का लाभ उठाएं',
+        'अभिजीत मुहूर्त के दौरान मुख्य करियर लक्ष्यों पर ध्यान केंद्रित करें जब ${astroProfile.lagnaHi} लग्न सक्रिय हो',
+        'मानसिक स्पष्टता के लिए प्रातःकाल ध्यान करें एवं ${astroProfile.rulingPlanet} मंत्र का जाप करें',
+      ];
+      beCarefulList = [
+        'राहु काल के समय भावुक होकर निर्णय लेने से बचें',
+        'महत्वपूर्ण वित्तीय समझौतों पर हस्ताक्षर करने से पहले नियमों की जांच करें',
+      ];
+      avoidList = [
+        'सहकर्मियों के साथ अनावश्यक बहस या विवाद से बचें',
+        'राहु काल के दौरान कोई नया दीर्घकालिक कार्य शुरू न करें',
+      ];
+      planetFactor = '${astroProfile.rulingPlanet} (स्वामी ग्रह) का शुभ भाव संचरण';
+      houseFactor = '${astroProfile.lagnaHi} लग्न एवं ${astroProfile.rashiHi} राशि धुरी';
+      transitFactor = '${astroProfile.nakshatra} नक्षत्र (पद ${astroProfile.pada})';
+      vedicInterpretation = '${astroProfile.lagnaHi} लग्न धुरी पर ${astroProfile.rulingPlanet} का शुभ गोचर आज आपके निर्णय लेने के आत्मविश्वास और व्यावसायिक सफलता को बढ़ाता है।';
+      practicalAction = 'महत्वपूर्ण बैठकों और वित्तीय निर्णयों के लिए अपने स्वर्णिम समय (11:15 AM - 1:20 PM) का उपयोग करें।';
+    } else if (lang == 'gu') {
+      doList = [
+        '11:15 AM થી 1:20 PM વચ્ચે ${astroProfile.rulingPlanet} ના સાનુકૂળ પરિભ્રમણનો લાભ લો',
+        'અભિજીત મુહૂર્ત દરમિયાન જ્યારે ${astroProfile.lagnaGu} લગ્ન સક્રિય હોય ત્યારે કરિયર પર ધ્યાન કેન્દ્રિત કરો',
+        'માનસિક શાંતિ માટે સવારે ધ્યાન કરો અને ${astroProfile.rulingPlanet} મંત્રનો જાપ કરો',
+      ];
+      beCarefulList = [
+        'રાહુ કાળ દરમિયાન ભાવનાત્મક નિર્ણય લેવાનું ટાળો',
+        'નાણાકીય કરારો પર સહી કરતા પહેલા શરતો ચકાસી લો',
+      ];
+      avoidList = [
+        'સહકર્મીઓ સાથે બિનજરૂરી દલીલો ટાળો',
+        'રાહુ કાળ દરમિયાન કોઈ નવું મોટું કાર્ય શરૂ ન કરો',
+      ];
+      planetFactor = '${astroProfile.rulingPlanet} (સ્વામી ગ્રહ) નું શુભ સ્થાન પરિભ્રમણ';
+      houseFactor = '${astroProfile.lagnaGu} લગ્ન અને ${astroProfile.rashiGu} રાશિનુ કેન્દ્ર';
+      transitFactor = '${astroProfile.nakshatra} નક્ષત્ર (પદ ${astroProfile.pada})';
+      vedicInterpretation = '${astroProfile.lagnaGu} લગ્ન પર ${astroProfile.rulingPlanet} નું શુભ ગોચર નિર્ણય લેવાની ક્ષમતા અને વ્યાવસાયિક સફળતા વધારે છે.';
+      practicalAction = 'મહત્વની મીટિંગ્સ અને નાણાકીય નિર્ણયો માટે તમારા ગોલ્ડન ટાઇમ (11:15 AM - 1:20 PM) નો ઉપયોગ કરો.';
+    } else {
+      doList = [
+        'Capitalize on favorable ${astroProfile.rulingPlanet} alignment between 11:15 AM and 1:20 PM',
+        'Focus on key career goals during Abhijit Muhurat while ${astroProfile.lagnaEn} Lagna is active',
+        'Practice morning meditation & chant ${astroProfile.rulingPlanet} mantra for clarity',
+      ];
+      beCarefulList = [
+        'Avoid making emotional commitments during Rahu Kaal window',
+        'Verify contract terms before signing key financial agreements',
+      ];
+      avoidList = [
+        'Avoid unnecessary arguments or confrontations with colleagues',
+        'Do not initiate major new long-term ventures during Rahu Kaal',
+      ];
+      planetFactor = '${astroProfile.rulingPlanet} (Ruling Planet) Transiting Benefic House';
+      houseFactor = '${astroProfile.lagnaEn} Lagna & ${astroProfile.rashiEn} Rashi Axis';
+      transitFactor = '${astroProfile.nakshatra} Nakshatra (Pada ${astroProfile.pada})';
+      vedicInterpretation = 'Benefic transit of ${astroProfile.rulingPlanet} over your ${astroProfile.lagnaEn} Lagna axis brings strong decision confidence, executive clarity, and professional alignment today.';
+      practicalAction = 'Capitalize on your golden window (11:15 AM - 1:20 PM) for important negotiations, client meetings, or financial decisions.';
+    }
+
     return GamePlanData(
       date: date,
-      dayScore: 8.7,
-      doList: [
-        'Initiate key career discussions between 11:15 AM and 1:20 PM',
-        'Chant Gayatri Mantra or meditate at sunrise for mental clarity',
-        'Take leadership on strategic projects while Jupiter is strong',
-      ],
-      beCarefulList: [
-        'Avoid making hasty financial commitments before 2 PM',
-        'Double-check contract terms and legal wording',
-      ],
-      avoidList: [
-        'Avoid starting new long-term ventures during Rahu Kaal',
-        'Unnecessary arguments or emotional confrontations',
-      ],
+      dayScore: dayScore,
+      doList: doList,
+      beCarefulList: beCarefulList,
+      avoidList: avoidList,
       bestWindow: TimeWindow(start: '11:15 AM', end: '01:20 PM'),
       categories: {
-        'Career': 8.9,
-        'Love': 7.8,
-        'Money': 8.5,
+        'Career': careerScore,
+        'Love': loveScore,
+        'Money': moneyScore,
       },
+      planetFactor: planetFactor,
+      houseFactor: houseFactor,
+      transitFactor: transitFactor,
+      vedicInterpretation: vedicInterpretation,
+      practicalAction: practicalAction,
     );
   }
 
   @override
   Future<PanchangData> calculatePanchang(String date, String location, {String languageCode = 'en'}) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    return PanchangData(
-      tithi: 'Shukla Paksha Dashami',
-      vara: 'Thursday',
-      nakshatra: 'Rohini (Moon Ruled)',
-      yoga: 'Siddhi Yoga',
-      karana: 'Taitila',
-      sunrise: '06:12 AM',
-      sunset: '06:45 PM',
-      rahuKaal: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
-    );
+    final lang = languageCode.toLowerCase();
+    if (lang == 'hi') {
+      return PanchangData(
+        tithi: 'शुक्ल पक्ष दशमी',
+        vara: 'गुरुवार',
+        nakshatra: 'रोहिणी (चंद्रमा शासित)',
+        yoga: 'सिद्धि योग',
+        karana: 'तैतिल',
+        sunrise: '06:12 AM',
+        sunset: '06:45 PM',
+        rahuKaal: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
+      );
+    } else if (lang == 'gu') {
+      return PanchangData(
+        tithi: 'શુક્લ પક્ષ દશમી',
+        vara: 'ગુરુવાર',
+        nakshatra: 'રોહિણી (ચંદ્ર શાસિત)',
+        yoga: 'સિદ્ધિ યોગ',
+        karana: 'તૈતિલ',
+        sunrise: '06:12 AM',
+        sunset: '06:45 PM',
+        rahuKaal: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
+      );
+    } else {
+      return PanchangData(
+        tithi: 'Shukla Paksha Dashami',
+        vara: 'Thursday',
+        nakshatra: 'Rohini (Moon Ruled)',
+        yoga: 'Siddhi Yoga',
+        karana: 'Taitila',
+        sunrise: '06:12 AM',
+        sunset: '06:45 PM',
+        rahuKaal: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
+      );
+    }
   }
 
   @override
   Future<MuhuratResult> calculateMuhurat(MuhuratInput input, {String languageCode = 'en'}) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    return MuhuratResult(
-      category: input.category,
-      bestWindow: TimeWindow(start: '11:15 AM', end: '01:20 PM'),
-      strength: 'Abhijit Muhurat (Highest Strength)',
-      bestFor: 'Crucial professional decisions, investments, and contracts',
-      avoidWindow: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
-    );
+    final lang = languageCode.toLowerCase();
+    if (lang == 'hi') {
+      return MuhuratResult(
+        category: input.category,
+        bestWindow: TimeWindow(start: '11:15 AM', end: '01:20 PM'),
+        strength: 'अभिजीत मुहूर्त (सर्वोच्च प्रभाव)',
+        bestFor: 'महत्वपूर्ण व्यावसायिक निर्णय, निवेश और अनुबंध',
+        avoidWindow: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
+      );
+    } else if (lang == 'gu') {
+      return MuhuratResult(
+        category: input.category,
+        bestWindow: TimeWindow(start: '11:15 AM', end: '01:20 PM'),
+        strength: 'અભિજીત મુહૂર્ત (સર્વોચ્ચ શક્તિ)',
+        bestFor: 'મહત્વપૂર્ણ વ્યવસાયિક નિર્ણયો, રોકાણ અને કરાર',
+        avoidWindow: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
+      );
+    } else {
+      return MuhuratResult(
+        category: input.category,
+        bestWindow: TimeWindow(start: '11:15 AM', end: '01:20 PM'),
+        strength: 'Abhijit Muhurat (Highest Strength)',
+        bestFor: 'Crucial professional decisions, investments, and contracts',
+        avoidWindow: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
+      );
+    }
   }
 
   @override
   Future<AstroBabaResponse> askAstroBaba(String question, String date, String location, {String languageCode = 'en'}) async {
-    await Future.delayed(const Duration(milliseconds: 800));
-
     final q = question.toLowerCase();
     String answer;
     List<String> actions;
@@ -173,8 +304,6 @@ class MockAstrologyEngine implements AstrologyEngine {
 
   @override
   Future<HoroscopeData> getHoroscope(String sign, String timeframe, {String languageCode = 'en'}) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-
     final cleanSign = sign.toLowerCase();
 
     final rashiAttributes = {
@@ -236,21 +365,33 @@ class MockAstrologyEngine implements AstrologyEngine {
     AstrologyValidator.validateDate(date);
     AstrologyValidator.validateTime(time);
 
+    final name = (profileId != null && profileId.isNotEmpty && profileId != 'default') ? profileId : 'Herry Prajapati';
+    final astroProfile = ZodiacSignUtils.calculateAstroProfile(
+      name: name,
+      dob: date,
+      birthTime: time,
+    );
+
+    final now = DateTime.now();
+    final hStr = now.hour.toString().padLeft(2, '0');
+    final mStr = now.minute.toString().padLeft(2, '0');
+
     final chart = {
-      'lagna': 'Aries (Mesha)',
-      'planets': [
-        {'name': 'Sun', 'code': 'Su', 'house': 1, 'longitude': 15.5, 'nakshatra': 'Ashwini', 'pada': 1},
-        {'name': 'Moon', 'code': 'Mo', 'house': 7, 'longitude': 180.2, 'nakshatra': 'Swati', 'pada': 2},
-        {'name': 'Mars', 'code': 'Ma', 'house': 4, 'longitude': 90.0, 'nakshatra': 'Punarvasu', 'pada': 4},
-        {'name': 'Mercury', 'code': 'Me', 'house': 1, 'longitude': 20.0, 'nakshatra': 'Bharani', 'pada': 3},
-        {'name': 'Jupiter', 'code': 'Ju', 'house': 9, 'longitude': 240.5, 'nakshatra': 'Mula', 'pada': 1},
-        {'name': 'Venus', 'code': 'Ve', 'house': 10, 'longitude': 270.0, 'nakshatra': 'Uttara Ashadha', 'pada': 1},
-        {'name': 'Saturn', 'code': 'Sa', 'house': 10, 'longitude': 280.0, 'nakshatra': 'Shravana', 'pada': 2},
-        {'name': 'Rahu', 'code': 'Ra', 'house': 12, 'longitude': 330.0, 'nakshatra': 'Purva Bhadrapada', 'pada': 3},
-        {'name': 'Ketu', 'code': 'Ke', 'house': 6, 'longitude': 150.0, 'nakshatra': 'Uttara Phalguni', 'pada': 1},
-      ],
+      'profileId': profileId ?? 'default',
+      'lagna': {
+        'rashi': astroProfile.lagnaDisplay,
+        'ruler': astroProfile.rulingPlanet,
+      },
+      'rashi': {
+        'name': astroProfile.rashiDisplay,
+        'hindiName': astroProfile.rashiHi,
+        'rulingPlanet': astroProfile.rulingPlanet,
+      },
+      'nakshatra': astroProfile.nakshatra,
+      'pada': astroProfile.pada,
+      'planets': astroProfile.planets,
       'metadata': DataQualityMetadata(
-        calculatedAt: 'Calculated at ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
+        calculatedAt: 'Calculated at $hStr:$mStr',
         timezone: '+05:30',
         latitude: 28.6139,
         longitude: 77.2090,

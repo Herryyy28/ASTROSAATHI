@@ -37,12 +37,16 @@ class DataFreshnessBadge extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 6),
-          Text(
-            displayTime,
-            style: GoogleFonts.outfit(
-              color: AppColors.textTertiaryDark,
-              fontSize: 11,
-              fontWeight: FontWeight.w400,
+          Flexible(
+            child: Text(
+              displayTime,
+              style: GoogleFonts.outfit(
+                color: AppColors.textTertiaryDark,
+                fontSize: 11,
+                fontWeight: FontWeight.w400,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

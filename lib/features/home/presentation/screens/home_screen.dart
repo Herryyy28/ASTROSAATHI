@@ -6,11 +6,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/providers/astrology_provider.dart';
+import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
-import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/widgets/error_state_widget.dart';
 import '../../../../core/widgets/responsive_layout.dart';
@@ -21,7 +22,6 @@ import '../../../../core/widgets/data_freshness_badge.dart';
 import '../../../../core/widgets/iphone_glass_menu.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../search/presentation/screens/astrology_search_screen.dart';
-import '../../../support/presentation/screens/trust_center_screen.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
 import 'main_screen.dart';
@@ -164,8 +164,11 @@ class HomeScreen extends ConsumerWidget {
           emoji = '🌙';
         }
 
+        final activeProfile = ref.watch(activeProfileProvider);
         final nameAsync = ref.watch(userNameProvider);
-        final userName = nameAsync.whenOrNull(data: (name) => name) ?? '';
+        final userName = activeProfile.name.isNotEmpty
+            ? activeProfile.name
+            : (nameAsync.whenOrNull(data: (name) => name) ?? '');
         final displayGreeting = userName.isNotEmpty
             ? '$greeting, $userName'
             : greeting;
@@ -181,7 +184,7 @@ class HomeScreen extends ConsumerWidget {
                   child: Text(
                     displayGreeting,
                     style: GoogleFonts.outfit(
-                      fontSize: 28,
+                      fontSize: context.responsive<double>(mobile: 24, tablet: 28, desktop: 32),
                       fontWeight: FontWeight.w700,
                       color: AppColors.textPrimaryDark,
                       letterSpacing: -0.3,
@@ -218,13 +221,17 @@ class HomeScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  _formatDate(),
-                  style: GoogleFonts.inter(
-                    fontSize: 14,
-                    color: AppColors.textSecondaryDark,
+                Expanded(
+                  child: Text(
+                    _formatDate(),
+                    style: GoogleFonts.inter(
+                      fontSize: 14,
+                      color: AppColors.textSecondaryDark,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                const SizedBox(width: 8),
                 DataFreshnessBadge(
                   timeString: 'Calculated at ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
                 ),
@@ -266,7 +273,7 @@ class HomeScreen extends ConsumerWidget {
 
   Widget _buildEnergyCard(BuildContext context, GamePlanData plan) {
     return GlassCard(
-      padding: const EdgeInsets.all(28),
+      padding: context.cardPadding,
       glowColor: AppColors.goldGlow,
       gradient: AppColors.premiumGradient,
       child: Column(
@@ -288,83 +295,157 @@ class HomeScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
 
-          // Score display
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              // Background ring
-              SizedBox(
-                width: 120,
-                height: 120,
-                child: CircularProgressIndicator(
-                  value: plan.dayScore / 10,
-                  strokeWidth: 6,
-                  backgroundColor: AppColors.surfaceHighlightDark,
-                  color: AppColors.primary,
-                  strokeCap: StrokeCap.round,
-                ),
-              ),
-              Column(
+          // Dynamic Animated Score display (60 FPS)
+          TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0.0, end: plan.dayScore),
+            duration: const Duration(milliseconds: 1200),
+            curve: Curves.easeOutCubic,
+            builder: (context, animatedValue, child) {
+              return Stack(
+                alignment: Alignment.center,
                 children: [
-                  Text(
-                    plan.dayScore.toStringAsFixed(0),
-                    style: GoogleFonts.outfit(
-                      fontSize: 44,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryDark,
-                      height: 1,
+                  SizedBox(
+                    width: 124,
+                    height: 124,
+                    child: CircularProgressIndicator(
+                      value: animatedValue / 10,
+                      strokeWidth: 7,
+                      backgroundColor: AppColors.surfaceHighlightDark.withOpacity(0.5),
+                      color: AppColors.primary,
+                      strokeCap: StrokeCap.round,
                     ),
                   ),
-                  Text(
-                    '/10',
-                    style: GoogleFonts.inter(
-                      fontSize: 16,
-                      color: AppColors.textSecondaryDark,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        animatedValue.toStringAsFixed(1),
+                        style: GoogleFonts.outfit(
+                          fontSize: 36,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary,
+                          height: 1,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'out of 10',
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: AppColors.textSecondaryDark,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ],
+              );
+            },
           ),
           const SizedBox(height: 16),
-          Text(
-            _getEnergyLabel(plan.dayScore),
-            style: GoogleFonts.inter(
-              fontSize: 16,
-              color: AppColors.textSecondaryDark,
+          Consumer(
+            builder: (context, ref, _) {
+              final lang = ref.watch(localeProvider);
+              return Text(
+                _getEnergyLabel(plan.dayScore, lang),
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  color: AppColors.textSecondaryDark,
+                  fontWeight: FontWeight.w500,
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 10),
+          // AI Generated Tag Badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.auto_awesome, color: AppColors.primary, size: 14),
+                const SizedBox(width: 6),
+                Consumer(
+                  builder: (context, ref, _) {
+                    final lang = ref.watch(localeProvider);
+                    String text = 'AI Generated Cosmic Insight';
+                    if (lang == AppLanguage.hindi) {
+                      text = 'एआई जनरेटेड कॉस्मिक स्कोर (${plan.dayScore} / 10)';
+                    } else if (lang == AppLanguage.gujarati) {
+                      text = 'એઆઈ જનરેટેડ કોસ્મિક સ્કોર (${plan.dayScore} / 10)';
+                    } else {
+                      text = 'AI Generated Cosmic Score (${plan.dayScore} / 10)';
+                    }
+                    return Flexible(
+                      child: Text(
+                        text,
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 12),
-          OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(color: AppColors.primary, width: 0.8),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            ),
-            onPressed: () {
-              WhyThisBottomSheet.show(
-                context,
-                title: 'Daily Energy Alignment: ${plan.dayScore}/10',
-                planetFactor: 'Jupiter Transiting 10th House',
-                houseFactor: '1st Lagna & 10th Karma Axis',
-                transitFactor: 'Rohini Nakshatra (Moon)',
-                vedicInterpretation: 'Jupiter aspecting 10th Karma house provides executive clarity, career support, and strong intuitive decision making.',
-                practicalAction: 'Capitalize on the Golden Window (11:15 AM - 1:20 PM) for critical negotiations or client discussions.',
+          const SizedBox(height: 12),
+          Consumer(
+            builder: (context, ref, _) {
+              final l10n = AppLocalizations.of(context, ref);
+              return OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: AppColors.primary, width: 0.8),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
+                onPressed: () {
+                  WhyThisBottomSheet.show(
+                    context,
+                    title: 'Daily Energy Alignment: ${plan.dayScore}/10',
+                    planetFactor: plan.planetFactor ?? 'Jupiter Transiting Benefic House',
+                    houseFactor: plan.houseFactor ?? '1st Lagna & 10th Karma Axis',
+                    transitFactor: plan.transitFactor ?? 'Moon Nakshatra Transit',
+                    vedicInterpretation: plan.vedicInterpretation ?? 'Benefic transit over key astrological axes provides high executive clarity and decision confidence.',
+                    practicalAction: plan.practicalAction ?? 'Capitalize on the Golden Window (11:15 AM - 1:20 PM) for critical negotiations or client discussions.',
+                  );
+                },
+                icon: const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 16),
+                label: Text(l10n.whyThis, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 12)),
               );
             },
-            icon: const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 16),
-            label: const Text('Why this score?', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 12)),
           ),
         ],
       ),
     );
   }
 
-  String _getEnergyLabel(double score) {
-    if (score >= 8) return 'Excellent energy today ✨';
-    if (score >= 6) return 'Your day looks favorable';
-    if (score >= 4) return 'A balanced day ahead';
-    return 'Take it easy today';
+  String _getEnergyLabel(double score, AppLanguage lang) {
+    if (lang == AppLanguage.hindi) {
+      if (score >= 8) return 'आज आपकी ऊर्जा उत्कृष्ट स्थिति में है ✨';
+      if (score >= 6) return 'आज का दिन आपके लिए अनुकूल है';
+      if (score >= 4) return 'आज का दिन संतुलित रहने की संभावना है';
+      return 'आज का दिन शांतिपूर्वक व्यतीत करें';
+    } else if (lang == AppLanguage.gujarati) {
+      if (score >= 8) return 'આજે તમારી ઊર્જા ઉત્કૃષ્ટ સ્થિતિમાં છે ✨';
+      if (score >= 6) return 'આજનો દિવસ તમારા માટે સાનુકૂળ છે';
+      if (score >= 4) return 'આજનો દિવસ સંતુલિત રહેશે';
+      return 'આજે શાંતિથી દિવસ વિતાવો';
+    } else {
+      if (score >= 8) return 'Excellent energy today ✨';
+      if (score >= 6) return 'Your day looks favorable';
+      if (score >= 4) return 'A balanced day ahead';
+      return 'Take it easy today';
+    }
   }
 
   Widget _buildActionSection(
@@ -434,6 +515,7 @@ class HomeScreen extends ConsumerWidget {
   Widget _buildBestWindow(GamePlanData plan) {
     return Consumer(
       builder: (context, ref, _) {
+        final l10n = AppLocalizations.of(context, ref);
         return GlassCard(
           onTap: () {
             Navigator.push(
@@ -462,7 +544,7 @@ class HomeScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('BEST WINDOW', style: AppDecorations.sectionHeader()),
+                    Text(l10n.bestWindow.toUpperCase(), style: AppDecorations.sectionHeader()),
                     const SizedBox(height: 6),
                     Text(
                       '${plan.bestWindow.start} — ${plan.bestWindow.end}',
@@ -574,15 +656,17 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              Text(
-                AppLocalizations.of(context, ref).askAstroBabaBtn,
-                style: GoogleFonts.outfit(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryDark,
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context, ref).askAstroBabaBtn,
+                  style: GoogleFonts.outfit(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimaryDark,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Spacer(),
               Icon(
                 Icons.arrow_forward_ios_rounded,
                 color: AppColors.textTertiaryDark,

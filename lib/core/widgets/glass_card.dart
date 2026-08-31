@@ -16,7 +16,7 @@ class GlassCard extends StatelessWidget {
     super.key,
     required this.child,
     this.padding,
-    this.borderRadius = 20,
+    this.borderRadius = 24,
     this.borderColor,
     this.glowColor,
     this.gradient,
@@ -25,23 +25,38 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final glassGradient = gradient ??
+        LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white.withOpacity(0.12),
+            Colors.white.withOpacity(0.04),
+          ],
+        );
+
     final card = ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
           padding: padding ?? const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            gradient: gradient,
-            color: gradient == null ? AppColors.glassSurface : null,
+            gradient: glassGradient,
             borderRadius: BorderRadius.circular(borderRadius),
             border: Border.all(
-              color: borderColor ?? AppColors.glassBorder,
-              width: 0.5,
+              color: borderColor ?? Colors.white.withOpacity(0.18),
+              width: 0.8,
             ),
-            boxShadow: glowColor != null
-                ? [BoxShadow(color: glowColor!, blurRadius: 20, spreadRadius: -4)]
-                : null,
+            boxShadow: [
+              if (glowColor != null)
+                BoxShadow(color: glowColor!, blurRadius: 24, spreadRadius: -4),
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
           child: child,
         ),

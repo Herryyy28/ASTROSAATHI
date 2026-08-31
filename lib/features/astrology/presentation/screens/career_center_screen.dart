@@ -57,24 +57,26 @@ class CareerCenterScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Career Score Today', style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark)),
-                          const SizedBox(height: 4),
-                          const Text('8.9 / 10', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.primary)),
-                          const SizedBox(height: 4),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: AppColors.success.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Career Score Today', style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark)),
+                            const SizedBox(height: 4),
+                            const Text('8.9 / 10', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.primary)),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppColors.success.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Text('✦ High Executive Energy', style: TextStyle(color: AppColors.success, fontWeight: FontWeight.bold, fontSize: 11)),
                             ),
-                            child: const Text('✦ High Executive Energy', style: TextStyle(color: AppColors.success, fontWeight: FontWeight.bold, fontSize: 11)),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      const Spacer(),
+                      const SizedBox(width: 8),
                       const Icon(Icons.trending_up_rounded, color: AppColors.primary, size: 54),
                     ],
                   ),

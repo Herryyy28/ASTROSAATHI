@@ -1,30 +1,92 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:astrosaathi/main.dart';
+import 'package:astrosaathi/core/utils/zodiac_sign_utils.dart';
+import 'package:astrosaathi/core/providers/profile_provider.dart';
+import 'package:astrosaathi/features/astrology/services/pdf_report_generator.dart';
+import 'package:astrosaathi/l10n/app_language.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const AstroSaathiApp());
+  group('AstroSaathi Unit & Business Logic Tests', () {
+    test('ZodiacSignUtils auto-detects Nam Rashi based on name initial', () {
+      final aries = ZodiacSignUtils.getZodiacFromName('Aarav Sharma');
+      expect(aries, isNotNull);
+      expect(aries!.englishName, equals('Aries'));
+      expect(aries.hindiName, equals('मेष'));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      final taurus = ZodiacSignUtils.getZodiacFromName('Bhavna Patel');
+      expect(taurus, isNotNull);
+      expect(taurus!.englishName, equals('Taurus'));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      final sagittarius = ZodiacSignUtils.getZodiacFromName('Bharat Kumar');
+      expect(sagittarius, isNotNull);
+      expect(sagittarius!.englishName, equals('Sagittarius'));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      final capitalized = ZodiacSignUtils.capitalizeName('john doe');
+      expect(capitalized, equals('John Doe'));
+    });
+
+    test('ProfilesNotifier enforces max 5 family member profiles capacity', () async {
+      final notifier = ProfilesNotifier();
+
+      // Clear any loaded state for deterministic test
+      for (var i = 1; i <= 5; i++) {
+        final added = await notifier.addProfile(
+          BirthProfileData(
+            id: 'p-$i',
+            name: 'Member $i',
+            relationship: 'Family',
+            dob: '1990-01-0$i',
+            birthTime: '08:00 AM',
+            birthPlace: 'Delhi',
+            latitude: 28.6,
+            longitude: 77.2,
+            timezone: '5.5',
+          ),
+        );
+        if (i <= 5) {
+          expect(added, isTrue, reason: 'Profile $i should be added successfully');
+        }
+      }
+
+      // 6th profile attempt must be rejected
+      final overflowAdded = await notifier.addProfile(
+        BirthProfileData(
+          id: 'p-6',
+          name: 'Member 6',
+          relationship: 'Friend',
+          dob: '1995-05-05',
+          birthTime: '10:00 AM',
+          birthPlace: 'Mumbai',
+          latitude: 19.0,
+          longitude: 72.8,
+          timezone: '5.5',
+        ),
+      );
+      expect(overflowAdded, isFalse, reason: '6th profile must be rejected under 5 capacity limit');
+    });
+
+    test('PdfReportGenerator creates multi-language Kundli reports', () {
+      final reportEn = PdfReportGenerator.generateLocalizedReport(
+        userName: 'Prajapati Herry',
+        dob: '1998-05-15',
+        birthTime: '07:30 AM',
+        birthPlace: 'New Delhi, India',
+        language: AppLanguage.english,
+      );
+
+      expect(reportEn.userName, equals('Prajapati Herry'));
+      expect(reportEn.reportTitle, contains('Authentic Vedic Kundli'));
+      expect(reportEn.keyInterpretations.length, greaterThanOrEqualTo(3));
+      expect(reportEn.recommendedRemedies.length, greaterThanOrEqualTo(3));
+
+      final reportHi = PdfReportGenerator.generateLocalizedReport(
+        userName: 'प्रजापति',
+        dob: '1998-05-15',
+        birthTime: '07:30 AM',
+        birthPlace: 'नई दिल्ली',
+        language: AppLanguage.hindi,
+      );
+
+      expect(reportHi.reportTitle, contains('वैदिक जन्म कुंडली'));
+    });
   });
 }

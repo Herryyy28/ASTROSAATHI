@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart' show kIsWeb, debugPrint;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import 'astrology_engine.dart';
 import 'models/game_plan_data.dart';
@@ -33,7 +33,14 @@ class ApiAstrologyEngine implements AstrologyEngine {
   }
 
   @override
-  Future<GamePlanData> calculateDailyGamePlan(String date, String location, {String languageCode = 'en'}) async {
+  Future<GamePlanData> calculateDailyGamePlan(
+    String date,
+    String location, {
+    String languageCode = 'en',
+    String? profileName,
+    String? dob,
+    String? birthTime,
+  }) async {
     final locData = _parseLocation(location);
     final response = await http.get(
       Uri.parse('$baseUrl/astrology/game-plan?date=$date&lat=${locData['lat']}&lon=${locData['lon']}&tz=${locData['tz']}&languageCode=$languageCode'),

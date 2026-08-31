@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/home/presentation/screens/main_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
+import '../../features/splash/presentation/screens/splash_screen.dart';
 
 /// Provider that checks if the user has completed onboarding.
 final onboardingCompleteProvider = FutureProvider<bool>((ref) async {
@@ -34,6 +35,9 @@ class RouterNotifier extends ChangeNotifier {
 
     return onboardingAsync.when(
       data: (isDone) {
+        final isSplashLocation = state.matchedLocation == '/splash';
+        if (isSplashLocation) return null; // Allow splash screen to show initially
+
         final isOnboardingLocation = state.matchedLocation == '/onboarding';
         if (!isDone && !isOnboardingLocation) {
           return '/onboarding';
@@ -57,10 +61,14 @@ final routerProvider = Provider<GoRouter>((ref) {
   final notifier = ref.read(routerNotifierProvider);
 
   return GoRouter(
-    initialLocation: '/onboarding',
+    initialLocation: '/splash',
     refreshListenable: notifier,
     redirect: notifier.redirect,
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
       GoRoute(
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen(),
@@ -72,3 +80,4 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+

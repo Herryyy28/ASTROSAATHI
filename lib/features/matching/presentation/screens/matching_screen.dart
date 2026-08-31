@@ -4,14 +4,18 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/cosmic_particle_background.dart';
 import '../widgets/guna_radar_painter.dart';
 
-class MatchingScreen extends StatefulWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/providers/locale_provider.dart';
+import '../../../../l10n/app_localizations.dart';
+
+class MatchingScreen extends ConsumerStatefulWidget {
   const MatchingScreen({super.key});
 
   @override
-  State<MatchingScreen> createState() => _MatchingScreenState();
+  ConsumerState<MatchingScreen> createState() => _MatchingScreenState();
 }
 
-class _MatchingScreenState extends State<MatchingScreen> {
+class _MatchingScreenState extends ConsumerState<MatchingScreen> {
   final _p1NameController = TextEditingController(text: 'Rohan');
   final _p2NameController = TextEditingController(text: 'Priya');
 
@@ -26,7 +30,7 @@ class _MatchingScreenState extends State<MatchingScreen> {
 
   double totalScore = 30.5;
   String grade = 'Excellent';
-  String summaryText = 'Aries and Leo achieve an authentic Ashtakoota compatibility score of 30.5 out of 36 Gunas (Excellent match). Sun and Mars lordship creates deep mutual respect and spiritual alignment.';
+  String summaryText = 'Aries and Leo achieve an authentic Ashtakoota compatibility score of 30.5 out of 36 Gunas (Excellent match).';
 
   Map<String, double> normalizedScores = {
     'Varna': 1.0,
@@ -50,8 +54,7 @@ class _MatchingScreenState extends State<MatchingScreen> {
     final idx1 = _zodiacSigns.indexOf(_p1Sign);
     final idx2 = _zodiacSigns.indexOf(_p2Sign);
 
-    // Dynamic authentic Vedic Guna math
-    final varna = (Math.floor(idx1 / 3) >= Math.floor(idx2 / 3)) ? 1.0 : 0.5;
+    final varna = (idx1 ~/ 3 >= idx2 ~/ 3) ? 1.0 : 0.5;
     final vashya = (idx1 % 3 == idx2 % 3) ? 2.0 : 1.5;
     final distance = (idx2 - idx1 + 12) % 12;
     final tara = (distance % 9 == 3 || distance % 9 == 5) ? 1.5 : 3.0;
@@ -74,8 +77,24 @@ class _MatchingScreenState extends State<MatchingScreen> {
     else if (calculatedTotal >= 12) calculatedGrade = 'Average';
     else calculatedGrade = 'Challenging';
 
+    final lang = ref.read(localeProvider);
+    String summary;
+    if (lang == AppLanguage.hindi) {
+      summary = '${_p1NameController.text} ($_p1Sign) और ${_p2NameController.text} ($_p2Sign) का अष्टकूट गुण मिलान 36 में से $calculatedTotal गुण है ($calculatedGrade)। ';
+      if (bhakoot == 0) summary += 'भकूट दोष देखा गया — वित्तीय उपाय की सलाह दी जाती है। ';
+      if (nadi == 0) summary += 'नाड़ी दोष उपस्थित — महामृत्युंजय जाप का सुझाव है। ';
+    } else if (lang == AppLanguage.gujarati) {
+      summary = '${_p1NameController.text} ($_p1Sign) અને ${_p2NameController.text} ($_p2Sign) નો અષ્ટકૂટ ગુણ મિલન 36 માંથી $calculatedTotal ગુણ છે ($calculatedGrade). ';
+      if (bhakoot == 0) summary += 'ભકૂટ દોષ જણાયેલ છે — નાણાકીય ઉપાયની સલાહ આપવામાં આવે છે. ';
+      if (nadi == 0) summary += 'નાડી દોષ ઉપસ્થિત — મહામૃત્યુંજય જાપનું સૂચન છે. ';
+    } else {
+      summary = '${_p1NameController.text} ($_p1Sign) & ${_p2NameController.text} ($_p2Sign) achieve an authentic Ashtakoota score of $calculatedTotal / 36 ($calculatedGrade Match). ';
+      if (bhakoot == 0) summary += 'Bhakoot Dosh observed — financial remedies recommended. ';
+      if (nadi == 0) summary += 'Nadi Dosh present — Mahamrityunjaya Japa suggested. ';
+    }
+
     setState(() {
-      totalScore = NumberUtilities.round(calculatedTotal);
+      totalScore = calculatedTotal;
       grade = calculatedGrade;
       normalizedScores = {
         'Varna': varna / 1.0,
@@ -87,17 +106,16 @@ class _MatchingScreenState extends State<MatchingScreen> {
         'Bhakoot': bhakoot / 7.0,
         'Nadi': nadi / 8.0,
       };
-
-      summaryText = '${_p1NameController.text} ($_p1Sign) & ${_p2NameController.text} ($_p2Sign) achieve an authentic Ashtakoota score of $totalScore / 36 ($grade Match). ';
-      if (bhakoot == 0) summaryText += 'Bhakoot Dosh observed — financial remedies recommended. ';
-      if (nadi == 0) summaryText += 'Nadi Dosh present — Mahamrityunjaya Japa suggested. ';
+      summaryText = summary;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context, ref);
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.backgroundDark,
       body: CosmicParticleBackground(
         child: SafeArea(
           child: SingleChildScrollView(
@@ -123,22 +141,35 @@ class _MatchingScreenState extends State<MatchingScreen> {
                       child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 20),
                     ),
                     const SizedBox(width: 12),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Kundli Matchmaking',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimaryDark,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            l10n.matchingTitle,
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimaryDark,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Authentic 36-Guna Ashtakoota & Dosh Calculation',
-                          style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
-                        ),
-                      ],
+                          Text(
+                            l10n.gunaScore,
+                            style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                          ),
+                          const SizedBox(height: 3),
+                          Row(
+                            children: const [
+                              Icon(Icons.auto_awesome, color: AppColors.primary, size: 10),
+                              SizedBox(width: 4),
+                              Text(
+                                'AI Calculated Ashtakoota Guna Score (Out of 36)',
+                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -240,9 +271,10 @@ class _MatchingScreenState extends State<MatchingScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                           const Text('Ashtakoota Milan Score', style: TextStyle(fontSize: 13, color: AppColors.textSecondaryDark)),
                           const SizedBox(height: 4),
                           Row(
@@ -270,6 +302,8 @@ class _MatchingScreenState extends State<MatchingScreen> {
                           ),
                         ],
                       ),
+                      ),
+                      const SizedBox(width: 12),
                       Stack(
                         alignment: Alignment.center,
                         children: [

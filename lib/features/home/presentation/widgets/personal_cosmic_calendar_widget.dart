@@ -36,134 +36,344 @@ class CosmicCalendarDay {
   });
 }
 
-class PersonalCosmicCalendarWidget extends StatefulWidget {
+class PersonalCosmicCalendarWidget extends ConsumerStatefulWidget {
   const PersonalCosmicCalendarWidget({super.key});
 
   @override
-  State<PersonalCosmicCalendarWidget> createState() => _PersonalCosmicCalendarWidgetState();
+  ConsumerState<PersonalCosmicCalendarWidget> createState() => _PersonalCosmicCalendarWidgetState();
 }
 
-class _PersonalCosmicCalendarWidgetState extends State<PersonalCosmicCalendarWidget> {
+class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCalendarWidget> {
   int _selectedIndex = 3; // Default to Today (Index 3)
 
-  late final List<CosmicCalendarDay> _days;
-
-  @override
-  void initState() {
-    super.initState();
+  List<CosmicCalendarDay> _buildDays(AppLanguage lang) {
     final now = DateTime.now();
-    _days = List.generate(7, (index) {
+    List<String> dayNames;
+    if (lang == AppLanguage.hindi) {
+      dayNames = ['सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि', 'रवि'];
+    } else if (lang == AppLanguage.gujarati) {
+      dayNames = ['સોમ', 'મંગળ', 'બુધ', 'ગુરુ', 'શુક્ર', 'શનિ', 'રવિ'];
+    } else {
+      dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    }
+
+    return List.generate(7, (index) {
       final date = now.add(Duration(days: index - 3));
-      final dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       final dayName = dayNames[date.weekday - 1];
       final dayNum = date.day.toString().padLeft(2, '0');
 
-      switch (index) {
-        case 0:
-          return CosmicCalendarDay(
-            date: date,
-            dayName: dayName,
-            dayNumber: dayNum,
-            energyLevel: 'Balanced',
-            badgeColor: AppColors.secondary,
-            nakshatra: 'Pushya Nakshatra',
-            yoga: 'Siddha Yoga',
-            transitHighlight: 'Moon enters Cancer • Emotional Clarity',
-            rahuKaal: '07:30 AM - 09:00 AM',
-            bestWindow: '10:15 AM - 12:30 PM',
-            recommendation: 'Ideal day for team meetings and long-term planning.',
-          );
-        case 1:
-          return CosmicCalendarDay(
-            date: date,
-            dayName: dayName,
-            dayNumber: dayNum,
-            energyLevel: 'Auspicious',
-            badgeColor: AppColors.success,
-            nakshatra: 'Ashlesha Nakshatra',
-            yoga: 'Amrit Siddhi Yoga',
-            transitHighlight: 'Mercury Aspecting 10th House • Speech Luck',
-            rahuKaal: '03:00 PM - 04:30 PM',
-            bestWindow: '09:00 AM - 11:15 AM',
-            recommendation: 'Execute contract signings, client pitches & negotiations.',
-          );
-        case 2:
-          return CosmicCalendarDay(
-            date: date,
-            dayName: dayName,
-            dayNumber: dayNum,
-            energyLevel: 'Caution',
-            badgeColor: AppColors.error,
-            nakshatra: 'Magha Nakshatra',
-            yoga: 'Vyatipata Yoga',
-            transitHighlight: 'Mars-Rahu Square Aspect • High Temperament',
-            rahuKaal: '12:00 PM - 01:30 PM',
-            bestWindow: '04:00 PM - 05:30 PM',
-            recommendation: 'Avoid major financial commitments or heated arguments.',
-          );
-        case 3: // Today
-          return CosmicCalendarDay(
-            date: date,
-            dayName: 'TODAY',
-            dayNumber: dayNum,
-            energyLevel: 'Peak Energy ✦',
-            badgeColor: AppColors.primary,
-            nakshatra: 'Purva Phalguni Nakshatra',
-            yoga: 'Gajakesari Yoga Active',
-            transitHighlight: 'Jupiter Trine Moon • Peak Financial Alignment',
-            rahuKaal: '01:30 PM - 03:00 PM',
-            bestWindow: '08:45 AM - 11:30 AM',
-            recommendation: 'Launch new initiatives, buy assets, or seek promotions.',
-          );
-        case 4:
-          return CosmicCalendarDay(
-            date: date,
-            dayName: dayName,
-            dayNumber: dayNum,
-            energyLevel: 'Auspicious',
-            badgeColor: AppColors.success,
-            nakshatra: 'Uttara Phalguni',
-            yoga: 'Shubha Yoga',
-            transitHighlight: 'Venus Conjunction in 11th House • Relationship Growth',
-            rahuKaal: '10:30 AM - 12:00 PM',
-            bestWindow: '02:00 PM - 04:30 PM',
-            recommendation: 'Plan social gatherings, romantic dates or creative projects.',
-          );
-        case 5:
-          return CosmicCalendarDay(
-            date: date,
-            dayName: dayName,
-            dayNumber: dayNum,
-            energyLevel: 'Peaceful',
-            badgeColor: AppColors.secondary,
-            nakshatra: 'Hasta Nakshatra',
-            yoga: 'Brahma Yoga',
-            transitHighlight: 'Sun Trine Saturn • Discipline & Recognition',
-            rahuKaal: '09:00 AM - 10:30 AM',
-            bestWindow: '06:30 AM - 08:30 AM',
-            recommendation: 'Great for spiritual practices, meditation & body detox.',
-          );
-        default:
-          return CosmicCalendarDay(
-            date: date,
-            dayName: dayName,
-            dayNumber: dayNum,
-            energyLevel: 'High Focus',
-            badgeColor: AppColors.primaryLight,
-            nakshatra: 'Chitra Nakshatra',
-            yoga: 'Indra Yoga',
-            transitHighlight: 'Moon Trine Mars • High Vitality & Courage',
-            rahuKaal: '04:30 PM - 06:00 PM',
-            bestWindow: '11:00 AM - 01:15 PM',
-            recommendation: 'Focus on physical workouts, sports & tough decision making.',
-          );
+      if (lang == AppLanguage.hindi) {
+        switch (index) {
+          case 0:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'संतुलित',
+              badgeColor: AppColors.secondary,
+              nakshatra: 'पुष्य नक्षत्र',
+              yoga: 'सिद्ध योग',
+              transitHighlight: 'चंद्रमा का कर्क राशि में प्रवेश • भावनात्मक स्पष्टता',
+              rahuKaal: '07:30 AM - 09:00 AM',
+              bestWindow: '10:15 AM - 12:30 PM',
+              recommendation: 'टीम बैठकों और दीर्घकालिक योजनाओं के लिए आदर्श दिन।',
+            );
+          case 1:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'शुभ',
+              badgeColor: AppColors.success,
+              nakshatra: 'अश्लेषा नक्षत्र',
+              yoga: 'अमृत सिद्धि योग',
+              transitHighlight: 'बुध का 10वें भाव में संचरण • वाक् चातुर्य',
+              rahuKaal: '03:00 PM - 04:30 PM',
+              bestWindow: '09:00 AM - 11:15 AM',
+              recommendation: 'अनुबंध पर हस्ताक्षर, क्लाइंट मीटिंग और बातचीत निष्पादित करें।',
+            );
+          case 2:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'सावधानी',
+              badgeColor: AppColors.error,
+              nakshatra: 'मघा नक्षत्र',
+              yoga: 'व्यतीपात योग',
+              transitHighlight: 'मंगल-राहु दृष्टि • उग्र ऊर्जा',
+              rahuKaal: '12:00 PM - 01:30 PM',
+              bestWindow: '04:00 PM - 05:30 PM',
+              recommendation: 'बड़े वित्तीय निर्णयों या विवादों से बचें।',
+            );
+          case 3:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: 'आज',
+              dayNumber: dayNum,
+              energyLevel: 'उच्चतम ऊर्जा ✦',
+              badgeColor: AppColors.primary,
+              nakshatra: 'पूर्वा फाल्गुनी नक्षत्र',
+              yoga: 'गजकेसरी योग सक्रिय',
+              transitHighlight: 'गुरु-चंद्र दृष्टि • वित्तीय वृद्धि योग',
+              rahuKaal: '01:30 PM - 03:00 PM',
+              bestWindow: '08:45 AM - 11:30 AM',
+              recommendation: 'नये कार्य प्रारंभ करें, संपत्ति खरीदें या पदोन्नति की बात करें।',
+            );
+          case 4:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'शुभ',
+              badgeColor: AppColors.success,
+              nakshatra: 'उत्तरा फाल्गुनी',
+              yoga: 'शुभ योग',
+              transitHighlight: 'शुक्र का 11वें भाव में युति • संबंधों में प्रगाढ़ता',
+              rahuKaal: '10:30 AM - 12:00 PM',
+              bestWindow: '02:00 PM - 04:30 PM',
+              recommendation: 'पारिवारिक एवं सामाजिक कार्यों के लिए उत्तम समय।',
+            );
+          case 5:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'शांतिदायक',
+              badgeColor: AppColors.secondary,
+              nakshatra: 'हस्त नक्षत्र',
+              yoga: 'ब्रह्म योग',
+              transitHighlight: 'सूर्य-शनि दृष्टि • अनुशासन एवं प्रतिष्ठा',
+              rahuKaal: '09:00 AM - 10:30 AM',
+              bestWindow: '06:30 AM - 08:30 AM',
+              recommendation: 'आध्यात्मिक साधना एवं ध्यान के लिए अत्यंत उपयुक्त।',
+            );
+          default:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'अनुकूल',
+              badgeColor: AppColors.primary,
+              nakshatra: 'चित्रा नक्षत्र',
+              yoga: 'इन्द्र योग',
+              transitHighlight: 'चंद्रमा का कन्या राशि में गोचर',
+              rahuKaal: '04:30 PM - 06:00 PM',
+              bestWindow: '11:00 AM - 01:00 PM',
+              recommendation: 'सप्ताह के कार्यों की समीक्षा करें एवं नए लक्ष्य निर्धारित करें।',
+            );
+        }
+      } else if (lang == AppLanguage.gujarati) {
+        switch (index) {
+          case 0:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'સંતુલિત',
+              badgeColor: AppColors.secondary,
+              nakshatra: 'પુષ્ય નક્ષત્ર',
+              yoga: 'સિદ્ધ યોગ',
+              transitHighlight: 'ચંદ્રમાનું કર્ક રાશિમાં પ્રવેશ • ભાવનાત્મક સ્પષ્ટતા',
+              rahuKaal: '07:30 AM - 09:00 AM',
+              bestWindow: '10:15 AM - 12:30 PM',
+              recommendation: 'ટીમ મીટિંગ્સ અને લાંબા ગાળાના આયોજન માટે ઉત્તમ દિવસ.',
+            );
+          case 1:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'શુભ',
+              badgeColor: AppColors.success,
+              nakshatra: 'અશ્લેષા નક્ષત્ર',
+              yoga: 'અમૃત સિદ્ધિ યોગ',
+              transitHighlight: 'બુધનું 10મા સ્થાનમાં પરિભ્રમણ • વાણી લાભ',
+              rahuKaal: '03:00 PM - 04:30 PM',
+              bestWindow: '09:00 AM - 11:15 AM',
+              recommendation: 'મહત્વના કરાર અને મીટિંગ્સ પૂર્ણ કરો.',
+            );
+          case 2:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'સાવધાની',
+              badgeColor: AppColors.error,
+              nakshatra: 'મઘા નક્ષત્ર',
+              yoga: 'વ્યતીપાત યોગ',
+              transitHighlight: 'મંગળ-રાહુ દ્રષ્ટિ • ઉગ્ર ઊર્જા',
+              rahuKaal: '12:00 PM - 01:30 PM',
+              bestWindow: '04:00 PM - 05:30 PM',
+              recommendation: 'મોટા નાણાકીય નિર્ણયો અને દલીલો ટાળો.',
+            );
+          case 3:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: 'આજે',
+              dayNumber: dayNum,
+              energyLevel: 'ઉચ્ચતમ ઊર્જા ✦',
+              badgeColor: AppColors.primary,
+              nakshatra: 'પૂર્વા ફાલ્ગુની નક્ષત્ર',
+              yoga: 'ગજકેસરી યોગ સક્રિય',
+              transitHighlight: 'ગુરુ-ચંદ્ર યોગ • નાણાકીય વૃદ્ધિ',
+              rahuKaal: '01:30 PM - 03:00 PM',
+              bestWindow: '08:45 AM - 11:30 AM',
+              recommendation: 'નવા કાર્યોનો પ્રારંભ કરો અથવા પ્રમોશન અંગે ચર્ચા કરો.',
+            );
+          case 4:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'શુભ',
+              badgeColor: AppColors.success,
+              nakshatra: 'ઉત્તરા ફાલ્ગુની',
+              yoga: 'શુભ યોગ',
+              transitHighlight: 'શુક્રની યુતિ • સંબંધોમાં મધુરતા',
+              rahuKaal: '10:30 AM - 12:00 PM',
+              bestWindow: '02:00 PM - 04:30 PM',
+              recommendation: 'કૌટુંબિક અને સામાજિક પ્રસંગો માટે ઉત્તમ.',
+            );
+          case 5:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'શાંતિદાયક',
+              badgeColor: AppColors.secondary,
+              nakshatra: 'હસ્ત નક્ષત્ર',
+              yoga: 'બ્રહ્મ યોગ',
+              transitHighlight: 'સૂર્ય-શનિ દ્રષ્ટિ • અનુશાસન',
+              rahuKaal: '09:00 AM - 10:30 AM',
+              bestWindow: '06:30 AM - 08:30 AM',
+              recommendation: 'આધ્યાત્મિક સાધના અને ધ્યાન માટે અનુકૂળ.',
+            );
+          default:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'અનુકૂળ',
+              badgeColor: AppColors.primary,
+              nakshatra: 'ચિત્રા નક્ષત્ર',
+              yoga: 'ઇન્દ્ર યોગ',
+              transitHighlight: 'ચંદ્રમાનું કન્યા રાશિમાં ગોચર',
+              rahuKaal: '04:30 PM - 06:00 PM',
+              bestWindow: '11:00 AM - 01:00 PM',
+              recommendation: 'અઠવાડિયાના કાર્યોની સમીક્ષા કરો અને નવા લક્ષ્યો નક્કી કરો.',
+            );
+        }
+      } else {
+        switch (index) {
+          case 0:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'Balanced',
+              badgeColor: AppColors.secondary,
+              nakshatra: 'Pushya Nakshatra',
+              yoga: 'Siddha Yoga',
+              transitHighlight: 'Moon enters Cancer • Emotional Clarity',
+              rahuKaal: '07:30 AM - 09:00 AM',
+              bestWindow: '10:15 AM - 12:30 PM',
+              recommendation: 'Ideal day for team meetings and long-term planning.',
+            );
+          case 1:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'Auspicious',
+              badgeColor: AppColors.success,
+              nakshatra: 'Ashlesha Nakshatra',
+              yoga: 'Amrit Siddhi Yoga',
+              transitHighlight: 'Mercury Aspecting 10th House • Speech Luck',
+              rahuKaal: '03:00 PM - 04:30 PM',
+              bestWindow: '09:00 AM - 11:15 AM',
+              recommendation: 'Execute contract signings, client pitches & negotiations.',
+            );
+          case 2:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'Caution',
+              badgeColor: AppColors.error,
+              nakshatra: 'Magha Nakshatra',
+              yoga: 'Vyatipata Yoga',
+              transitHighlight: 'Mars-Rahu Square Aspect • High Temperament',
+              rahuKaal: '12:00 PM - 01:30 PM',
+              bestWindow: '04:00 PM - 05:30 PM',
+              recommendation: 'Avoid major financial commitments or heated arguments.',
+            );
+          case 3:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: 'TODAY',
+              dayNumber: dayNum,
+              energyLevel: 'Peak Energy ✦',
+              badgeColor: AppColors.primary,
+              nakshatra: 'Purva Phalguni Nakshatra',
+              yoga: 'Gajakesari Yoga Active',
+              transitHighlight: 'Jupiter Trine Moon • Peak Financial Alignment',
+              rahuKaal: '01:30 PM - 03:00 PM',
+              bestWindow: '08:45 AM - 11:30 AM',
+              recommendation: 'Launch new initiatives, buy assets, or seek promotions.',
+            );
+          case 4:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'Auspicious',
+              badgeColor: AppColors.success,
+              nakshatra: 'Uttara Phalguni',
+              yoga: 'Shubha Yoga',
+              transitHighlight: 'Venus Conjunction in 11th House • Relationship Growth',
+              rahuKaal: '10:30 AM - 12:00 PM',
+              bestWindow: '02:00 PM - 04:30 PM',
+              recommendation: 'Plan social gatherings, romantic dates or creative projects.',
+            );
+          case 5:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'Peaceful',
+              badgeColor: AppColors.secondary,
+              nakshatra: 'Hasta Nakshatra',
+              yoga: 'Brahma Yoga',
+              transitHighlight: 'Sun Trine Saturn • Discipline & Recognition',
+              rahuKaal: '09:00 AM - 10:30 AM',
+              bestWindow: '06:30 AM - 08:30 AM',
+              recommendation: 'Great for spiritual practices, meditation & body detox.',
+            );
+          default:
+            return CosmicCalendarDay(
+              date: date,
+              dayName: dayName,
+              dayNumber: dayNum,
+              energyLevel: 'Favorable',
+              badgeColor: AppColors.primary,
+              nakshatra: 'Chitra Nakshatra',
+              yoga: 'Indra Yoga',
+              transitHighlight: 'Moon Transiting Virgo',
+              rahuKaal: '04:30 PM - 06:00 PM',
+              bestWindow: '11:00 AM - 01:00 PM',
+              recommendation: 'Review weekly progress and set new milestones.',
+            );
+        }
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final selectedDay = _days[_selectedIndex];
+    final lang = ref.watch(localeProvider);
+    final days = _buildDays(lang);
+    final selectedDay = days[_selectedIndex];
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -220,6 +430,25 @@ class _PersonalCosmicCalendarWidgetState extends State<PersonalCosmicCalendarWid
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
+                        const SizedBox(height: 3),
+                        Row(
+                          children: [
+                            const Icon(Icons.auto_awesome, color: AppColors.primary, size: 10),
+                            const SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                'AI Generated 7-Day Outlook',
+                                style: GoogleFonts.inter(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.primary,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     );
                   },
@@ -251,10 +480,10 @@ class _PersonalCosmicCalendarWidgetState extends State<PersonalCosmicCalendarWid
             height: 76,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: _days.length,
+              itemCount: days.length,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
-                final day = _days[index];
+                final day = days[index];
                 final isSelected = index == _selectedIndex;
 
                 return GestureDetector(
@@ -382,7 +611,12 @@ class _PersonalCosmicCalendarWidgetState extends State<PersonalCosmicCalendarWid
                             children: [
                               const Text('✦ Best Window', style: TextStyle(fontSize: 10, color: AppColors.success, fontWeight: FontWeight.bold)),
                               const SizedBox(height: 2),
-                              Text(selectedDay.bestWindow, style: const TextStyle(fontSize: 12, color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold)),
+                              Text(
+                                selectedDay.bestWindow,
+                                style: const TextStyle(fontSize: 12, color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ],
                           ),
                         ),
@@ -401,7 +635,12 @@ class _PersonalCosmicCalendarWidgetState extends State<PersonalCosmicCalendarWid
                             children: [
                               const Text('⚠️ Rahu Kaal', style: TextStyle(fontSize: 10, color: AppColors.error, fontWeight: FontWeight.bold)),
                               const SizedBox(height: 2),
-                              Text(selectedDay.rahuKaal, style: const TextStyle(fontSize: 12, color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold)),
+                              Text(
+                                selectedDay.rahuKaal,
+                                style: const TextStyle(fontSize: 12, color: AppColors.textPrimaryDark, fontWeight: FontWeight.bold),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ],
                           ),
                         ),
