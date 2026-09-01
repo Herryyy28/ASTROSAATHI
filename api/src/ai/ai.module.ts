@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AiController } from './ai.controller';
 import { AiService } from './ai.service';
 import { ContextBuilder } from './context.builder';
@@ -13,6 +14,7 @@ import { KnowledgeGraha } from '../database/entities/knowledge_graha.entity';
 
 @Module({
   imports: [
+    ConfigModule,
     forwardRef(() => AstrologyModule), 
     CoreModule,
     TypeOrmModule.forFeature([KnowledgeRashi, KnowledgeBhava, KnowledgeGraha])

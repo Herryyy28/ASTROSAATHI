@@ -8,6 +8,7 @@ class GradientButton extends StatefulWidget {
   final Gradient? gradient;
   final double? width;
   final IconData? icon;
+  final bool isLoading;
 
   const GradientButton({
     super.key,
@@ -16,6 +17,7 @@ class GradientButton extends StatefulWidget {
     this.gradient,
     this.width,
     this.icon,
+    this.isLoading = false,
   });
 
   @override
@@ -48,12 +50,14 @@ class _GradientButtonState extends State<GradientButton>
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => _controller.forward(),
-      onTapUp: (_) {
-        _controller.reverse();
-        widget.onPressed();
-      },
-      onTapCancel: () => _controller.reverse(),
+      onTapDown: widget.isLoading ? null : (_) => _controller.forward(),
+      onTapUp: widget.isLoading
+          ? null
+          : (_) {
+              _controller.reverse();
+              widget.onPressed();
+            },
+      onTapCancel: widget.isLoading ? null : () => _controller.reverse(),
       child: AnimatedBuilder(
         animation: _scaleAnimation,
         builder: (context, child) {
@@ -77,30 +81,41 @@ class _GradientButtonState extends State<GradientButton>
               ),
             ],
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              if (widget.icon != null) ...[
-                Icon(widget.icon, color: Colors.black, size: 20),
-                const SizedBox(width: 10),
-              ],
-              Flexible(
-                child: Text(
-                  widget.text,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.3,
+          child: widget.isLoading
+              ? const Center(
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                    ),
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    if (widget.icon != null) ...[
+                      Icon(widget.icon, color: Colors.black, size: 20),
+                      const SizedBox(width: 10),
+                    ],
+                    Flexible(
+                      child: Text(
+                        widget.text,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.3,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );

@@ -684,7 +684,7 @@ class HomeScreen extends ConsumerWidget {
         return GlassCard(
           onTap: () {
             ref.read(mainNavIndexProvider.notifier).state =
-                2; // Navigate to Astro Baba tab (Index 2)
+                3; // Navigate to Astro AI tab (Index 3)
           },
           borderColor: AppColors.secondary.withOpacity(0.4),
           glowColor: AppColors.purpleGlow,

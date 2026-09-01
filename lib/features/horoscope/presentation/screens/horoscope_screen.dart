@@ -12,7 +12,19 @@ import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/theme/utils/responsive.dart';
 
-final selectedSignProvider = StateProvider<String>((ref) => 'Aries');
+import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/utils/zodiac_sign_utils.dart';
+
+final selectedSignProvider = StateProvider<String>((ref) {
+  final profile = ref.read(activeProfileProvider);
+  if (profile.name.isNotEmpty) {
+    final zodiac = ZodiacSignUtils.getZodiacFromName(profile.name);
+    if (zodiac != null) {
+      return zodiac.englishName;
+    }
+  }
+  return 'Aries';
+});
 
 final horoscopeProvider = FutureProvider.family<dynamic, String>((
   ref,
@@ -262,84 +274,91 @@ class _HoroscopeTabView extends ConsumerWidget {
 
     return horoscopeAsync.when(
       data: (data) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 16, 24, 100),
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ── Sign Header ─────────────────────────────────────
-              Row(
-                children: [
-                  Text(
-                    AppColors.zodiacEmojis[sign] ?? '⭐',
-                    style: const TextStyle(fontSize: 36),
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        sign,
-                        style: GoogleFonts.outfit(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryDark,
+        return RefreshIndicator(
+          color: AppColors.primary,
+          backgroundColor: AppColors.surfaceDark,
+          onRefresh: () async {
+            ref.refresh(horoscopeProvider(timeframe));
+          },
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 100),
+            physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // ── Sign Header ─────────────────────────────────────
+                Row(
+                  children: [
+                    Text(
+                      AppColors.zodiacEmojis[sign] ?? '⭐',
+                      style: const TextStyle(fontSize: 36),
+                    ),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          sign,
+                          style: GoogleFonts.outfit(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimaryDark,
+                          ),
                         ),
-                      ),
-                      Text(
-                        timeframe.toUpperCase(),
-                        style: TextStyle(
-                          color: AppColors.secondary,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                          letterSpacing: 1.5,
+                        Text(
+                          timeframe.toUpperCase(),
+                          style: TextStyle(
+                            color: AppColors.secondary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            letterSpacing: 1.5,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ).fadeSlideUp(),
-              const SizedBox(height: 24),
+                      ],
+                    ),
+                  ],
+                ).fadeSlideUp(),
+                const SizedBox(height: 24),
 
-              // ── Reading Card ────────────────────────────────────
-              GlassCard(
-                padding: const EdgeInsets.all(24),
-                child: Text(
-                  data.reading,
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    height: 1.7,
-                    color: AppColors.textPrimaryDark,
-                  ),
-                ),
-              ).fadeSlideUp(delay: 100.ms),
-
-              const SizedBox(height: 20),
-
-              // ── Lucky Info Cards ────────────────────────────────
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildInfoCard(
-                      'Lucky Number',
-                      data.luckyNumber.toString(),
-                      Icons.tag_rounded,
-                      AppColors.primary,
+                // ── Reading Card ────────────────────────────────────
+                GlassCard(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    data.reading,
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      height: 1.7,
+                      color: AppColors.textPrimaryDark,
                     ),
                   ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: _buildInfoCard(
-                      'Lucky Color',
-                      data.luckyColor,
-                      Icons.palette_rounded,
-                      AppColors.secondary,
+                ).fadeSlideUp(delay: 100.ms),
+
+                const SizedBox(height: 20),
+
+                // ── Lucky Info Cards ────────────────────────────────
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildInfoCard(
+                        'Lucky Number',
+                        data.luckyNumber.toString(),
+                        Icons.tag_rounded,
+                        AppColors.primary,
+                      ),
                     ),
-                  ),
-                ],
-              ).fadeSlideUp(delay: 200.ms),
-            ],
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: _buildInfoCard(
+                        'Lucky Color',
+                        data.luckyColor,
+                        Icons.palette_rounded,
+                        AppColors.secondary,
+                      ),
+                    ),
+                  ],
+                ).fadeSlideUp(delay: 200.ms),
+              ],
+            ),
           ),
         );
       },

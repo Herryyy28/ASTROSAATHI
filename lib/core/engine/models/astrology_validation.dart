@@ -10,6 +10,23 @@ class AstrologyValidationException implements Exception {
     this.code,
   ]);
 
+  factory AstrologyValidationException.fromCode(String code) {
+    switch (code) {
+      case 'FUTURE_DATE':
+        return AstrologyValidationException('Birth date cannot be in the future. Please correct the date.', code);
+      case 'DATE_OUT_OF_RANGE':
+        return AstrologyValidationException('Birth year must be between 1800 and 2100.', code);
+      case 'INVALID_LATITUDE':
+      case 'INVALID_LONGITUDE':
+        return AstrologyValidationException('Please select a valid city/location from the dropdown.', code);
+      case 'INVALID_TIME':
+      case 'TIME_OUT_OF_RANGE':
+        return AstrologyValidationException('Please enter a valid birth time (e.g., 07:30 AM).', code);
+      default:
+        return AstrologyValidationException('Astrology data could not be calculated.\nPlease check your birth details. Retry', code);
+    }
+  }
+
   @override
   String toString() => message;
 }
@@ -101,7 +118,10 @@ class AstrologyValidator {
   static void validateDate(String dateStr) {
     final parsed = parseDate(dateStr);
     if (parsed.year < 1800 || parsed.year > 2100) {
-      throw const AstrologyValidationException(defaultErrorMessage, 'DATE_OUT_OF_RANGE');
+      throw AstrologyValidationException.fromCode('DATE_OUT_OF_RANGE');
+    }
+    if (parsed.isAfter(DateTime.now())) {
+      throw AstrologyValidationException.fromCode('FUTURE_DATE');
     }
   }
 
@@ -109,7 +129,7 @@ class AstrologyValidator {
   static void validateTime(String timeStr) {
     final cleaned = timeStr.trim();
     if (cleaned.isEmpty) {
-      throw const AstrologyValidationException(defaultErrorMessage, 'EMPTY_TIME');
+      throw AstrologyValidationException.fromCode('EMPTY_TIME');
     }
 
     final lower = cleaned.toLowerCase();
@@ -139,13 +159,13 @@ class AstrologyValidator {
   /// Validates coordinates and timezone
   static void validateCoordinates(double lat, double lon, double tz) {
     if (lat < -90.0 || lat > 90.0) {
-      throw const AstrologyValidationException(defaultErrorMessage, 'INVALID_LATITUDE');
+      throw AstrologyValidationException.fromCode('INVALID_LATITUDE');
     }
     if (lon < -180.0 || lon > 180.0) {
-      throw const AstrologyValidationException(defaultErrorMessage, 'INVALID_LONGITUDE');
+      throw AstrologyValidationException.fromCode('INVALID_LONGITUDE');
     }
     if (tz < -12.0 || tz > 14.0) {
-      throw const AstrologyValidationException(defaultErrorMessage, 'INVALID_TIMEZONE');
+      throw AstrologyValidationException.fromCode('INVALID_TIMEZONE');
     }
   }
 

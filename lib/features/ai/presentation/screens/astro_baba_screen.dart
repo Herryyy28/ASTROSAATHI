@@ -15,6 +15,7 @@ import '../widgets/cosmic_orb_painter.dart';
 import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/providers/subscription_provider.dart';
+import '../../../../core/providers/profile_provider.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
 
 class AstroBabaScreen extends ConsumerStatefulWidget {
@@ -149,67 +150,118 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
         .read(subscriptionProvider.notifier)
         .remainingFreeAiQueries;
 
+    // ── Get active profile for Kundli context ──
+    final activeProfile = ref.watch(
+      Provider((ref) {
+        final profiles = ref.watch(profilesListProvider);
+        final idx = ref.watch(activeProfileIndexProvider);
+        if (profiles.isEmpty) return null;
+        return profiles[idx.clamp(0, profiles.length - 1)];
+      }),
+    );
+    final profileName = activeProfile?.name ?? '';
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CosmicOrbWidget(
-            isSpeaking: _isLoading || _isListeningVoice,
-            size: 48,
-          ),
-          const SizedBox(width: 14),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
             children: [
-              Text(
-                'AI ${l10n.navAstroBaba}',
-                style: GoogleFonts.outfit(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimaryDark,
+              CosmicOrbWidget(
+                isSpeaking: _isLoading || _isListeningVoice,
+                size: 48,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'AI ${l10n.navAstroBaba}',
+                      style: GoogleFonts.outfit(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimaryDark,
+                      ),
+                    ),
+                    Text(
+                      _isLoading ? l10n.loading : l10n.babaConnected,
+                      style: const TextStyle(
+                        color: AppColors.textSecondaryDark,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Text(
-                _isLoading ? l10n.loading : l10n.babaConnected,
-                style: const TextStyle(
-                  color: AppColors.textSecondaryDark,
-                  fontSize: 12,
+              GestureDetector(
+                onTap: () => PremiumUpgradeModal.show(context),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: isPremium
+                        ? const Color(0xFFFFD700).withOpacity(0.18)
+                        : AppColors.primary.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: isPremium
+                          ? const Color(0xFFFFD700)
+                          : AppColors.primary.withOpacity(0.4),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        isPremium ? '👑 Unlimited' : '⚡ $remaining/1 Free',
+                        style: GoogleFonts.outfit(
+                          color: isPremium
+                              ? const Color(0xFFFFD700)
+                              : AppColors.textPrimaryDark,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
-          const Spacer(),
-          GestureDetector(
-            onTap: () => PremiumUpgradeModal.show(context),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          // ── Kundli Context Badge ──────────────────────
+          if (profileName.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: isPremium
-                    ? const Color(0xFFFFD700).withOpacity(0.18)
-                    : AppColors.primary.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(14),
+                color: AppColors.secondary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: isPremium
-                      ? const Color(0xFFFFD700)
-                      : AppColors.primary.withOpacity(0.4),
+                  color: AppColors.secondary.withOpacity(0.25),
+                  width: 0.8,
                 ),
               ),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
+                  const Icon(
+                    Icons.auto_awesome,
+                    color: AppColors.secondary,
+                    size: 14,
+                  ),
+                  const SizedBox(width: 6),
                   Text(
-                    isPremium ? '👑 Unlimited' : '⚡ $remaining/1 Free',
-                    style: GoogleFonts.outfit(
-                      color: isPremium
-                          ? const Color(0xFFFFD700)
-                          : AppColors.textPrimaryDark,
+                    '${l10n.translate('based_on_kundli')} ($profileName)',
+                    style: GoogleFonts.inter(
                       fontSize: 11,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.secondary,
                     ),
                   ),
                 ],
               ),
             ),
-          ),
+          ],
         ],
       ),
     );

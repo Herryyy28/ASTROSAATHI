@@ -201,4 +201,53 @@ final Map<String, String> hiTranslations = {
   'balanced': 'संतुलित',
   'peaceful': 'शांतिप्रिय',
   'high_focus': 'उच्च ध्यान',
+
+  // ── New 5-Tab Navigation ─────────────────────────
+  'nav_home': 'होम',
+  'nav_kundli': 'कुण्डली',
+  'nav_explore': 'एक्सप्लोर',
+  'nav_astro_ai': 'एस्ट्रो एआई',
+  'nav_profile': 'प्रोफाइल',
+
+  // ── Explore Hub ──────────────────────────────────
+  'explore_title': 'वैदिक ब्रह्मांड एक्सप्लोर करें',
+  'explore_panchang': 'पंचांग एवं समय',
+  'explore_muhurat': 'मुहूर्त खोजें',
+  'explore_horoscope': 'राशिफल भविष्यवाणियां',
+  'explore_dosha': 'दोष एवं योग विश्लेषण',
+  'explore_remedies': 'वैदिक उपाय व रत्न',
+  'explore_compatibility': 'कुण्डली मिलान',
+  'explore_numerology': 'अंक ज्योतिष कैलकुलेटर',
+  'explore_transits': 'ग्रह गोचर',
+
+  // ── Progressive Disclosure ───────────────────────
+  'what_this_means': 'आपके लिए इसका क्या अर्थ है',
+  'view_technical_details': 'तकनीकी विवरण देखें',
+  'based_on_kundli': 'आपकी कुण्डली पर आधारित',
+  'why_seeing_this': 'मैं यह क्यों देख रहा हूँ?',
+
+  // ── Kundli Screen Tabs ───────────────────────────
+  'tab_overview': 'अवलोकन',
+  'tab_planets': 'ग्रह',
+  'tab_houses': 'भाव',
+  'tab_dasha': 'दशा',
+  'tab_yogas': 'योग व दोष',
+  'tab_remedies': 'उपाय',
+  'strong_influence': 'मजबूत प्रभाव',
+  'moderate_influence': 'मध्यम प्रभाव',
+  'weak_influence': 'कमजोर प्रभाव',
+
+  // ── Profile Screen ───────────────────────────────
+  'primary_profile': 'प्राथमिक',
+  'family_kundlis': 'परिवार की कुण्डलियां',
+  'add_family_member': 'परिवार के सदस्य को जोड़ें',
+  'data_privacy': 'डेटा गोपनीयता',
+  'account_management': 'खाता प्रबंधन',
+
+  // ── AI Prompt Chips ──────────────────────────────
+  'chip_relationship': '❤️ रिश्ता',
+  'chip_career_v2': '💼 करियर',
+  'chip_finance': '💰 वित्त',
+  'chip_growth': '🧘 विकास',
+  'chip_today': '🔮 आज',
 };

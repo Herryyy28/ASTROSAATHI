@@ -201,4 +201,53 @@ final Map<String, String> enTranslations = {
   'balanced': 'Balanced',
   'peaceful': 'Peaceful',
   'high_focus': 'High Focus',
+
+  // ── New 5-Tab Navigation ─────────────────────────
+  'nav_home': 'Home',
+  'nav_kundli': 'Kundli',
+  'nav_explore': 'Explore',
+  'nav_astro_ai': 'Astro AI',
+  'nav_profile': 'Profile',
+
+  // ── Explore Hub ──────────────────────────────────
+  'explore_title': 'Explore Vedic Cosmos',
+  'explore_panchang': 'Panchang & Daily Timings',
+  'explore_muhurat': 'Muhurat Finder',
+  'explore_horoscope': 'Horoscope Predictions',
+  'explore_dosha': 'Dosha & Yoga Analysis',
+  'explore_remedies': 'Vedic Remedies & Gemstones',
+  'explore_compatibility': 'Kundli Matching',
+  'explore_numerology': 'Numerology Calculator',
+  'explore_transits': 'Planetary Transits',
+
+  // ── Progressive Disclosure ───────────────────────
+  'what_this_means': 'What this means for you',
+  'view_technical_details': 'View technical details',
+  'based_on_kundli': 'Based on your Kundli',
+  'why_seeing_this': 'Why am I seeing this?',
+
+  // ── Kundli Screen Tabs ───────────────────────────
+  'tab_overview': 'Overview',
+  'tab_planets': 'Planets',
+  'tab_houses': 'Houses',
+  'tab_dasha': 'Dasha',
+  'tab_yogas': 'Yogas & Doshas',
+  'tab_remedies': 'Remedies',
+  'strong_influence': 'Strong Influence',
+  'moderate_influence': 'Moderate Influence',
+  'weak_influence': 'Weak Influence',
+
+  // ── Profile Screen ───────────────────────────────
+  'primary_profile': 'Primary',
+  'family_kundlis': 'Family Kundlis',
+  'add_family_member': 'Add Family Member',
+  'data_privacy': 'Data Privacy',
+  'account_management': 'Account Management',
+
+  // ── AI Prompt Chips ──────────────────────────────
+  'chip_relationship': '❤️ Relationship',
+  'chip_career_v2': '💼 Career',
+  'chip_finance': '💰 Finance',
+  'chip_growth': '🧘 Growth',
+  'chip_today': '🔮 Today',
 };

@@ -248,3 +248,5 @@ final hasBirthProfileProvider = Provider<bool>((ref) {
   return profile.dob.isNotEmpty && profile.name.isNotEmpty;
 });
 
+final activeProfileIndexProvider = StateProvider<int>((ref) => 0);
+

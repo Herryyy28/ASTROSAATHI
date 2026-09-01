@@ -15,6 +15,8 @@ class AppColors {
   // ── Accent Colors ─────────────────────────────────────────────────
   static const Color primary = Color(0xFFD4AF37); // Gold / Sun
   static const Color primaryLight = Color(0xFFE8C84A);
+  static const Color ivory = Color(0xFFF4E4BC); // Warm Ivory
+  static const Color warmGold = Color(0xFFF7D070); // Radiant Gold
   static const Color secondary = Color(0xFF7B61FF); // Cosmic Purple
   static const Color secondaryLight = Color(0xFF9B85FF);
   static const Color tertiary = Color(0xFF4A90E2); // Ethereal Blue

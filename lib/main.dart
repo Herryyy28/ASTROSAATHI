@@ -4,13 +4,21 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+
 import 'core/routing/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'core/providers/locale_provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    debugPrint('Firebase initialization warning: $e');
+  }
 
   // Enforce consistent dark system UI overlay styling across platforms
   SystemChrome.setSystemUIOverlayStyle(
@@ -72,12 +80,17 @@ class AstroSaathiApp extends ConsumerWidget {
       routerConfig: router,
       builder: (context, child) {
         final mediaQueryData = MediaQuery.of(context);
+        // Clamp system font size:
+        // min 0.80 = respects "Small" setting
+        // max 1.15 = caps "Very Large" / "Huge" to prevent pixel overflow
         final clampedTextScaler = mediaQueryData.textScaler.clamp(
-          minScaleFactor: 0.85,
-          maxScaleFactor: 1.25,
+          minScaleFactor: 0.80,
+          maxScaleFactor: 1.15,
         );
         return MediaQuery(
-          data: mediaQueryData.copyWith(textScaler: clampedTextScaler),
+          data: mediaQueryData.copyWith(
+            textScaler: clampedTextScaler,
+          ),
           child: child ?? const SizedBox.shrink(),
         );
       },

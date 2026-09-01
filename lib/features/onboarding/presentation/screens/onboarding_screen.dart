@@ -19,6 +19,7 @@ import '../../../../features/auth/data/auth_repository.dart';
 import '../../../../core/widgets/location_permission_dialog.dart';
 import '../../../../core/utils/zodiac_sign_utils.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/engine/models/astrology_validation.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -106,11 +107,35 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     super.dispose();
   }
 
+  void _showError(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 18),
+            const SizedBox(width: 10),
+            Expanded(child: Text(message, style: const TextStyle(color: Colors.white))),
+          ],
+        ),
+        backgroundColor: AppColors.error,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
   void _nextPage() {
     String? errorMessage;
     if (_currentIndex == 1) {
-      if (_nameController.text.trim().isEmpty) {
+      final name = _nameController.text.trim();
+      if (name.isEmpty) {
         errorMessage = 'Please enter your name';
+      } else if (name.length < 2) {
+        errorMessage = 'Name must be at least 2 characters';
       }
     } else if (_currentIndex == 2) {
       if (_dobController.text.trim().isEmpty) {
@@ -119,17 +144,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
         errorMessage = 'Please enter your time of birth';
       } else if (_placeController.text.trim().isEmpty) {
         errorMessage = 'Please select or enter your place of birth';
+      } else {
+        // Validate date using AstrologyValidator
+        try {
+          AstrologyValidator.validateDate(_dobController.text.trim());
+          AstrologyValidator.validateTime('${_timeController.text.trim()} $_selectedAmPm');
+        } on AstrologyValidationException catch (e) {
+          errorMessage = e.message;
+        }
       }
     }
 
     if (errorMessage != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(errorMessage),
-          backgroundColor: AppColors.error,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _showError(errorMessage);
       return;
     }
 
@@ -150,13 +177,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     final place = _placeController.text.trim();
 
     if (name.isEmpty || dob.isEmpty || fullTime.isEmpty || place.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please complete all birth details'),
-          backgroundColor: AppColors.error,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      _showError('Please complete all birth details');
+      return;
+    }
+
+    // Validate before proceeding
+    try {
+      AstrologyValidator.validateDate(dob);
+      AstrologyValidator.validateTime(fullTime);
+    } on AstrologyValidationException catch (e) {
+      _showError(e.message);
       return;
     }
 

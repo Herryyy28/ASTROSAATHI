@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -58,7 +59,8 @@ class PdfReportGenerator {
       birthTime: birthTime.isEmpty ? '12:00' : birthTime,
     );
 
-    final certSerial = 'VDK-KUNDLI-${cleanName.hashCode.abs().toRadixString(16).toUpperCase()}-${DateTime.now().millisecondsSinceEpoch.toRadixString(16).toUpperCase().substring(0, 4)}';
+    final certSerial =
+        'VDK-KUNDLI-${cleanName.hashCode.abs().toRadixString(16).toUpperCase()}-${DateTime.now().millisecondsSinceEpoch.toRadixString(16).toUpperCase().substring(0, 4)}';
 
     final planetaryPositions = astroProfile.planets.map((p) {
       final name = p['name']?.toString() ?? 'Graha';
@@ -237,7 +239,10 @@ class PdfReportGenerator {
                       ],
                     ),
                     pw.Container(
-                      padding: const pw.EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const pw.EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
                       decoration: pw.BoxDecoration(
                         color: PdfColor.fromHex('#1E2536'),
                         border: pw.Border.all(color: primaryGold, width: 1),
@@ -248,12 +253,19 @@ class PdfReportGenerator {
                         children: [
                           pw.Text(
                             'OFFICIAL CERTIFICATE',
-                            style: pw.TextStyle(color: primaryGold, fontSize: 9, fontWeight: pw.FontWeight.bold),
+                            style: pw.TextStyle(
+                              color: primaryGold,
+                              fontSize: 9,
+                              fontWeight: pw.FontWeight.bold,
+                            ),
                           ),
                           pw.SizedBox(height: 2),
                           pw.Text(
                             report.certSerial,
-                            style: const pw.TextStyle(color: PdfColors.grey400, fontSize: 7),
+                            style: const pw.TextStyle(
+                              color: PdfColors.grey400,
+                              fontSize: 7,
+                            ),
                           ),
                         ],
                       ),
@@ -271,7 +283,10 @@ class PdfReportGenerator {
                 decoration: pw.BoxDecoration(
                   color: cardBg,
                   borderRadius: pw.BorderRadius.circular(12),
-                  border: pw.Border.all(color: primaryGold.shade(0.5), width: 0.5),
+                  border: pw.Border.all(
+                    color: primaryGold.shade(0.5),
+                    width: 0.5,
+                  ),
                 ),
                 child: pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -281,11 +296,18 @@ class PdfReportGenerator {
                       children: [
                         pw.Text(
                           'OFFICIAL BIRTH KUNDLI PROFILE',
-                          style: pw.TextStyle(color: primaryGold, fontSize: 10, fontWeight: pw.FontWeight.bold),
+                          style: pw.TextStyle(
+                            color: primaryGold,
+                            fontSize: 10,
+                            fontWeight: pw.FontWeight.bold,
+                          ),
                         ),
                         pw.Text(
                           report.certBadge,
-                          style: const pw.TextStyle(color: PdfColors.grey400, fontSize: 8),
+                          style: const pw.TextStyle(
+                            color: PdfColors.grey400,
+                            fontSize: 8,
+                          ),
                         ),
                       ],
                     ),
@@ -307,7 +329,10 @@ class PdfReportGenerator {
                       children: [
                         _buildInfoColumn('Lagna (Ascendant)', report.ascendant),
                         _buildInfoColumn('Moon Sign (Rashi)', report.moonSign),
-                        _buildInfoColumn('Nakshatra & Pada', '${report.nakshatra} P${report.pada}'),
+                        _buildInfoColumn(
+                          'Nakshatra & Pada',
+                          '${report.nakshatra} P${report.pada}',
+                        ),
                         _buildInfoColumn('Active Mahadasha', report.mahadasha),
                       ],
                     ),
@@ -320,16 +345,32 @@ class PdfReportGenerator {
               // Planetary Placements Table
               pw.Text(
                 'Vedic Graha Planetary Positions Table',
-                style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold, color: darkBg),
+                style: pw.TextStyle(
+                  fontSize: 13,
+                  fontWeight: pw.FontWeight.bold,
+                  color: darkBg,
+                ),
               ),
               pw.SizedBox(height: 6),
               pw.TableHelper.fromTextArray(
-                headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, color: PdfColors.white, fontSize: 9),
-                headerDecoration: pw.BoxDecoration(color: PdfColor.fromHex('#1E2536')),
+                headerStyle: pw.TextStyle(
+                  fontWeight: pw.FontWeight.bold,
+                  color: PdfColors.white,
+                  fontSize: 9,
+                ),
+                headerDecoration: pw.BoxDecoration(
+                  color: PdfColor.fromHex('#1E2536'),
+                ),
                 cellHeight: 22,
                 cellStyle: const pw.TextStyle(fontSize: 9),
                 data: <List<String>>[
-                  <String>['Graha (Planet)', 'Sign (Rashi)', 'Nakshatra & Pada', 'House', 'Planetary Dignity'],
+                  <String>[
+                    'Graha (Planet)',
+                    'Sign (Rashi)',
+                    'Nakshatra & Pada',
+                    'House',
+                    'Planetary Dignity',
+                  ],
                   ...report.planetaryPositions.map(
                     (p) => <String>[
                       p['planet'] ?? '',
@@ -347,7 +388,11 @@ class PdfReportGenerator {
               // Key Interpretations Section
               pw.Text(
                 'Vedic Life Predictions & Planetary Forecast',
-                style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold, color: darkBg),
+                style: pw.TextStyle(
+                  fontSize: 13,
+                  fontWeight: pw.FontWeight.bold,
+                  color: darkBg,
+                ),
               ),
               pw.SizedBox(height: 6),
               ...report.keyInterpretations.asMap().entries.map(
@@ -356,8 +401,20 @@ class PdfReportGenerator {
                   child: pw.Row(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text('${entry.key + 1}. ', style: pw.TextStyle(color: primaryGold, fontWeight: pw.FontWeight.bold, fontSize: 10)),
-                      pw.Expanded(child: pw.Text(entry.value, style: const pw.TextStyle(fontSize: 10, height: 1.3))),
+                      pw.Text(
+                        '${entry.key + 1}. ',
+                        style: pw.TextStyle(
+                          color: primaryGold,
+                          fontWeight: pw.FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
+                      pw.Expanded(
+                        child: pw.Text(
+                          entry.value,
+                          style: const pw.TextStyle(fontSize: 10, height: 1.3),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -368,7 +425,11 @@ class PdfReportGenerator {
               // Recommended Vedic Remedies
               pw.Text(
                 'Authentic Vedic Remedies & Daily Guidance',
-                style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold, color: darkBg),
+                style: pw.TextStyle(
+                  fontSize: 13,
+                  fontWeight: pw.FontWeight.bold,
+                  color: darkBg,
+                ),
               ),
               pw.SizedBox(height: 6),
               ...report.recommendedRemedies.asMap().entries.map(
@@ -377,8 +438,20 @@ class PdfReportGenerator {
                   child: pw.Row(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text('${entry.key + 1}. ', style: pw.TextStyle(color: primaryGold, fontWeight: pw.FontWeight.bold, fontSize: 10)),
-                      pw.Expanded(child: pw.Text(entry.value, style: const pw.TextStyle(fontSize: 10, height: 1.3))),
+                      pw.Text(
+                        '${entry.key + 1}. ',
+                        style: pw.TextStyle(
+                          color: primaryGold,
+                          fontWeight: pw.FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
+                      pw.Expanded(
+                        child: pw.Text(
+                          entry.value,
+                          style: const pw.TextStyle(fontSize: 10, height: 1.3),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -394,11 +467,17 @@ class PdfReportGenerator {
                 children: [
                   pw.Text(
                     'Certified & Calculated by AstroSaathi Institute of Vedic Astrology - Ephemeris Calculations',
-                    style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey600),
+                    style: const pw.TextStyle(
+                      fontSize: 8,
+                      color: PdfColors.grey600,
+                    ),
                   ),
                   pw.Text(
                     'Serial No: ${report.certSerial}',
-                    style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey600),
+                    style: const pw.TextStyle(
+                      fontSize: 8,
+                      color: PdfColors.grey600,
+                    ),
                   ),
                 ],
               ),
@@ -411,6 +490,16 @@ class PdfReportGenerator {
     return pdf.save();
   }
 
+  static Future<Uint8List> _buildPdfInIsolate(_PdfArgs args) async {
+    return buildPdfDocumentBytes(
+      userName: args.userName,
+      dob: args.dob,
+      birthTime: args.birthTime,
+      birthPlace: args.birthPlace,
+      language: args.language,
+    );
+  }
+
   /// Triggers native system PDF preview, print, or download sheet.
   static Future<void> downloadAndPrintPdf({
     required String userName,
@@ -419,12 +508,10 @@ class PdfReportGenerator {
     required String birthPlace,
     required AppLanguage language,
   }) async {
-    final pdfBytes = await buildPdfDocumentBytes(
-      userName: userName,
-      dob: dob,
-      birthTime: birthTime,
-      birthPlace: birthPlace,
-      language: language,
+    // Run PDF generation in a background Isolate for buttery smooth UI 60 FPS
+    final pdfBytes = await compute(
+      _buildPdfInIsolate,
+      _PdfArgs(userName, dob, birthTime, birthPlace, language),
     );
 
     final titleName = userName.isEmpty ? 'User' : userName.replaceAll(' ', '_');
@@ -435,13 +522,39 @@ class PdfReportGenerator {
   }
 }
 
+class _PdfArgs {
+  final String userName;
+  final String dob;
+  final String birthTime;
+  final String birthPlace;
+  final AppLanguage language;
+
+  _PdfArgs(
+    this.userName,
+    this.dob,
+    this.birthTime,
+    this.birthPlace,
+    this.language,
+  );
+}
+
 pw.Widget _buildInfoColumn(String label, String value) {
   return pw.Column(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
-      pw.Text(label, style: pw.TextStyle(color: PdfColors.grey400, fontSize: 9)),
+      pw.Text(
+        label,
+        style: pw.TextStyle(color: PdfColors.grey400, fontSize: 9),
+      ),
       pw.SizedBox(height: 2),
-      pw.Text(value.isEmpty ? '—' : value, style: pw.TextStyle(color: PdfColors.white, fontSize: 10, fontWeight: pw.FontWeight.bold)),
+      pw.Text(
+        value.isEmpty ? '—' : value,
+        style: pw.TextStyle(
+          color: PdfColors.white,
+          fontSize: 10,
+          fontWeight: pw.FontWeight.bold,
+        ),
+      ),
     ],
   );
 }

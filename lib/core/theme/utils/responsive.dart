@@ -113,3 +113,76 @@ extension ResponsiveContext on BuildContext {
   double get maxContentWidth =>
       responsive(mobile: double.infinity, tablet: 680.0, desktop: 860.0);
 }
+
+/// ── App-wide standard text sizes ────────────────────────────────────────────
+/// Usage: Text('Hello', style: AppTextStyles.of(context).title)
+/// This auto-adapts to screen size AND respects the clamped system font scale.
+class AppTextStyles {
+  final BuildContext _context;
+  AppTextStyles._(this._context);
+
+  static AppTextStyles of(BuildContext context) => AppTextStyles._(context);
+
+  double get _w => MediaQuery.of(_context).size.width;
+
+  // Scale multiplier: smaller phones get slightly tighter text
+  double get _scale {
+    if (_w < 360) return 0.88;
+    if (_w < 400) return 0.93;
+    if (_w < 480) return 1.0;
+    if (_w < 768) return 1.05;
+    return 1.1;
+  }
+
+  double _s(double base) => base * _scale;
+
+  // ── Display (Hero headings, Splash) ───────────────────────────────
+  TextStyle get display => TextStyle(fontSize: _s(30), fontWeight: FontWeight.w700, height: 1.2, overflow: TextOverflow.ellipsis);
+  TextStyle get displaySmall => TextStyle(fontSize: _s(24), fontWeight: FontWeight.w700, height: 1.25, overflow: TextOverflow.ellipsis);
+
+  // ── Titles (Screen headers, card titles) ──────────────────────────
+  TextStyle get h1 => TextStyle(fontSize: _s(22), fontWeight: FontWeight.w700, height: 1.3, overflow: TextOverflow.ellipsis);
+  TextStyle get h2 => TextStyle(fontSize: _s(18), fontWeight: FontWeight.w600, height: 1.35, overflow: TextOverflow.ellipsis);
+  TextStyle get h3 => TextStyle(fontSize: _s(16), fontWeight: FontWeight.w600, height: 1.4, overflow: TextOverflow.ellipsis);
+
+  // ── Body (Main content text) ──────────────────────────────────────
+  TextStyle get bodyLarge => TextStyle(fontSize: _s(15), fontWeight: FontWeight.w400, height: 1.55);
+  TextStyle get body => TextStyle(fontSize: _s(14), fontWeight: FontWeight.w400, height: 1.5);
+  TextStyle get bodySmall => TextStyle(fontSize: _s(12.5), fontWeight: FontWeight.w400, height: 1.45);
+
+  // ── Labels (Chips, tabs, buttons) ─────────────────────────────────
+  TextStyle get label => TextStyle(fontSize: _s(13), fontWeight: FontWeight.w600, letterSpacing: 0.3, overflow: TextOverflow.ellipsis);
+  TextStyle get labelSmall => TextStyle(fontSize: _s(11), fontWeight: FontWeight.w500, letterSpacing: 0.5, overflow: TextOverflow.ellipsis);
+
+  // ── Caption (Footnotes, timestamps, badges) ───────────────────────
+  TextStyle get caption => TextStyle(fontSize: _s(10.5), fontWeight: FontWeight.w400, height: 1.4);
+  TextStyle get captionBold => TextStyle(fontSize: _s(10.5), fontWeight: FontWeight.w600, letterSpacing: 0.4);
+}
+
+/// ── Overflow-safe text widget shortcut ──────────────────────────────────────
+/// Usage: SafeText('Long string', style: AppTextStyles.of(context).body)
+class SafeText extends StatelessWidget {
+  final String text;
+  final TextStyle? style;
+  final int maxLines;
+  final TextAlign? textAlign;
+
+  const SafeText(
+    this.text, {
+    super.key,
+    this.style,
+    this.maxLines = 2,
+    this.textAlign,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: style,
+      maxLines: maxLines,
+      overflow: TextOverflow.ellipsis,
+      textAlign: textAlign,
+    );
+  }
+}

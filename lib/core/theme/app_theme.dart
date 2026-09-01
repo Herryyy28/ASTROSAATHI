@@ -23,59 +23,59 @@ class AppTheme {
       textTheme: GoogleFonts.outfitTextTheme(ThemeData.dark().textTheme).copyWith(
         displayLarge: GoogleFonts.outfit(
           color: AppColors.textPrimaryDark,
-          fontSize: 34,
+          fontSize: 30,          // was 34 — tightened for small screens
           fontWeight: FontWeight.w700,
           letterSpacing: -0.5,
-          height: 1.35,
+          height: 1.3,
         ),
         displayMedium: GoogleFonts.outfit(
           color: AppColors.textPrimaryDark,
-          fontSize: 28,
+          fontSize: 24,          // was 28
           fontWeight: FontWeight.w600,
-          height: 1.35,
+          height: 1.3,
         ),
         titleLarge: GoogleFonts.outfit(
           color: AppColors.textPrimaryDark,
-          fontSize: 22,
+          fontSize: 20,          // was 22
           fontWeight: FontWeight.w600,
           height: 1.35,
         ),
         titleMedium: GoogleFonts.outfit(
           color: AppColors.textPrimaryDark,
-          fontSize: 18,
+          fontSize: 16,          // was 18
           fontWeight: FontWeight.w600,
           height: 1.35,
         ),
         bodyLarge: GoogleFonts.inter(
           color: AppColors.textPrimaryDark,
-          fontSize: 16,
+          fontSize: 15,          // was 16
           fontWeight: FontWeight.w400,
-          height: 1.4,
+          height: 1.5,
         ),
         bodyMedium: GoogleFonts.inter(
           color: AppColors.textSecondaryDark,
-          fontSize: 14,
+          fontSize: 13,          // was 14
           fontWeight: FontWeight.w400,
-          height: 1.4,
+          height: 1.45,
         ),
         bodySmall: GoogleFonts.inter(
           color: AppColors.textTertiaryDark,
-          fontSize: 12,
+          fontSize: 11.5,        // was 12
           fontWeight: FontWeight.w400,
           height: 1.35,
         ),
         labelLarge: GoogleFonts.inter(
           color: AppColors.textPrimaryDark,
-          fontSize: 14,
+          fontSize: 13,          // was 14
           fontWeight: FontWeight.w600,
-          letterSpacing: 0.5,
+          letterSpacing: 0.4,
           height: 1.3,
         ),
         labelSmall: GoogleFonts.inter(
           color: AppColors.textSecondaryDark,
-          fontSize: 11,
+          fontSize: 10.5,        // was 11
           fontWeight: FontWeight.w500,
-          letterSpacing: 1.2,
+          letterSpacing: 1.0,
           height: 1.3,
         ),
       ),
@@ -117,7 +117,7 @@ class AppTheme {
             borderRadius: BorderRadius.circular(16),
           ),
           textStyle: GoogleFonts.inter(
-            fontSize: 16,
+            fontSize: 15,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.3,
           ),
@@ -141,7 +141,7 @@ class AppTheme {
         fillColor: AppColors.surfaceDark,
         hintStyle: GoogleFonts.inter(
           color: AppColors.textTertiaryDark,
-          fontSize: 16,
+          fontSize: 14,
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         border: OutlineInputBorder(
@@ -169,11 +169,11 @@ class AppTheme {
         unselectedLabelColor: AppColors.textSecondaryDark,
         indicatorSize: TabBarIndicatorSize.label,
         labelStyle: GoogleFonts.inter(
-          fontSize: 14,
+          fontSize: 13,
           fontWeight: FontWeight.w600,
         ),
         unselectedLabelStyle: GoogleFonts.inter(
-          fontSize: 14,
+          fontSize: 13,
           fontWeight: FontWeight.w400,
         ),
         dividerColor: Colors.transparent,

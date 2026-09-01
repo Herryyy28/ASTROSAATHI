@@ -5,9 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../../home/presentation/screens/home_screen.dart';
-import '../../../horoscope/presentation/screens/horoscope_screen.dart';
+import '../../../kundli/presentation/screens/kundli_screen.dart';
+import '../../../explore/presentation/screens/explore_screen.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
-import '../../../profile/presentation/screens/my_kundlis_screen.dart';
+import '../../../profile/presentation/screens/profile_screen.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// Provider for managing main navigation tab index globally
@@ -23,29 +24,33 @@ class MainScreen extends ConsumerStatefulWidget {
 class _MainScreenState extends ConsumerState<MainScreen> {
   final List<Widget> _screens = const [
     HomeScreen(),
-    HoroscopeScreen(),
+    KundliScreen(),
+    ExploreScreen(),
     AstroBabaScreen(),
-    MyKundlisScreen(),
+    ProfileScreen(),
   ];
 
   static const List<_NavItem> _navItems = [
-    _NavItem(icon: Icons.home_rounded, activeIcon: Icons.home_rounded, label: 'Game Plan'),
-    _NavItem(icon: Icons.auto_awesome_mosaic_outlined, activeIcon: Icons.auto_awesome_mosaic_rounded, label: 'Horoscope'),
-    _NavItem(icon: Icons.auto_awesome_outlined, activeIcon: Icons.auto_awesome, label: 'Astro Baba'),
-    _NavItem(icon: Icons.account_circle_outlined, activeIcon: Icons.account_circle_rounded, label: 'My Kundlis'),
+    _NavItem(icon: Icons.home_outlined, activeIcon: Icons.home_rounded, label: 'Home'),
+    _NavItem(icon: Icons.auto_awesome_outlined, activeIcon: Icons.auto_awesome, label: 'Kundli'),
+    _NavItem(icon: Icons.explore_outlined, activeIcon: Icons.explore_rounded, label: 'Explore'),
+    _NavItem(icon: Icons.psychology_outlined, activeIcon: Icons.psychology_rounded, label: 'Astro AI'),
+    _NavItem(icon: Icons.person_outline_rounded, activeIcon: Icons.person_rounded, label: 'Profile'),
   ];
 
   String _getNavLabel(BuildContext context, int index) {
     final l10n = AppLocalizations.of(context, ref);
     switch (index) {
       case 0:
-        return l10n.navGamePlan;
+        return l10n.navHome;
       case 1:
-        return l10n.navHoroscope;
+        return l10n.navKundli;
       case 2:
-        return l10n.navAstroBaba;
+        return l10n.navExplore;
       case 3:
-        return l10n.navMyKundlis;
+        return l10n.navAstroAi;
+      case 4:
+        return l10n.navProfile;
       default:
         return _navItems[index].label;
     }

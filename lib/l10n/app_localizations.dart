@@ -194,4 +194,46 @@ class AppLocalizations {
   String get onboardingSub1 => translate('onboarding_sub1');
   String get onboardingSub2 => translate('onboarding_sub2');
   String get getStarted => translate('get_started');
+
+  // ── New 5-Tab Navigation ─────────────────────────
+  String get navHome => translate('nav_home');
+  String get navKundli => translate('nav_kundli');
+  String get navExplore => translate('nav_explore');
+  String get navAstroAi => translate('nav_astro_ai');
+  String get navProfile => translate('nav_profile');
+
+  // ── Explore Hub ──────────────────────────────────
+  String get exploreTitle => translate('explore_title');
+  String get explorePanchang => translate('explore_panchang');
+  String get exploreMuhurat => translate('explore_muhurat');
+  String get exploreHoroscope => translate('explore_horoscope');
+  String get exploreDosha => translate('explore_dosha');
+  String get exploreRemedies => translate('explore_remedies');
+  String get exploreCompatibility => translate('explore_compatibility');
+  String get exploreNumerology => translate('explore_numerology');
+  String get exploreTransits => translate('explore_transits');
+
+  // ── Progressive Disclosure ───────────────────────
+  String get whatThisMeans => translate('what_this_means');
+  String get viewTechnicalDetails => translate('view_technical_details');
+  String get basedOnKundli => translate('based_on_kundli');
+  String get whySeeingThis => translate('why_seeing_this');
+
+  // ── Kundli Screen Tabs ───────────────────────────
+  String get tabOverview => translate('tab_overview');
+  String get tabPlanets => translate('tab_planets');
+  String get tabHouses => translate('tab_houses');
+  String get tabDasha => translate('tab_dasha');
+  String get tabYogas => translate('tab_yogas');
+  String get tabRemedies => translate('tab_remedies');
+  String get strongInfluence => translate('strong_influence');
+  String get moderateInfluence => translate('moderate_influence');
+  String get weakInfluence => translate('weak_influence');
+
+  // ── Profile Screen ───────────────────────────────
+  String get primaryProfile => translate('primary_profile');
+  String get familyKundlis => translate('family_kundlis');
+  String get addFamilyMember => translate('add_family_member');
+  String get dataPrivacy => translate('data_privacy');
+  String get accountManagement => translate('account_management');
 }

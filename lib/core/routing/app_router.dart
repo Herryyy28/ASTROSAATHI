@@ -7,7 +7,8 @@ import '../../features/home/presentation/screens/main_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
 
-import '../../core/providers/profile_provider.dart';
+import '../../features/auth/presentation/screens/auth_screen.dart';
+import '../providers/profile_provider.dart';
 
 /// Provider that checks if the user has completed onboarding.
 final onboardingCompleteProvider = Provider<bool>((ref) {
@@ -64,6 +65,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/',
         builder: (context, state) => const MainScreen(),
+      ),
+      GoRoute(
+        path: '/auth',
+        builder: (context, state) => const AuthScreen(),
       ),
     ],
   );

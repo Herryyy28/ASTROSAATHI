@@ -6,6 +6,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../core/providers/subscription_provider.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../auth/data/auth_repository.dart';
+import '../../../auth/presentation/screens/auth_screen.dart';
 
 class PremiumUpgradeModal extends ConsumerStatefulWidget {
   const PremiumUpgradeModal({super.key});
@@ -224,26 +226,71 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
                 // CTA Button (BUY IT Below Price Options)
                 if (isAlreadyVip) ...[
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Color(0xFFFFD700)),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-                      ),
-                      icon: const Icon(Icons.check_circle_rounded, color: Color(0xFFFFD700)),
-                      label: Text(
-                        'Active Subscription: ${subState.tier.displayName}',
-                        style: GoogleFonts.outfit(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFFFFD700),
+                  Builder(builder: (context) {
+                    final remainingDays = ref.watch(subscriptionProvider.notifier).remainingDaysOfSubscription;
+                    return Column(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFD700).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(color: const Color(0xFFFFD700)),
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.verified_rounded, color: Color(0xFFFFD700), size: 22),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    'Active VIP Pass: ${subState.tier.displayName}',
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFFFFD700),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                '$remainingDays Days Remaining • Non-Recurring Pass',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 13,
+                                  color: Colors.white70,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      onPressed: null,
-                    ),
-                  ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Color(0xFFFFD700)),
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                            ),
+                            icon: const Icon(Icons.add_shopping_cart_rounded, color: Color(0xFFFFD700)),
+                            label: Text(
+                              'RE-BUY / EXTEND VIP PASS',
+                              style: GoogleFonts.outfit(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xFFFFD700),
+                              ),
+                            ),
+                            onPressed: _handleSubscribe,
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
                 ] else ...[
                   SizedBox(
                     width: double.infinity,
@@ -476,13 +523,118 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   }
 
   Future<void> _handleSubscribe() async {
+    final session = ref.read(userSessionProvider);
+    if (!session.isAuthenticated) {
+      _showAuthRequiredSheet(context);
+      return;
+    }
+
     final double amount = _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199);
     final String planName = _selectedTier.displayName;
 
-    _showOnlinePaymentGateway(context, amount, planName);
+    _showOnlinePaymentGateway(context, amount, planName, session.userId ?? 'user', session.email ?? '');
   }
 
-  void _showOnlinePaymentGateway(BuildContext context, double amount, String planName) {
+  void _showAuthRequiredSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withOpacity(0.85),
+      builder: (ctx) {
+        return ClipRRect(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            child: Container(
+              color: const Color(0xF20B0F19),
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.white24,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('🔐', style: TextStyle(fontSize: 44)),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Account Login Required',
+                    style: GoogleFonts.outfit(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'To maintain privacy and save your VIP membership receipt, please sign in with your Google Account or Email before payment.',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.outfit(fontSize: 13, color: Colors.white70, height: 1.4),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black87,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                      icon: const Icon(Icons.g_mobiledata_rounded, size: 32, color: Colors.red),
+                      label: Text(
+                        'Sign In with Google',
+                        style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () async {
+                        Navigator.pop(ctx);
+                        final success = await ref.read(userSessionProvider.notifier).loginWithGoogle();
+                        if (success && mounted) {
+                          _handleSubscribe();
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.white38),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      ),
+                      icon: const Icon(Icons.email_rounded, color: Colors.white),
+                      label: Text(
+                        'Sign In with Email',
+                        style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AuthScreen()),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showOnlinePaymentGateway(BuildContext context, double amount, String planName, String userId, String userEmail) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -493,7 +645,11 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           amount: amount,
           planName: planName,
           onPaymentSuccess: () async {
-            await ref.read(subscriptionProvider.notifier).upgradeToTier(_selectedTier);
+            await ref.read(subscriptionProvider.notifier).processRazorpayPayment(
+              _selectedTier,
+              userId: userId,
+              userEmail: userEmail,
+            );
             if (mounted) {
               Navigator.pop(ctx); // Close payment sheet
               Navigator.pop(context); // Close VIP upgrade modal
@@ -578,6 +734,7 @@ class _PaymentGatewaySheet extends StatefulWidget {
 
 class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
   int _step = 0; // 0: Select, 1: Connecting/App open, 2: OTP, 3: Success
+  bool _acceptedPolicy = true;
   String _selectedMethod = '';
   final TextEditingController _cardNumber = TextEditingController();
   final TextEditingController _cardExpiry = TextEditingController();
@@ -595,6 +752,17 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
   }
 
   void _processPayment(String method) async {
+    if (!_acceptedPolicy) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please accept the Terms & Non-Refundable Policy to proceed.'),
+          backgroundColor: Colors.amber,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
     setState(() {
       _selectedMethod = method;
       _step = 1;
@@ -764,11 +932,45 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
           ],
         ),
         const SizedBox(height: 14),
+
+        // Terms & Policy Disclosure Box
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.04),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white.withOpacity(0.08)),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 24,
+                height: 24,
+                child: Checkbox(
+                  value: _acceptedPolicy,
+                  activeColor: const Color(0xFFFFD700),
+                  checkColor: Colors.black,
+                  onChanged: (v) => setState(() => _acceptedPolicy = v ?? false),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'I agree to Terms & Privacy Policy (Non-Refundable 1-Time VIP Pass, No Auto-Renewal)',
+                  style: GoogleFonts.outfit(color: Colors.white70, fontSize: 11, height: 1.2),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 14),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFD700),
+              backgroundColor: _acceptedPolicy ? const Color(0xFFFFD700) : Colors.white24,
               foregroundColor: Colors.black,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               padding: const EdgeInsets.symmetric(vertical: 14),
@@ -776,6 +978,8 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
             onPressed: () {
               if (_cardNumber.text.isNotEmpty) {
                 _processPayment('Credit / Debit Card');
+              } else {
+                _processPayment('Online Checkout');
               }
             },
             child: Text('Pay ₹${widget.amount.toStringAsFixed(0)} Securely', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),

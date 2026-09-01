@@ -201,4 +201,53 @@ final Map<String, String> guTranslations = {
   'balanced': 'સંતુલિત',
   'peaceful': 'શાંતિપ્રિય',
   'high_focus': 'ઉચ્ચ ધ્યાન',
+
+  // ── New 5-Tab Navigation ─────────────────────────
+  'nav_home': 'હોમ',
+  'nav_kundli': 'કુંડળી',
+  'nav_explore': 'એક્સપ્લોર',
+  'nav_astro_ai': 'એસ્ટ્રો એઆઈ',
+  'nav_profile': 'પ્રોફાઇલ',
+
+  // ── Explore Hub ──────────────────────────────────
+  'explore_title': 'વૈદિક બ્રહ્માંડ એક્સપ્લોર કરો',
+  'explore_panchang': 'પંચાંગ અને સમય',
+  'explore_muhurat': 'મુહૂર્ત શોધો',
+  'explore_horoscope': 'રાશિફળ ભવિષ્યવાણીઓ',
+  'explore_dosha': 'દોષ અને યોગ વિશ્લેષણ',
+  'explore_remedies': 'વૈદિક ઉપાય અને રત્નો',
+  'explore_compatibility': 'કુંડળી મેળવવી',
+  'explore_numerology': 'અંક જ્યોતિષ કેલ્ક્યુલેટર',
+  'explore_transits': 'ગ્રહ ગોચર',
+
+  // ── Progressive Disclosure ───────────────────────
+  'what_this_means': 'તમારા માટે આનો શું અર્થ છે',
+  'view_technical_details': 'તકનીકી વિગતો જુઓ',
+  'based_on_kundli': 'તમારી કુંડળી પર આધારિત',
+  'why_seeing_this': 'હું આ શા માટે જોઈ રહ્યો છું?',
+
+  // ── Kundli Screen Tabs ───────────────────────────
+  'tab_overview': 'ઝાંખી',
+  'tab_planets': 'ગ્રહો',
+  'tab_houses': 'ભાવ',
+  'tab_dasha': 'દશા',
+  'tab_yogas': 'યોગ અને દોષ',
+  'tab_remedies': 'ઉપાયો',
+  'strong_influence': 'મજબૂત પ્રભાવ',
+  'moderate_influence': 'મધ્યમ પ્રભાવ',
+  'weak_influence': 'નબળો પ્રભાવ',
+
+  // ── Profile Screen ───────────────────────────────
+  'primary_profile': 'પ્રાથમિક',
+  'family_kundlis': 'પરિવારની કુંડળીઓ',
+  'add_family_member': 'પરિવારના સભ્યને ઉમેરો',
+  'data_privacy': 'ડેટા ગોપનીયતા',
+  'account_management': 'એકાઉન્ટ મેનેજમેન્ટ',
+
+  // ── AI Prompt Chips ──────────────────────────────
+  'chip_relationship': '❤️ સંબંધ',
+  'chip_career_v2': '💼 કારકિર્દી',
+  'chip_finance': '💰 નાણાં',
+  'chip_growth': '🧘 વિકાસ',
+  'chip_today': '🔮 આજે',
 };

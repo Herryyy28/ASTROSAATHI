@@ -11,6 +11,8 @@ import { UsersModule } from './users/users.module';
 import { NotificationsModule } from './notifications/notifications.module';
 
 import { ProfilesModule } from './profiles/profiles.module';
+import { PaymentsModule } from './payments/payments.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -38,7 +40,9 @@ import { ProfilesModule } from './profiles/profiles.module';
     ProfilesModule,
     NotificationsModule,
     AstrologyModule, 
-    AiModule
+    AiModule,
+    PaymentsModule,
+    AdminModule,
   ],
   controllers: [],
   providers: [],
