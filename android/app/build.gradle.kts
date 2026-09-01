@@ -38,19 +38,23 @@ android {
 
     signingConfigs {
         create("release") {
-            if (keystorePropertiesFile.exists()) {
-                keyAlias = keystoreProperties["keyAlias"] as String
-                keyPassword = keystoreProperties["keyPassword"] as String
-                storeFile = keystoreProperties["storeFile"]?.let { file(it) }
-                storePassword = keystoreProperties["storePassword"] as String
+            if (keystorePropertiesFile.exists() && keystoreProperties["storeFile"] != null) {
+                val ksFile = file(keystoreProperties["storeFile"] as String)
+                if (ksFile.exists()) {
+                    keyAlias = keystoreProperties["keyAlias"] as String
+                    keyPassword = keystoreProperties["keyPassword"] as String
+                    storeFile = ksFile
+                    storePassword = keystoreProperties["storePassword"] as String
+                }
             }
         }
     }
 
     buildTypes {
         release {
-            if (keystorePropertiesFile.exists()) {
-                signingConfig = signingConfigs.getByName("release")
+            val relConfig = signingConfigs.findByName("release")
+            if (relConfig != null && relConfig.storeFile != null && relConfig.storeFile!!.exists()) {
+                signingConfig = relConfig
             } else {
                 signingConfig = signingConfigs.getByName("debug")
             }

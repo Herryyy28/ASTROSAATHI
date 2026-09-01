@@ -229,6 +229,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   }
 
   bool canAskAiQuery() {
+    _checkDateReset();
     if (state.isPremium) return true;
     final today = _todayDateString;
     final currentQueries = (state.lastQueryDate == today) ? state.aiQueriesToday : 0;
@@ -236,6 +237,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   }
 
   int get remainingFreeAiQueries {
+    _checkDateReset();
     if (state.isPremium) return 999;
     final today = _todayDateString;
     final currentQueries = (state.lastQueryDate == today) ? state.aiQueriesToday : 0;

@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:AstroSaathi/features/ai/presentation/screens/astro_baba_screen.dart';
+import '../../features/ai/presentation/screens/astro_baba_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,7 +16,6 @@ import '../../features/panchang/presentation/screens/panchang_screen.dart';
 import '../../features/matching/presentation/screens/matching_screen.dart';
 import '../../features/remedies/presentation/screens/remedy_hub_screen.dart';
 import '../../features/muhurat/presentation/screens/muhurat_screen.dart';
-import '../../features/subscription/presentation/screens/premium_upgrade_modal.dart';
 import '../providers/subscription_provider.dart';
 
 class IPhoneGlassMenu {
@@ -39,7 +38,6 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLang = ref.watch(localeProvider);
     final activeProfile = ref.watch(activeProfileProvider);
-    final isPremium = ref.watch(isPremiumProvider);
 
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(36)),

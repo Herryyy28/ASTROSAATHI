@@ -17,14 +17,11 @@ import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../../../core/engine/models/game_plan_data.dart';
 import '../../../../core/widgets/why_this_bottom_sheet.dart';
-import '../../../../core/widgets/data_freshness_badge.dart';
-import '../../../../core/widgets/iphone_glass_menu.dart';
 
 import '../../../../core/widgets/admob_banner_widget.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../search/presentation/screens/astrology_search_screen.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
-import '../../../subscription/presentation/widgets/vip_badge_button.dart';
 import '../../../profile/presentation/widgets/profile_switcher_modal.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
 import 'main_screen.dart';
