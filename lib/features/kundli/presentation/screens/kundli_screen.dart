@@ -38,11 +38,14 @@ class KundliScreen extends ConsumerWidget {
       l10n.tabRemedies,
     ];
 
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.cosmicRadialGradient,
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: SafeArea(
           bottom: false,
@@ -913,10 +916,10 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
                           Expanded(
                             child: Text(
                               widget.title,
-                              style: GoogleFonts.outfit(
+                              style: GoogleFonts.plusJakartaSans(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.textPrimaryDark,
+                                color: Theme.of(context).textTheme.titleMedium?.color ?? AppColors.textPrimaryDark,
                               ),
                             ),
                           ),
@@ -931,7 +934,7 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
                             ),
                             child: Text(
                               widget.badge,
-                              style: GoogleFonts.outfit(
+                              style: GoogleFonts.plusJakartaSans(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w700,
                                 color: widget.badgeColor,
@@ -943,9 +946,9 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
                       const SizedBox(height: 4),
                       Text(
                         widget.subtitle,
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.plusJakartaSans(
                           fontSize: 13,
-                          color: AppColors.textSecondaryDark,
+                          color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textSecondaryDark,
                         ),
                       ),
                     ],

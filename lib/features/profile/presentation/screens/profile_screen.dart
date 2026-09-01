@@ -14,6 +14,7 @@ import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/widgets/language_selection_modal.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/providers/locale_provider.dart';
+import '../../../../core/providers/theme_provider.dart';
 import '../../../../core/providers/subscription_provider.dart';
 import '../../../../core/utils/zodiac_sign_utils.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -39,11 +40,14 @@ class ProfileScreen extends ConsumerWidget {
     final primary = profiles.where((p) => p.isPrimary).toList();
     final family = profiles.where((p) => !p.isPrimary).toList();
 
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.cosmicRadialGradient,
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: SafeArea(
           bottom: false,
@@ -121,6 +125,21 @@ class ProfileScreen extends ConsumerWidget {
                         const SizedBox(height: 8),
 
                         // Notifications
+                        // Appearance / Theme
+                        Consumer(
+                          builder: (context, ref, _) {
+                            final currentThemeMode = ref.watch(themeModeProvider);
+                            return _buildSettingsTile(
+                              icon: currentThemeMode.icon,
+                              iconColor: AppColors.primary,
+                              title: 'Appearance',
+                              subtitle: currentThemeMode.label,
+                              onTap: () => _showThemeSelectionModal(context, ref),
+                            );
+                          },
+                        ).animate().fadeIn(delay: 300.ms),
+                        const SizedBox(height: 8),
+
                         _buildSettingsTile(
                           icon: Icons.notifications_rounded,
                           iconColor: AppColors.warning,
@@ -778,6 +797,106 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _showThemeSelectionModal(BuildContext context, WidgetRef ref) {
+    final currentThemeMode = ref.read(themeModeProvider);
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+            color: AppColors.surfaceDark,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+            border: Border(
+              top: BorderSide(color: AppColors.glassBorder, width: 0.8),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.textTertiaryDark,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Appearance Preference',
+                style: GoogleFonts.outfit(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimaryDark,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Choose how AstroSaathi looks on your device',
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  color: AppColors.textSecondaryDark,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ...AppThemeMode.values.map((mode) {
+                final isSelected = currentThemeMode == mode;
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AppColors.primary.withOpacity(0.12)
+                        : AppColors.surfaceHighlightDark.withOpacity(0.4),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.glassBorder,
+                      width: isSelected ? 1.5 : 0.5,
+                    ),
+                  ),
+                  child: ListTile(
+                    leading: Icon(
+                      mode.icon,
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.textSecondaryDark,
+                    ),
+                    title: Text(
+                      mode.label,
+                      style: GoogleFonts.outfit(
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.w500,
+                        color: AppColors.textPrimaryDark,
+                      ),
+                    ),
+                    trailing: isSelected
+                        ? const Icon(
+                            Icons.check_circle_rounded,
+                            color: AppColors.primary,
+                          )
+                        : null,
+                    onTap: () {
+                      ref.read(themeModeProvider.notifier).setThemeMode(mode);
+                      Navigator.pop(context);
+                    },
+                  ),
+                );
+              }),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
     );
   }
 }

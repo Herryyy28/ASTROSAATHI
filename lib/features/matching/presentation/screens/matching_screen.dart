@@ -7,9 +7,11 @@ import '../widgets/guna_radar_painter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/providers/locale_provider.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../../core/providers/subscription_provider.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
-import '../../../../l10n/app_localizations.dart';
+import '../../../../core/widgets/responsive_layout.dart';
+import '../../../../core/theme/utils/responsive.dart';
 
 class MatchingScreen extends ConsumerStatefulWidget {
   const MatchingScreen({super.key});
@@ -118,10 +120,11 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
     final l10n = AppLocalizations.of(context, ref);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: CosmicParticleBackground(
         child: SafeArea(
-          child: SingleChildScrollView(
+          child: ResponsiveLayout(
+            child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             child: Column(
@@ -406,6 +409,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                 ).animate().fade(delay: 200.ms).slideY(begin: 0.1),
               ],
             ),
+          ),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/utils/responsive.dart';
@@ -193,10 +194,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           vertical: 12,
         ),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.primary.withOpacity(0.12) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
+          color: isActive ? AppColors.primary.withOpacity(0.14) : Colors.transparent,
+          borderRadius: BorderRadius.circular(14),
           border: isActive
-              ? Border.all(color: AppColors.primary.withOpacity(0.3), width: 0.5)
+              ? Border.all(color: AppColors.primary.withOpacity(0.35), width: 0.8)
               : null,
         ),
         child: Row(
@@ -216,9 +217,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               const SizedBox(width: 12),
               Text(
                 _getNavLabel(context, index),
-                style: TextStyle(
+                style: GoogleFonts.outfit(
                   fontSize: 14,
-                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                  fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
                   color: isActive ? AppColors.primary : AppColors.textSecondaryDark,
                 ),
               ),
@@ -230,20 +231,37 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget _buildBottomNav(BuildContext context, int currentIndex) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Container(
+      margin: const EdgeInsets.fromLTRB(14, 0, 14, 12),
       decoration: BoxDecoration(
-        color: AppColors.surfaceDark.withOpacity(0.92),
-        border: const Border(
-          top: BorderSide(color: AppColors.glassBorder, width: 0.5),
+        color: isLight
+            ? Colors.white.withOpacity(0.94)
+            : const Color(0xEB0E1118),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: isLight
+              ? Colors.black.withOpacity(0.08)
+              : Colors.white.withOpacity(0.14),
+          width: 0.8,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isLight ? 0.08 : 0.35),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
-      child: ClipRect(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(28),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+          filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
           child: SafeArea(
             top: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(_navItems.length, (index) {
@@ -262,6 +280,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget _buildBottomNavItem(int index, int currentIndex) {
     final isActive = currentIndex == index;
     final item = _navItems[index];
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
+    final activeColor = AppColors.primary;
+    final inactiveColor = isLight
+        ? const Color(0xFF70757A)
+        : Colors.white.withOpacity(0.45);
 
     return GestureDetector(
       onTap: () {
@@ -273,44 +297,64 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
+        padding: const EdgeInsets.symmetric(vertical: 4),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Floating Active Capsule Background
             AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOutCubic,
-              width: isActive ? 18 : 0,
-              height: 3,
-              margin: const EdgeInsets.only(bottom: 4),
+              width: isActive ? 48 : 36,
+              height: 28,
               decoration: BoxDecoration(
-                color: isActive ? AppColors.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(2),
+                color: isActive
+                    ? activeColor.withOpacity(0.16)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(16),
+                border: isActive
+                    ? Border.all(
+                        color: activeColor.withOpacity(0.40),
+                        width: 0.8,
+                      )
+                    : null,
                 boxShadow: isActive
-                    ? [const BoxShadow(color: AppColors.goldGlow, blurRadius: 8)]
+                    ? [
+                        BoxShadow(
+                          color: activeColor.withOpacity(0.20),
+                          blurRadius: 10,
+                          spreadRadius: -1,
+                        ),
+                      ]
                     : null,
               ),
+              child: Center(
+                child: AnimatedScale(
+                  scale: isActive ? 1.1 : 1.0,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeOutBack,
+                  child: Icon(
+                    isActive ? item.activeIcon : item.icon,
+                    color: isActive ? activeColor : inactiveColor,
+                    size: 19,
+                  ),
+                ),
+              ),
             ),
-            AnimatedScale(
-              scale: isActive ? 1.15 : 1.0,
+            const SizedBox(height: 4),
+            AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOutBack,
-              child: Icon(
-                isActive ? item.activeIcon : item.icon,
-                color: isActive ? AppColors.primary : AppColors.textTertiaryDark,
-                size: 20,
+              style: GoogleFonts.inter(
+                fontSize: 10,
+                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+                color: isActive ? activeColor : inactiveColor,
+                letterSpacing: isActive ? 0.2 : 0,
               ),
-            ),
-            const SizedBox(height: 3),
-            Text(
-              _getNavLabel(context, index),
-              style: TextStyle(
-                fontSize: 8.5,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                color: isActive ? AppColors.primary : AppColors.textTertiaryDark,
+              child: Text(
+                _getNavLabel(context, index),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

@@ -12,6 +12,7 @@ import 'core/routing/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'core/providers/locale_provider.dart';
+import 'core/providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -67,13 +68,14 @@ class AstroSaathiApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final language = ref.watch(localeProvider);
+    final appThemeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
       title: 'AstroSaathi',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.dark,
+      themeMode: appThemeMode.mode,
       locale: Locale(language.code),
       supportedLocales: const [
         Locale('en'),

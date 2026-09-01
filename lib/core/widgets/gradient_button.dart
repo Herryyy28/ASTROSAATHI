@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
 
 /// A premium gradient CTA button with gold shimmer and press animation.
@@ -68,26 +69,26 @@ class _GradientButtonState extends State<GradientButton>
         },
         child: Container(
           width: widget.width ?? double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 18),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           decoration: BoxDecoration(
             gradient: widget.gradient ?? AppColors.goldGradient,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(14),
             boxShadow: [
               BoxShadow(
                 color: AppColors.goldGlow,
-                blurRadius: 20,
-                offset: const Offset(0, 6),
-                spreadRadius: -4,
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+                spreadRadius: -2,
               ),
             ],
           ),
           child: widget.isLoading
               ? const Center(
                   child: SizedBox(
-                    height: 20,
-                    width: 20,
+                    height: 18,
+                    width: 18,
                     child: CircularProgressIndicator(
-                      strokeWidth: 2.5,
+                      strokeWidth: 2.2,
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
                     ),
                   ),
@@ -97,16 +98,16 @@ class _GradientButtonState extends State<GradientButton>
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     if (widget.icon != null) ...[
-                      Icon(widget.icon, color: Colors.black, size: 20),
-                      const SizedBox(width: 10),
+                      Icon(widget.icon, color: Colors.black, size: 18),
+                      const SizedBox(width: 8),
                     ],
                     Flexible(
                       child: Text(
                         widget.text,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: GoogleFonts.plusJakartaSans(
                           color: Colors.black,
-                          fontSize: 16,
+                          fontSize: 14.5,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.3,
                         ),

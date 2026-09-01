@@ -93,11 +93,14 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
     final double keyboardInset = MediaQuery.of(context).viewInsets.bottom;
     final double bottomPadding = keyboardInset > 0 ? 0.0 : 64.0;
 
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.cosmicRadialGradient,
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: SafeArea(
           bottom: false,

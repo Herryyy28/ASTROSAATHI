@@ -56,7 +56,7 @@ class _CosmicParticleBackgroundState extends State<CosmicParticleBackground>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.backgroundDark,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Stack(
         children: [
           // ── Isolated 60 FPS Particle Background Canvas ─────────────────

@@ -16,7 +16,7 @@ class GlassCard extends StatelessWidget {
     super.key,
     required this.child,
     this.padding,
-    this.borderRadius = 24,
+    this.borderRadius = 16,
     this.borderColor,
     this.glowColor,
     this.gradient,
@@ -25,34 +25,47 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     final glassGradient = gradient ??
         LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Colors.white.withOpacity(0.12),
-            Colors.white.withOpacity(0.04),
-          ],
+          colors: isLight
+              ? [
+                  Colors.white,
+                  Colors.white.withOpacity(0.92),
+                ]
+              : [
+                  Colors.white.withOpacity(0.16),
+                  Colors.white.withOpacity(0.06),
+                ],
         );
+
+    final defaultBorderColor = isLight
+        ? Colors.black.withOpacity(0.08)
+        : Colors.white.withOpacity(0.22);
 
     final card = ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
-          padding: padding ?? const EdgeInsets.all(20),
+          padding: padding ?? const EdgeInsets.all(16),
           decoration: BoxDecoration(
             gradient: glassGradient,
             borderRadius: BorderRadius.circular(borderRadius),
             border: Border.all(
-              color: borderColor ?? Colors.white.withOpacity(0.18),
+              color: borderColor ?? defaultBorderColor,
               width: 0.8,
             ),
             boxShadow: [
               if (glowColor != null)
                 BoxShadow(color: glowColor!, blurRadius: 24, spreadRadius: -4),
               BoxShadow(
-                color: Colors.black.withOpacity(0.25),
+                color: isLight
+                    ? Colors.black.withOpacity(0.04)
+                    : Colors.black.withOpacity(0.25),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               ),
