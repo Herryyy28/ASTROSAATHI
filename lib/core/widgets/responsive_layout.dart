@@ -24,9 +24,16 @@ class ResponsiveLayout extends StatelessWidget {
     }
 
     return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: width),
-        child: child,
+      child: SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: width),
+            child: child,
+          ),
+        ),
       ),
     );
   }

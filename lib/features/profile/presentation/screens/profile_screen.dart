@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
@@ -15,6 +18,12 @@ import '../../../../core/providers/subscription_provider.dart';
 import '../../../../core/utils/zodiac_sign_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
+import '../widgets/add_family_member_modal.dart';
+import 'settings/notifications_screen.dart';
+import 'settings/saved_insights_screen.dart';
+import 'settings/data_privacy_screen.dart';
+import 'settings/about_screen.dart';
+import '../widgets/profile_switcher_modal.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -57,22 +66,40 @@ class ProfileScreen extends ConsumerWidget {
                         if (primary.isNotEmpty) ...[
                           _buildSectionTitle(l10n.myProfile),
                           const SizedBox(height: 10),
-                          _buildPrimaryKundliCard(primary.first, l10n)
+                          _buildPrimaryKundliCard(primary.first, l10n, activeProfile, ref)
                               .animate().fadeIn(delay: 100.ms),
                           const SizedBox(height: 24),
                         ],
 
                         // ── Family Kundlis ────────────────────────
-                        _buildSectionTitle(l10n.familyKundlis),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _buildSectionTitle(l10n.familyKundlis),
+                            if (family.isNotEmpty)
+                              IconButton(
+                                icon: const Icon(Icons.add_circle_outline_rounded, color: AppColors.primary),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                                onPressed: () {
+                                  if (ref.read(canAddMoreProfilesProvider)) {
+                                    AddFamilyMemberModal.show(context);
+                                  } else {
+                                    PremiumUpgradeModal.show(context);
+                                  }
+                                },
+                              ),
+                          ],
+                        ),
                         const SizedBox(height: 10),
                         if (family.isEmpty)
-                          _buildEmptyFamilyCard(l10n)
+                          _buildEmptyFamilyCard(l10n, context, ref)
                               .animate().fadeIn(delay: 200.ms)
                         else
                           ...family.asMap().entries.map((entry) {
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 10),
-                              child: _buildFamilyMemberCard(entry.value, ref)
+                              child: _buildFamilyMemberCard(entry.value, activeProfile, ref)
                                   .animate()
                                   .fadeIn(delay: Duration(milliseconds: 200 + entry.key * 80)),
                             );
@@ -99,7 +126,10 @@ class ProfileScreen extends ConsumerWidget {
                           iconColor: AppColors.warning,
                           title: l10n.notifications,
                           subtitle: 'Daily cosmic plan alerts',
-                          onTap: () {},
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                          ),
                         ).animate().fadeIn(delay: 360.ms),
                         const SizedBox(height: 8),
 
@@ -109,7 +139,10 @@ class ProfileScreen extends ConsumerWidget {
                           iconColor: AppColors.secondary,
                           title: l10n.savedInsights,
                           subtitle: 'Your saved AI recommendations',
-                          onTap: () {},
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const SavedInsightsScreen()),
+                          ),
                         ).animate().fadeIn(delay: 420.ms),
                         const SizedBox(height: 8),
 
@@ -119,7 +152,10 @@ class ProfileScreen extends ConsumerWidget {
                           iconColor: AppColors.success,
                           title: l10n.dataPrivacy,
                           subtitle: 'End-to-end encrypted',
-                          onTap: () {},
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const DataPrivacyScreen()),
+                          ),
                         ).animate().fadeIn(delay: 480.ms),
                         const SizedBox(height: 8),
 
@@ -129,8 +165,23 @@ class ProfileScreen extends ConsumerWidget {
                           iconColor: AppColors.textSecondaryDark,
                           title: l10n.about,
                           subtitle: 'AstroSaathi v2.0',
-                          onTap: () {},
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const AboutScreen()),
+                          ),
                         ).animate().fadeIn(delay: 540.ms),
+
+                        // VIP Account Deletion & Reset (Shows when VIP is enabled)
+                        if (subState.isPremium) ...[
+                          const SizedBox(height: 8),
+                          _buildSettingsTile(
+                            icon: Icons.delete_forever_rounded,
+                            iconColor: AppColors.error,
+                            title: l10n.deleteAccount,
+                            subtitle: 'Erase all profile details & return to entry onboarding',
+                            onTap: () => _showDeleteAccountDialog(context, ref),
+                          ).animate().fadeIn(delay: 600.ms),
+                        ],
 
                         // VIP Upgrade
                         if (!subState.isPremium) ...[
@@ -246,15 +297,21 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPrimaryKundliCard(BirthProfileData profile, AppLocalizations l10n) {
+  Widget _buildPrimaryKundliCard(BirthProfileData profile, AppLocalizations l10n, BirthProfileData activeProfile, WidgetRef ref) {
     final zodiac = profile.name.isNotEmpty
         ? ZodiacSignUtils.getZodiacFromName(profile.name)
         : null;
+    final isActive = activeProfile.id == profile.id;
 
     return GlassCard(
       borderRadius: 20,
-      glowColor: AppColors.goldGlow,
+      glowColor: isActive ? AppColors.goldGlow : null,
+      borderColor: isActive ? AppColors.primary : AppColors.glassBorder,
       padding: const EdgeInsets.all(20),
+      onTap: () {
+        final profiles = ref.read(profilesListProvider);
+        ref.read(activeProfileIndexProvider.notifier).state = profiles.indexOf(profile);
+      },
       child: Row(
         children: [
           Container(
@@ -315,6 +372,25 @@ class ProfileScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    if (isActive) ...[
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: AppColors.success.withOpacity(0.2),
+                          border: Border.all(color: AppColors.success.withOpacity(0.4)),
+                        ),
+                        child: Text(
+                          'Active',
+                          style: GoogleFonts.outfit(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.success,
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
                 ),
                 const SizedBox(height: 4),
@@ -356,17 +432,21 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildFamilyMemberCard(BirthProfileData profile, WidgetRef ref) {
+  Widget _buildFamilyMemberCard(BirthProfileData profile, BirthProfileData activeProfile, WidgetRef ref) {
     final zodiac = profile.name.isNotEmpty
         ? ZodiacSignUtils.getZodiacFromName(profile.name)
         : null;
+    final isActive = activeProfile.id == profile.id;
 
     return GlassCard(
       borderRadius: 16,
+      borderColor: isActive ? AppColors.primary : AppColors.glassBorder,
+      glowColor: isActive ? AppColors.goldGlow : null,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       onTap: () {
+        final profiles = ref.read(profilesListProvider);
         ref.read(activeProfileIndexProvider.notifier).state =
-            ref.read(profilesListProvider).indexOf(profile);
+            profiles.indexOf(profile);
       },
       child: Row(
         children: [
@@ -416,20 +496,45 @@ class ProfileScreen extends ConsumerWidget {
               ],
             ),
           ),
-          const Icon(
-            Icons.chevron_right_rounded,
-            color: AppColors.textTertiaryDark,
-            size: 20,
-          ),
+          if (isActive)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: AppColors.success.withOpacity(0.2),
+                border: Border.all(color: AppColors.success.withOpacity(0.4)),
+              ),
+              child: Text(
+                'Active',
+                style: GoogleFonts.outfit(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.success,
+                ),
+              ),
+            )
+          else
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: AppColors.textTertiaryDark,
+              size: 20,
+            ),
         ],
       ),
     );
   }
 
-  Widget _buildEmptyFamilyCard(AppLocalizations l10n) {
+  Widget _buildEmptyFamilyCard(AppLocalizations l10n, BuildContext context, WidgetRef ref) {
     return GlassCard(
       borderRadius: 16,
       padding: const EdgeInsets.all(20),
+      onTap: () {
+        if (ref.read(canAddMoreProfilesProvider)) {
+          AddFamilyMemberModal.show(context);
+        } else {
+          PremiumUpgradeModal.show(context);
+        }
+      },
       child: Row(
         children: [
           Container(
@@ -581,6 +686,95 @@ class ProfileScreen extends ConsumerWidget {
             Icons.arrow_forward_ios_rounded,
             color: Color(0xFFFFD700),
             size: 16,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteAccountDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.surfaceDark,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: const BorderSide(color: AppColors.error, width: 1),
+        ),
+        title: Row(
+          children: [
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: AppColors.error,
+              size: 28,
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Delete Account & Reset Data',
+                style: GoogleFonts.outfit(
+                  color: AppColors.textPrimaryDark,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          'Are you sure you want to permanently erase your VIP subscription, saved Kundlis, family profiles, and settings?\n\nYou will be returned to the entry level onboarding screen to fill all your birth details from scratch.',
+          style: GoogleFonts.inter(
+            color: AppColors.textSecondaryDark,
+            fontSize: 13,
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: AppColors.textSecondaryDark),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+
+              // 1. Wipe all profile data
+              await ref.read(profilesListProvider.notifier).clearAllProfiles();
+
+              // 2. Cancel VIP Subscription
+              await ref.read(subscriptionProvider.notifier).cancelSubscription();
+
+              // 3. Clear SharedPreferences
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.clear();
+
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Account deleted & data cleared. Returning to onboarding...',
+                    ),
+                    backgroundColor: AppColors.success,
+                  ),
+                );
+                // 4. Redirect to entry level Onboarding
+                context.go('/onboarding');
+              }
+            },
+            child: const Text(
+              'Delete & Reset',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),

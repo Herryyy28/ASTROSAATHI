@@ -372,6 +372,25 @@ class KundliScreen extends ConsumerWidget {
     AppLocalizations l10n,
   ) {
     final planets = (chartData['planets'] as List<dynamic>?) ?? [];
+    final cols = context.responsive(mobile: 1, tablet: 2, desktop: 2);
+
+    if (cols > 1) {
+      return GridView.builder(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
+        physics: const BouncingScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: cols,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          mainAxisExtent: 190,
+        ),
+        itemCount: planets.length,
+        itemBuilder: (context, index) {
+          final planet = planets[index] as Map<String, dynamic>;
+          return _buildPlanetSummaryCard(planet, l10n, index);
+        },
+      );
+    }
 
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
@@ -391,6 +410,41 @@ class KundliScreen extends ConsumerWidget {
     AppLocalizations l10n,
   ) {
     final houses = (chartData['houses'] as List<dynamic>?) ?? [];
+    final cols = context.responsive(mobile: 1, tablet: 2, desktop: 2);
+
+    if (cols > 1) {
+      return GridView.builder(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
+        physics: const BouncingScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: cols,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          mainAxisExtent: 190,
+        ),
+        itemCount: houses.length,
+        itemBuilder: (context, index) {
+          final house = houses[index] as Map<String, dynamic>;
+          final houseNum = house['number'] as int? ?? (index + 1);
+          final sign = house['sign'] as String? ?? 'Aries';
+          final lord = house['lord'] as String? ?? '';
+          final planets = (house['planets'] as List<dynamic>?) ?? [];
+          final meaning = house['meaning'] as String? ?? 'This house governs aspects of your life.';
+
+          return _ProgressiveDisclosureCard(
+            title: 'House $houseNum • $sign',
+            badge: planets.isNotEmpty ? '${planets.length} Planet${planets.length > 1 ? 's' : ''}' : 'Empty',
+            badgeColor: planets.isNotEmpty ? AppColors.success : AppColors.textTertiaryDark,
+            subtitle: 'Lord: $lord${planets.isNotEmpty ? ' • ${planets.join(", ")}' : ''}',
+            meaningText: meaning,
+            technicalDetails: 'Sign: $sign • Lord: $lord • Planets: ${planets.isNotEmpty ? planets.join(", ") : "None"}',
+            whatThisMeansLabel: l10n.whatThisMeans,
+            viewDetailsLabel: l10n.viewTechnicalDetails,
+            index: index,
+          );
+        },
+      );
+    }
 
     return ListView.builder(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),

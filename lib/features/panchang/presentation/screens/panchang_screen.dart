@@ -12,8 +12,8 @@ import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/engine/models/panchang_data.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/widgets/why_this_bottom_sheet.dart';
+import '../../../../core/widgets/admob_banner_widget.dart';
 import '../../../../core/theme/utils/responsive.dart';
-
 import '../../../../l10n/app_localizations.dart';
 
 class PanchangScreen extends ConsumerWidget {
@@ -215,7 +215,10 @@ class PanchangScreen extends ConsumerWidget {
                 _buildElementCard(context, 'Yoga', panchang.yoga, 'Sun-Moon angle', '🔮', 3),
                 _buildElementCard(context, 'Karana', panchang.karana, 'Half lunar day', '☯️', 4),
 
-                const SizedBox(height: 28),
+                const SizedBox(height: 16),
+
+                const AdMobBannerWidget(),
+                const SizedBox(height: 16),
 
                 // ── Inauspicious Timings ──────────────────────────
                 _buildInauspiciousTimings(panchang),

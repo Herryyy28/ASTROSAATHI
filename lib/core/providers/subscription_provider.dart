@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -149,9 +150,13 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
       if (tier == PlanTier.weeklyVip) amount = 19.0;
       if (tier == PlanTier.yearlyVip) amount = 199.0;
 
+      final String baseUrl = kDebugMode
+          ? 'http://10.0.2.2:3000'
+          : 'https://api.astrosaathi.app';
+
       // 1. Create order on NestJS Backend
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/api/v1/payments/create-order'),
+        Uri.parse('$baseUrl/api/v1/payments/create-order'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'amount': amount,
@@ -167,7 +172,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
         // 2. Verify signature on NestJS Backend & write SHA-256 block to Blockchain Ledger
         final verifyRes = await http.post(
-          Uri.parse('http://10.0.2.2:3000/api/v1/payments/verify-signature'),
+          Uri.parse('$baseUrl/api/v1/payments/verify-signature'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
             'orderId': orderId,

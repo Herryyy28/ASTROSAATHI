@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'subscription_provider.dart';
+
 const _profilesKey = 'birth_profiles_v1';
 
 class BirthProfileData {
@@ -203,6 +205,19 @@ class ProfilesNotifier extends StateNotifier<List<BirthProfileData>> {
     state = updated;
     await _persist();
   }
+
+  Future<void> clearAllProfiles() async {
+    state = [];
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_profilesKey);
+    await prefs.remove('user_name');
+    await prefs.remove('user_dob');
+    await prefs.remove('user_time');
+    await prefs.remove('user_place');
+    await prefs.remove('user_lat');
+    await prefs.remove('user_lon');
+    await prefs.remove('user_tz');
+  }
 }
 
 final profilesListProvider =
@@ -211,6 +226,8 @@ final profilesListProvider =
 });
 
 final canAddMoreProfilesProvider = Provider<bool>((ref) {
+  final isPremium = ref.watch(subscriptionProvider).isPremium;
+  if (isPremium) return true;
   final profiles = ref.watch(profilesListProvider);
   return profiles.length < ProfilesNotifier.maxProfiles;
 });
@@ -234,9 +251,15 @@ final _emptyProfile = BirthProfileData(
   isPrimary: true,
 );
 
+final activeProfileIndexProvider = StateProvider<int>((ref) => 0);
+
 final activeProfileProvider = Provider<BirthProfileData>((ref) {
   final profiles = ref.watch(profilesListProvider);
   if (profiles.isEmpty) return _emptyProfile;
+  final index = ref.watch(activeProfileIndexProvider);
+  if (index >= 0 && index < profiles.length) {
+    return profiles[index];
+  }
   return profiles.firstWhere(
     (p) => p.isPrimary,
     orElse: () => profiles.first,
@@ -248,5 +271,4 @@ final hasBirthProfileProvider = Provider<bool>((ref) {
   return profile.dob.isNotEmpty && profile.name.isNotEmpty;
 });
 
-final activeProfileIndexProvider = StateProvider<int>((ref) => 0);
 

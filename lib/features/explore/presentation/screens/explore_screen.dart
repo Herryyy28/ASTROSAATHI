@@ -17,6 +17,11 @@ import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../horoscope/presentation/screens/horoscope_screen.dart';
 import '../../../remedies/presentation/screens/remedy_hub_screen.dart';
 import '../../../matching/presentation/screens/matching_screen.dart';
+import '../../../astrology/presentation/screens/numerology_screen.dart';
+import '../../../astrology/presentation/screens/transits_screen.dart';
+
+import '../../../home/presentation/screens/main_screen.dart';
+import '../../../kundli/presentation/screens/kundli_screen.dart';
 
 class ExploreScreen extends ConsumerWidget {
   const ExploreScreen({super.key});
@@ -110,7 +115,7 @@ class ExploreScreen extends ConsumerWidget {
                       childAspectRatio: 1.05,
                     ),
                     delegate: SliverChildListDelegate(
-                      _buildCategoryItems(context, l10n),
+                      _buildCategoryItems(context, ref, l10n),
                     ),
                   ),
                 ),
@@ -122,7 +127,7 @@ class ExploreScreen extends ConsumerWidget {
     );
   }
 
-  List<Widget> _buildCategoryItems(BuildContext context, AppLocalizations l10n) {
+  List<Widget> _buildCategoryItems(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
     final categories = [
       _ExploreCategory(
         emoji: '🌅',
@@ -171,7 +176,10 @@ class ExploreScreen extends ConsumerWidget {
           colors: [Color(0xFF3A1A0A), Color(0xFFFF9500)],
         ),
         icon: Icons.bolt_rounded,
-        onTap: () {}, // Routes to existing dosha screen if available
+        onTap: () {
+          ref.read(kundliTabProvider.notifier).update((_) => 4); // Yoga & Dosha tab
+          ref.read(mainNavIndexProvider.notifier).update((_) => 1); // Kundli screen
+        },
       ),
       _ExploreCategory(
         emoji: '💎',
@@ -207,7 +215,10 @@ class ExploreScreen extends ConsumerWidget {
           colors: [Color(0xFF1A1A3A), Color(0xFF4A90E2)],
         ),
         icon: Icons.pin_rounded,
-        onTap: () {}, // Future feature
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const NumerologyScreen()),
+        ),
       ),
       _ExploreCategory(
         emoji: '🪐',
@@ -217,7 +228,10 @@ class ExploreScreen extends ConsumerWidget {
           colors: [Color(0xFF2A1A3A), Color(0xFF9B59B6)],
         ),
         icon: Icons.public_rounded,
-        onTap: () {}, // Future feature
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const TransitsScreen()),
+        ),
       ),
     ];
 

@@ -109,9 +109,12 @@ extension ResponsiveContext on BuildContext {
   double get fontXL => responsive(mobile: 22.0, tablet: 26.0, desktop: 30.0);
   double get fontDisplay => responsive(mobile: 28.0, tablet: 34.0, desktop: 42.0);
 
+  // ── Adaptive Grid Columns ─────────────────────────────────────────
+  int get gridColumns => responsive(mobile: 1, tablet: 2, desktop: 3);
+
   // ── Max content width ─────────────────────────────────────────────
   double get maxContentWidth =>
-      responsive(mobile: double.infinity, tablet: 680.0, desktop: 860.0);
+      responsive(mobile: double.infinity, tablet: 720.0, desktop: 960.0);
 }
 
 /// ── App-wide standard text sizes ────────────────────────────────────────────

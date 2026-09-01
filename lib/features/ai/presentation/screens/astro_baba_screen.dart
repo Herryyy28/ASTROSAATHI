@@ -16,6 +16,7 @@ import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/providers/subscription_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/widgets/admob_banner_widget.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
 
 class AstroBabaScreen extends ConsumerStatefulWidget {
@@ -123,6 +124,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                 ),
 
                 // ── Ad Banner ───────────────────────────────────────
+                const AdMobBannerWidget(),
 
                 // ── Contextual Smart Prompt Chips (Only show if typing is allowed) ──
                 if (!hasUsedQuery) _buildSuggestedQuestions(),

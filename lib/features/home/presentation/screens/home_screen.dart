@@ -20,10 +20,12 @@ import '../../../../core/widgets/why_this_bottom_sheet.dart';
 import '../../../../core/widgets/data_freshness_badge.dart';
 import '../../../../core/widgets/iphone_glass_menu.dart';
 
+import '../../../../core/widgets/admob_banner_widget.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../search/presentation/screens/astrology_search_screen.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../subscription/presentation/widgets/vip_badge_button.dart';
+import '../../../profile/presentation/widgets/profile_switcher_modal.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
 import 'main_screen.dart';
 
@@ -66,6 +68,8 @@ class HomeScreen extends ConsumerWidget {
       tablet: 32,
       desktop: 40,
     );
+    final isWide = !context.isMobile;
+
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -79,19 +83,34 @@ class HomeScreen extends ConsumerWidget {
                 _buildGreeting().fadeSlideUp(),
                 const SizedBox(height: 24),
 
-                // ── Visual Birth Chart ─────────────────────────────
-                BirthChartCard(),
-                const SizedBox(height: 32),
-
-                // ── Energy Score Card ─────────────────────────────
-                _buildEnergyCard(context, plan).fadeSlideUp(delay: 100.ms),
+                // ── Hero Section (Adaptive side-by-side on wide screens) ──
+                if (isWide) ...[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: const BirthChartCard(),
+                      ),
+                      const SizedBox(width: 24),
+                      Expanded(
+                        child: _buildEnergyCard(context, plan).fadeSlideUp(delay: 100.ms),
+                      ),
+                    ],
+                  ),
+                ] else ...[
+                  const BirthChartCard(),
+                  const SizedBox(height: 24),
+                  _buildEnergyCard(context, plan).fadeSlideUp(delay: 100.ms),
+                ],
                 const SizedBox(height: 28),
 
                 // ── Personal Cosmic Calendar ──────────────────────
                 const PersonalCosmicCalendarWidget().fadeSlideUp(delay: 120.ms),
                 const SizedBox(height: 20),
 
-                // ── Ad / Sponsored Banner UI ───────────────────────
+                // ── AdMob Banner (Shows on normal free account, hides on VIP subscription) ──
+                const AdMobBannerWidget(),
+                const SizedBox(height: 20),
 
                 // ── Do / Careful / Avoid ──────────────────────────
                 Consumer(
@@ -154,6 +173,8 @@ class HomeScreen extends ConsumerWidget {
     return Consumer(
       builder: (context, ref, _) {
         final l10n = AppLocalizations.of(context, ref);
+        final lang = ref.watch(localeProvider);
+
         if (hour < 12) {
           greeting = l10n.goodMorning;
           emoji = '☀️';
@@ -211,47 +232,54 @@ class HomeScreen extends ConsumerWidget {
                     );
                   },
                 ),
-                Container(
-                  margin: const EdgeInsets.only(left: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: AppColors.primary.withOpacity(0.3),
-                      width: 0.8,
-                    ),
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.more_vert_rounded,
-                      color: AppColors.primary,
-                      size: 22,
-                    ),
-                    onPressed: () {
-                      IPhoneGlassMenu.show(context, ref);
-                    },
-                  ),
-                ),
               ],
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                GestureDetector(
+                  onTap: () => ProfileSwitcherModal.show(context),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          activeProfile.isPrimary ? Icons.star_rounded : Icons.person_rounded,
+                          size: 14,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          activeProfile.name.isNotEmpty ? activeProfile.name : 'Profile',
+                          style: GoogleFonts.outfit(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.swap_vert_rounded, size: 14, color: AppColors.primary),
+                      ],
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: Text(
-                    _formatDate(),
+                    _formatDate(lang),
+                    textAlign: TextAlign.end,
                     style: GoogleFonts.inter(
-                      fontSize: 14,
+                      fontSize: 13,
                       color: AppColors.textSecondaryDark,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                const SizedBox(width: 8),
-                DataFreshnessBadge(
-                  timeString:
-                      'Calculated at ${DateTime.now().hour.toString().padLeft(2, '0')}:${DateTime.now().minute.toString().padLeft(2, '0')}',
                 ),
               ],
             ),
@@ -261,33 +289,24 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  String _formatDate() {
+  String _formatDate(AppLanguage lang) {
     final now = DateTime.now();
-    const days = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-    ];
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${days[now.weekday - 1]} · ${now.day} ${months[now.month - 1]}';
+    List<String> days;
+    List<String> months;
+
+    if (lang == AppLanguage.hindi) {
+      days = ['सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार', 'रविवार'];
+      months = ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'];
+    } else if (lang == AppLanguage.gujarati) {
+      days = ['સોમવાર', 'મંગળવાર', 'બુધવાર', 'ગુરુવાર', 'શુક્રવાર', 'શનિવાર', 'રવિવાર'];
+      months = ['જાન્યુઆરી', 'ફેબ્રુઆરી', 'માર્ચ', 'એપ્રિલ', 'મે', 'જૂન', 'જુલાઇ', 'ઓગસ્ટ', 'સપ્ટેમ્બર', 'ઓક્ટોબર', 'નવેમ્બર', 'ડિસેમ્બર'];
+    } else {
+      days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    }
+    return '${days[(now.weekday - 1) % 7]} · ${now.day} ${months[(now.month - 1) % 12]}';
   }
+
 
   Widget _buildEnergyCard(BuildContext context, GamePlanData plan) {
     return GlassCard(

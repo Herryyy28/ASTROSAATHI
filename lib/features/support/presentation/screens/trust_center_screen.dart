@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/gradient_button.dart';
+import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/providers/subscription_provider.dart';
 import '../../../onboarding/presentation/screens/onboarding_screen.dart';
 
 class TrustCenterScreen extends ConsumerStatefulWidget {
@@ -106,7 +108,8 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
     );
 
     if (confirmed == true && mounted) {
-      // Clear SharedPreferences
+      await ref.read(profilesListProvider.notifier).clearAllProfiles();
+      await ref.read(subscriptionProvider.notifier).cancelSubscription();
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
 
@@ -407,6 +410,15 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
                   color: AppColors.textSecondaryDark,
                   fontSize: 13,
                   height: 1.4,
+                ),
+              ),
+              const SizedBox(height: 12),
+              SelectableText(
+                'https://astrosaathi.app/privacy-policy',
+                style: GoogleFonts.outfit(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
                 ),
               ),
               const SizedBox(height: 12),
