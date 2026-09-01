@@ -40,6 +40,10 @@ class AppColors {
   static const Color textSecondaryDark = Color(0xFFCBD5E1);
   static const Color textTertiaryDark = Color(0xFF64748B);
 
+  static const Color textPrimaryLight = Color(0xFF0F172A);
+  static const Color textSecondaryLight = Color(0xFF475569);
+  static const Color textTertiaryLight = Color(0xFF94A3B8);
+
   // ── Gradients ─────────────────────────────────────────────────────
   static const LinearGradient premiumGradient = LinearGradient(
     colors: [Color(0xFF0C0F1E), Color(0xFF141A33), Color(0xFF0E1A38)],
