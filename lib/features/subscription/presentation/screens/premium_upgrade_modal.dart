@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +12,8 @@ import '../../../../core/services/razorpay_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../auth/data/auth_repository.dart';
 import '../../../auth/presentation/screens/auth_screen.dart';
+import 'payment_status_screens.dart';
+import 'package:intl/intl.dart';
 
 class PremiumUpgradeModal extends ConsumerStatefulWidget {
   const PremiumUpgradeModal({super.key});
@@ -31,6 +35,24 @@ class PremiumUpgradeModal extends ConsumerStatefulWidget {
 class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   PlanTier _selectedTier = PlanTier.yearlyVip;
   bool _isProcessing = false;
+  Razorpay? _razorpay;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+      _razorpay = Razorpay();
+      _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+      _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+      _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    }
+  }
+
+  @override
+  void dispose() {
+    _razorpay?.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -538,7 +560,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     final double amount = _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199);
     final String planName = _selectedTier.displayName;
 
-    _showOnlinePaymentGateway(context, amount, planName, session.userId ?? 'user', session.email ?? '');
+    _startRazorpayCheckout(amount, planName, session.userId ?? 'user', session.email ?? '');
   }
 
   void _showAuthRequiredSheet(BuildContext context) {
@@ -646,87 +668,147 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     );
   }
 
-  void _showOnlinePaymentGateway(BuildContext context, double amount, String planName, String userId, String userEmail) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.85),
-      builder: (ctx) {
-        return _PaymentGatewaySheet(
-          amount: amount,
-          planName: planName,
-          userId: userId,
-          userEmail: userEmail,
-          onPaymentSuccess: () async {
-            await ref.read(subscriptionProvider.notifier).processRazorpayPayment(
-              _selectedTier,
-              userId: userId,
-              userEmail: userEmail,
-            );
-            if (mounted) {
-              Navigator.pop(ctx); // Close payment sheet
-              Navigator.pop(context); // Close VIP upgrade modal
-              _showSuccessDialog();
-            }
+  String _currentOrderId = '';
+
+  Future<void> _startRazorpayCheckout(double amount, String planName, String userId, String userEmail) async {
+    setState(() => _isProcessing = true);
+
+    try {
+      final req = RazorpayPaymentRequest(
+        amount: amount,
+        planName: planName,
+        userId: userId,
+        userEmail: userEmail,
+        paymentMethod: 'Razorpay Gateway',
+      );
+
+      final orderRes = await RazorpayService.instance.createRazorpayOrder(req);
+
+      if (orderRes['success'] == true) {
+        _currentOrderId = orderRes['orderId'];
+        var options = {
+          'key': RazorpayConfig.keyId,
+          'amount': orderRes['amount'],
+          'name': RazorpayConfig.merchantName,
+          'order_id': _currentOrderId,
+          'description': 'Payment for $planName',
+          'prefill': {
+            'contact': '9876543210',
+            'email': userEmail,
           },
+          'theme': {
+            'color': '#0066FF'
+          },
+          'send_sms_hash': true,
+        };
+
+        if (_razorpay == null) {
+          throw Exception('Razorpay is not supported on this platform. Please use Android or iOS.');
+        }
+        _razorpay!.open(options);
+      } else {
+        throw Exception('Failed to create order');
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isProcessing = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Payment initiation failed. Please try again.')),
         );
-      },
+      }
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    if (!mounted) return;
+    setState(() => _isProcessing = false);
+    
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const PaymentProcessingOverlay(),
+    );
+
+    final session = ref.read(userSessionProvider);
+
+    final isVerified = await RazorpayService.instance.verifyRazorpayPayment(
+      orderId: response.orderId ?? _currentOrderId,
+      paymentId: response.paymentId ?? '',
+      signature: response.signature ?? '',
+      userId: session.userId ?? 'user',
+      userEmail: session.email ?? '',
+    );
+
+    if (!mounted) return;
+    Navigator.pop(context); // close processing overlay
+
+    if (isVerified) {
+      await ref.read(subscriptionProvider.notifier).grantPremiumAccess(_selectedTier, _currentOrderId);
+      
+      Navigator.pop(context); // Close VIP upgrade modal
+      
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PaymentSuccessScreen(
+            amount: _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199),
+            planName: _selectedTier.displayName,
+            transactionId: response.paymentId ?? '',
+            dateStr: DateFormat('dd MMM yyyy, hh:mm a').format(DateTime.now()),
+          ),
+        ),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => PaymentFailedScreen(
+            errorMessage: "We couldn't verify your payment with the server. If money was deducted, it will be refunded automatically.",
+            onRetry: () {
+              Navigator.pop(context);
+              _startRazorpayCheckout(
+                _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199),
+                _selectedTier.displayName,
+                session.userId ?? 'user',
+                session.email ?? ''
+              );
+            },
+          ),
+        ),
+      );
+    }
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    if (!mounted) return;
+    setState(() => _isProcessing = false);
+    
+    final session = ref.read(userSessionProvider);
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PaymentFailedScreen(
+          errorMessage: response.message ?? 'Payment cancelled or failed.',
+          onRetry: () {
+            Navigator.pop(context);
+            _startRazorpayCheckout(
+              _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199),
+              _selectedTier.displayName,
+              session.userId ?? 'user',
+              session.email ?? ''
+            );
+          },
+        ),
+      ),
     );
   }
 
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF141923),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(28),
-          side: const BorderSide(color: Color(0xFFFFD700), width: 1.5),
-        ),
-        title: Center(
-          child: Column(
-            children: [
-              const Text('🎉👑✨', style: TextStyle(fontSize: 48)),
-              const SizedBox(height: 12),
-              Text(
-                'Welcome to AstroSaathi VIP!',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.outfit(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFFFFD700),
-                ),
-              ),
-            ],
-          ),
-        ),
-        content: Text(
-          'Your VIP status is now active. Enjoy 100% ad-free experience, unlimited AI consultation, and premium Vedic report exports!',
-          textAlign: TextAlign.center,
-          style: GoogleFonts.outfit(
-            fontSize: 14,
-            color: Colors.white70,
-          ),
-        ),
-        actions: [
-          Center(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFFD700),
-                foregroundColor: const Color(0xFF1E1705),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              ),
-              onPressed: () => Navigator.pop(ctx),
-              child: Text(
-                'Explore VIP Perks',
-                style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
-            ),
-          ),
-        ],
-      ),
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    if (!mounted) return;
+    setState(() => _isProcessing = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('External Wallet Selected: ${response.walletName}')),
     );
   }
 }

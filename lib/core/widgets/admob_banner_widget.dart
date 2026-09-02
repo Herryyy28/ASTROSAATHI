@@ -38,7 +38,7 @@ class _AdMobBannerWidgetState extends ConsumerState<AdMobBannerWidget> {
     final isPremium = ref.read(isPremiumProvider);
     if (isPremium) return;
 
-    if (kIsWeb) return;
+    if (kIsWeb || (!Platform.isAndroid && !Platform.isIOS)) return;
 
     final String adUnitId = Platform.isAndroid
         ? (kDebugMode

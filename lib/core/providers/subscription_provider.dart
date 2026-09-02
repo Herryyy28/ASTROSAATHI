@@ -144,55 +144,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     );
   }
 
-  Future<bool> processRazorpayPayment(PlanTier tier, {String userId = 'guest', String userEmail = ''}) async {
-    try {
-      double amount = 49.0;
-      if (tier == PlanTier.weeklyVip) amount = 19.0;
-      if (tier == PlanTier.yearlyVip) amount = 199.0;
-
-      final String baseUrl = kDebugMode
-          ? 'http://10.0.2.2:3000'
-          : 'https://api.astrosaathi.app';
-
-      // 1. Create order on NestJS Backend
-      final response = await http.post(
-        Uri.parse('$baseUrl/api/v1/payments/create-order'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'amount': amount,
-          'currency': 'INR',
-          'userId': userId,
-          'userEmail': userEmail,
-        }),
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final orderData = jsonDecode(response.body)['data'];
-        final orderId = orderData['id'];
-
-        // 2. Verify signature on NestJS Backend & write SHA-256 block to Blockchain Ledger
-        final verifyRes = await http.post(
-          Uri.parse('$baseUrl/api/v1/payments/verify-signature'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({
-            'orderId': orderId,
-            'paymentId': 'pay_${DateTime.now().millisecondsSinceEpoch}',
-            'signature': 'valid_mock_signature',
-            'userId': userId,
-            'userEmail': userEmail,
-          }),
-        );
-
-        if (verifyRes.statusCode == 200 || verifyRes.statusCode == 201) {
-          await upgradeToTier(tier);
-          return true;
-        }
-      }
-    } catch (_) {}
-
-    // Fallback upgrade for smooth UX testing
+  Future<void> grantPremiumAccess(PlanTier tier, String orderId) async {
+    // Only called after real server-side verification succeeds
     await upgradeToTier(tier);
-    return true;
   }
 
   Future<void> upgradeToTier(PlanTier tier) async {

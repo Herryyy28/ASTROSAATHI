@@ -177,6 +177,7 @@ class _WhatShouldIDoNowModalState extends State<WhatShouldIDoNowModal> {
                 ),
               ],
             ),
+            ),
           ),
         ),
       ),

@@ -58,8 +58,8 @@ export class PaymentsService {
       .update(body)
       .digest('hex');
 
-    // In development/test mode, verify matching or allow mock signature
-    const isValid = signature === expectedSignature || signature === 'valid_mock_signature';
+    // Enforce real signature verification
+    const isValid = signature === expectedSignature;
 
     if (!isValid) {
       await this.blockchainService.recordBlock('PAYMENT_FAILED_SIGNATURE_MISMATCH', {
