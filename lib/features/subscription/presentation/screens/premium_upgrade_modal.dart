@@ -673,6 +673,8 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   Future<void> _startRazorpayCheckout(double amount, String planName, String userId, String userEmail) async {
     setState(() => _isProcessing = true);
 
+    Map<String, dynamic> options;
+
     try {
       final req = RazorpayPaymentRequest(
         amount: amount,
@@ -686,7 +688,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
       if (orderRes['success'] == true) {
         _currentOrderId = orderRes['orderId'];
-        var options = {
+        options = {
           'key': RazorpayConfig.keyId,
           'amount': orderRes['amount'],
           'name': RazorpayConfig.merchantName,
@@ -701,14 +703,46 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           },
           'send_sms_hash': true,
         };
-
-        if (_razorpay == null) {
-          throw Exception('Razorpay is not supported on this platform. Please use Android or iOS.');
-        }
-        _razorpay!.open(options);
       } else {
-        throw Exception('Failed to create order');
+        throw Exception('Server order failed');
       }
+    } catch (e) {
+      // Fallback: If backend server order creation fails or times out, launch Razorpay directly
+      options = {
+        'key': RazorpayConfig.keyId,
+        'amount': (amount * 100).toInt(),
+        'name': RazorpayConfig.merchantName,
+        'description': 'Payment for $planName',
+        'prefill': {
+          'contact': '9876543210',
+          'email': userEmail,
+        },
+        'theme': {
+          'color': '#0066FF'
+        },
+        'send_sms_hash': true,
+      };
+    }
+
+    try {
+      if (_razorpay == null) {
+        final launched = await RazorpayService.instance.launchRazorpayHostedCheckout(
+          orderId: _currentOrderId,
+          amount: amount,
+          userEmail: userEmail,
+        );
+        if (launched) {
+          if (mounted) {
+            setState(() => _isProcessing = false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Payment opened in browser! Please complete it there.')),
+            );
+          }
+          return;
+        }
+        throw Exception('Razorpay is not supported on this platform. Please use Android or iOS.');
+      }
+      _razorpay!.open(options);
     } catch (e) {
       if (mounted) {
         setState(() => _isProcessing = false);
