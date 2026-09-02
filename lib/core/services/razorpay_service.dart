@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
+import '../config/app_config.dart';
 
 /// Official Security & Configuration for Razorpay Payment Gateway
 class RazorpayConfig {
@@ -51,11 +52,7 @@ class RazorpayService {
   static final RazorpayService instance = RazorpayService._internal();
   RazorpayService._internal();
 
-  String get _baseUrl {
-    if (kReleaseMode) return 'https://api.astrosaathi.app';
-    if (!kIsWeb && Platform.isAndroid) return 'http://10.0.2.2:3000';
-    return 'http://127.0.0.1:3000';
-  }
+  String get _baseUrl => AppConfig.baseUrl;
 
   /// 1. Create a Secure Razorpay Order ID on Backend Server
   Future<Map<String, dynamic>> createRazorpayOrder(RazorpayPaymentRequest request) async {
