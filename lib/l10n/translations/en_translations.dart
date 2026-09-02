@@ -1,5 +1,6 @@
+/// English Translations for AstroSaathi
 final Map<String, String> enTranslations = {
-  // Common & Core
+  // Common & Core Actions
   'app_title': 'AstroSaathi',
   'active': 'Active',
   'loading': 'Analyzing transits & Dasha...',
@@ -29,8 +30,13 @@ final Map<String, String> enTranslations = {
   'select_language': 'Select Language',
   'choose_language': 'Choose Your Language',
   'choose_language_sub': 'Select the language you are most comfortable with.',
-  
+
   // Navigation Tabs
+  'nav_home': 'Home',
+  'nav_kundli': 'Kundli',
+  'nav_explore': 'Explore',
+  'nav_astro_ai': 'Astro AI',
+  'nav_profile': 'Profile',
   'nav_game_plan': 'Game Plan',
   'nav_horoscope': 'Horoscope',
   'nav_panchang': 'Panchang',
@@ -104,33 +110,15 @@ final Map<String, String> enTranslations = {
   'abhijit_muhurat': 'Abhijit Muhurat',
   'muhurat': 'Auspicious Muhurat',
   'recommended': 'Recommended',
-  'career_business': 'Career & Business',
-  'travel': 'Travel & Journey',
-  'meeting': 'Meetings & Deals',
-  'investment': 'Investment & Assets',
-  'marriage': 'Marriage & Ceremonies',
-  'property': 'Property & Vehicle',
-  'start_time': 'Start Time',
-  'end_time': 'End Time',
   'why_this_time': 'Why this time window?',
 
-  // Gun Milan & Matching
+  // Gun Milan & Compatibility
   'matching_title': 'Kundli Gun Milan & Compatibility',
   'guna_score': 'Guna Score',
-  'varna': 'Varna (Work & Spiritual Alignment)',
-  'vashya': 'Vashya (Mutual Attraction & Influence)',
-  'tara': 'Tara (Destiny & Longevity Compatibility)',
-  'yoni': 'Yoni (Intimacy & Temperament Alignment)',
-  'maitri': 'Graha Maitri (Mental Friendship)',
-  'gana': 'Gana (Temperament & Behavior)',
-  'bhakoot': 'Bhakoot (Health & Prosperity)',
-  'nadi': 'Nadi (Genetics & Life Energy)',
   'mangal_dosh': 'Mangal Dosh Analysis',
   'strengths': 'Relationship Strengths',
   'concerns': 'Areas of Caution',
   'overall_compatibility': 'Overall Compatibility Interpretation',
-  'partner1': 'Partner 1 (Groom)',
-  'partner2': 'Partner 2 (Bride)',
   'check_compatibility': 'Calculate Gun Milan',
 
   // Remedies & Mantras
@@ -144,29 +132,15 @@ final Map<String, String> enTranslations = {
   'beej_mantra': 'Powerful Beej Mantra',
   'authentic_upay': 'Authentic Upay for',
   'instructions': 'Daily Practice Instructions',
-  'start': 'Start Practice',
-  'complete': 'Complete Ritual',
-  'progress': 'Daily Progress',
-  'streak': 'Day Streak',
-  'daily_goal': 'Daily Goal',
   'japa_counter': '108 Mantra Japa Counter',
   'chant_count': 'Chants Completed',
-  'remaining': 'Remaining',
-  'completed': 'Completed',
-  'target_108': 'Target: 108 Chants',
 
   // Astro Baba AI
   'astro_baba_greeting': 'I am Astro Baba, your personal astrologer. What would you like to know today?',
   'ask_baba_hint': 'Ask Astro Baba anything about your destiny...',
   'baba_connected': 'Connected to Vedic Engine',
-  'chip_career': '💼 Career Forecast',
-  'chip_love': '❤️ Love & Marriage',
-  'chip_money': '💰 Wealth & Finance',
-  'chip_mindset': '🧠 Mental Peace',
-  'chip_business': '🚀 Business Growth',
-  'chip_marriage': '💍 Marriage Compatibility',
 
-  // Profile & Settings
+  // Profile, Trust Center & Settings
   'profile_settings': 'Profile & Settings',
   'my_profile': 'My Profile',
   'my_family': 'My Family & Friends',
@@ -176,7 +150,7 @@ final Map<String, String> enTranslations = {
   'appearance': 'Appearance',
   'dark_mode': 'Dark Mode',
   'light_mode': 'Light Mode',
-  'trust_center': 'Trust & Security Center',
+  'trust_center': 'Trust & Help Center',
   'privacy': 'Privacy Policy',
   'security': 'Data Encryption & Security',
   'help': 'Help & Support',
@@ -188,28 +162,7 @@ final Map<String, String> enTranslations = {
   'notification_daily_ready': '🔮 Your Daily Cosmic Game Plan is ready.',
   'generate_pdf_report': 'Generate PDF Report',
 
-  // Onboarding
-  'welcome_to_astrosaathi': 'Welcome to AstroSaathi',
-  'onboarding_sub1': 'Your AI-powered personal Vedic Astrology companion.',
-  'onboarding_sub2': 'Get precise chart calculations, daily game plans, and remedies.',
-  'get_started': 'Get Started',
-
-  // Energy & Status
-  'peak_energy': 'Peak Energy ✦',
-  'auspicious': 'Auspicious',
-  'caution': 'Caution',
-  'balanced': 'Balanced',
-  'peaceful': 'Peaceful',
-  'high_focus': 'High Focus',
-
-  // ── New 5-Tab Navigation ─────────────────────────
-  'nav_home': 'Home',
-  'nav_kundli': 'Kundli',
-  'nav_explore': 'Explore',
-  'nav_astro_ai': 'Astro AI',
-  'nav_profile': 'Profile',
-
-  // ── Explore Hub ──────────────────────────────────
+  // Explore Hub
   'explore_title': 'Explore Vedic Cosmos',
   'explore_panchang': 'Panchang & Daily Timings',
   'explore_muhurat': 'Muhurat Finder',
@@ -220,13 +173,11 @@ final Map<String, String> enTranslations = {
   'explore_numerology': 'Numerology Calculator',
   'explore_transits': 'Planetary Transits',
 
-  // ── Progressive Disclosure ───────────────────────
+  // Progressive Disclosure & Tabs
   'what_this_means': 'What this means for you',
   'view_technical_details': 'View technical details',
   'based_on_kundli': 'Based on your Kundli',
   'why_seeing_this': 'Why am I seeing this?',
-
-  // ── Kundli Screen Tabs ───────────────────────────
   'tab_overview': 'Overview',
   'tab_planets': 'Planets',
   'tab_houses': 'Houses',
@@ -237,17 +188,43 @@ final Map<String, String> enTranslations = {
   'moderate_influence': 'Moderate Influence',
   'weak_influence': 'Weak Influence',
 
-  // ── Profile Screen ───────────────────────────────
+  // Profile Screen & Accounts
   'primary_profile': 'Primary',
   'family_kundlis': 'Family Kundlis',
   'add_family_member': 'Add Family Member',
   'data_privacy': 'Data Privacy',
   'account_management': 'Account Management',
 
-  // ── AI Prompt Chips ──────────────────────────────
-  'chip_relationship': '❤️ Relationship',
-  'chip_career_v2': '💼 Career',
-  'chip_finance': '💰 Finance',
-  'chip_growth': '🧘 Growth',
-  'chip_today': '🔮 Today',
+  // 12 Zodiac Signs (Rashis)
+  'rashi_aries': 'Aries (Mesh)',
+  'rashi_taurus': 'Taurus (Vrishabh)',
+  'rashi_gemini': 'Gemini (Mithun)',
+  'rashi_cancer': 'Cancer (Kark)',
+  'rashi_leo': 'Leo (Simha)',
+  'rashi_virgo': 'Virgo (Kanya)',
+  'rashi_libra': 'Libra (Tula)',
+  'rashi_scorpio': 'Scorpio (Vrishchik)',
+  'rashi_sagittarius': 'Sagittarius (Dhanu)',
+  'rashi_capricorn': 'Capricorn (Makar)',
+  'rashi_aquarius': 'Aquarius (Kumbh)',
+  'rashi_pisces': 'Pisces (Meen)',
+
+  // 9 Navagrahas (Planets)
+  'planet_sun': 'Sun (Surya)',
+  'planet_moon': 'Moon (Chandra)',
+  'planet_mars': 'Mars (Mangal)',
+  'planet_mercury': 'Mercury (Budh)',
+  'planet_jupiter': 'Jupiter (Guru)',
+  'planet_venus': 'Venus (Shukra)',
+  'planet_saturn': 'Saturn (Shani)',
+  'planet_rahu': 'Rahu (North Node)',
+  'planet_ketu': 'Ketu (South Node)',
+
+  // AI Astro Baba Chips
+  'chip_career': 'Career',
+  'chip_love': 'Love',
+  'chip_money': 'Money',
+  'chip_mindset': 'Mindset',
+  'chip_business': 'Business',
+  'chip_marriage': 'Marriage',
 };

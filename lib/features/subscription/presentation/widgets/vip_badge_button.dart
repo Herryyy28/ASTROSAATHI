@@ -31,15 +31,11 @@ class VipBadgeButton extends ConsumerWidget {
         ),
         decoration: BoxDecoration(
           gradient: isPremium
-              ? const LinearGradient(
-                  colors: [Color(0xFFD4AF37), Color(0xFFFFD700), Color(0xFFB8860B)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                )
+              ? AppColors.goldGradient
               : LinearGradient(
                   colors: [
-                    const Color(0xFF2A2010),
-                    const Color(0xFF4A3B18).withOpacity(0.9),
+                    const Color(0xFF231E14),
+                    const Color(0xFF382F1B),
                     AppColors.surfaceDark,
                   ],
                   begin: Alignment.topLeft,
@@ -47,14 +43,14 @@ class VipBadgeButton extends ConsumerWidget {
                 ),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: const Color(0xFFFFD700).withOpacity(isPremium ? 0.9 : 0.6),
+            color: AppColors.primary.withOpacity(isPremium ? 0.8 : 0.4),
             width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFFFD700).withOpacity(isPremium ? 0.4 : 0.25),
-              blurRadius: isPremium ? 14 : 10,
-              spreadRadius: isPremium ? 1 : 0,
+              color: AppColors.goldGlow,
+              blurRadius: isPremium ? 12 : 6,
+              spreadRadius: 0,
               offset: const Offset(0, 2),
             ),
           ],
@@ -74,7 +70,7 @@ class VipBadgeButton extends ConsumerWidget {
                 fontSize: compact ? 11 : 12,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 0.6,
-                color: isPremium ? const Color(0xFF1A1200) : const Color(0xFFFFE899),
+                color: isPremium ? Colors.black : AppColors.primary,
               ),
             ),
           ],

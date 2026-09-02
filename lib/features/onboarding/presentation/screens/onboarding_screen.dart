@@ -11,6 +11,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/gradient_button.dart';
+import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../../../core/providers/locale_provider.dart';
@@ -21,6 +22,9 @@ import '../../../../core/utils/zodiac_sign_utils.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/engine/models/astrology_validation.dart';
 
+/// Elite Production Onboarding Screen for AstroSaathi
+/// Delivers a high-converting, celestial UI/UX with smooth transitions,
+/// real-time Nam Rashi discovery, precision birth inputs, and animated Kundli creation.
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -40,6 +44,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   );
   final TextEditingController _placeController = TextEditingController();
 
+  String _selectedGender = 'Male';
   String _selectedAmPm = 'AM';
   String _selectedCity = 'New Delhi, India';
 
@@ -63,6 +68,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   ];
 
   late AnimationController _pulseController;
+  late AnimationController _spinController;
   ZodiacInfo? _detectedZodiac;
 
   @override
@@ -73,12 +79,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       duration: const Duration(seconds: 2),
     )..repeat(reverse: true);
 
+    _spinController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 12),
+    )..repeat();
+
     _nameController.addListener(_onNameChanged);
     _placeController.text = _selectedCity;
   }
 
   void _onNameChanged() {
-    final text = _nameController.text;
+    final text = _nameController.text.trim();
     if (text.isNotEmpty) {
       final zodiac = ZodiacSignUtils.getZodiacFromName(text);
       if (zodiac != _detectedZodiac) {
@@ -99,6 +110,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   void dispose() {
     _nameController.removeListener(_onNameChanged);
     _pulseController.dispose();
+    _spinController.dispose();
     _nameController.dispose();
     _dobController.dispose();
     _timeController.dispose();
@@ -114,18 +126,32 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 18),
+            const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 20),
             const SizedBox(width: 10),
-            Expanded(child: Text(message, style: const TextStyle(color: Colors.white))),
+            Expanded(
+              child: Text(
+                message,
+                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w500),
+              ),
+            ),
           ],
         ),
-        backgroundColor: AppColors.error,
+        backgroundColor: AppColors.error.withOpacity(0.95),
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
         margin: const EdgeInsets.all(16),
         duration: const Duration(seconds: 3),
       ),
     );
+  }
+
+  void _previousPage() {
+    if (_currentIndex > 0) {
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
+      );
+    }
   }
 
   void _nextPage() {
@@ -133,7 +159,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     if (_currentIndex == 1) {
       final name = _nameController.text.trim();
       if (name.isEmpty) {
-        errorMessage = 'Please enter your name';
+        errorMessage = 'Please enter your full name';
       } else if (name.length < 2) {
         errorMessage = 'Name must be at least 2 characters';
       }
@@ -141,11 +167,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       if (_dobController.text.trim().isEmpty) {
         errorMessage = 'Please select your date of birth';
       } else if (_timeController.text.trim().isEmpty) {
-        errorMessage = 'Please enter your time of birth';
+        errorMessage = 'Please enter your birth time';
       } else if (_placeController.text.trim().isEmpty) {
-        errorMessage = 'Please select or enter your place of birth';
+        errorMessage = 'Please enter or select your place of birth';
       } else {
-        // Validate date using AstrologyValidator
         try {
           AstrologyValidator.validateDate(_dobController.text.trim());
           AstrologyValidator.validateTime('${_timeController.text.trim()} $_selectedAmPm');
@@ -181,7 +206,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
       return;
     }
 
-    // Validate before proceeding
     try {
       AstrologyValidator.validateDate(dob);
       AstrologyValidator.validateTime(fullTime);
@@ -203,7 +227,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     try {
       final focusWeights = {'Career': 1.2, 'Love': 0.8, 'Money': 1.0};
 
-      // Direct geocoding with platform guards and timeout
       double lat = 28.6139;
       double lon = 77.2090;
       try {
@@ -267,9 +290,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     } finally {
       ref.invalidate(onboardingCompleteProvider);
       ref.invalidate(profilesListProvider);
-      
-      // Wait slightly for state to sync and animations to feel right
-      await Future.delayed(const Duration(milliseconds: 800));
+
+      await Future.delayed(const Duration(milliseconds: 1200));
 
       if (mounted) {
         context.go('/');
@@ -280,30 +302,70 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backgroundDark,
       body: Container(
         decoration: const BoxDecoration(gradient: AppColors.cosmicGradient),
         child: SafeArea(
           child: ResponsiveLayout(
             child: Column(
               children: [
-                if (_currentIndex < 3)
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      context.responsive<double>(
-                        mobile: 20,
-                        tablet: 32,
-                        desktop: 40,
-                      ),
-                      20,
-                      context.responsive<double>(
-                        mobile: 20,
-                        tablet: 32,
-                        desktop: 40,
-                      ),
-                      0,
+                // Top Navigation Bar (Header + Back Button + Progress)
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.responsive<double>(
+                      mobile: 20,
+                      tablet: 32,
+                      desktop: 40,
                     ),
-                    child: _buildSegmentedProgress(),
+                    vertical: 12,
                   ),
+                  child: Row(
+                    children: [
+                      if (_currentIndex > 0 && _currentIndex < 3)
+                        IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          onPressed: _previousPage,
+                        )
+                      else
+                        const SizedBox(width: 40),
+                      Expanded(
+                        child: _currentIndex < 3
+                            ? _buildSegmentedProgress()
+                            : const SizedBox.shrink(),
+                      ),
+                      if (_currentIndex < 3)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: AppColors.primary.withOpacity(0.3),
+                            ),
+                          ),
+                          child: Text(
+                            'Step ${_currentIndex + 1}/3',
+                            style: GoogleFonts.outfit(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        )
+                      else
+                        const SizedBox(width: 40),
+                    ],
+                  ),
+                ),
+
+                // Main Page View
                 Expanded(
                   child: PageView(
                     controller: _pageController,
@@ -336,15 +398,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeOutCubic,
-            height: 4,
-            margin: EdgeInsets.only(right: index < 2 ? 6 : 0),
+            height: 5,
+            margin: EdgeInsets.only(right: index < 2 ? 8 : 0),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(2),
-              color: isActive
-                  ? AppColors.primary
-                  : AppColors.surfaceHighlightDark,
+              borderRadius: BorderRadius.circular(3),
+              gradient: isActive ? AppColors.goldGradient : null,
+              color: isActive ? null : Colors.white.withOpacity(0.12),
               boxShadow: isCurrent
-                  ? [BoxShadow(color: AppColors.goldGlow, blurRadius: 8)]
+                  ? [
+                      BoxShadow(
+                        color: AppColors.primary.withOpacity(0.6),
+                        blurRadius: 10,
+                        spreadRadius: 1,
+                      ),
+                    ]
                   : null,
             ),
           ),
@@ -362,38 +429,38 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: IntrinsicHeight(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 20,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Spacer(),
+
+                    // Animated Glowing Cosmic Emblem
                     Center(
                       child: AnimatedBuilder(
                         animation: _pulseController,
                         builder: (context, child) {
                           return Transform.scale(
-                            scale: 1.0 + (_pulseController.value * 0.05),
+                            scale: 1.0 + (_pulseController.value * 0.04),
                             child: child,
                           );
                         },
                         child: Container(
-                          width: 110,
-                          height: 110,
+                          width: 120,
+                          height: 120,
+                          padding: const EdgeInsets.all(3),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: AppColors.goldSubtleGradient,
                             border: Border.all(
-                              color: AppColors.primary.withOpacity(0.4),
-                              width: 1.5,
+                              color: AppColors.primary.withOpacity(0.6),
+                              width: 2,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.goldGlow,
-                                blurRadius: 36,
-                                spreadRadius: -6,
+                                color: AppColors.primary.withOpacity(0.35),
+                                blurRadius: 40,
+                                spreadRadius: 2,
                               ),
                             ],
                           ),
@@ -403,12 +470,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) =>
                                   const Center(
-                                    child: Text(
-                                      '✦',
-                                      style: TextStyle(
-                                        fontSize: 48,
-                                        color: AppColors.primary,
-                                      ),
+                                    child: Icon(
+                                      Icons.auto_awesome,
+                                      size: 54,
+                                      color: AppColors.primary,
                                     ),
                                   ),
                             ),
@@ -416,117 +481,188 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                         ),
                       ).fadeSlideUp(),
                     ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'Your Personal Vedic\nAstrologer, Every Day.',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.outfit(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimaryDark,
-                        height: 1.35,
-                        letterSpacing: -0.5,
+
+                    const SizedBox(height: 28),
+
+                    // Gold Mask Title
+                    ShaderMask(
+                      shaderCallback: (bounds) => const LinearGradient(
+                        colors: [
+                          Color(0xFFFFFFFF),
+                          Color(0xFFFFE899),
+                          Color(0xFFE5B842),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ).createShader(bounds),
+                      child: Text(
+                        'Unlock Your Cosmic Blueprint',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                          letterSpacing: -0.5,
+                        ),
                       ),
-                    ).fadeSlideUp(delay: 200.ms),
+                    ).fadeSlideUp(delay: 150.ms),
+
                     const SizedBox(height: 10),
+
                     Text(
-                      'Choose Your Preferred Language',
+                      'Your Personal Vedic Astrologer & Kundli Companion',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         color: AppColors.textSecondaryDark,
-                        height: 1.35,
+                        height: 1.4,
                       ),
-                    ).fadeSlideUp(delay: 300.ms),
-                    const SizedBox(height: 16),
-                    Consumer(
-                      builder: (context, ref, _) {
-                        final currentLang = ref.watch(localeProvider);
-                        final languages = [
-                          AppLanguage.english,
-                          AppLanguage.hindi,
-                          AppLanguage.gujarati,
-                        ];
+                    ).fadeSlideUp(delay: 250.ms),
 
-                        return Column(
-                          children: languages.map((lang) {
-                            final isSelected = currentLang == lang;
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: GestureDetector(
-                                onTap: () {
-                                  ref
-                                      .read(localeProvider.notifier)
-                                      .setLanguage(lang);
-                                },
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 200),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 12,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? AppColors.primary.withOpacity(0.18)
-                                        : AppColors.surfaceDark.withOpacity(
-                                            0.6,
-                                          ),
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
-                                      color: isSelected
-                                          ? AppColors.primary
-                                          : AppColors.glassBorder,
-                                      width: isSelected ? 1.5 : 0.8,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        lang.flagEmoji,
-                                        style: const TextStyle(fontSize: 20),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: Text(
-                                          '${lang.nativeName} (${lang.englishName})',
-                                          style: GoogleFonts.outfit(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: isSelected
-                                                ? AppColors.primary
-                                                : AppColors.textPrimaryDark,
-                                            height: 1.35,
-                                          ),
-                                        ),
-                                      ),
-                                      if (isSelected)
-                                        const Icon(
-                                          Icons.check_circle_rounded,
-                                          color: AppColors.primary,
-                                          size: 20,
-                                        )
-                                      else
-                                        Icon(
-                                          Icons.circle_outlined,
-                                          color: AppColors.textTertiaryDark,
-                                          size: 18,
-                                        ),
-                                    ],
-                                  ),
+                    const SizedBox(height: 28),
+
+                    // Language Selection Box
+                    GlassCard(
+                      borderRadius: 20,
+                      padding: const EdgeInsets.all(18),
+                      borderColor: Colors.white.withOpacity(0.15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.language_rounded,
+                                color: AppColors.primary,
+                                size: 18,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Select Preferred Language',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 ),
                               ),
-                            );
-                          }).toList(),
-                        );
-                      },
-                    ).fadeSlideUp(delay: 400.ms),
+                            ],
+                          ),
+                          const SizedBox(height: 14),
+                          Consumer(
+                            builder: (context, ref, _) {
+                              final currentLang = ref.watch(localeProvider);
+                              final languages = [
+                                AppLanguage.english,
+                                AppLanguage.hindi,
+                                AppLanguage.gujarati,
+                              ];
+
+                              return Column(
+                                children: languages.map((lang) {
+                                  final isSelected = currentLang == lang;
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        ref
+                                            .read(localeProvider.notifier)
+                                            .setLanguage(lang);
+                                      },
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 200),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: isSelected
+                                              ? AppColors.primary.withOpacity(0.2)
+                                              : Colors.white.withOpacity(0.04),
+                                          borderRadius: BorderRadius.circular(14),
+                                          border: Border.all(
+                                            color: isSelected
+                                                ? AppColors.primary
+                                                : Colors.white.withOpacity(0.1),
+                                            width: isSelected ? 1.5 : 0.8,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              lang.flagEmoji,
+                                              style: const TextStyle(fontSize: 22),
+                                            ),
+                                            const SizedBox(width: 14),
+                                            Expanded(
+                                              child: Text(
+                                                '${lang.nativeName} (${lang.englishName})',
+                                                style: GoogleFonts.outfit(
+                                                  fontSize: 15,
+                                                  fontWeight: isSelected
+                                                      ? FontWeight.bold
+                                                      : FontWeight.w500,
+                                                  color: isSelected
+                                                      ? AppColors.primary
+                                                      : Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            if (isSelected)
+                                              const Icon(
+                                                Icons.check_circle_rounded,
+                                                color: AppColors.primary,
+                                                size: 20,
+                                              )
+                                            else
+                                              Icon(
+                                                Icons.circle_outlined,
+                                                color: Colors.white.withOpacity(0.3),
+                                                size: 18,
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ).fadeSlideUp(delay: 350.ms),
+
                     const Spacer(),
+
+                    // Trust Tagline
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.verified_user_outlined,
+                          size: 14,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          '100% Accurate Vedic Calculations • Privacy Protected',
+                          style: GoogleFonts.inter(
+                            fontSize: 11.5,
+                            color: AppColors.textTertiaryDark,
+                          ),
+                        ),
+                      ],
+                    ).fadeSlideUp(delay: 450.ms),
+
+                    const SizedBox(height: 16),
+
                     GradientButton(
                       text: 'Begin Your Cosmic Journey',
                       icon: Icons.auto_awesome,
                       onPressed: _nextPage,
-                    ).fadeSlideUp(delay: 500.ms),
-                    const SizedBox(height: 20),
+                    ).fadeSlideUp(delay: 550.ms),
+
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -539,54 +675,136 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
   Widget _buildNameStep() {
     return _buildInputStep(
-      icon: '👤',
-      title: 'What should we\ncall you?',
-      subtitle: 'Your name personalizes your chart & daily predictions.',
+      badgeTitle: 'PERSONALIZATION',
+      title: 'What should we call you?',
+      subtitle: 'Your name maps your Nam Rashi and personalizes daily forecasts.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Name Text Field
           TextField(
             controller: _nameController,
             textCapitalization: TextCapitalization.words,
-            style: GoogleFonts.inter(
-              color: AppColors.textPrimaryDark,
+            style: GoogleFonts.outfit(
+              color: Colors.white,
               fontSize: 18,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
             decoration: AppDecorations.premiumInput(
-              hintText: 'Enter full name',
+              hintText: 'Enter your full name',
               prefixIcon: Icons.person_outline_rounded,
             ),
           ),
-          const SizedBox(height: 16),
-          if (_detectedZodiac != null)
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+
+          const SizedBox(height: 20),
+
+          // Gender Selection Segmented Pills
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Gender',
+                style: GoogleFonts.outfit(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textSecondaryDark,
+                ),
               ),
+              const SizedBox(height: 8),
+              Row(
+                children: ['Male', 'Female', 'Other'].map((gender) {
+                  final isSelected = _selectedGender == gender;
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: GestureDetector(
+                        onTap: () => setState(() => _selectedGender = gender),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? AppColors.primary.withOpacity(0.2)
+                                : Colors.white.withOpacity(0.05),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: isSelected
+                                  ? AppColors.primary
+                                  : Colors.white.withOpacity(0.15),
+                              width: isSelected ? 1.5 : 0.8,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              gender,
+                              style: GoogleFonts.outfit(
+                                fontSize: 14,
+                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                color: isSelected ? AppColors.primary : Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
+          // Real-Time Nam Rashi Discovery Card
+          if (_detectedZodiac != null)
+            GlassCard(
+              borderRadius: 18,
+              padding: const EdgeInsets.all(16),
+              borderColor: AppColors.primary.withOpacity(0.5),
+              glowColor: AppColors.primary.withOpacity(0.2),
               child: Row(
                 children: [
-                  Text(
-                    _detectedZodiac!.symbol,
-                    style: const TextStyle(fontSize: 22),
+                  Container(
+                    width: 52,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.primary.withOpacity(0.15),
+                      border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                    ),
+                    child: Center(
+                      child: Text(
+                        _detectedZodiac!.symbol,
+                        style: const TextStyle(fontSize: 26),
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 14),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Nam Rashi: ${_detectedZodiac!.englishName} (${_detectedZodiac!.hindiName})',
-                          style: GoogleFonts.outfit(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              'Nam Rashi: ${_detectedZodiac!.englishName}',
+                              style: GoogleFonts.outfit(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              '(${_detectedZodiac!.hindiName})',
+                              style: GoogleFonts.outfit(
+                                fontSize: 13,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
                         ),
+                        const SizedBox(height: 2),
                         Text(
                           'Element: ${_detectedZodiac!.element} • Ruler: ${_detectedZodiac!.rulingPlanet}',
                           style: GoogleFonts.inter(
@@ -600,9 +818,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 ],
               ),
             ).fadeSlideUp(),
+
           const SizedBox(height: 28),
+
           GradientButton(
             text: 'Continue to Birth Details',
+            icon: Icons.arrow_forward_rounded,
             onPressed: _nextPage,
           ),
         ],
@@ -612,23 +833,33 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
   Widget _buildBirthDetailsStep() {
     return _buildInputStep(
-      icon: '✨',
-      title: 'Enter Birth Details',
-      subtitle:
-          'Date, exact time, and location generate your authentic Kundli.',
+      badgeTitle: 'VEDIC KUNDLI CALCULATION',
+      title: 'Enter Precise Birth Details',
+      subtitle: 'Date, exact time, and birth city calculate your authentic Kundli.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Date of Birth Field
-          TextField(
-            controller: _dobController,
-            readOnly: true,
+          // Date of Birth Field Button / Card
+          GestureDetector(
             onTap: () async {
               final date = await showDatePicker(
                 context: context,
                 initialDate: DateTime(2000, 1, 1),
                 firstDate: DateTime(1900),
                 lastDate: DateTime.now(),
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: const ColorScheme.dark(
+                        primary: AppColors.primary,
+                        onPrimary: Colors.black,
+                        surface: AppColors.surfaceDark,
+                        onSurface: Colors.white,
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
               );
               if (date != null) {
                 setState(() {
@@ -637,34 +868,46 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 });
               }
             },
-            style: const TextStyle(
-              color: AppColors.textPrimaryDark,
-              fontSize: 16,
-            ),
-            decoration: AppDecorations.premiumInput(
-              hintText: 'Date of Birth (YYYY-MM-DD)',
-              prefixIcon: Icons.calendar_today_rounded,
+            child: AbsorbPointer(
+              child: TextField(
+                controller: _dobController,
+                style: GoogleFonts.outfit(color: Colors.white, fontSize: 16),
+                decoration: AppDecorations.premiumInput(
+                  hintText: 'Date of Birth (YYYY-MM-DD)',
+                  prefixIcon: Icons.calendar_today_rounded,
+                ),
+              ),
             ),
           ),
-          const SizedBox(height: 14),
 
-          // Time of Birth with AM/PM Dropdown
+          const SizedBox(height: 16),
+
+          // Time of Birth + AM/PM Segment Toggle
           Row(
             children: [
               Expanded(
                 flex: 3,
-                child: TextField(
-                  controller: _timeController,
-                  readOnly: true,
+                child: GestureDetector(
                   onTap: () async {
                     final time = await showTimePicker(
                       context: context,
                       initialTime: const TimeOfDay(hour: 7, minute: 30),
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: const ColorScheme.dark(
+                              primary: AppColors.primary,
+                              onPrimary: Colors.black,
+                              surface: AppColors.surfaceDark,
+                              onSurface: Colors.white,
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
                     );
                     if (time != null) {
-                      final hour = time.hourOfPeriod == 0
-                          ? 12
-                          : time.hourOfPeriod;
+                      final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
                       final minute = time.minute.toString().padLeft(2, '0');
                       final period = time.period == DayPeriod.am ? 'AM' : 'PM';
                       setState(() {
@@ -674,63 +917,71 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       });
                     }
                   },
-                  style: const TextStyle(
-                    color: AppColors.textPrimaryDark,
-                    fontSize: 16,
-                  ),
-                  decoration: AppDecorations.premiumInput(
-                    hintText: 'Time (HH:MM)',
-                    prefixIcon: Icons.access_time_rounded,
+                  child: AbsorbPointer(
+                    child: TextField(
+                      controller: _timeController,
+                      style: GoogleFonts.outfit(color: Colors.white, fontSize: 16),
+                      decoration: AppDecorations.premiumInput(
+                        hintText: 'Time (HH:MM)',
+                        prefixIcon: Icons.access_time_rounded,
+                      ),
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Expanded(
                 flex: 2,
                 child: Container(
-                  height: 52,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  height: 54,
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceHighlightDark,
+                    color: Colors.white.withOpacity(0.06),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.glassBorder),
+                    border: Border.all(color: Colors.white.withOpacity(0.15)),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: _selectedAmPm,
-                      dropdownColor: AppColors.surfaceDark,
-                      alignment: Alignment.center,
-                      style: GoogleFonts.outfit(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        height: 1.2,
-                      ),
-                      items: ['AM', 'PM']
-                          .map(
-                            (val) =>
-                                DropdownMenuItem(value: val, child: Text(val)),
-                          )
-                          .toList(),
-                      onChanged: (val) {
-                        if (val != null) setState(() => _selectedAmPm = val);
-                      },
-                    ),
+                  child: Row(
+                    children: ['AM', 'PM'].map((period) {
+                      final isSelected = _selectedAmPm == period;
+                      return Expanded(
+                        child: GestureDetector(
+                          onTap: () => setState(() => _selectedAmPm = period),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            decoration: BoxDecoration(
+                              color: isSelected ? AppColors.primary : Colors.transparent,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                              child: Text(
+                                period,
+                                style: GoogleFonts.outfit(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: isSelected ? Colors.black : Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
 
-          // City Location Dropdown / Input
+          const SizedBox(height: 16),
+
+          // City Location Dropdown / Selection
           Container(
-            height: 52,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
+            height: 54,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: AppColors.surfaceHighlightDark,
+              color: Colors.white.withOpacity(0.06),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.glassBorder),
+              border: Border.all(color: Colors.white.withOpacity(0.15)),
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
@@ -739,27 +990,35 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     : 'Custom Location',
                 isExpanded: true,
                 dropdownColor: AppColors.surfaceDark,
-                alignment: Alignment.centerLeft,
-                style: const TextStyle(
-                  color: AppColors.textPrimaryDark,
+                icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.primary),
+                style: GoogleFonts.outfit(
+                  color: Colors.white,
                   fontSize: 15,
-                  height: 1.2,
                 ),
                 items: _popularCities
                     .map(
                       (city) => DropdownMenuItem(
                         value: city,
-                        child: Text(
-                          city,
-                          style: TextStyle(
-                            color: city == 'Custom Location'
-                                ? AppColors.primary
-                                : AppColors.textPrimaryDark,
-                            fontWeight: city == 'Custom Location'
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            height: 1.2,
-                          ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.location_on_outlined,
+                              size: 18,
+                              color: AppColors.primary,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              city,
+                              style: GoogleFonts.outfit(
+                                color: city == 'Custom Location'
+                                    ? AppColors.primary
+                                    : Colors.white,
+                                fontWeight: city == 'Custom Location'
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     )
@@ -779,21 +1038,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               ),
             ),
           ),
+
           if (_selectedCity == 'Custom Location') ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
             TextField(
               controller: _placeController,
-              style: const TextStyle(
-                color: AppColors.textPrimaryDark,
-                fontSize: 16,
-              ),
+              style: GoogleFonts.outfit(color: Colors.white, fontSize: 16),
               decoration: AppDecorations.premiumInput(
-                hintText: 'Enter City, Country',
-                prefixIcon: Icons.location_on_outlined,
+                hintText: 'Enter City, State, Country',
+                prefixIcon: Icons.edit_location_alt_outlined,
               ),
             ),
           ],
+
           const SizedBox(height: 8),
+
+          // Detect Location Action Button
           Align(
             alignment: Alignment.centerRight,
             child: TextButton.icon(
@@ -812,18 +1072,20 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 size: 16,
               ),
               label: Text(
-                'Detect Location',
+                'Auto-Detect Location',
                 style: GoogleFonts.inter(
                   color: AppColors.primary,
-                  fontSize: 12,
+                  fontSize: 12.5,
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
           ),
+
           const SizedBox(height: 20),
+
           GradientButton(
-            text: 'Generate Birth Chart',
+            text: 'Generate My Birth Chart',
             icon: Icons.auto_awesome,
             onPressed: _nextPage,
           ),
@@ -842,68 +1104,101 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
+
+              // Animated Concentric Celestial Zodiac Wheel
               Stack(
                 alignment: Alignment.center,
                 children: [
-                  Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.primary.withOpacity(0.3),
-                            width: 2,
-                          ),
+                  RotationTransition(
+                    turns: _spinController,
+                    child: Container(
+                      width: 140,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: AppColors.primary.withOpacity(0.35),
+                          width: 2,
                         ),
-                      )
-                      .animate(onPlay: (c) => c.repeat(reverse: false))
-                      .rotate(duration: 8000.ms, curve: Curves.linear),
-                  Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.primary.withOpacity(0.5),
-                            width: 1.5,
-                          ),
-                        ),
-                      )
-                      .animate(onPlay: (c) => c.repeat(reverse: true))
-                      .rotate(
-                        duration: 3000.ms,
-                        curve: Curves.linear,
-                        begin: 1,
-                        end: 0,
                       ),
-                  const Text(
-                    '✦',
-                    style: TextStyle(fontSize: 28, color: AppColors.primary),
+                      child: Stack(
+                        children: List.generate(8, (i) {
+                          final angle = (i * 45) * 3.14159 / 180;
+                          return Align(
+                            alignment: Alignment(
+                              0.85 * (i % 2 == 0 ? 1 : -1),
+                              0.85 * (i % 4 < 2 ? 1 : -1),
+                            ),
+                            child: Text(
+                              ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏'][i],
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.primary.withOpacity(0.6),
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 96,
+                    height: 96,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: AppColors.goldSubtleGradient,
+                      border: Border.all(
+                        color: AppColors.primary,
+                        width: 1.5,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withOpacity(0.4),
+                          blurRadius: 30,
+                          spreadRadius: 2,
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.stars_rounded,
+                        size: 42,
+                        color: AppColors.primary,
+                      ),
+                    ),
                   ),
                 ],
               ).fadeSlideUp(),
-              const SizedBox(height: 24),
+
+              const SizedBox(height: 32),
+
               Text(
-                    'Reading your stars...',
-                    style: GoogleFonts.outfit(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimaryDark,
-                      height: 1.3,
-                    ),
-                  )
-                  .animate(onPlay: (c) => c.repeat(reverse: true))
-                  .shimmer(
-                    duration: 1500.ms,
-                    color: AppColors.primaryLight.withOpacity(0.5),
+                'Reading Your Celestial Chart...',
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ).animate(onPlay: (c) => c.repeat(reverse: true)).shimmer(
+                    duration: 1600.ms,
+                    color: AppColors.primaryLight,
                   ),
-              const SizedBox(height: 20),
-              _buildCheckItem('Name & Nam Rashi mapped', 0),
-              _buildCheckItem(
-                'Birth details & planetary positions calculated',
-                1,
-              ),
-              _buildCheckItem('Vedic Kundli & daily guidance ready', 2),
+
+              const SizedBox(height: 24),
+
+              GlassCard(
+                borderRadius: 20,
+                padding: const EdgeInsets.all(18),
+                child: Column(
+                  children: [
+                    _buildCheckItem('Nam Rashi & Zodiac Sign Mapped', 0),
+                    const Divider(color: Colors.white10, height: 16),
+                    _buildCheckItem('Planetary Positions & Kundli Calculated', 1),
+                    const Divider(color: Colors.white10, height: 16),
+                    _buildCheckItem('Vedic Guidance & Daily Horoscope Ready', 2),
+                  ],
+                ),
+              ).fadeSlideUp(delay: 200.ms),
             ],
           ),
         ),
@@ -913,44 +1208,44 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
   Widget _buildCheckItem(String text, int index) {
     return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-          child: Row(
-            children: [
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.success.withOpacity(0.15),
-                  border: Border.all(color: AppColors.success.withOpacity(0.5)),
-                ),
-                child: const Icon(
-                  Icons.check_rounded,
-                  size: 14,
-                  color: AppColors.success,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  text,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textSecondaryDark,
-                    height: 1.35,
-                  ),
-                ),
-              ),
-            ],
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Container(
+            width: 26,
+            height: 26,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.green.withOpacity(0.2),
+              border: Border.all(color: Colors.green.shade400),
+            ),
+            child: const Icon(
+              Icons.check_rounded,
+              size: 16,
+              color: Colors.greenAccent,
+            ),
           ),
-        )
-        .animate(delay: Duration(milliseconds: 400 + (index * 400)))
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              text,
+              style: GoogleFonts.outfit(
+                fontSize: 14.5,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    )
+        .animate(delay: Duration(milliseconds: 300 + (index * 350)))
         .fadeIn(duration: 400.ms)
-        .slideX(begin: 0.1);
+        .slideX(begin: 0.08);
   }
 
   Widget _buildInputStep({
-    required String icon,
+    required String badgeTitle,
     required String title,
     required String subtitle,
     required Widget child,
@@ -963,39 +1258,63 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: IntrinsicHeight(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 20,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      icon,
-                      style: const TextStyle(fontSize: 36),
+                    // Step Badge Header Pill
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: AppColors.primary.withOpacity(0.35),
+                              width: 0.8,
+                            ),
+                          ),
+                          child: Text(
+                            '✦  $badgeTitle',
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 10.5,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.primary,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ),
+                      ],
                     ).fadeSlideUp(),
+
                     const SizedBox(height: 16),
+
                     Text(
                       title,
-                      style: GoogleFonts.outfit(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimaryDark,
-                        height: 1.3,
-                        letterSpacing: -0.5,
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                        letterSpacing: -0.4,
                       ),
                     ).fadeSlideUp(delay: 100.ms),
-                    const SizedBox(height: 8),
+
+                    const SizedBox(height: 6),
+
                     Text(
                       subtitle,
                       style: GoogleFonts.inter(
-                        fontSize: 15,
+                        fontSize: 14,
                         color: AppColors.textSecondaryDark,
                         height: 1.35,
                       ),
                     ).fadeSlideUp(delay: 200.ms),
+
                     const SizedBox(height: 24),
+
                     child.fadeSlideUp(delay: 300.ms),
+
                     const Spacer(),
                   ],
                 ),

@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../../../../core/services/firebase_service.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepository(),
@@ -160,14 +160,7 @@ class AuthRepository {
   final String baseUrl = 'http://10.0.2.2:3000';
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  FirebaseAuth? get _firebaseAuth {
-    try {
-      if (Firebase.apps.isNotEmpty) {
-        return FirebaseAuth.instance;
-      }
-    } catch (_) {}
-    return null;
-  }
+  FirebaseAuth? get _firebaseAuth => FirebaseService.instance.auth;
 
   Future<void> signInAnonymously() async {
     try {

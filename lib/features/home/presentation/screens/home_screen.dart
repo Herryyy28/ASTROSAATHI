@@ -10,6 +10,7 @@ import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/theme/app_animations.dart';
+import '../../../../core/theme/design_tokens.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/widgets/error_state_widget.dart';
@@ -25,6 +26,7 @@ import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../profile/presentation/widgets/profile_switcher_modal.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
 import 'main_screen.dart';
+
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -120,6 +122,7 @@ class HomeScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildActionSection(
+                          context,
                           l10n.doTitle,
                           plan.doList,
                           AppColors.success,
@@ -128,6 +131,7 @@ class HomeScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 16),
                         _buildActionSection(
+                          context,
                           l10n.beCarefulTitle,
                           plan.beCarefulList,
                           AppColors.warning,
@@ -136,6 +140,7 @@ class HomeScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 16),
                         _buildActionSection(
+                          context,
                           l10n.avoidTitle,
                           plan.avoidList,
                           AppColors.error,
@@ -153,7 +158,7 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(height: 28),
 
                 // ── Categories ────────────────────────────────────
-                _buildCategories(plan).fadeSlideUp(delay: 520.ms),
+                _buildCategories(context, plan).fadeSlideUp(delay: 520.ms),
                 const SizedBox(height: 28),
 
                 // ── Ask Astro Baba ────────────────────────────────
@@ -197,19 +202,31 @@ class HomeScreen extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Text(emoji, style: const TextStyle(fontSize: 28)),
-                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.14),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.primary.withOpacity(0.28), width: 1.0),
+                  ),
+                  child: const Icon(
+                    Icons.wb_sunny_rounded,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     displayGreeting,
                     style: GoogleFonts.outfit(
                       fontSize: context.responsive<double>(
-                        mobile: 19,
+                        mobile: 20,
                         tablet: 24,
                         desktop: 28,
                       ),
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryDark,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.getTextPrimary(context),
                       letterSpacing: -0.3,
                       height: 1.1,
                     ),
@@ -218,10 +235,18 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(
-                    Icons.search_rounded,
-                    color: AppColors.primary,
-                    size: 24,
+                  icon: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.getSurfaceElevated(context),
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                    ),
+                    child: Icon(
+                      Icons.search_rounded,
+                      color: AppColors.getPrimary(context),
+                      size: 18,
+                    ),
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -234,38 +259,38 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
                   onTap: () => ProfileSwitcherModal.show(context),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.12),
+                      color: AppColors.getPrimary(context).withOpacity(0.12),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                      border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.4), width: 1.0),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(
-                          activeProfile.isPrimary ? Icons.star_rounded : Icons.person_rounded,
-                          size: 14,
-                          color: AppColors.primary,
+                          Icons.star_rounded,
+                          size: 13,
+                          color: AppColors.getPrimary(context),
                         ),
-                        const SizedBox(width: 4),
+                        const SizedBox(width: 6),
                         Text(
                           activeProfile.name.isNotEmpty ? activeProfile.name : 'Profile',
                           style: GoogleFonts.outfit(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.primary,
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.getPrimary(context),
                           ),
                         ),
                         const SizedBox(width: 4),
-                        const Icon(Icons.swap_vert_rounded, size: 14, color: AppColors.primary),
+                        Icon(Icons.swap_vert_rounded, size: 14, color: AppColors.getPrimary(context)),
                       ],
                     ),
                   ),
@@ -275,8 +300,9 @@ class HomeScreen extends ConsumerWidget {
                     _formatDate(lang),
                     textAlign: TextAlign.end,
                     style: GoogleFonts.inter(
-                      fontSize: 13,
-                      color: AppColors.textSecondaryDark,
+                      fontSize: 12.5,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.getTextSecondary(context),
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -311,8 +337,6 @@ class HomeScreen extends ConsumerWidget {
   Widget _buildEnergyCard(BuildContext context, GamePlanData plan) {
     return GlassCard(
       padding: context.cardPadding,
-      glowColor: AppColors.goldGlow,
-      gradient: AppColors.premiumGradient,
       child: Column(
         children: [
           Row(
@@ -356,24 +380,24 @@ class HomeScreen extends ConsumerWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        animatedValue.toStringAsFixed(1),
-                        style: GoogleFonts.outfit(
-                          fontSize: 36,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.primary,
-                          height: 1,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'out of 10',
-                        style: GoogleFonts.inter(
-                          fontSize: 11,
-                          color: AppColors.textSecondaryDark,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+          Text(
+            animatedValue.toStringAsFixed(1),
+            style: GoogleFonts.outfit(
+              fontSize: 36,
+              fontWeight: FontWeight.w700,
+              color: AppColors.getPrimary(context),
+              height: 1,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            'out of 10',
+            style: GoogleFonts.inter(
+              fontSize: 11,
+              color: AppColors.getTextSecondary(context),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
                     ],
                   ),
                 ],
@@ -388,8 +412,8 @@ class HomeScreen extends ConsumerWidget {
                 _getEnergyLabel(plan.dayScore, lang),
                 style: GoogleFonts.inter(
                   fontSize: 16,
-                  color: AppColors.textSecondaryDark,
-                  fontWeight: FontWeight.w500,
+                  color: AppColors.getTextSecondary(context),
+                  fontWeight: FontWeight.w600,
                 ),
               );
             },
@@ -443,8 +467,7 @@ class HomeScreen extends ConsumerWidget {
               ],
             ),
           ),
-          const SizedBox(height: 12),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.md),
           Consumer(
             builder: (context, ref, _) {
               final l10n = AppLocalizations.of(context, ref);
@@ -473,15 +496,15 @@ class HomeScreen extends ConsumerWidget {
                         'Capitalize on the Golden Window (11:15 AM - 1:20 PM) for critical negotiations or client discussions.',
                   );
                 },
-                icon: const Icon(
+                icon: Icon(
                   Icons.info_outline_rounded,
-                  color: AppColors.primary,
+                  color: AppColors.getPrimary(context),
                   size: 16,
                 ),
                 label: Text(
                   l10n.whyThis,
-                  style: const TextStyle(
-                    color: AppColors.primary,
+                  style: TextStyle(
+                    color: AppColors.getPrimary(context),
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                   ),
@@ -514,6 +537,7 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _buildActionSection(
+    BuildContext context,
     String title,
     List<String> items,
     Color color,
@@ -522,7 +546,7 @@ class HomeScreen extends ConsumerWidget {
   ) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: AppDecorations.accentCard(accentColor: color),
+      decoration: AppDecorations.accentCard(accentColor: color, context: context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -558,16 +582,16 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      entry.value,
-                      style: GoogleFonts.inter(
-                        fontSize: 15,
-                        color: AppColors.textPrimaryDark,
-                        height: 1.4,
-                      ),
+                Expanded(
+                  child: Text(
+                    entry.value,
+                    style: GoogleFonts.inter(
+                      fontSize: 14.5,
+                      color: AppColors.getTextPrimary(context),
+                      height: 1.45,
                     ),
                   ),
+                ),
                 ],
               ),
             ),
@@ -614,14 +638,14 @@ class HomeScreen extends ConsumerWidget {
                       style: AppDecorations.sectionHeader(),
                     ),
                     const SizedBox(height: 6),
-                    Text(
-                      '${plan.bestWindow.start} — ${plan.bestWindow.end}',
-                      style: GoogleFonts.outfit(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryDark,
-                      ),
-                    ),
+              Text(
+                '${plan.bestWindow.start} — ${plan.bestWindow.end}',
+                style: GoogleFonts.outfit(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.getTextPrimary(context),
+                ),
+              ),
                   ],
                 ),
               ),
@@ -636,7 +660,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCategories(GamePlanData plan) {
+  Widget _buildCategories(BuildContext context, GamePlanData plan) {
     final entries = plan.categories.entries.toList();
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -653,31 +677,31 @@ class HomeScreen extends ConsumerWidget {
                   Text(
                     e.key.toUpperCase(),
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: AppColors.textSecondaryDark,
+                    style: TextStyle(
+                      color: AppColors.getTextSecondary(context),
                       fontSize: 11,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                       letterSpacing: 0.5,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    e.value.toStringAsFixed(0),
-                    style: GoogleFonts.outfit(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryDark,
-                    ),
+                Text(
+                  e.value.toStringAsFixed(0),
+                  style: GoogleFonts.outfit(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.getTextPrimary(context),
                   ),
+                ),
                   const SizedBox(height: 8),
                   // Mini progress bar
                   ClipRRect(
                     borderRadius: BorderRadius.circular(2),
                     child: LinearProgressIndicator(
                       value: e.value / 10,
-                      backgroundColor: AppColors.surfaceHighlightDark,
+                      backgroundColor: AppColors.getSurfaceSecondary(context),
                       color: _getCategoryColor(e.value),
                       minHeight: 3,
                     ),
@@ -729,16 +753,16 @@ class HomeScreen extends ConsumerWidget {
                 child: Text(
                   AppLocalizations.of(context, ref).askAstroBabaBtn,
                   style: GoogleFonts.outfit(
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               Icon(
                 Icons.arrow_forward_ios_rounded,
-                color: AppColors.textTertiaryDark,
+                color: AppColors.getTextMuted(context),
                 size: 16,
               ),
             ],

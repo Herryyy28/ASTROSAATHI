@@ -13,8 +13,10 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -22,14 +24,15 @@ class AboutScreen extends StatelessWidget {
           'About AstroSaathi',
           style: GoogleFonts.outfit(
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryDark,
+            color: AppColors.getTextPrimary(context),
           ),
         ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimaryDark),
+        iconTheme: IconThemeData(color: AppColors.getTextPrimary(context)),
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.cosmicRadialGradient,
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: ResponsiveLayout(
           child: ListView(
@@ -71,7 +74,7 @@ class AboutScreen extends StatelessWidget {
                 style: GoogleFonts.outfit(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimaryDark,
+                  color: AppColors.getTextPrimary(context),
                 ),
               ),
             ),
@@ -81,7 +84,7 @@ class AboutScreen extends StatelessWidget {
                 'Version 2.0.0 (Cosmic Edition)',
                 style: GoogleFonts.inter(
                   fontSize: 14,
-                  color: AppColors.textSecondaryDark,
+                  color: AppColors.getTextSecondary(context),
                 ),
               ),
             ),
@@ -92,6 +95,7 @@ class AboutScreen extends StatelessWidget {
               child: Column(
                 children: [
                   _buildListTile(
+                    context: context,
                     title: 'Terms of Service',
                     icon: Icons.description_outlined,
                     onTap: () async {
@@ -101,8 +105,9 @@ class AboutScreen extends StatelessWidget {
                       }
                     },
                   ),
-                  Divider(color: AppColors.glassBorder),
+                  Divider(color: AppColors.getGlassBorder(context)),
                   _buildListTile(
+                    context: context,
                     title: 'Privacy Policy',
                     icon: Icons.privacy_tip_outlined,
                     onTap: () {
@@ -112,8 +117,9 @@ class AboutScreen extends StatelessWidget {
                       );
                     },
                   ),
-                  Divider(color: AppColors.glassBorder),
+                  Divider(color: AppColors.getGlassBorder(context)),
                   _buildListTile(
+                    context: context,
                     title: 'Contact Support',
                     icon: Icons.support_agent_rounded,
                     onTap: () async {
@@ -127,8 +133,9 @@ class AboutScreen extends StatelessWidget {
                       }
                     },
                   ),
-                  Divider(color: AppColors.glassBorder),
+                  Divider(color: AppColors.getGlassBorder(context)),
                   _buildListTile(
+                    context: context,
                     title: 'Rate App',
                     icon: Icons.star_border_rounded,
                     onTap: () async {
@@ -153,7 +160,7 @@ class AboutScreen extends StatelessWidget {
                 'Made with ❤️ & 🌌',
                 style: GoogleFonts.inter(
                   fontSize: 12,
-                  color: AppColors.textTertiaryDark,
+                  color: AppColors.getTextMuted(context),
                 ),
               ),
             ),
@@ -165,6 +172,7 @@ class AboutScreen extends StatelessWidget {
   }
 
   Widget _buildListTile({
+    required BuildContext context,
     required String title,
     required IconData icon,
     required VoidCallback onTap,
@@ -177,7 +185,7 @@ class AboutScreen extends StatelessWidget {
         style: GoogleFonts.outfit(
           fontSize: 16,
           fontWeight: FontWeight.w500,
-          color: AppColors.textPrimaryDark,
+          color: AppColors.getTextPrimary(context),
         ),
       ),
       trailing: const Icon(

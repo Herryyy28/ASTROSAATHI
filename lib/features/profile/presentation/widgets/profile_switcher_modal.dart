@@ -24,11 +24,11 @@ class ProfileSwitcherModal extends ConsumerWidget {
     final activeProfile = ref.watch(activeProfileProvider);
 
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.backgroundDark,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      decoration: BoxDecoration(
+        color: AppColors.getBackground(context),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
         border: Border(
-          top: BorderSide(color: AppColors.glassBorder, width: 1.5),
+          top: BorderSide(color: AppColors.getGlassBorder(context), width: 1.5),
         ),
       ),
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
@@ -42,7 +42,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.textTertiaryDark.withOpacity(0.4),
+                color: AppColors.getTextMuted(context).withOpacity(0.4),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -58,11 +58,11 @@ class ProfileSwitcherModal extends ConsumerWidget {
                 style: GoogleFonts.outfit(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.textPrimaryDark,
+                  color: AppColors.getTextPrimary(context),
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.close_rounded, color: AppColors.textSecondaryDark),
+                icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context)),
                 onPressed: () => Navigator.pop(context),
               ),
             ],
@@ -71,7 +71,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
             'Select a profile to update charts, insights & calculations across the app.',
             style: GoogleFonts.inter(
               fontSize: 12,
-              color: AppColors.textSecondaryDark,
+              color: AppColors.getTextSecondary(context),
             ),
           ),
           const SizedBox(height: 20),
@@ -92,7 +92,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
 
                 return GlassCard(
                   borderRadius: 16,
-                  borderColor: isActive ? AppColors.primary : AppColors.glassBorder,
+                  borderColor: isActive ? AppColors.primary : AppColors.getGlassBorder(context),
                   glowColor: isActive ? AppColors.goldGlow : null,
                   padding: const EdgeInsets.all(14),
                   onTap: () {
@@ -108,9 +108,9 @@ class ProfileSwitcherModal extends ConsumerWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: isActive ? AppColors.goldGradient : null,
-                          color: isActive ? null : AppColors.surfaceHighlightDark,
+                          color: isActive ? null : AppColors.getSurfaceSecondary(context),
                           border: Border.all(
-                            color: isActive ? AppColors.primary : AppColors.glassBorder,
+                            color: isActive ? AppColors.primary : AppColors.getGlassBorder(context),
                             width: isActive ? 2 : 1,
                           ),
                         ),
@@ -120,7 +120,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
                             style: GoogleFonts.outfit(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              color: isActive ? Colors.black : AppColors.textPrimaryDark,
+                              color: isActive ? Colors.black : AppColors.getTextPrimary(context),
                             ),
                           ),
                         ),
@@ -140,7 +140,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
                                     style: GoogleFonts.outfit(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
-                                      color: AppColors.textPrimaryDark,
+                                      color: AppColors.getTextPrimary(context),
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -171,7 +171,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
                               '${profile.relationship} • ${profile.dob}',
                               style: GoogleFonts.inter(
                                 fontSize: 12,
-                                color: AppColors.textSecondaryDark,
+                                color: AppColors.getTextSecondary(context),
                               ),
                             ),
                           ],
@@ -204,7 +204,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
                         )
                       else
                         PopupMenuButton<String>(
-                          icon: const Icon(Icons.more_vert_rounded, color: AppColors.textTertiaryDark),
+                          icon: Icon(Icons.more_vert_rounded, color: AppColors.getTextMuted(context)),
                           onSelected: (val) {
                             if (val == 'select') {
                               ref.read(activeProfileIndexProvider.notifier).state = index;

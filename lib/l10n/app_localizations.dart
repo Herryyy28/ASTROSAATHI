@@ -7,20 +7,25 @@ import 'translations/en_translations.dart';
 import 'translations/hi_translations.dart';
 import 'translations/gu_translations.dart';
 
+/// Centralized localization service for AstroSaathi providing type-safe translation getters,
+/// fallback safety, and dynamic argument replacement.
 class AppLocalizations {
   final AppLanguage language;
 
-  AppLocalizations(this.language);
+  const AppLocalizations(this.language);
 
+  /// Obtains the current [AppLocalizations] instance via Riverpod [localeProvider].
   static AppLocalizations of(BuildContext context, WidgetRef ref) {
     final lang = ref.watch(localeProvider);
     return AppLocalizations(lang);
   }
 
+  /// Instantiates [AppLocalizations] from a explicit [AppLanguage].
   static AppLocalizations fromLanguage(AppLanguage language) {
     return AppLocalizations(language);
   }
 
+  /// Returns the translated string for a given [key] with fallback to English and key.
   String translate(String key) {
     Map<String, String> translationMap;
     switch (language) {
@@ -39,7 +44,16 @@ class AppLocalizations {
     return translationMap[key] ?? enTranslations[key] ?? key;
   }
 
-  // Common & Core
+  /// Translates a string key and replaces placeholders like `{name}` with given [args].
+  String translateWithArgs(String key, Map<String, String> args) {
+    String text = translate(key);
+    args.forEach((param, value) {
+      text = text.replaceAll('{$param}', value);
+    });
+    return text;
+  }
+
+  // ── Common & Core ───────────────────────────────────────────────
   String get appTitle => translate('app_title');
   String get active => translate('active');
   String get loading => translate('loading');
@@ -70,7 +84,12 @@ class AppLocalizations {
   String get chooseLanguage => translate('choose_language');
   String get chooseLanguageSub => translate('choose_language_sub');
 
-  // Nav
+  // ── Nav Bar & Hubs ──────────────────────────────────────────────
+  String get navHome => translate('nav_home');
+  String get navKundli => translate('nav_kundli');
+  String get navExplore => translate('nav_explore');
+  String get navAstroAi => translate('nav_astro_ai');
+  String get navProfile => translate('nav_profile');
   String get navGamePlan => translate('nav_game_plan');
   String get navHoroscope => translate('nav_horoscope');
   String get navPanchang => translate('nav_panchang');
@@ -80,7 +99,7 @@ class AppLocalizations {
   String get navMyKundlis => translate('nav_my_kundlis');
   String get navSettings => translate('nav_settings');
 
-  // Home
+  // ── Home & Daily Game Plan ──────────────────────────────────────
   String get goodMorning => translate('good_morning');
   String get goodAfternoon => translate('good_afternoon');
   String get goodEvening => translate('good_evening');
@@ -101,7 +120,7 @@ class AppLocalizations {
   String get askAstroBabaBtn => translate('ask_astro_baba_btn');
   String get quickActions => translate('quick_actions');
 
-  // Kundli
+  // ── Kundli & Birth Charts ───────────────────────────────────────
   String get kundliTitle => translate('kundli_title');
   String get birthChart => translate('birth_chart');
   String get planetaryPositions => translate('planetary_positions');
@@ -119,7 +138,7 @@ class AppLocalizations {
   String get explanation => translate('explanation');
   String get createKundli => translate('create_kundli');
 
-  // Panchang & Muhurat
+  // ── Panchang & Muhurat ──────────────────────────────────────────
   String get panchangTitle => translate('panchang_title');
   String get todaysPanchang => translate('todays_panchang');
   String get changeDate => translate('change_date');
@@ -139,7 +158,7 @@ class AppLocalizations {
   String get recommended => translate('recommended');
   String get whyThisTime => translate('why_this_time');
 
-  // Matching
+  // ── Gun Milan & Compatibility ───────────────────────────────────
   String get matchingTitle => translate('matching_title');
   String get gunaScore => translate('guna_score');
   String get mangalDosh => translate('mangal_dosh');
@@ -148,7 +167,7 @@ class AppLocalizations {
   String get overallCompatibility => translate('overall_compatibility');
   String get checkCompatibility => translate('check_compatibility');
 
-  // Remedies & Japa
+  // ── Remedies & Japa Counter ─────────────────────────────────────
   String get remediesTitle => translate('remedies_title');
   String get remediesSub => translate('remedies_sub');
   String get recommendedRemedy => translate('recommended_remedy');
@@ -162,12 +181,12 @@ class AppLocalizations {
   String get japaCounter => translate('japa_counter');
   String get chantCount => translate('chant_count');
 
-  // Astro Baba
+  // ── Astro Baba AI ───────────────────────────────────────────────
   String get astroBabaGreeting => translate('astro_baba_greeting');
   String get askBabaHint => translate('ask_baba_hint');
   String get babaConnected => translate('baba_connected');
 
-  // Settings & Profile
+  // ── Profile, Trust & Settings ───────────────────────────────────
   String get profileSettings => translate('profile_settings');
   String get myProfile => translate('my_profile');
   String get myFamily => translate('my_family');
@@ -189,20 +208,7 @@ class AppLocalizations {
   String get notificationDailyReady => translate('notification_daily_ready');
   String get generatePdfReport => translate('generate_pdf_report');
 
-  // Onboarding
-  String get welcomeToAstrosaathi => translate('welcome_to_astrosaathi');
-  String get onboardingSub1 => translate('onboarding_sub1');
-  String get onboardingSub2 => translate('onboarding_sub2');
-  String get getStarted => translate('get_started');
-
-  // ── New 5-Tab Navigation ─────────────────────────
-  String get navHome => translate('nav_home');
-  String get navKundli => translate('nav_kundli');
-  String get navExplore => translate('nav_explore');
-  String get navAstroAi => translate('nav_astro_ai');
-  String get navProfile => translate('nav_profile');
-
-  // ── Explore Hub ──────────────────────────────────
+  // ── Explore Hub ─────────────────────────────────────────────────
   String get exploreTitle => translate('explore_title');
   String get explorePanchang => translate('explore_panchang');
   String get exploreMuhurat => translate('explore_muhurat');
@@ -213,13 +219,13 @@ class AppLocalizations {
   String get exploreNumerology => translate('explore_numerology');
   String get exploreTransits => translate('explore_transits');
 
-  // ── Progressive Disclosure ───────────────────────
+  // ── Progressive Disclosure ──────────────────────────────────────
   String get whatThisMeans => translate('what_this_means');
   String get viewTechnicalDetails => translate('view_technical_details');
   String get basedOnKundli => translate('based_on_kundli');
   String get whySeeingThis => translate('why_seeing_this');
 
-  // ── Kundli Screen Tabs ───────────────────────────
+  // ── Kundli Tabs & Influence ─────────────────────────────────────
   String get tabOverview => translate('tab_overview');
   String get tabPlanets => translate('tab_planets');
   String get tabHouses => translate('tab_houses');
@@ -230,10 +236,18 @@ class AppLocalizations {
   String get moderateInfluence => translate('moderate_influence');
   String get weakInfluence => translate('weak_influence');
 
-  // ── Profile Screen ───────────────────────────────
+  // ── Profile Screen ──────────────────────────────────────────────
   String get primaryProfile => translate('primary_profile');
   String get familyKundlis => translate('family_kundlis');
   String get addFamilyMember => translate('add_family_member');
   String get dataPrivacy => translate('data_privacy');
   String get accountManagement => translate('account_management');
+
+  // ── AI Astro Baba Chips ──────────────────────────────────────────
+  String get chipCareer => translate('chip_career');
+  String get chipLove => translate('chip_love');
+  String get chipMoney => translate('chip_money');
+  String get chipMindset => translate('chip_mindset');
+  String get chipBusiness => translate('chip_business');
+  String get chipMarriage => translate('chip_marriage');
 }

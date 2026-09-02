@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+/// Supported application languages in AstroSaathi.
 enum AppLanguage {
   english,
   hindi,
@@ -5,6 +8,7 @@ enum AppLanguage {
 }
 
 extension AppLanguageExtension on AppLanguage {
+  /// Two-letter ISO language code.
   String get code {
     switch (this) {
       case AppLanguage.english:
@@ -16,6 +20,10 @@ extension AppLanguageExtension on AppLanguage {
     }
   }
 
+  /// Flutter [Locale] object.
+  Locale get locale => Locale(code);
+
+  /// English display name.
   String get englishName {
     switch (this) {
       case AppLanguage.english:
@@ -27,6 +35,7 @@ extension AppLanguageExtension on AppLanguage {
     }
   }
 
+  /// Native language display name.
   String get nativeName {
     switch (this) {
       case AppLanguage.english:
@@ -38,6 +47,7 @@ extension AppLanguageExtension on AppLanguage {
     }
   }
 
+  /// National flag emoji representation.
   String get flagEmoji {
     switch (this) {
       case AppLanguage.english:
@@ -49,8 +59,12 @@ extension AppLanguageExtension on AppLanguage {
     }
   }
 
+  /// Formatted language subtitle.
+  String get displayLabel => '$nativeName ($englishName)';
+
+  /// Converts ISO language code to [AppLanguage]. Defaults to English.
   static AppLanguage fromCode(String code) {
-    switch (code.toLowerCase()) {
+    switch (code.toLowerCase().trim()) {
       case 'hi':
         return AppLanguage.hindi;
       case 'gu':

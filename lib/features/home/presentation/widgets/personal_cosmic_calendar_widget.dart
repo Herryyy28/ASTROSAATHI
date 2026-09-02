@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_animations.dart';
+import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/providers/locale_provider.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -375,20 +376,9 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
     final days = _buildDays(lang);
     final selectedDay = days[_selectedIndex];
 
-    return Container(
+    return GlassCard(
+      borderRadius: 24,
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceDark.withOpacity(0.85),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: AppColors.glassBorder, width: 0.8),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -416,7 +406,7 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                           style: GoogleFonts.outfit(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimaryDark,
+                            color: AppColors.getDynamicTextPrimary(context),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -425,7 +415,7 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                           l10n.cosmicCalendarSub,
                           style: GoogleFonts.inter(
                             fontSize: 11,
-                            color: AppColors.textSecondaryDark,
+                            color: AppColors.getDynamicTextSecondary(context),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -494,10 +484,10 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                     margin: const EdgeInsets.only(right: 8),
                     decoration: BoxDecoration(
                       gradient: isSelected ? AppColors.goldGradient : null,
-                      color: isSelected ? null : AppColors.glassSurface,
+                      color: isSelected ? null : AppColors.getGlassSurface(context),
                       borderRadius: BorderRadius.circular(18),
                       border: Border.all(
-                        color: isSelected ? AppColors.primary : AppColors.glassBorder,
+                        color: isSelected ? AppColors.primary : AppColors.getGlassBorder(context),
                         width: isSelected ? 1.5 : 0.6,
                       ),
                       boxShadow: isSelected
@@ -518,7 +508,7 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
-                            color: isSelected ? Colors.black : AppColors.textSecondaryDark,
+                            color: isSelected ? Colors.black : AppColors.getTextSecondary(context),
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -527,7 +517,7 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
-                            color: isSelected ? Colors.black : AppColors.textPrimaryDark,
+                            color: isSelected ? Colors.black : AppColors.getTextPrimary(context),
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -555,9 +545,9 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
               key: ValueKey(_selectedIndex),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.glassSurface.withOpacity(0.6),
+                color: AppColors.getGlassSurface(context).withOpacity(0.9),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.glassBorder, width: 0.5),
+                border: Border.all(color: AppColors.getGlassBorder(context), width: 0.5),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -654,7 +644,7 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceHighlightDark.withOpacity(0.5),
+                      color: AppColors.getSurfaceSecondary(context),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -666,7 +656,7 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                             selectedDay.recommendation,
                             style: GoogleFonts.inter(
                               fontSize: 12,
-                              color: AppColors.textSecondaryDark,
+                              color: AppColors.getTextSecondary(context),
                               height: 1.3,
                             ),
                           ),
@@ -687,9 +677,9 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surfaceDark,
+        color: AppColors.getSurfaceSecondary(context),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.glassBorder, width: 0.5),
+        border: Border.all(color: AppColors.getGlassBorder(context), width: 0.5),
       ),
       child: Row(
         children: [
@@ -699,10 +689,10 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: const TextStyle(fontSize: 9, color: AppColors.textTertiaryDark)),
+                Text(label, style: TextStyle(fontSize: 9, color: AppColors.getTextMuted(context))),
                 Text(
                   value,
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                   overflow: TextOverflow.ellipsis,
                 ),
               ],

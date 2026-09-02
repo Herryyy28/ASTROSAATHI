@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/providers/astrology_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/providers/locale_provider.dart';
@@ -74,9 +75,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
             child: Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                color: AppColors.surfaceDark.withOpacity(0.95),
-                border: const Border(
-                  top: BorderSide(color: AppColors.glassBorder, width: 0.5),
+                color: AppColors.getSurface(context).withOpacity(0.95),
+                border: Border(
+                  top: BorderSide(color: AppColors.getGlassBorder(context), width: 0.5),
                 ),
               ),
               child: SingleChildScrollView(
@@ -101,9 +102,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                         ),
                         IconButton(
                           onPressed: () => Navigator.pop(context),
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.close_rounded,
-                            color: AppColors.textSecondaryDark,
+                            color: AppColors.getTextSecondary(context),
                           ),
                         ),
                       ],
@@ -111,20 +112,20 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                     const SizedBox(height: 12),
                     Text(
                       description,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppColors.textPrimaryDark,
+                        color: AppColors.getTextPrimary(context),
                         height: 1.4,
                       ),
                     ),
                     const SizedBox(height: 16),
                     if (planets.isNotEmpty) ...[
-                      const Text(
+                      Text(
                         'Residing Planetary Energies:',
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textSecondaryDark,
+                          color: AppColors.getTextSecondary(context),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -147,11 +148,11 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                         }).toList(),
                       ),
                     ] else ...[
-                      const Text(
+                      Text(
                         'No planet residing in this house currently.',
                         style: TextStyle(
                           fontSize: 13,
-                          color: AppColors.textTertiaryDark,
+                          color: AppColors.getTextMuted(context),
                           fontStyle: FontStyle.italic,
                         ),
                       ),
@@ -172,27 +173,10 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
     final birthChartAsync = ref.watch(birthChartProvider);
     final activeProfile = ref.watch(activeProfileProvider);
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceHighlightDark.withOpacity(0.4),
-        borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: AppColors.glassBorder),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withOpacity(0.05),
-            blurRadius: 20,
-            spreadRadius: 5,
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(28),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: birthChartAsync.when(
+    return GlassCard(
+      borderRadius: 24,
+      padding: const EdgeInsets.all(20),
+      child: birthChartAsync.when(
             loading: () => const Center(
               child: CircularProgressIndicator(color: AppColors.primary),
             ),
@@ -361,26 +345,39 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: Text(
-                                    isExploring ? 'Rashi Bhavishya (Explorer)' : 'Authentic Kundli Bhavishyavani',
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      color: isExploring ? AppColors.secondary : AppColors.textPrimaryDark,
-                                      height: 1.35,
-                                    ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        isExploring ? 'Rashi Bhavishya (Explorer)' : 'Authentic Kundli Bhavishyavani',
+                                        style: GoogleFonts.outfit(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w800,
+                                          color: isExploring ? AppColors.secondary : AppColors.getTextPrimary(context),
+                                          height: 1.25,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        'Your personalized Vedic astrology insight',
+                                        style: GoogleFonts.inter(
+                                          fontSize: 11.5,
+                                          color: AppColors.getTextSecondary(context),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 const SizedBox(width: 6),
                                 IconButton(
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
-                                  icon: const Icon(Icons.bug_report, color: AppColors.textTertiaryDark, size: 18),
+                                  icon: Icon(Icons.bug_report, color: AppColors.getTextMuted(context), size: 18),
                                   onPressed: () {
                                     showDialog(
                                       context: context,
                                       builder: (_) => AlertDialog(
-                                        backgroundColor: AppColors.surfaceDark,
+                                        backgroundColor: AppColors.cardSurface,
                                         title: const Text('Kundli Data Inspector', style: TextStyle(color: AppColors.primary)),
                                         content: SingleChildScrollView(
                                           child: SelectableText(chartData.toString(), style: const TextStyle(color: AppColors.textSecondaryDark, fontSize: 12)),
@@ -402,14 +399,13 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                               Text(
                                 activeProfile.name,
                                 style: GoogleFonts.inter(
-                                  color: AppColors.textSecondaryDark,
+                                  color: AppColors.primary,
                                   fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.35,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 12),
                             Wrap(
                               spacing: 8,
                               runSpacing: 6,
@@ -424,19 +420,19 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                               Text(
                                 _formatCalculatedAt(calculatedAt),
                                 style: GoogleFonts.inter(
-                                  color: AppColors.textTertiaryDark,
+                                  color: AppColors.getTextMuted(context),
                                   fontSize: 11,
                                   height: 1.35,
                                 ),
                               ),
                             ],
-                            const SizedBox(height: 10),
+                            const SizedBox(height: 14),
                             OutlinedButton.icon(
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: AppColors.primary,
                                 side: const BorderSide(color: AppColors.primary, width: 1.2),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                               ),
                               onPressed: () async {
                                 final currentLang = ref.read(localeProvider);
@@ -451,7 +447,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                               icon: const Icon(Icons.picture_as_pdf_rounded, size: 16),
                               label: Text(
                                 AppLocalizations.of(context, ref).generatePdfReport,
-                                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold, height: 1.2),
+                                style: GoogleFonts.outfit(fontSize: 12.5, fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],
@@ -526,6 +522,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                         child: CustomPaint(
                           painter: VedicChartPainter(
                             housePlanets: activePlanets,
+                            context: context,
                           ),
                         ),
                       ),
@@ -542,11 +539,8 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
               );
             },
           ),
-        ),
-      ),
-    ),
-  ).animate().fade(duration: 800.ms).slideY(begin: 0.1);
-}
+    );
+  }
 
   String _formatCalculatedAt(String iso) {
     if (iso.startsWith('Calculated')) return iso;
@@ -572,36 +566,34 @@ class _InfoChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 1),
+        color: AppColors.primary.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.primary.withOpacity(0.35), width: 1.0),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 12, color: AppColors.primary),
-            const SizedBox(width: 4),
+            Icon(icon, size: 13, color: AppColors.primary),
+            const SizedBox(width: 5),
           ],
           Text(
             '$label: ',
             style: GoogleFonts.inter(
-              color: AppColors.primary.withOpacity(0.85),
-              fontSize: 11.5,
+              color: AppColors.getTextSecondary(context),
+              fontSize: 12,
               fontWeight: FontWeight.w500,
-              height: 1.2,
             ),
           ),
           Flexible(
             child: Text(
               value,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.outfit(
                 color: AppColors.primary,
-                fontSize: 11.5,
-                fontWeight: FontWeight.bold,
-                height: 1.2,
+                fontSize: 12.5,
+                fontWeight: FontWeight.w700,
               ),
               overflow: TextOverflow.ellipsis,
             ),

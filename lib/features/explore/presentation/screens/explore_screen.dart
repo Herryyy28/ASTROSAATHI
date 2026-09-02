@@ -349,9 +349,7 @@ class ExploreScreen extends ConsumerWidget {
             height: 52,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              gradient: const LinearGradient(
-                colors: [Color(0xFFD4AF37), Color(0xFFFFD700)],
-              ),
+              gradient: AppColors.goldGradient,
               boxShadow: [
                 BoxShadow(
                   color: AppColors.primary.withOpacity(0.35),

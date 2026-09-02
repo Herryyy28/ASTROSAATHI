@@ -6,6 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_animations.dart';
+import '../../../../core/theme/design_tokens.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/engine/models/ai_data.dart';
 import '../providers/astro_baba_provider.dart';
@@ -91,7 +92,8 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
     final hasUsedQuery = !isPremium && remaining <= 0;
 
     final double keyboardInset = MediaQuery.of(context).viewInsets.bottom;
-    final double bottomPadding = keyboardInset > 0 ? 0.0 : 64.0;
+    final double safeBottom = MediaQuery.of(context).padding.bottom;
+    final double bottomPadding = keyboardInset > 0 ? 8.0 : (84.0 + safeBottom);
 
     final isLight = Theme.of(context).brightness == Brightness.light;
 
@@ -187,13 +189,13 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                       style: GoogleFonts.outfit(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimaryDark,
+                        color: AppColors.getTextPrimary(context),
                       ),
                     ),
                     Text(
                       _isLoading ? l10n.loading : l10n.babaConnected,
-                      style: const TextStyle(
-                        color: AppColors.textSecondaryDark,
+                      style: TextStyle(
+                        color: AppColors.getTextSecondary(context),
                         fontSize: 12,
                       ),
                     ),
@@ -206,12 +208,12 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: isPremium
-                        ? const Color(0xFFFFD700).withOpacity(0.18)
+                        ? AppColors.primary.withOpacity(0.18)
                         : AppColors.primary.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
                       color: isPremium
-                          ? const Color(0xFFFFD700)
+                          ? AppColors.primary
                           : AppColors.primary.withOpacity(0.4),
                     ),
                   ),
@@ -221,8 +223,8 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                         isPremium ? '👑 Unlimited' : '⚡ $remaining/1 Free',
                         style: GoogleFonts.outfit(
                           color: isPremium
-                              ? const Color(0xFFFFD700)
-                              : AppColors.textPrimaryDark,
+                              ? AppColors.primary
+                              : AppColors.getDynamicTextPrimary(context),
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
                         ),
@@ -319,7 +321,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                         decoration: BoxDecoration(
                           color: isUser
                               ? AppColors.primary.withOpacity(0.15)
-                              : AppColors.glassSurface,
+                              : AppColors.getGlassSurface(context),
                           borderRadius: BorderRadius.circular(18).copyWith(
                             bottomRight: isUser
                                 ? const Radius.circular(4)
@@ -331,17 +333,17 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                           border: Border.all(
                             color: isUser
                                 ? AppColors.primary.withOpacity(0.3)
-                                : AppColors.glassBorder,
+                                : AppColors.getGlassBorder(context),
                             width: 0.5,
                           ),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                        Text(
                               message.text,
                               style: GoogleFonts.inter(
-                                color: AppColors.textPrimaryDark,
+                                color: AppColors.getTextPrimary(context),
                                 fontSize: 15,
                                 height: 1.5,
                               ),
@@ -351,7 +353,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                               const SizedBox(height: 14),
                               Container(
                                 height: 0.5,
-                                color: AppColors.glassBorder,
+                                color: AppColors.getGlassBorder(context),
                               ),
                               const SizedBox(height: 12),
                               const Row(
@@ -387,11 +389,11 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                                           fontSize: 12,
                                         ),
                                       ),
-                                      Expanded(
+                                       Expanded(
                                         child: Text(
                                           a,
                                           style: GoogleFonts.inter(
-                                            color: AppColors.textSecondaryDark,
+                                            color: AppColors.getTextSecondary(context),
                                             fontSize: 13,
                                             height: 1.4,
                                           ),
@@ -542,17 +544,17 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                   vertical: 8,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.getPrimary(context).withOpacity(0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
                   border: Border.all(
-                    color: AppColors.primary.withOpacity(0.4),
+                    color: AppColors.getPrimary(context).withOpacity(0.35),
                     width: 0.8,
                   ),
                 ),
                 child: Text(
                   item['chip']!,
-                  style: const TextStyle(
-                    color: AppColors.primary,
+                  style: TextStyle(
+                    color: AppColors.getPrimary(context),
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                   ),
@@ -571,11 +573,11 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
           decoration: BoxDecoration(
-            color: AppColors.surfaceDark.withOpacity(0.85),
-            border: const Border(
-              top: BorderSide(color: AppColors.glassBorder, width: 0.5),
+            color: AppColors.getSurface(context).withOpacity(0.92),
+            border: Border(
+              top: BorderSide(color: AppColors.getBorder(context), width: 0.8),
             ),
           ),
           child: SafeArea(
@@ -590,12 +592,12 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                     decoration: BoxDecoration(
                       color: _isListeningVoice
                           ? AppColors.error.withOpacity(0.2)
-                          : AppColors.glassSurface,
+                          : AppColors.getGlassSurface(context),
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: _isListeningVoice
                             ? AppColors.error
-                            : AppColors.glassBorder,
+                            : AppColors.getGlassBorder(context),
                       ),
                     ),
                     child: Icon(
@@ -614,40 +616,41 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                   child: TextField(
                     controller: _controller,
                     style: GoogleFonts.inter(
-                      color: AppColors.textPrimaryDark,
-                      fontSize: 15,
+                      color: AppColors.getTextPrimary(context),
+                      fontSize: 14.5,
                     ),
                     decoration: InputDecoration(
                       hintText: l10n.askBabaHint,
-                      hintStyle: const TextStyle(
-                        color: AppColors.textTertiaryDark,
+                      hintStyle: GoogleFonts.inter(
+                        color: AppColors.getTextMuted(context),
+                        fontSize: 13.5,
                       ),
                       filled: true,
-                      fillColor: AppColors.glassSurface,
+                      fillColor: AppColors.getSurfaceElevated(context),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(
-                          color: AppColors.glassBorder,
-                          width: 0.5,
+                        borderSide: BorderSide(
+                          color: AppColors.getBorder(context),
+                          width: 0.8,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(
-                          color: AppColors.glassBorder,
-                          width: 0.5,
+                        borderSide: BorderSide(
+                          color: AppColors.getBorder(context),
+                          width: 0.8,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
-                        borderSide: const BorderSide(
-                          color: AppColors.primary,
-                          width: 1,
+                        borderSide: BorderSide(
+                          color: AppColors.getPrimary(context),
+                          width: 1.2,
                         ),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 14,
+                        horizontal: 18,
+                        vertical: 12,
                       ),
                     ),
                     onSubmitted: _sendMessage,
@@ -679,12 +682,15 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
   }
 
   Widget _buildUpgradeInputPlaceholder() {
+    final primaryColor = AppColors.getPrimary(context);
+    final primarySoft = AppColors.getPrimarySoft(context);
+
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
       decoration: BoxDecoration(
-        color: AppColors.surfaceDark.withOpacity(0.85),
-        border: const Border(
-          top: BorderSide(color: AppColors.glassBorder, width: 0.5),
+        color: AppColors.getSurface(context).withOpacity(0.92),
+        border: Border(
+          top: BorderSide(color: AppColors.getBorder(context), width: 0.8),
         ),
       ),
       child: SafeArea(
@@ -692,19 +698,15 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF2C220E), Color(0xFF1F1706)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(20),
+            color: primarySoft,
+            borderRadius: BorderRadius.circular(AppRadius.xl2),
             border: Border.all(
-              color: const Color(0xFFFFD700).withOpacity(0.5),
+              color: primaryColor.withOpacity(0.45),
               width: 1.2,
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFFFD700).withOpacity(0.12),
+                color: primaryColor.withOpacity(0.10),
                 blurRadius: 16,
                 spreadRadius: -2,
               ),
@@ -719,9 +721,9 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: const Color(0xFFFFD700).withOpacity(0.15),
+                      color: primaryColor.withOpacity(0.15),
                     ),
-                    child: const Text('👑', style: TextStyle(fontSize: 16)),
+                    child: const Text('\u{1F451}', style: TextStyle(fontSize: 16)),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -733,13 +735,17 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                           style: GoogleFonts.outfit(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
-                            color: const Color(0xFFFFD700),
+                            color: primaryColor,
                           ),
                         ),
                         const SizedBox(height: 2),
-                        const Text(
+                        Text(
                           'You have used your 1 free chat query. Upgrade to VIP to chat 24/7.',
-                          style: TextStyle(fontSize: 11, color: Colors.white70),
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            color: AppColors.getTextSecondary(context),
+                            height: 1.4,
+                          ),
                         ),
                       ],
                     ),
@@ -751,16 +757,17 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFD700),
+                    backgroundColor: primaryColor,
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: AppRadius.borderButton,
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 12),
+                    minimumSize: const Size(0, 46),
                   ),
                   onPressed: () => PremiumUpgradeModal.show(context),
                   child: Text(
-                    'Upgrade to VIP 👑',
+                    'Upgrade to VIP \u{1F451}',
                     style: GoogleFonts.outfit(
                       fontWeight: FontWeight.bold,
                       fontSize: 13,

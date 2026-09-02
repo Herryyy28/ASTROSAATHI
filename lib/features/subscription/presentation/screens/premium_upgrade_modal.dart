@@ -300,16 +300,12 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                         padding: EdgeInsets.zero,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
                         elevation: 8,
-                        shadowColor: const Color(0xFFFFD700).withOpacity(0.5),
+                        shadowColor: AppColors.goldGlow,
                       ),
                       onPressed: _isProcessing ? null : _handleSubscribe,
                       child: Ink(
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFFFD700), Color(0xFFD4AF37), Color(0xFF996515)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
+                          gradient: AppColors.goldGradient,
                           borderRadius: BorderRadius.circular(18),
                         ),
                         child: Container(

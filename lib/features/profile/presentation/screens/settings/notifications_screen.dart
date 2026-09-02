@@ -20,8 +20,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -29,14 +31,15 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           'Notifications',
           style: GoogleFonts.outfit(
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryDark,
+            color: AppColors.getTextPrimary(context),
           ),
         ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimaryDark),
+        iconTheme: IconThemeData(color: AppColors.getTextPrimary(context)),
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.cosmicRadialGradient,
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: ListView(
           padding: const EdgeInsets.all(24),
@@ -45,7 +48,7 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               'Customize your cosmic alerts',
               style: GoogleFonts.inter(
                 fontSize: 16,
-                color: AppColors.textSecondaryDark,
+                color: AppColors.getTextSecondary(context),
               ),
             ),
             const SizedBox(height: 24),
@@ -60,21 +63,21 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                     _dailyHoroscope,
                     (val) => setState(() => _dailyHoroscope = val),
                   ),
-                  Divider(color: AppColors.glassBorder),
+                  Divider(color: AppColors.getGlassBorder(context)),
                   _buildToggle(
                     'Lunar Phases',
                     'Alerts for Full Moon & New Moon',
                     _lunarPhases,
                     (val) => setState(() => _lunarPhases = val),
                   ),
-                  Divider(color: AppColors.glassBorder),
+                  Divider(color: AppColors.getGlassBorder(context)),
                   _buildToggle(
                     'Planetary Transits',
                     'Major astrological shifts',
                     _planetaryTransits,
                     (val) => setState(() => _planetaryTransits = val),
                   ),
-                  Divider(color: AppColors.glassBorder),
+                  Divider(color: AppColors.getGlassBorder(context)),
                   _buildToggle(
                     'App Updates',
                     'New features and improvements',
@@ -99,20 +102,20 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
         style: GoogleFonts.outfit(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: AppColors.textPrimaryDark,
+          color: AppColors.getTextPrimary(context),
         ),
       ),
       subtitle: Text(
         subtitle,
         style: GoogleFonts.inter(
           fontSize: 12,
-          color: AppColors.textSecondaryDark,
+          color: AppColors.getTextSecondary(context),
         ),
       ),
       activeColor: AppColors.primary,
       activeTrackColor: AppColors.primary.withOpacity(0.3),
-      inactiveThumbColor: AppColors.textTertiaryDark,
-      inactiveTrackColor: AppColors.surfaceHighlightDark,
+      inactiveThumbColor: AppColors.getTextMuted(context),
+      inactiveTrackColor: AppColors.getSurfaceSecondary(context),
       contentPadding: EdgeInsets.zero,
     );
   }

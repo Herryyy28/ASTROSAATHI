@@ -1,12 +1,12 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../theme/design_tokens.dart';
 
-/// A premium glassmorphic card with frosted background and optional glow.
+/// Single Source of Truth Card component implementing the Blinkit card system.
 class GlassCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
-  final double borderRadius;
+  final double? borderRadius;
   final Color? borderColor;
   final Color? glowColor;
   final Gradient? gradient;
@@ -16,7 +16,7 @@ class GlassCard extends StatelessWidget {
     super.key,
     required this.child,
     this.padding,
-    this.borderRadius = 16,
+    this.borderRadius,
     this.borderColor,
     this.glowColor,
     this.gradient,
@@ -25,55 +25,36 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
+    final cardColor = AppColors.getSurface(context);
+    final defaultBorderColor = AppColors.getBorder(context);
+    final isLight = AppColors.isLight(context);
+    final radiusValue = borderRadius ?? AppRadius.card;
 
-    final glassGradient = gradient ??
-        LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isLight
-              ? [
-                  Colors.white,
-                  Colors.white.withOpacity(0.92),
-                ]
-              : [
-                  Colors.white.withOpacity(0.16),
-                  Colors.white.withOpacity(0.06),
-                ],
-        );
-
-    final defaultBorderColor = isLight
-        ? Colors.black.withOpacity(0.08)
-        : Colors.white.withOpacity(0.22);
-
-    final card = ClipRRect(
-      borderRadius: BorderRadius.circular(borderRadius),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-        child: Container(
-          padding: padding ?? const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            gradient: glassGradient,
-            borderRadius: BorderRadius.circular(borderRadius),
-            border: Border.all(
-              color: borderColor ?? defaultBorderColor,
-              width: 0.8,
-            ),
-            boxShadow: [
-              if (glowColor != null)
-                BoxShadow(color: glowColor!, blurRadius: 24, spreadRadius: -4),
-              BoxShadow(
-                color: isLight
-                    ? Colors.black.withOpacity(0.04)
-                    : Colors.black.withOpacity(0.25),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: child,
+    final card = Container(
+      padding: padding ?? AppSpacing.cardPadding,
+      decoration: BoxDecoration(
+        color: gradient == null ? cardColor : null,
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(radiusValue),
+        border: Border.all(
+          color: borderColor ?? defaultBorderColor,
+          width: 1.0,
         ),
+        boxShadow: [
+          if (glowColor != null)
+            BoxShadow(
+              color: glowColor!,
+              blurRadius: 16,
+              spreadRadius: -2,
+            ),
+          BoxShadow(
+            color: Colors.black.withOpacity(isLight ? 0.03 : 0.25),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
+      child: child,
     );
 
     if (onTap != null) {
@@ -81,9 +62,9 @@ class GlassCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(borderRadius),
-          splashColor: AppColors.primary.withOpacity(0.1),
-          highlightColor: AppColors.glassHighlight,
+          borderRadius: BorderRadius.circular(radiusValue),
+          splashColor: AppColors.getPrimary(context).withOpacity(0.12),
+          highlightColor: isLight ? Colors.black.withOpacity(0.04) : AppColors.glassHighlight,
           child: card,
         ),
       );

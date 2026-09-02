@@ -4,9 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_animations.dart';
+import '../theme/design_tokens.dart';
 import '../../l10n/app_localizations.dart';
 import 'gradient_button.dart';
 
+/// Fully theme-adaptive error state widget with retry action.
 class ErrorStateWidget extends ConsumerWidget {
   final String? title;
   final String? message;
@@ -24,6 +26,9 @@ class ErrorStateWidget extends ConsumerWidget {
     final l10n = AppLocalizations.of(context, ref);
     final displayTitle = title ?? l10n.somethingWentWrong;
     final displayMessage = message ?? l10n.error;
+    final textPrimary = AppColors.getTextPrimary(context);
+    final textSecondary = AppColors.getTextSecondary(context);
+    final errorColor = AppColors.getError(context);
 
     return Center(
       child: Padding(
@@ -33,50 +38,51 @@ class ErrorStateWidget extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Floating planet or moon icon
               Container(
-                width: 120,
-                height: 120,
+                width: 96,
+                height: 96,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.error.withOpacity(0.1),
-                  border: Border.all(color: AppColors.error.withOpacity(0.3)),
+                  color: errorColor.withOpacity(0.08),
+                  border: Border.all(color: errorColor.withOpacity(0.25), width: 1.5),
                 ),
-                child: const Center(
+                child: Center(
                   child: Icon(
                     Icons.cloud_off_rounded,
-                    size: 48,
-                    color: AppColors.error,
+                    size: 42,
+                    color: errorColor,
                   ),
                 ),
-              ).animate(onPlay: (c) => c.repeat(reverse: true)).moveY(begin: -5, end: 5, duration: 2.seconds),
-              
-              const SizedBox(height: 32),
-              
+              ).animate(onPlay: (c) => c.repeat(reverse: true))
+               .moveY(begin: -4, end: 4, duration: 2.seconds, curve: Curves.easeInOut),
+
+              const SizedBox(height: AppSpacing.xxxl),
+
               Text(
                 displayTitle,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.outfit(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimaryDark,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: textPrimary,
+                  height: 1.25,
                 ),
               ),
-              
-              const SizedBox(height: 16),
-              
+
+              const SizedBox(height: AppSpacing.md),
+
               Text(
                 displayMessage,
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
-                  fontSize: 16,
+                  fontSize: 14,
                   height: 1.5,
-                  color: AppColors.textSecondaryDark,
+                  color: textSecondary,
                 ),
               ),
-              
-              const SizedBox(height: 40),
-              
+
+              const SizedBox(height: AppSpacing.xxxl),
+
               GradientButton(
                 text: l10n.retry,
                 onPressed: onRetry,

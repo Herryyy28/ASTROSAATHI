@@ -14,8 +14,10 @@ class DataPrivacyScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -23,14 +25,15 @@ class DataPrivacyScreen extends ConsumerWidget {
           'Data Privacy',
           style: GoogleFonts.outfit(
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryDark,
+            color: AppColors.getTextPrimary(context),
           ),
         ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimaryDark),
+        iconTheme: IconThemeData(color: AppColors.getTextPrimary(context)),
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.cosmicRadialGradient,
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: ListView(
           padding: const EdgeInsets.all(24),
@@ -47,7 +50,7 @@ class DataPrivacyScreen extends ConsumerWidget {
               style: GoogleFonts.outfit(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimaryDark,
+                color: AppColors.getTextPrimary(context),
               ),
             ),
             const SizedBox(height: 8),
@@ -56,7 +59,7 @@ class DataPrivacyScreen extends ConsumerWidget {
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 fontSize: 14,
-                color: AppColors.textSecondaryDark,
+                color: AppColors.getTextSecondary(context),
                 height: 1.5,
               ),
             ),
@@ -68,18 +71,21 @@ class DataPrivacyScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildPrivacyPoint(
+                    context,
                     Icons.lock_rounded,
                     'End-to-End Encryption',
                     'Your birth data and AI chats are encrypted before leaving your device.',
                   ),
                   const SizedBox(height: 20),
                   _buildPrivacyPoint(
+                    context,
                     Icons.visibility_off_rounded,
                     'No Third-Party Sharing',
                     'We never sell your data to advertisers or third parties.',
                   ),
                   const SizedBox(height: 20),
                   _buildPrivacyPoint(
+                    context,
                     Icons.cloud_off_rounded,
                     'Local Storage First',
                     'Your Kundlis are stored locally on your device for maximum privacy.',
@@ -106,7 +112,7 @@ class DataPrivacyScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPrivacyPoint(IconData icon, String title, String subtitle) {
+  Widget _buildPrivacyPoint(BuildContext context, IconData icon, String title, String subtitle) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -128,7 +134,7 @@ class DataPrivacyScreen extends ConsumerWidget {
                 style: GoogleFonts.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryDark,
+                  color: AppColors.getTextPrimary(context),
                 ),
               ),
               const SizedBox(height: 4),
@@ -136,7 +142,7 @@ class DataPrivacyScreen extends ConsumerWidget {
                 subtitle,
                 style: GoogleFonts.inter(
                   fontSize: 13,
-                  color: AppColors.textSecondaryDark,
+                  color: AppColors.getTextSecondary(context),
                   height: 1.4,
                 ),
               ),
@@ -151,19 +157,19 @@ class DataPrivacyScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppColors.surfaceDark,
+        backgroundColor: AppColors.getSurface(context),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: Text(
           'Delete All Data & Account?',
           style: GoogleFonts.outfit(
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimaryDark,
+            color: AppColors.getTextPrimary(context),
           ),
         ),
         content: Text(
           'This will permanently erase all your birth profiles, VIP subscription, settings, and saved insights.\n\nYou will be returned to the entry level onboarding screen to fill all your details from scratch.',
           style: GoogleFonts.inter(
-            color: AppColors.textSecondaryDark,
+            color: AppColors.getTextSecondary(context),
             fontSize: 13,
             height: 1.4,
           ),
@@ -171,7 +177,7 @@ class DataPrivacyScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondaryDark)),
+            child: Text('Cancel', style: TextStyle(color: AppColors.getTextSecondary(context))),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(

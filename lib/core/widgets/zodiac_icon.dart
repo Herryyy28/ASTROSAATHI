@@ -29,9 +29,9 @@ class ZodiacIcon extends StatelessWidget {
         shape: BoxShape.circle,
         color: isSelected
             ? AppColors.primary.withOpacity(0.15)
-            : AppColors.glassSurface,
+            : AppColors.getGlassSurface(context),
         border: Border.all(
-          color: isSelected ? AppColors.primary : AppColors.glassBorder,
+          color: isSelected ? AppColors.primary : AppColors.getGlassBorder(context),
           width: isSelected ? 1.5 : 0.5,
         ),
         boxShadow: showGlow || isSelected

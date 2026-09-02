@@ -121,10 +121,10 @@ class LanguageSelectionModal extends ConsumerWidget {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppColors.primary.withOpacity(0.18)
-                            : AppColors.glassSurface,
+                            : AppColors.getGlassSurface(context),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: isSelected ? AppColors.primary : AppColors.glassBorder,
+                          color: isSelected ? AppColors.primary : AppColors.getGlassBorder(context),
                           width: isSelected ? 1.5 : 0.8,
                         ),
                       ),

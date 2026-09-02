@@ -70,7 +70,7 @@ class ProfileScreen extends ConsumerWidget {
                         if (primary.isNotEmpty) ...[
                           _buildSectionTitle(l10n.myProfile),
                           const SizedBox(height: 10),
-                          _buildPrimaryKundliCard(primary.first, l10n, activeProfile, ref)
+                          _buildPrimaryKundliCard(context, primary.first, l10n, activeProfile, ref)
                               .animate().fadeIn(delay: 100.ms),
                           const SizedBox(height: 24),
                         ],
@@ -103,7 +103,7 @@ class ProfileScreen extends ConsumerWidget {
                           ...family.asMap().entries.map((entry) {
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 10),
-                              child: _buildFamilyMemberCard(entry.value, activeProfile, ref)
+                              child: _buildFamilyMemberCard(context, entry.value, activeProfile, ref)
                                   .animate()
                                   .fadeIn(delay: Duration(milliseconds: 200 + entry.key * 80)),
                             );
@@ -116,6 +116,7 @@ class ProfileScreen extends ConsumerWidget {
 
                         // Language
                         _buildSettingsTile(
+                          context,
                           icon: Icons.language_rounded,
                           iconColor: AppColors.tertiary,
                           title: l10n.languageSetting,
@@ -130,6 +131,7 @@ class ProfileScreen extends ConsumerWidget {
                           builder: (context, ref, _) {
                             final currentThemeMode = ref.watch(themeModeProvider);
                             return _buildSettingsTile(
+                              context,
                               icon: currentThemeMode.icon,
                               iconColor: AppColors.primary,
                               title: 'Appearance',
@@ -141,6 +143,7 @@ class ProfileScreen extends ConsumerWidget {
                         const SizedBox(height: 8),
 
                         _buildSettingsTile(
+                          context,
                           icon: Icons.notifications_rounded,
                           iconColor: AppColors.warning,
                           title: l10n.notifications,
@@ -154,6 +157,7 @@ class ProfileScreen extends ConsumerWidget {
 
                         // Saved Insights
                         _buildSettingsTile(
+                          context,
                           icon: Icons.bookmark_rounded,
                           iconColor: AppColors.secondary,
                           title: l10n.savedInsights,
@@ -167,6 +171,7 @@ class ProfileScreen extends ConsumerWidget {
 
                         // Data Privacy
                         _buildSettingsTile(
+                          context,
                           icon: Icons.shield_rounded,
                           iconColor: AppColors.success,
                           title: l10n.dataPrivacy,
@@ -180,6 +185,7 @@ class ProfileScreen extends ConsumerWidget {
 
                         // About
                         _buildSettingsTile(
+                          context,
                           icon: Icons.info_outline_rounded,
                           iconColor: AppColors.textSecondaryDark,
                           title: l10n.about,
@@ -194,6 +200,7 @@ class ProfileScreen extends ConsumerWidget {
                         if (subState.isPremium) ...[
                           const SizedBox(height: 8),
                           _buildSettingsTile(
+                            context,
                             icon: Icons.delete_forever_rounded,
                             iconColor: AppColors.error,
                             title: l10n.deleteAccount,
@@ -258,7 +265,7 @@ class ProfileScreen extends ConsumerWidget {
                       style: GoogleFonts.outfit(
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimaryDark,
+                        color: AppColors.getTextPrimary(context),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -292,7 +299,7 @@ class ProfileScreen extends ConsumerWidget {
                   '${profile.birthPlace.isNotEmpty ? profile.birthPlace : ''} • ${profile.dob}',
                   style: GoogleFonts.inter(
                     fontSize: 13,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getTextSecondary(context),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -316,7 +323,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPrimaryKundliCard(BirthProfileData profile, AppLocalizations l10n, BirthProfileData activeProfile, WidgetRef ref) {
+  Widget _buildPrimaryKundliCard(BuildContext context, BirthProfileData profile, AppLocalizations l10n, BirthProfileData activeProfile, WidgetRef ref) {
     final zodiac = profile.name.isNotEmpty
         ? ZodiacSignUtils.getZodiacFromName(profile.name)
         : null;
@@ -363,7 +370,7 @@ class ProfileScreen extends ConsumerWidget {
                         style: GoogleFonts.outfit(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryDark,
+                          color: AppColors.getTextPrimary(context),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -417,7 +424,7 @@ class ProfileScreen extends ConsumerWidget {
                   '${profile.dob} • ${profile.birthTime}',
                   style: GoogleFonts.inter(
                     fontSize: 13,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getTextSecondary(context),
                   ),
                 ),
                 if (profile.birthPlace.isNotEmpty) ...[
@@ -426,7 +433,7 @@ class ProfileScreen extends ConsumerWidget {
                     '📍 ${profile.birthPlace}',
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: AppColors.textTertiaryDark,
+                      color: AppColors.getTextMuted(context),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -451,7 +458,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildFamilyMemberCard(BirthProfileData profile, BirthProfileData activeProfile, WidgetRef ref) {
+  Widget _buildFamilyMemberCard(BuildContext context, BirthProfileData profile, BirthProfileData activeProfile, WidgetRef ref) {
     final zodiac = profile.name.isNotEmpty
         ? ZodiacSignUtils.getZodiacFromName(profile.name)
         : null;
@@ -459,7 +466,7 @@ class ProfileScreen extends ConsumerWidget {
 
     return GlassCard(
       borderRadius: 16,
-      borderColor: isActive ? AppColors.primary : AppColors.glassBorder,
+      borderColor: isActive ? AppColors.primary : AppColors.getGlassBorder(context),
       glowColor: isActive ? AppColors.goldGlow : null,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       onTap: () {
@@ -474,9 +481,9 @@ class ProfileScreen extends ConsumerWidget {
             height: 42,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.surfaceHighlightDark,
+              color: AppColors.getSurfaceSecondary(context),
               border: Border.all(
-                color: AppColors.glassBorder,
+                color: AppColors.getGlassBorder(context),
               ),
             ),
             child: Center(
@@ -487,7 +494,7 @@ class ProfileScreen extends ConsumerWidget {
                 style: GoogleFonts.outfit(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryDark,
+                  color: AppColors.getTextPrimary(context),
                 ),
               ),
             ),
@@ -502,14 +509,14 @@ class ProfileScreen extends ConsumerWidget {
                   style: GoogleFonts.outfit(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                   ),
                 ),
                 Text(
                   '${profile.relationship} • ${profile.dob}',
                   style: GoogleFonts.inter(
                     fontSize: 12,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getTextSecondary(context),
                   ),
                 ),
               ],
@@ -533,9 +540,9 @@ class ProfileScreen extends ConsumerWidget {
               ),
             )
           else
-            const Icon(
+            Icon(
               Icons.chevron_right_rounded,
-              color: AppColors.textTertiaryDark,
+              color: AppColors.getTextMuted(context),
               size: 20,
             ),
         ],
@@ -579,14 +586,14 @@ class ProfileScreen extends ConsumerWidget {
                   style: GoogleFonts.outfit(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                   ),
                 ),
                 Text(
                   'Store birth details for instant Kundli',
                   style: GoogleFonts.inter(
                     fontSize: 12,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getTextSecondary(context),
                   ),
                 ),
               ],
@@ -602,7 +609,8 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSettingsTile({
+  Widget _buildSettingsTile(
+    BuildContext context, {
     required IconData icon,
     required Color iconColor,
     required String title,
@@ -634,22 +642,22 @@ class ProfileScreen extends ConsumerWidget {
                   style: GoogleFonts.outfit(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                   ),
                 ),
                 Text(
                   subtitle,
                   style: GoogleFonts.inter(
-                    fontSize: 11,
-                    color: AppColors.textSecondaryDark,
+                    fontSize: 11.5,
+                    color: AppColors.getTextSecondary(context),
                   ),
                 ),
               ],
             ),
           ),
-          const Icon(
+          Icon(
             Icons.chevron_right_rounded,
-            color: AppColors.textTertiaryDark,
+            color: AppColors.getTextMuted(context),
             size: 20,
           ),
         ],
@@ -660,8 +668,8 @@ class ProfileScreen extends ConsumerWidget {
   Widget _buildUpgradeBanner(BuildContext context) {
     return GlassCard(
       borderRadius: 20,
-      borderColor: const Color(0xFFFFD700).withOpacity(0.5),
-      glowColor: const Color(0xFFFFD700).withOpacity(0.15),
+      borderColor: AppColors.primary.withOpacity(0.5),
+      glowColor: AppColors.goldGlow,
       padding: const EdgeInsets.all(20),
       onTap: () => PremiumUpgradeModal.show(context),
       child: Row(
@@ -687,7 +695,7 @@ class ProfileScreen extends ConsumerWidget {
                   style: GoogleFonts.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFFFFD700),
+                    color: AppColors.primary,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -695,7 +703,7 @@ class ProfileScreen extends ConsumerWidget {
                   'Unlimited AI chats, family Kundlis & more',
                   style: GoogleFonts.inter(
                     fontSize: 12,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getDynamicTextSecondary(context),
                   ),
                 ),
               ],
@@ -703,7 +711,7 @@ class ProfileScreen extends ConsumerWidget {
           ),
           const Icon(
             Icons.arrow_forward_ios_rounded,
-            color: Color(0xFFFFD700),
+            color: AppColors.primary,
             size: 16,
           ),
         ],
@@ -715,7 +723,7 @@ class ProfileScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppColors.surfaceDark,
+        backgroundColor: AppColors.getSurface(context),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
           side: const BorderSide(color: AppColors.error, width: 1),
@@ -732,7 +740,7 @@ class ProfileScreen extends ConsumerWidget {
               child: Text(
                 'Delete Account & Reset Data',
                 style: GoogleFonts.outfit(
-                  color: AppColors.textPrimaryDark,
+                  color: AppColors.getTextPrimary(context),
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -743,7 +751,7 @@ class ProfileScreen extends ConsumerWidget {
         content: Text(
           'Are you sure you want to permanently erase your VIP subscription, saved Kundlis, family profiles, and settings?\n\nYou will be returned to the entry level onboarding screen to fill all your birth details from scratch.',
           style: GoogleFonts.inter(
-            color: AppColors.textSecondaryDark,
+            color: AppColors.getTextSecondary(context),
             fontSize: 13,
             height: 1.5,
           ),
@@ -751,9 +759,9 @@ class ProfileScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text(
+            child: Text(
               'Cancel',
-              style: TextStyle(color: AppColors.textSecondaryDark),
+              style: TextStyle(color: AppColors.getTextSecondary(context)),
             ),
           ),
           ElevatedButton(
@@ -802,6 +810,7 @@ class ProfileScreen extends ConsumerWidget {
 
   void _showThemeSelectionModal(BuildContext context, WidgetRef ref) {
     final currentThemeMode = ref.read(themeModeProvider);
+    final isLight = Theme.of(context).brightness == Brightness.light;
 
     showModalBottomSheet(
       context: context,
@@ -809,11 +818,14 @@ class ProfileScreen extends ConsumerWidget {
       builder: (context) {
         return Container(
           padding: const EdgeInsets.all(24),
-          decoration: const BoxDecoration(
-            color: AppColors.surfaceDark,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+          decoration: BoxDecoration(
+            color: isLight ? Colors.white : AppColors.surfaceDark,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
             border: Border(
-              top: BorderSide(color: AppColors.glassBorder, width: 0.8),
+              top: BorderSide(
+                color: isLight ? Colors.black.withOpacity(0.08) : AppColors.glassBorder,
+                width: 0.8,
+              ),
             ),
           ),
           child: Column(
@@ -825,7 +837,7 @@ class ProfileScreen extends ConsumerWidget {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: AppColors.textTertiaryDark,
+                    color: isLight ? Colors.black26 : AppColors.textTertiaryDark,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -836,7 +848,7 @@ class ProfileScreen extends ConsumerWidget {
                 style: GoogleFonts.outfit(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimaryDark,
+                  color: AppColors.getDynamicTextPrimary(context),
                 ),
               ),
               const SizedBox(height: 6),
@@ -844,7 +856,7 @@ class ProfileScreen extends ConsumerWidget {
                 'Choose how AstroSaathi looks on your device',
                 style: GoogleFonts.inter(
                   fontSize: 13,
-                  color: AppColors.textSecondaryDark,
+                  color: AppColors.getDynamicTextSecondary(context),
                 ),
               ),
               const SizedBox(height: 20),
@@ -854,13 +866,15 @@ class ProfileScreen extends ConsumerWidget {
                   margin: const EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.primary.withOpacity(0.12)
-                        : AppColors.surfaceHighlightDark.withOpacity(0.4),
+                        ? AppColors.primary.withOpacity(0.15)
+                        : (isLight
+                            ? const Color(0xFFF1F5F9)
+                            : AppColors.surfaceHighlightDark.withOpacity(0.4)),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: isSelected
                           ? AppColors.primary
-                          : AppColors.glassBorder,
+                          : (isLight ? Colors.black.withOpacity(0.08) : AppColors.glassBorder),
                       width: isSelected ? 1.5 : 0.5,
                     ),
                   ),
@@ -869,14 +883,13 @@ class ProfileScreen extends ConsumerWidget {
                       mode.icon,
                       color: isSelected
                           ? AppColors.primary
-                          : AppColors.textSecondaryDark,
+                          : AppColors.getDynamicTextSecondary(context),
                     ),
                     title: Text(
                       mode.label,
                       style: GoogleFonts.outfit(
-                        fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.w500,
-                        color: AppColors.textPrimaryDark,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                        color: AppColors.getDynamicTextPrimary(context),
                       ),
                     ),
                     trailing: isSelected

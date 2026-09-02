@@ -4,8 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:firebase_core/firebase_core.dart';
-
+import 'core/services/firebase_service.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'core/routing/app_router.dart';
@@ -17,11 +16,8 @@ import 'core/providers/theme_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  try {
-    await Firebase.initializeApp();
-  } catch (e) {
-    debugPrint('Firebase initialization warning: $e');
-  }
+  // Initialize centralized Firebase service
+  await FirebaseService.instance.initialize();
 
   try {
     await MobileAds.instance.initialize();
@@ -73,7 +69,7 @@ class AstroSaathiApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'AstroSaathi',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: appThemeMode.mode,
       locale: Locale(language.code),

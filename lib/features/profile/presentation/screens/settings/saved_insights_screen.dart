@@ -9,8 +9,10 @@ class SavedInsightsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -18,14 +20,15 @@ class SavedInsightsScreen extends StatelessWidget {
           'Saved Insights',
           style: GoogleFonts.outfit(
             fontWeight: FontWeight.w600,
-            color: AppColors.textPrimaryDark,
+            color: AppColors.getTextPrimary(context),
           ),
         ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimaryDark),
+        iconTheme: IconThemeData(color: AppColors.getTextPrimary(context)),
       ),
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.cosmicRadialGradient,
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: const EmptyStateWidget(
           icon: Icons.bookmark_outline_rounded,

@@ -86,22 +86,31 @@ class AppDecorations {
     boxShadow: AppColors.goldGlowShadow,
   );
 
-  // ── Colored Accent Card (iPhone Glass Style) ──────────────────────
+  // ── Colored Accent Card (Adaptive Theme Style) ──────────────────────
   static BoxDecoration accentCard({
     required Color accentColor,
     double radius = 20,
-  }) => BoxDecoration(
-    color: AppColors.surfaceHighlightDark.withOpacity(0.4),
-    borderRadius: BorderRadius.circular(radius),
-    border: Border.all(color: accentColor.withOpacity(0.35), width: 0.8),
-    boxShadow: [
-      BoxShadow(
-        color: accentColor.withOpacity(0.08),
-        blurRadius: 12,
-        offset: const Offset(0, 4),
+    BuildContext? context,
+  }) {
+    final isLight = context != null && Theme.of(context).brightness == Brightness.light;
+    return BoxDecoration(
+      color: isLight ? Colors.white : AppColors.surfaceDark,
+      borderRadius: BorderRadius.circular(radius),
+      border: Border.all(
+        color: isLight ? accentColor.withOpacity(0.4) : accentColor.withOpacity(0.35),
+        width: 1.0,
       ),
-    ],
-  );
+      boxShadow: [
+        BoxShadow(
+          color: isLight
+              ? Colors.black.withOpacity(0.03)
+              : accentColor.withOpacity(0.08),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
+        ),
+      ],
+    );
+  }
 
   // ── Pulsing Glow Border (for warnings / important items) ─────────
   static BoxDecoration alertCard({
@@ -128,29 +137,37 @@ class AppDecorations {
   static InputDecoration premiumInput({
     required String hintText,
     IconData? prefixIcon,
-  }) => InputDecoration(
-    hintText: hintText,
-    prefixIcon: prefixIcon != null
-        ? Icon(prefixIcon, color: AppColors.textTertiaryDark, size: 20)
-        : null,
-    filled: true,
-    fillColor: AppColors.surfaceDark,
-    isDense: false,
-    hintStyle: const TextStyle(color: AppColors.textTertiaryDark, height: 1.2),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
-      borderSide: BorderSide(color: AppColors.glassBorder, width: 0.5),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
-      borderSide: BorderSide(color: AppColors.glassBorder, width: 0.5),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
-      borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-    ),
-  );
+    BuildContext? context,
+  }) {
+    final isLight = context != null && Theme.of(context).brightness == Brightness.light;
+    final hintColor = isLight ? AppColors.textMutedLight : AppColors.textTertiaryDark;
+    final fillColor = isLight ? AppColors.surfaceElevatedLight : AppColors.surfaceDark;
+    final borderColor = isLight ? AppColors.borderLight : AppColors.glassBorder;
+
+    return InputDecoration(
+      hintText: hintText,
+      prefixIcon: prefixIcon != null
+          ? Icon(prefixIcon, color: hintColor, size: 20)
+          : null,
+      filled: true,
+      fillColor: fillColor,
+      isDense: false,
+      hintStyle: TextStyle(color: hintColor, height: 1.2),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: borderColor, width: 0.5),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: borderColor, width: 0.5),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: isLight ? AppColors.primaryLightMode : AppColors.primary, width: 1.5),
+      ),
+    );
+  }
 
   // ── Section Header Style ──────────────────────────────────────────
   static TextStyle sectionHeader({Color color = AppColors.primary}) => TextStyle(

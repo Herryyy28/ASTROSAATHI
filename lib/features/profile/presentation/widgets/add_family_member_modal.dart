@@ -176,10 +176,10 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
     return Container(
       margin: EdgeInsets.only(top: kToolbarHeight),
       decoration: BoxDecoration(
-        color: AppColors.backgroundDark,
+        color: AppColors.getBackground(context),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         border: Border(
-          top: BorderSide(color: AppColors.glassBorder),
+          top: BorderSide(color: AppColors.getGlassBorder(context)),
         ),
       ),
       child: SafeArea(
@@ -197,7 +197,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceHighlightDark,
+                      color: AppColors.getSurfaceSecondary(context),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -209,7 +209,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                   style: GoogleFonts.outfit(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -218,7 +218,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                   'Add birth details for instant kundlis',
                   style: GoogleFonts.inter(
                     fontSize: 14,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getTextSecondary(context),
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -228,10 +228,11 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                 TextField(
                   controller: _nameController,
                   textCapitalization: TextCapitalization.words,
-                  style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 16),
+                  style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 16),
                   decoration: AppDecorations.premiumInput(
                     hintText: 'Full Name',
                     prefixIcon: Icons.person_outline_rounded,
+                    context: context,
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -241,17 +242,17 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                   height: 52,
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceHighlightDark,
+                    color: AppColors.getSurfaceSecondary(context),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.glassBorder),
+                    border: Border.all(color: AppColors.getGlassBorder(context)),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: _selectedRelationship,
                       isExpanded: true,
-                      dropdownColor: AppColors.surfaceDark,
-                      style: const TextStyle(
-                        color: AppColors.textPrimaryDark,
+                      dropdownColor: AppColors.getSurface(context),
+                      style: TextStyle(
+                        color: AppColors.getTextPrimary(context),
                         fontSize: 16,
                       ),
                       items: _relationships.map((rel) {
@@ -283,13 +284,14 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                       });
                     }
                   },
-                  style: const TextStyle(
-                    color: AppColors.textPrimaryDark,
+                  style: TextStyle(
+                    color: AppColors.getTextPrimary(context),
                     fontSize: 16,
                   ),
                   decoration: AppDecorations.premiumInput(
                     hintText: 'Date of Birth (YYYY-MM-DD)',
                     prefixIcon: Icons.calendar_today_rounded,
+                    context: context,
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -317,13 +319,14 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                             });
                           }
                         },
-                        style: const TextStyle(
-                          color: AppColors.textPrimaryDark,
+                        style: TextStyle(
+                          color: AppColors.getTextPrimary(context),
                           fontSize: 16,
                         ),
                         decoration: AppDecorations.premiumInput(
                           hintText: 'Time (HH:MM)',
                           prefixIcon: Icons.access_time_rounded,
+                          context: context,
                         ),
                       ),
                     ),
@@ -334,14 +337,14 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                         height: 52,
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
-                          color: AppColors.surfaceHighlightDark,
+                          color: AppColors.getSurfaceSecondary(context),
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: AppColors.glassBorder),
+                          border: Border.all(color: AppColors.getGlassBorder(context)),
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: _selectedAmPm,
-                            dropdownColor: AppColors.surfaceDark,
+                            dropdownColor: AppColors.getSurface(context),
                             alignment: Alignment.center,
                             style: GoogleFonts.outfit(
                               color: AppColors.primary,
@@ -368,9 +371,9 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                   height: 52,
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceHighlightDark,
+                    color: AppColors.getSurfaceSecondary(context),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.glassBorder),
+                    border: Border.all(color: AppColors.getGlassBorder(context)),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
@@ -378,10 +381,10 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                           ? _selectedCity
                           : 'Custom Location',
                       isExpanded: true,
-                      dropdownColor: AppColors.surfaceDark,
+                      dropdownColor: AppColors.getSurface(context),
                       alignment: Alignment.centerLeft,
-                      style: const TextStyle(
-                        color: AppColors.textPrimaryDark,
+                      style: TextStyle(
+                        color: AppColors.getTextPrimary(context),
                         fontSize: 15,
                         height: 1.2,
                       ),
@@ -393,7 +396,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                                   style: TextStyle(
                                     color: city == 'Custom Location'
                                         ? AppColors.primary
-                                        : AppColors.textPrimaryDark,
+                                        : AppColors.getTextPrimary(context),
                                     fontWeight: city == 'Custom Location'
                                         ? FontWeight.bold
                                         : FontWeight.normal,
@@ -421,13 +424,14 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                   const SizedBox(height: 10),
                   TextField(
                     controller: _placeController,
-                    style: const TextStyle(
-                      color: AppColors.textPrimaryDark,
+                    style: TextStyle(
+                      color: AppColors.getTextPrimary(context),
                       fontSize: 16,
                     ),
                     decoration: AppDecorations.premiumInput(
                       hintText: 'Enter City, Country',
                       prefixIcon: Icons.location_on_outlined,
+                      context: context,
                     ),
                   ),
                 ],

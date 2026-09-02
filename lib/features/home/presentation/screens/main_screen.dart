@@ -69,8 +69,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget _buildMobileLayout(BuildContext context, int currentIndex) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: Stack(
         children: [
           IndexedStack(
@@ -93,11 +94,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget _buildWideLayout(BuildContext context, int currentIndex) {
     final isDesktop = context.isDesktop;
     final railWidth = isDesktop ? 220.0 : 80.0;
+    final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.cosmicRadialGradient),
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
+        ),
         child: Row(
           children: [
             _buildSideRail(context, isDesktop, railWidth, currentIndex),
@@ -114,14 +119,20 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget _buildSideRail(BuildContext context, bool isDesktop, double width, int currentIndex) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+    final railBgColor = isLight
+        ? AppColors.surfaceLight.withOpacity(0.94)
+        : const Color(0x1A0F1219);
+    final railBorderColor = isLight ? AppColors.borderLight : AppColors.glassBorder;
+
     return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
           width: width,
-          decoration: const BoxDecoration(
-            color: Color(0x1A0F1219),
-            border: Border(right: BorderSide(color: AppColors.glassBorder, width: 0.5)),
+          decoration: BoxDecoration(
+            color: railBgColor,
+            border: Border(right: BorderSide(color: railBorderColor, width: 0.5)),
           ),
           child: SafeArea(
             child: Column(
@@ -178,6 +189,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget _buildSideNavItem(int index, bool isDesktop, int currentIndex) {
     final isActive = currentIndex == index;
     final item = _navItems[index];
+    final isLight = Theme.of(context).brightness == Brightness.light;
+    final activeColor = AppColors.getPrimary(context);
+    final inactiveColor = isLight ? AppColors.textMutedLight : AppColors.textTertiaryDark;
+    final inactiveLabelColor = isLight ? AppColors.textSecondaryLight : AppColors.textSecondaryDark;
 
     return GestureDetector(
       onTap: () {
@@ -194,10 +209,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           vertical: 12,
         ),
         decoration: BoxDecoration(
-          color: isActive ? AppColors.primary.withOpacity(0.14) : Colors.transparent,
+          color: isActive ? activeColor.withOpacity(0.12) : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
           border: isActive
-              ? Border.all(color: AppColors.primary.withOpacity(0.35), width: 0.8)
+              ? Border.all(color: activeColor.withOpacity(0.30), width: 0.8)
               : null,
         ),
         child: Row(
@@ -209,7 +224,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               curve: Curves.easeOutBack,
               child: Icon(
                 isActive ? item.activeIcon : item.icon,
-                color: isActive ? AppColors.primary : AppColors.textTertiaryDark,
+                color: isActive ? activeColor : inactiveColor,
                 size: 22,
               ),
             ),
@@ -220,7 +235,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 style: GoogleFonts.outfit(
                   fontSize: 14,
                   fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                  color: isActive ? AppColors.primary : AppColors.textSecondaryDark,
+                  color: isActive ? activeColor : inactiveLabelColor,
                 ),
               ),
             ],
@@ -232,23 +247,24 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   Widget _buildBottomNav(BuildContext context, int currentIndex) {
     final isLight = Theme.of(context).brightness == Brightness.light;
+    final navBgColor = isLight
+        ? AppColors.surfaceLight.withOpacity(0.96)
+        : AppColors.surfaceDark.withOpacity(0.96);
+    final navBorderColor = isLight ? AppColors.borderLight : AppColors.glassBorder;
+    final shadowOpacity = isLight ? 0.10 : 0.40;
 
     return Container(
       margin: const EdgeInsets.fromLTRB(14, 0, 14, 12),
       decoration: BoxDecoration(
-        color: isLight
-            ? Colors.white.withOpacity(0.94)
-            : const Color(0xEB0E1118),
+        color: navBgColor,
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
-          color: isLight
-              ? Colors.black.withOpacity(0.08)
-              : Colors.white.withOpacity(0.14),
-          width: 0.8,
+          color: navBorderColor,
+          width: 1.0,
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isLight ? 0.08 : 0.35),
+            color: Colors.black.withOpacity(shadowOpacity),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -257,7 +273,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(28),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: SafeArea(
             top: false,
             child: Padding(
@@ -266,7 +282,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: List.generate(_navItems.length, (index) {
                   return Expanded(
-                    child: _buildBottomNavItem(index, currentIndex),
+                    child: _buildBottomNavItem(context, index, currentIndex),
                   );
                 }),
               ),
@@ -277,15 +293,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildBottomNavItem(int index, int currentIndex) {
+  Widget _buildBottomNavItem(BuildContext context, int index, int currentIndex) {
     final isActive = currentIndex == index;
     final item = _navItems[index];
     final isLight = Theme.of(context).brightness == Brightness.light;
 
-    final activeColor = AppColors.primary;
-    final inactiveColor = isLight
-        ? const Color(0xFF70757A)
-        : Colors.white.withOpacity(0.45);
+    final activeColor = AppColors.getPrimary(context);
+    final inactiveColor = isLight ? AppColors.textMutedLight : AppColors.textTertiaryDark;
 
     return GestureDetector(
       onTap: () {
@@ -309,23 +323,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               height: 28,
               decoration: BoxDecoration(
                 color: isActive
-                    ? activeColor.withOpacity(0.16)
+                    ? activeColor.withOpacity(0.15)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(16),
                 border: isActive
                     ? Border.all(
                         color: activeColor.withOpacity(0.40),
-                        width: 0.8,
+                        width: 1.0,
                       )
-                    : null,
-                boxShadow: isActive
-                    ? [
-                        BoxShadow(
-                          color: activeColor.withOpacity(0.20),
-                          blurRadius: 10,
-                          spreadRadius: -1,
-                        ),
-                      ]
                     : null,
               ),
               child: Center(
@@ -345,7 +350,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             AnimatedDefaultTextStyle(
               duration: const Duration(milliseconds: 200),
               style: GoogleFonts.inter(
-                fontSize: 10,
+                fontSize: 10.5,
                 fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
                 color: isActive ? activeColor : inactiveColor,
                 letterSpacing: isActive ? 0.2 : 0,

@@ -30,18 +30,20 @@ class RelationshipCenterScreen extends StatelessWidget {
                       child: const Icon(Icons.favorite_rounded, color: Colors.white, size: 20),
                     ),
                     const SizedBox(width: 12),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Relationship Center',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
-                        ),
-                        Text(
-                          '7th House Partnerships, Venus Transits & Harmony',
-                          style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Relationship Center',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                          ),
+                          Text(
+                            '7th House Partnerships, Venus Transits & Harmony',
+                            style: TextStyle(fontSize: 11.5, color: AppColors.getTextSecondary(context)),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -87,18 +89,18 @@ class RelationshipCenterScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceHighlightDark.withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: AppColors.glassBorder),
+                    color: AppColors.getSurface(context),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: AppColors.getBorder(context)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('7th House & Venus Alignment', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark)),
+                      Text('7th House & Venus Alignment', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context))),
                       const SizedBox(height: 12),
-                      _buildInsightItem('Venus in Rohini Nakshatra', 'Fosters magnetic charm, deep affection, and empathetic communication.'),
-                      _buildInsightItem('7th House Lord Synergy', 'Ideal time for heart-to-heart dialogue, resolving past misunderstandings, and date nights.'),
-                      _buildInsightItem('Daily Upay Reminder', 'Wear white pastel tones or apply rose water on Friday mornings to enhance Venus grace.'),
+                      _buildInsightItem(context, 'Venus in Rohini Nakshatra', 'Fosters magnetic charm, deep affection, and empathetic communication.'),
+                      _buildInsightItem(context, '7th House Lord Synergy', 'Ideal time for heart-to-heart dialogue, resolving past misunderstandings, and date nights.'),
+                      _buildInsightItem(context, 'Daily Upay Reminder', 'Wear white pastel tones or apply rose water on Friday mornings to enhance Venus grace.'),
                     ],
                   ),
                 ),
@@ -110,21 +112,21 @@ class RelationshipCenterScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInsightItem(String title, String desc) {
+  Widget _buildInsightItem(BuildContext context, String title, String desc) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.favorite_border_rounded, color: AppColors.secondaryLight, size: 18),
+          Icon(Icons.favorite_border_rounded, color: AppColors.getPrimary(context), size: 18),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.secondaryLight, fontSize: 13)),
+                Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.getPrimary(context), fontSize: 13)),
                 const SizedBox(height: 2),
-                Text(desc, style: const TextStyle(color: AppColors.textSecondaryDark, fontSize: 12, height: 1.3)),
+                Text(desc, style: TextStyle(color: AppColors.getTextSecondary(context), fontSize: 12, height: 1.3)),
               ],
             ),
           ),
