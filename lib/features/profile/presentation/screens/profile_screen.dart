@@ -187,7 +187,7 @@ class ProfileScreen extends ConsumerWidget {
                         _buildSettingsTile(
                           context,
                           icon: Icons.info_outline_rounded,
-                          iconColor: AppColors.textSecondaryDark,
+                          iconColor: AppColors.getTextSecondary(context),
                           title: l10n.about,
                           subtitle: 'AstroSaathi v2.0',
                           onTap: () => Navigator.push(
@@ -332,7 +332,7 @@ class ProfileScreen extends ConsumerWidget {
     return GlassCard(
       borderRadius: 20,
       glowColor: isActive ? AppColors.goldGlow : null,
-      borderColor: isActive ? AppColors.primary : AppColors.glassBorder,
+      borderColor: isActive ? AppColors.primary : AppColors.getGlassBorder(context),
       padding: const EdgeInsets.all(20),
       onTap: () {
         final profiles = ref.read(profilesListProvider);
@@ -815,6 +815,7 @@ class ProfileScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
+      isScrollControlled: true,
       builder: (context) {
         return Container(
           padding: const EdgeInsets.all(24),
@@ -828,10 +829,13 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+          child: SafeArea(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
               Center(
                 child: Container(
                   width: 40,
@@ -908,8 +912,10 @@ class ProfileScreen extends ConsumerWidget {
               const SizedBox(height: 12),
             ],
           ),
-        );
-      },
+        ),
+      ),
+    );
+  },
     );
   }
 }

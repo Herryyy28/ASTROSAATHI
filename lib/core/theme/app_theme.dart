@@ -85,6 +85,15 @@ class AppTheme {
         ),
       ),
 
+      tabBarTheme: const TabBarThemeData(
+        indicatorColor: AppColors.primaryLightMode,
+        labelColor: AppColors.primaryLightMode,
+        unselectedLabelColor: AppColors.textSecondaryLight,
+        dividerColor: Colors.transparent,
+        overlayColor: WidgetStatePropertyAll(Colors.transparent),
+        indicatorSize: TabBarIndicatorSize.label,
+      ),
+
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
           TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
@@ -172,6 +181,15 @@ class AppTheme {
           borderRadius: AppRadius.borderInput,
           borderSide: const BorderSide(color: AppColors.primaryDarkMode, width: 1.5),
         ),
+      ),
+
+      tabBarTheme: const TabBarThemeData(
+        indicatorColor: AppColors.primaryDarkMode,
+        labelColor: AppColors.primaryDarkMode,
+        unselectedLabelColor: AppColors.textSecondaryDark,
+        dividerColor: Colors.transparent,
+        overlayColor: WidgetStatePropertyAll(Colors.transparent),
+        indicatorSize: TabBarIndicatorSize.label,
       ),
 
       pageTransitionsTheme: const PageTransitionsTheme(

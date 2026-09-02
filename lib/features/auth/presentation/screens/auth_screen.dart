@@ -87,10 +87,15 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(userSessionProvider);
+    final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.cosmicGradient),
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicGradient,
+        ),
         child: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
@@ -102,19 +107,22 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+                      icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.getTextPrimary(context)),
                       onPressed: () => context.pop(),
                     ),
-                    const Spacer(),
-                    Text(
-                      _isSignUp ? 'Create Account' : 'Welcome Back',
-                      style: GoogleFonts.outfit(
-                        fontSize: context.fontLG,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                    Expanded(
+                      child: Text(
+                        _isSignUp ? 'Create Account' : 'Welcome Back',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.outfit(
+                          fontSize: context.fontLG,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getTextPrimary(context),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const Spacer(),
                     const SizedBox(width: 48),
                   ],
                 ),
@@ -139,7 +147,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: context.fontSM,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getTextSecondary(context),
                   ),
                 ).fadeSlideUp(delay: 100.ms),
 
@@ -156,7 +164,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         if (_isSignUp) ...[
                           TextFormField(
                             controller: _nameController,
-                            style: const TextStyle(color: Colors.white),
+                            style: TextStyle(color: AppColors.getTextPrimary(context)),
                             decoration: const InputDecoration(
                               labelText: 'Full Name',
                               prefixIcon: Icon(Icons.person_outline_rounded, color: AppColors.primary),
@@ -169,7 +177,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         TextFormField(
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(color: AppColors.getTextPrimary(context)),
                           decoration: const InputDecoration(
                             labelText: 'Email Address',
                             prefixIcon: Icon(Icons.email_outlined, color: AppColors.primary),
@@ -186,14 +194,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         TextFormField(
                           controller: _passwordController,
                           obscureText: _obscurePassword,
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(color: AppColors.getTextPrimary(context)),
                           decoration: InputDecoration(
                             labelText: 'Password',
                             prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.primary),
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                                color: AppColors.textTertiaryDark,
+                                color: AppColors.getTextMuted(context),
                               ),
                               onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                             ),
@@ -214,15 +222,15 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         // OR Divider
                         Row(
                           children: [
-                            Expanded(child: Divider(color: Colors.white.withOpacity(0.15))),
+                            Expanded(child: Divider(color: AppColors.getGlassBorder(context))),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 12),
                               child: Text(
                                 'OR',
-                                style: TextStyle(color: AppColors.textTertiaryDark, fontSize: 12, fontWeight: FontWeight.bold),
+                                style: TextStyle(color: AppColors.getTextMuted(context), fontSize: 12, fontWeight: FontWeight.bold),
                               ),
                             ),
-                            Expanded(child: Divider(color: Colors.white.withOpacity(0.15))),
+                            Expanded(child: Divider(color: AppColors.getGlassBorder(context))),
                           ],
                         ),
 
@@ -258,18 +266,20 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                           label: Text(
                             'Continue with Google',
                             style: GoogleFonts.outfit(
-                              color: Colors.white,
+                              color: AppColors.getTextPrimary(context),
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
                             ),
                           ),
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
-                            side: BorderSide(color: Colors.white.withOpacity(0.2)),
+                            side: BorderSide(color: AppColors.getGlassBorder(context)),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(14),
                             ),
-                            backgroundColor: Colors.white.withOpacity(0.05),
+                            backgroundColor: isLight
+                                ? AppColors.surfaceLight
+                                : Colors.white.withOpacity(0.05),
                           ),
                         ),
 
@@ -308,7 +318,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                         Expanded(
                           child: Text(
                             'Signed in as ${session.name} (${session.email})',
-                            style: const TextStyle(color: Colors.white, fontSize: 13),
+                            style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
                           ),
                         ),
                         TextButton(

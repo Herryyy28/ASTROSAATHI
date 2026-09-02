@@ -26,11 +26,15 @@ class MuhuratScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final muhuratAsync = ref.watch(muhuratProvider(selectedCategory));
+    final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.cosmicRadialGradient),
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
+        ),
         child: SafeArea(
           bottom: false,
           child: ResponsiveLayout(
@@ -61,7 +65,7 @@ class MuhuratScreen extends ConsumerWidget {
                               style: GoogleFonts.outfit(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.textPrimaryDark,
+                                color: AppColors.getTextPrimary(context),
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -69,7 +73,7 @@ class MuhuratScreen extends ConsumerWidget {
                               'What are you planning?',
                               style: GoogleFonts.inter(
                                 fontSize: 14,
-                                color: AppColors.textSecondaryDark,
+                                color: AppColors.getTextSecondary(context),
                               ),
                             ),
                           ],
@@ -81,7 +85,7 @@ class MuhuratScreen extends ConsumerWidget {
                   const SizedBox(height: 24),
 
                   // ── Category Selector ─────────────────────────────
-                  _buildCategorySelector(ref, selectedCategory).fadeSlideUp(delay: 100.ms),
+                  _buildCategorySelector(context, ref, selectedCategory).fadeSlideUp(delay: 100.ms),
 
                   const SizedBox(height: 32),
 
@@ -99,7 +103,7 @@ class MuhuratScreen extends ConsumerWidget {
                           ],
                         ),
                       ),
-                      data: (result) => _buildMuhuratResult(result),
+                      data: (result) => _buildMuhuratResult(context, result),
                     ),
                   ),
                 ],
@@ -111,7 +115,8 @@ class MuhuratScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCategorySelector(WidgetRef ref, String selected) {
+  Widget _buildCategorySelector(BuildContext context, WidgetRef ref, String selected) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
@@ -129,10 +134,10 @@ class MuhuratScreen extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                 decoration: BoxDecoration(
                   gradient: isSelected ? AppColors.goldGradient : null,
-                  color: isSelected ? null : AppColors.glassSurface,
+                  color: isSelected ? null : (isLight ? AppColors.surfaceSecondaryLight : AppColors.glassSurface),
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: isSelected ? Colors.transparent : AppColors.glassBorder,
+                    color: isSelected ? Colors.transparent : AppColors.getGlassBorder(context),
                     width: 0.5,
                   ),
                   boxShadow: isSelected ? [
@@ -145,13 +150,13 @@ class MuhuratScreen extends ConsumerWidget {
                     Icon(
                       icon,
                       size: 16,
-                      color: isSelected ? Colors.black : AppColors.textSecondaryDark,
+                      color: isSelected ? Colors.black : AppColors.getTextSecondary(context),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       category,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : AppColors.textPrimaryDark,
+                        color: isSelected ? Colors.black : AppColors.getTextPrimary(context),
                         fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
                         fontSize: 14,
                       ),
@@ -166,7 +171,7 @@ class MuhuratScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildMuhuratResult(MuhuratResult result) {
+  Widget _buildMuhuratResult(BuildContext context, MuhuratResult result) {
     return ListView(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(bottom: 100),
@@ -190,7 +195,7 @@ class MuhuratScreen extends ConsumerWidget {
               Text(
                 'Best Time',
                 style: TextStyle(
-                  color: AppColors.textSecondaryDark,
+                  color: AppColors.getTextSecondary(context),
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
@@ -215,6 +220,7 @@ class MuhuratScreen extends ConsumerWidget {
 
         // ── Detail Cards ──────────────────────────────────────
         _buildDetailCard(
+          context,
           'Strength',
           result.strength,
           Icons.bolt_rounded,
@@ -224,6 +230,7 @@ class MuhuratScreen extends ConsumerWidget {
         const SizedBox(height: 12),
 
         _buildDetailCard(
+          context,
           'Best For',
           result.bestFor,
           Icons.check_circle_rounded,
@@ -235,7 +242,7 @@ class MuhuratScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: AppDecorations.alertCard(alertColor: AppColors.error),
+            decoration: AppDecorations.alertCard(alertColor: AppColors.error, context: context),
             child: Row(
               children: [
                 Container(
@@ -267,7 +274,7 @@ class MuhuratScreen extends ConsumerWidget {
                         style: GoogleFonts.outfit(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimaryDark,
+                          color: AppColors.getTextPrimary(context),
                         ),
                       ),
                     ],
@@ -281,7 +288,7 @@ class MuhuratScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildDetailCard(String label, String value, IconData icon, Color color) {
+  Widget _buildDetailCard(BuildContext context, String label, String value, IconData icon, Color color) {
     return GlassCard(
       padding: const EdgeInsets.all(18),
       child: Row(
@@ -302,8 +309,8 @@ class MuhuratScreen extends ConsumerWidget {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
-                    color: AppColors.textSecondaryDark,
+                  style: TextStyle(
+                    color: AppColors.getTextSecondary(context),
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -312,7 +319,7 @@ class MuhuratScreen extends ConsumerWidget {
                 Text(
                   value,
                   style: GoogleFonts.inter(
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                   ),

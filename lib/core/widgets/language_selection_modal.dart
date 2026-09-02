@@ -37,9 +37,9 @@ class LanguageSelectionModal extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: AppColors.surfaceDark.withOpacity(0.92),
+          color: AppColors.getSurface(context).withOpacity(0.96),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-          border: const Border(top: BorderSide(color: AppColors.glassBorder, width: 1)),
+          border: Border(top: BorderSide(color: AppColors.getGlassBorder(context), width: 1)),
         ),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -53,7 +53,7 @@ class LanguageSelectionModal extends ConsumerWidget {
                   width: 44,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: AppColors.textTertiaryDark,
+                    color: AppColors.getTextMuted(context),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -81,7 +81,7 @@ class LanguageSelectionModal extends ConsumerWidget {
                           style: GoogleFonts.outfit(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimaryDark,
+                            color: AppColors.getTextPrimary(context),
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -89,7 +89,7 @@ class LanguageSelectionModal extends ConsumerWidget {
                           l10n.chooseLanguageSub,
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: AppColors.textSecondaryDark,
+                            color: AppColors.getTextSecondary(context),
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -120,11 +120,11 @@ class LanguageSelectionModal extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? AppColors.primary.withOpacity(0.18)
-                            : AppColors.getGlassSurface(context),
+                            ? AppColors.getPrimary(context).withOpacity(0.14)
+                            : AppColors.getSurfaceSecondary(context),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: isSelected ? AppColors.primary : AppColors.getGlassBorder(context),
+                          color: isSelected ? AppColors.getPrimary(context) : AppColors.getGlassBorder(context),
                           width: isSelected ? 1.5 : 0.8,
                         ),
                       ),
@@ -144,7 +144,7 @@ class LanguageSelectionModal extends ConsumerWidget {
                                   style: GoogleFonts.outfit(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: isSelected ? AppColors.primary : AppColors.textPrimaryDark,
+                                    color: isSelected ? AppColors.getPrimary(context) : AppColors.getTextPrimary(context),
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -153,7 +153,7 @@ class LanguageSelectionModal extends ConsumerWidget {
                                   lang.englishName,
                                   style: GoogleFonts.inter(
                                     fontSize: 12,
-                                    color: AppColors.textSecondaryDark,
+                                    color: AppColors.getTextSecondary(context),
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -165,14 +165,14 @@ class LanguageSelectionModal extends ConsumerWidget {
                           if (isSelected)
                             Container(
                               padding: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: AppColors.primary,
+                                color: AppColors.getPrimary(context),
                               ),
                               child: const Icon(Icons.check, color: Colors.black, size: 16),
                             )
                           else
-                            Icon(Icons.circle_outlined, color: AppColors.textTertiaryDark, size: 20),
+                            Icon(Icons.circle_outlined, color: AppColors.getTextMuted(context), size: 20),
                         ],
                       ),
                     ),

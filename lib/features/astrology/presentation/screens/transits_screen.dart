@@ -27,12 +27,14 @@ class TransitsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final transitsAsync = ref.watch(currentTransitsProvider);
+    final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.cosmicRadialGradient,
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: SafeArea(
           bottom: false,
@@ -63,7 +65,7 @@ class TransitsScreen extends ConsumerWidget {
                             final planet = planets[index] as Map<String, dynamic>;
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 16),
-                              child: _buildPlanetTransitCard(planet, index),
+                              child: _buildPlanetTransitCard(context, planet, index),
                             );
                           },
                           childCount: planets.length,
@@ -91,7 +93,7 @@ class TransitsScreen extends ConsumerWidget {
         child: Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+              icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.getTextPrimary(context), size: 20),
               onPressed: () => Navigator.pop(context),
             ),
             const SizedBox(width: 8),
@@ -124,14 +126,14 @@ class TransitsScreen extends ConsumerWidget {
                     style: GoogleFonts.outfit(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryDark,
+                      color: AppColors.getTextPrimary(context),
                     ),
                   ),
                   Text(
                     'Current positions for $todayStr',
                     style: GoogleFonts.inter(
                       fontSize: 13,
-                      color: AppColors.textSecondaryDark,
+                      color: AppColors.getTextSecondary(context),
                     ),
                   ),
                 ],
@@ -143,7 +145,7 @@ class TransitsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPlanetTransitCard(Map<String, dynamic> planet, int index) {
+  Widget _buildPlanetTransitCard(BuildContext context, Map<String, dynamic> planet, int index) {
     final name = planet['name'] as String? ?? 'Unknown';
     final sign = planet['sign'] as String? ?? 'Unknown';
     final house = planet['house']?.toString() ?? '1';
@@ -201,7 +203,7 @@ class TransitsScreen extends ConsumerWidget {
                       style: GoogleFonts.outfit(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryDark,
+                        color: AppColors.getTextPrimary(context),
                       ),
                     ),
                     if (isRetrograde) ...[
@@ -229,7 +231,7 @@ class TransitsScreen extends ConsumerWidget {
                   'Transiting $sign • House $house',
                   style: GoogleFonts.inter(
                     fontSize: 14,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getTextSecondary(context),
                   ),
                 ),
                 if (nakshatra.isNotEmpty)
@@ -239,7 +241,7 @@ class TransitsScreen extends ConsumerWidget {
                       'Nakshatra: $nakshatra (${degree.toStringAsFixed(1)}°)',
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        color: AppColors.textTertiaryDark,
+                        color: AppColors.getTextMuted(context),
                       ),
                     ),
                   ),

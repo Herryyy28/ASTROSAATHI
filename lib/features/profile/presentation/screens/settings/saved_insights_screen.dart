@@ -12,9 +12,9 @@ class SavedInsightsScreen extends StatelessWidget {
     final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : Colors.transparent,
         elevation: 0,
         title: Text(
           'Saved Insights',

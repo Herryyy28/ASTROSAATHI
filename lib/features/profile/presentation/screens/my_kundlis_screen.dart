@@ -146,12 +146,14 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                   maxHeight: MediaQuery.of(context).size.height * 0.85,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.surfaceDark,
+                  color: AppColors.getSurface(context),
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(32),
                   ),
                   border: Border.all(
-                    color: AppColors.primary.withOpacity(0.35),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? AppColors.borderLight
+                        : AppColors.primary.withOpacity(0.35),
                     width: 1.2,
                   ),
                   boxShadow: [
@@ -286,11 +288,10 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                         : FontWeight.w500,
                                     color: isSelected
                                         ? Colors.black
-                                        : AppColors.textPrimaryDark,
+                                        : AppColors.getTextPrimary(context),
                                   ),
-                                  selectedColor: AppColors.primary,
-                                  backgroundColor:
-                                      AppColors.surfaceHighlightDark,
+                                  selectedColor: AppColors.getPrimary(context),
+                                  backgroundColor: AppColors.getSurfaceSecondary(context),
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 10,
                                     vertical: 8,
@@ -299,8 +300,8 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                     borderRadius: BorderRadius.circular(12),
                                     side: BorderSide(
                                       color: isSelected
-                                          ? AppColors.primary
-                                          : AppColors.glassBorder,
+                                          ? AppColors.getPrimary(context)
+                                          : AppColors.getGlassBorder(context),
                                     ),
                                   ),
                                   onSelected: (selected) {
@@ -321,7 +322,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                               style: GoogleFonts.outfit(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.primary,
+                                color: AppColors.getPrimary(context),
                                 letterSpacing: 1.2,
                               ),
                             ),
@@ -330,7 +331,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                               controller: _nameController,
                               textCapitalization: TextCapitalization.words,
                               style: GoogleFonts.outfit(
-                                color: AppColors.textPrimaryDark,
+                                color: AppColors.getTextPrimary(context),
                                 fontWeight: FontWeight.w600,
                               ),
                               onChanged: (val) {
@@ -343,16 +344,16 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                 hintText:
                                     'Enter full name (e.g., Rajesh Sharma)',
                                 hintStyle: GoogleFonts.inter(
-                                  color: AppColors.textTertiaryDark,
+                                  color: AppColors.getTextMuted(context),
                                   fontSize: 13,
                                 ),
-                                prefixIcon: const Icon(
+                                prefixIcon: Icon(
                                   Icons.person_rounded,
-                                  color: AppColors.primary,
+                                  color: AppColors.getPrimary(context),
                                   size: 20,
                                 ),
                                 filled: true,
-                                fillColor: AppColors.surfaceHighlightDark,
+                                fillColor: AppColors.getSurfaceSecondary(context),
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 16,
                                   vertical: 14,
@@ -914,13 +915,14 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
     final profiles = ref.watch(profilesListProvider);
     final activeProfile = ref.watch(activeProfileProvider);
     final canAdd = ref.watch(canAddMoreProfilesProvider);
     final capacityText = ref.watch(profileCapacityTextProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: CosmicParticleBackground(
         child: SafeArea(
           child: ResponsiveLayout(
@@ -959,7 +961,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                     style: GoogleFonts.outfit(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimaryDark,
+                                      color: AppColors.getTextPrimary(context),
                                       height: 1.35,
                                     ),
                                   ),
@@ -967,7 +969,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                     'Up to 5 Family & Partner Kundlis ($capacityText)',
                                     style: GoogleFonts.inter(
                                       fontSize: 12,
-                                      color: AppColors.textSecondaryDark,
+                                      color: AppColors.getTextSecondary(context),
                                       height: 1.35,
                                     ),
                                   ),
@@ -1014,9 +1016,11 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                       vertical: 12,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceDark.withOpacity(0.6),
+                      color: isLight
+                          ? AppColors.surfaceLight
+                          : AppColors.surfaceDark.withOpacity(0.6),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.glassBorder),
+                      border: Border.all(color: AppColors.getGlassBorder(context)),
                     ),
                     child: Row(
                       children: [
@@ -1039,7 +1043,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                     style: GoogleFonts.outfit(
                                       fontSize: 13,
                                       fontWeight: FontWeight.w600,
-                                      color: AppColors.textPrimaryDark,
+                                      color: AppColors.getTextPrimary(context),
                                     ),
                                   ),
                                   Text(
@@ -1059,8 +1063,9 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                   value:
                                       profiles.length /
                                       ProfilesNotifier.maxProfiles,
-                                  backgroundColor:
-                                      AppColors.surfaceHighlightDark,
+                                  backgroundColor: isLight
+                                      ? AppColors.surfaceSecondaryLight
+                                      : AppColors.surfaceHighlightDark,
                                   color:
                                       profiles.length >=
                                           ProfilesNotifier.maxProfiles
@@ -1122,7 +1127,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                         'Active Kundli Profile',
                                         style: GoogleFonts.inter(
                                           fontSize: 11,
-                                          color: AppColors.textSecondaryDark,
+                                          color: AppColors.getTextSecondary(context),
                                           height: 1.35,
                                         ),
                                       ),
@@ -1140,7 +1145,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                         '${activeProfile.birthPlace} • ${activeProfile.dob} (${activeProfile.birthTime})',
                                         style: GoogleFonts.inter(
                                           fontSize: 12,
-                                          color: AppColors.textSecondaryDark,
+                                          color: AppColors.getTextSecondary(context),
                                           height: 1.35,
                                         ),
                                       ),
@@ -1234,7 +1239,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                       style: GoogleFonts.outfit(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimaryDark,
+                        color: AppColors.getTextPrimary(context),
                         height: 1.35,
                       ),
                     ),
@@ -1247,13 +1252,15 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: isCurrent
-                            ? AppColors.primary.withOpacity(0.1)
-                            : AppColors.surfaceHighlightDark.withOpacity(0.4),
+                            ? AppColors.primary.withOpacity(0.12)
+                            : (isLight
+                                ? AppColors.surfaceLight
+                                : AppColors.surfaceHighlightDark.withOpacity(0.4)),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: isCurrent
                               ? AppColors.primary.withOpacity(0.5)
-                              : AppColors.glassBorder,
+                              : AppColors.getGlassBorder(context),
                         ),
                       ),
                       child: Row(
@@ -1264,7 +1271,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                 : Icons.account_circle_outlined,
                             color: isCurrent
                                 ? AppColors.primary
-                                : AppColors.textTertiaryDark,
+                                : AppColors.getTextMuted(context),
                             size: 28,
                           ),
                           const SizedBox(width: 14),
@@ -1279,7 +1286,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                     fontWeight: FontWeight.bold,
                                     color: isCurrent
                                         ? AppColors.primary
-                                        : AppColors.textPrimaryDark,
+                                        : AppColors.getTextPrimary(context),
                                     height: 1.35,
                                   ),
                                 ),
@@ -1288,7 +1295,7 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                   '${p.relationship} • ${p.birthPlace}',
                                   style: GoogleFonts.inter(
                                     fontSize: 12,
-                                    color: AppColors.textSecondaryDark,
+                                    color: AppColors.getTextSecondary(context),
                                     height: 1.35,
                                   ),
                                 ),
@@ -1358,10 +1365,12 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                       return Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: AppColors.surfaceDark.withOpacity(0.85),
+                          color: isLight
+                              ? AppColors.surfaceLight
+                              : AppColors.surfaceDark.withOpacity(0.85),
                           borderRadius: BorderRadius.circular(24),
                           border: Border.all(
-                            color: AppColors.primary.withOpacity(0.4),
+                            color: AppColors.getGlassBorder(context),
                           ),
                           boxShadow: [
                             BoxShadow(

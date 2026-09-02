@@ -173,19 +173,23 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    return Container(
-      margin: EdgeInsets.only(top: kToolbarHeight),
-      decoration: BoxDecoration(
-        color: AppColors.getBackground(context),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-        border: Border(
-          top: BorderSide(color: AppColors.getGlassBorder(context)),
-        ),
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.85,
       ),
-      child: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(24, 16, 24, 24 + bottomInset),
-          child: SingleChildScrollView(
+      child: Container(
+        margin: const EdgeInsets.only(top: 20),
+        decoration: BoxDecoration(
+          color: AppColors.getBackground(context),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+          border: Border(
+            top: BorderSide(color: AppColors.getGlassBorder(context)),
+          ),
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(24, 16, 24, 24 + bottomInset),
+            child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -271,11 +275,32 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                   controller: _dobController,
                   readOnly: true,
                   onTap: () async {
+                    final isLight = Theme.of(context).brightness == Brightness.light;
                     final date = await showDatePicker(
                       context: context,
                       initialDate: DateTime(2000, 1, 1),
                       firstDate: DateTime(1900),
                       lastDate: DateTime.now(),
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: isLight
+                                ? const ColorScheme.light(
+                                    primary: AppColors.primaryLightMode,
+                                    onPrimary: Colors.white,
+                                    surface: AppColors.surfaceLight,
+                                    onSurface: AppColors.textPrimaryLight,
+                                  )
+                                : const ColorScheme.dark(
+                                    primary: AppColors.primary,
+                                    onPrimary: Colors.black,
+                                    surface: AppColors.surfaceDark,
+                                    onSurface: Colors.white,
+                                  ),
+                          ),
+                          child: child!,
+                        );
+                      },
                     );
                     if (date != null) {
                       setState(() {
@@ -305,9 +330,30 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                         controller: _timeController,
                         readOnly: true,
                         onTap: () async {
+                          final isLight = Theme.of(context).brightness == Brightness.light;
                           final time = await showTimePicker(
                             context: context,
                             initialTime: const TimeOfDay(hour: 7, minute: 30),
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  colorScheme: isLight
+                                      ? const ColorScheme.light(
+                                          primary: AppColors.primaryLightMode,
+                                          onPrimary: Colors.white,
+                                          surface: AppColors.surfaceLight,
+                                          onSurface: AppColors.textPrimaryLight,
+                                        )
+                                      : const ColorScheme.dark(
+                                          primary: AppColors.primary,
+                                          onPrimary: Colors.black,
+                                          surface: AppColors.surfaceDark,
+                                          onSurface: Colors.white,
+                                        ),
+                                ),
+                                child: child!,
+                              );
+                            },
                           );
                           if (time != null) {
                             final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
@@ -448,6 +494,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 }

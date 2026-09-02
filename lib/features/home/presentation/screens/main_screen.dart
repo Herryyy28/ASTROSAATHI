@@ -155,10 +155,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        const Text(
+                        Text(
                           'AstroSaathi',
                           style: TextStyle(
-                            color: AppColors.textPrimaryDark,
+                            color: AppColors.getTextPrimary(context),
                             fontWeight: FontWeight.w700,
                             fontSize: 16,
                           ),

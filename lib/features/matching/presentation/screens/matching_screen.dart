@@ -153,17 +153,17 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                         children: [
                           Text(
                             l10n.matchingTitle,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimaryDark,
+                              color: AppColors.getTextPrimary(context),
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             l10n.gunaScore,
-                            style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                            style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context)),
                           ),
                           const SizedBox(height: 3),
                           Row(
@@ -194,9 +194,11 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceHighlightDark.withOpacity(0.4),
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? AppColors.surfaceLight
+                        : AppColors.surfaceHighlightDark.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(28),
-                    border: Border.all(color: AppColors.glassBorder),
+                    border: Border.all(color: AppColors.getGlassBorder(context)),
                   ),
                   child: Column(
                     children: [
@@ -208,12 +210,12 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                               children: [
                                 TextField(
                                   controller: _p1NameController,
-                                  style: const TextStyle(color: AppColors.textPrimaryDark),
+                                  style: TextStyle(color: AppColors.getTextPrimary(context)),
                                   decoration: InputDecoration(
                                     labelText: 'Partner 1 Name',
-                                    labelStyle: const TextStyle(color: AppColors.textSecondaryDark, fontSize: 12),
+                                    labelStyle: TextStyle(color: AppColors.getTextSecondary(context), fontSize: 12),
                                     filled: true,
-                                    fillColor: AppColors.surfaceDark,
+                                    fillColor: AppColors.getSurfaceSecondary(context),
                                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
                                   ),
                                 ),
@@ -234,12 +236,12 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                               children: [
                                 TextField(
                                   controller: _p2NameController,
-                                  style: const TextStyle(color: AppColors.textPrimaryDark),
+                                  style: TextStyle(color: AppColors.getTextPrimary(context)),
                                   decoration: InputDecoration(
                                     labelText: 'Partner 2 Name',
-                                    labelStyle: const TextStyle(color: AppColors.textSecondaryDark, fontSize: 12),
+                                    labelStyle: TextStyle(color: AppColors.getTextSecondary(context), fontSize: 12),
                                     filled: true,
-                                    fillColor: AppColors.surfaceDark,
+                                    fillColor: AppColors.getSurfaceSecondary(context),
                                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
                                   ),
                                 ),
@@ -299,7 +301,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                          const Text('Ashtakoota Milan Score', style: TextStyle(fontSize: 13, color: AppColors.textSecondaryDark)),
+                          Text('Ashtakoota Milan Score', style: TextStyle(fontSize: 13, color: AppColors.getTextSecondary(context))),
                           const SizedBox(height: 4),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -309,7 +311,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                                 '$totalScore',
                                 style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: AppColors.primary),
                               ),
-                              const Text(' / 36 Gunas', style: TextStyle(fontSize: 14, color: AppColors.textSecondaryDark)),
+                              Text(' / 36 Gunas', style: TextStyle(fontSize: 14, color: AppColors.getTextSecondary(context))),
                             ],
                           ),
                           const SizedBox(height: 4),
@@ -337,7 +339,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                             child: CircularProgressIndicator(
                               value: (totalScore / 36).clamp(0.0, 1.0),
                               strokeWidth: 7,
-                              backgroundColor: AppColors.surfaceDark,
+                              backgroundColor: AppColors.getSurfaceSecondary(context),
                               color: AppColors.primary,
                             ),
                           ),
@@ -356,9 +358,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceDark,
+                    color: AppColors.getSurface(context),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.glassBorder),
+                    border: Border.all(color: AppColors.getGlassBorder(context)),
                   ),
                   child: Row(
                     children: [
@@ -367,7 +369,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                       Expanded(
                         child: Text(
                           summaryText,
-                          style: const TextStyle(color: AppColors.textPrimaryDark, fontSize: 13, height: 1.4),
+                          style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13, height: 1.4),
                         ),
                       ),
                     ],
@@ -381,18 +383,20 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                     final isPremium = ref.watch(isPremiumProvider);
                     if (!isPremium) return const SizedBox.shrink();
 
+                    final isLight = Theme.of(context).brightness == Brightness.light;
+
                     return Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceHighlightDark.withOpacity(0.4),
+                        color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4),
                         borderRadius: BorderRadius.circular(32),
-                        border: Border.all(color: AppColors.glassBorder),
+                        border: Border.all(color: AppColors.getGlassBorder(context)),
                       ),
                       child: Column(
                         children: [
-                          const Text(
+                          Text(
                             '8-Dimension Guna Breakdown',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                           ),
                           const SizedBox(height: 24),
                           SizedBox(
@@ -420,19 +424,19 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       decoration: BoxDecoration(
-        color: AppColors.surfaceDark,
+        color: AppColors.getSurfaceSecondary(context),
         borderRadius: BorderRadius.circular(16),
       ),
       child: DropdownButton<String>(
         value: value,
         isExpanded: true,
         underline: const SizedBox.shrink(),
-        dropdownColor: AppColors.surfaceDark,
+        dropdownColor: AppColors.getSurface(context),
         style: const TextStyle(color: AppColors.primary, fontSize: 13, fontWeight: FontWeight.bold),
         items: _zodiacSigns.map((sign) {
           return DropdownMenuItem<String>(
             value: sign,
-            child: Text(sign),
+            child: Text(sign, overflow: TextOverflow.ellipsis),
           );
         }).toList(),
         onChanged: onChanged,

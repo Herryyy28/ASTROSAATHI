@@ -17,9 +17,9 @@ class DashaTimelineWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceHighlightDark.withOpacity(0.4),
+        color: AppColors.getSurface(context),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.glassBorder),
+        border: Border.all(color: AppColors.getGlassBorder(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,13 +35,13 @@ class DashaTimelineWidget extends StatelessWidget {
                 child: const Icon(Icons.timeline_rounded, color: AppColors.primary, size: 18),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Text(
                   'Vimshottari Dasha Timeline',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                   ),
                 ),
               ),
@@ -84,14 +84,14 @@ class DashaTimelineWidget extends StatelessWidget {
                   width: 160,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isActive ? planetColor.withOpacity(0.15) : AppColors.surfaceDark,
+                    color: isActive ? planetColor.withOpacity(0.12) : AppColors.getSurfaceSecondary(context),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: isActive ? planetColor.withOpacity(0.6) : AppColors.glassBorder,
+                      color: isActive ? planetColor.withOpacity(0.6) : AppColors.getGlassBorder(context),
                       width: isActive ? 1.5 : 1.0,
                     ),
                     boxShadow: isActive
-                        ? [BoxShadow(color: planetColor.withOpacity(0.2), blurRadius: 10)]
+                        ? [BoxShadow(color: planetColor.withOpacity(0.15), blurRadius: 8)]
                         : null,
                   ),
                   child: Column(
@@ -115,7 +115,7 @@ class DashaTimelineWidget extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,
-                                color: isActive ? AppColors.textPrimaryDark : AppColors.textSecondaryDark,
+                                color: AppColors.getTextPrimary(context),
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -134,9 +134,9 @@ class DashaTimelineWidget extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         dasha['period'] as String,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
-                          color: AppColors.textTertiaryDark,
+                          color: AppColors.getTextMuted(context),
                         ),
                       ),
                     ],

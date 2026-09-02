@@ -60,6 +60,7 @@ class PanchangScreen extends ConsumerWidget {
 
   Widget _buildPanchangUI(BuildContext context, WidgetRef ref, PanchangData panchang) {
     final l10n = AppLocalizations.of(context, ref);
+    final isLight = Theme.of(context).brightness == Brightness.light;
     final hPad = context.responsive<double>(mobile: 20, tablet: 32, desktop: 40);
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
@@ -87,7 +88,7 @@ class PanchangScreen extends ConsumerWidget {
                             style: GoogleFonts.outfit(
                               fontSize: 28,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimaryDark,
+                              color: AppColors.getTextPrimary(context),
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -95,7 +96,7 @@ class PanchangScreen extends ConsumerWidget {
                             l10n.todaysPanchang,
                             style: GoogleFonts.inter(
                               fontSize: 14,
-                              color: AppColors.textSecondaryDark,
+                              color: AppColors.getTextSecondary(context),
                             ),
                           ),
                         ],
@@ -107,20 +108,26 @@ class PanchangScreen extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceHighlightDark.withOpacity(0.5),
+                    color: isLight
+                        ? AppColors.surfaceSecondaryLight
+                        : AppColors.surfaceHighlightDark.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Icon(Icons.sync, size: 12, color: AppColors.textTertiaryDark),
+                      Icon(Icons.sync, size: 12, color: AppColors.getTextMuted(context)),
                       const SizedBox(width: 4),
-                      Text(
-                        'Calculated for New Delhi • Live',
-                        style: GoogleFonts.inter(
-                          fontSize: 11,
-                          color: AppColors.textTertiaryDark,
-                          fontWeight: FontWeight.w500,
+                      Flexible(
+                        child: Text(
+                          'Calculated for New Delhi • Live',
+                          style: GoogleFonts.inter(
+                            fontSize: 11,
+                            color: AppColors.getTextMuted(context),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
@@ -156,7 +163,7 @@ class PanchangScreen extends ConsumerWidget {
                               Text(
                                 isToday ? 'Today ($formattedDate)' : formattedDate,
                                 style: GoogleFonts.outfit(
-                                  color: AppColors.textPrimaryDark,
+                                  color: AppColors.getTextPrimary(context),
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
                                 ),
@@ -191,7 +198,7 @@ class PanchangScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
 
                 // ── Sunrise / Sunset ──────────────────────────────
-                _buildSunMoonTimings(panchang).fadeSlideUp(delay: 100.ms),
+                _buildSunMoonTimings(context, panchang).fadeSlideUp(delay: 100.ms),
                 const SizedBox(height: 28),
 
                 // ── Five Elements Section ─────────────────────────
@@ -226,7 +233,7 @@ class PanchangScreen extends ConsumerWidget {
                 const SizedBox(height: 16),
 
                 // ── Inauspicious Timings ──────────────────────────
-                _buildInauspiciousTimings(panchang),
+                _buildInauspiciousTimings(context, panchang),
               ],
             ),
           ),
@@ -235,13 +242,14 @@ class PanchangScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSunMoonTimings(PanchangData panchang) {
+  Widget _buildSunMoonTimings(BuildContext context, PanchangData panchang) {
     return GlassCard(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
       child: Row(
         children: [
           Expanded(
             child: _buildTimingItem(
+              context,
               '☀️',
               'Sunrise',
               panchang.sunrise,
@@ -251,10 +259,11 @@ class PanchangScreen extends ConsumerWidget {
           Container(
             width: 1,
             height: 50,
-            color: AppColors.glassBorder,
+            color: AppColors.getGlassBorder(context),
           ),
           Expanded(
             child: _buildTimingItem(
+              context,
               '🌅',
               'Sunset',
               panchang.sunset,
@@ -266,15 +275,15 @@ class PanchangScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTimingItem(String emoji, String label, String time, Color color) {
+  Widget _buildTimingItem(BuildContext context, String emoji, String label, String time, Color color) {
     return Column(
       children: [
         Text(emoji, style: const TextStyle(fontSize: 24)),
         const SizedBox(height: 8),
         Text(
           label,
-          style: const TextStyle(
-            color: AppColors.textSecondaryDark,
+          style: TextStyle(
+            color: AppColors.getTextSecondary(context),
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),
@@ -285,7 +294,7 @@ class PanchangScreen extends ConsumerWidget {
           style: GoogleFonts.outfit(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: AppColors.textPrimaryDark,
+            color: AppColors.getTextPrimary(context),
           ),
         ),
       ],
@@ -329,8 +338,8 @@ class PanchangScreen extends ConsumerWidget {
                   children: [
                     Text(
                       name,
-                      style: const TextStyle(
-                        color: AppColors.textSecondaryDark,
+                      style: TextStyle(
+                        color: AppColors.getTextSecondary(context),
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -341,7 +350,7 @@ class PanchangScreen extends ConsumerWidget {
                       style: GoogleFonts.outfit(
                         fontSize: 17,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryDark,
+                        color: AppColors.getTextPrimary(context),
                       ),
                     ),
                   ],
@@ -351,7 +360,7 @@ class PanchangScreen extends ConsumerWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: AppColors.glassSurface,
+                    color: AppColors.getSurfaceSecondary(context),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -379,7 +388,7 @@ class PanchangScreen extends ConsumerWidget {
     ).fadeSlideUp(delay: Duration(milliseconds: 240 + (index * 80)));
   }
 
-  Widget _buildInauspiciousTimings(PanchangData panchang) {
+  Widget _buildInauspiciousTimings(BuildContext context, PanchangData panchang) {
     if (panchang.rahuKaal == null) return const SizedBox.shrink();
 
     return Column(
@@ -405,7 +414,7 @@ class PanchangScreen extends ConsumerWidget {
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(20),
-          decoration: AppDecorations.alertCard(alertColor: AppColors.error),
+          decoration: AppDecorations.alertCard(alertColor: AppColors.error, context: context),
           child: Row(
             children: [
               Container(
@@ -425,7 +434,7 @@ class PanchangScreen extends ConsumerWidget {
                     Text(
                       'Rahu Kaal',
                       style: GoogleFonts.outfit(
-                        color: AppColors.textPrimaryDark,
+                        color: AppColors.getTextPrimary(context),
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
@@ -443,7 +452,7 @@ class PanchangScreen extends ConsumerWidget {
                     Text(
                       'Unfavorable for starting important activities',
                       style: GoogleFonts.inter(
-                        color: AppColors.textSecondaryDark,
+                        color: AppColors.getTextSecondary(context),
                         fontSize: 12,
                       ),
                     ),

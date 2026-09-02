@@ -55,13 +55,16 @@ class HoroscopeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        backgroundColor: Colors.transparent,
+        backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
         body: Container(
-          decoration: const BoxDecoration(
-            gradient: AppColors.cosmicRadialGradient,
+          decoration: BoxDecoration(
+            color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+            gradient: isLight ? null : AppColors.cosmicRadialGradient,
           ),
           child: SafeArea(
             bottom: false,
@@ -96,13 +99,13 @@ class HoroscopeScreen extends ConsumerWidget {
                                 desktop: 32,
                               ),
                               fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimaryDark,
+                              color: AppColors.getTextPrimary(context),
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         const SizedBox(width: 8),
-                        _buildSignDropdown(ref),
+                        _buildSignDropdown(context, ref),
                       ],
                     ),
                   ).fadeSlideUp(),
@@ -120,12 +123,20 @@ class HoroscopeScreen extends ConsumerWidget {
                     child: GlassCard(
                       padding: EdgeInsets.zero,
                       borderRadius: 14,
-                      child: const TabBar(
-                        padding: EdgeInsets.symmetric(
+                      child: TabBar(
+                        dividerColor: Colors.transparent,
+                        indicatorColor: AppColors.primary,
+                        indicatorSize: TabBarIndicatorSize.label,
+                        labelColor: AppColors.primary,
+                        unselectedLabelColor: AppColors.getTextSecondary(context),
+                        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+                        labelStyle: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 14),
+                        unselectedLabelStyle: GoogleFonts.outfit(fontWeight: FontWeight.w500, fontSize: 14),
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 4,
                         ),
-                        tabs: [
+                        tabs: const [
                           Tab(text: 'Daily'),
                           Tab(text: 'Weekly'),
                           Tab(text: 'Monthly'),
@@ -186,7 +197,7 @@ class HoroscopeScreen extends ConsumerWidget {
                           : FontWeight.w400,
                       color: isSelected
                           ? AppColors.primary
-                          : AppColors.textTertiaryDark,
+                          : AppColors.getTextMuted(context),
                     ),
                   ),
                 ],
@@ -198,13 +209,13 @@ class HoroscopeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSignDropdown(WidgetRef ref) {
+  Widget _buildSignDropdown(BuildContext context, WidgetRef ref) {
     final currentSign = ref.watch(selectedSignProvider);
     return PopupMenuButton<String>(
       onSelected: (sign) {
         ref.read(selectedSignProvider.notifier).state = sign;
       },
-      color: AppColors.surfaceDark,
+      color: AppColors.getSurface(context),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       itemBuilder: (context) => signs.map((sign) {
         return PopupMenuItem<String>(
@@ -221,7 +232,7 @@ class HoroscopeScreen extends ConsumerWidget {
                 style: TextStyle(
                   color: sign == currentSign
                       ? AppColors.primary
-                      : AppColors.textPrimaryDark,
+                      : AppColors.getTextPrimary(context),
                   fontWeight: sign == currentSign
                       ? FontWeight.bold
                       : FontWeight.normal,
@@ -242,12 +253,16 @@ class HoroscopeScreen extends ConsumerWidget {
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(width: 6),
-            Text(
-              currentSign,
-              style: GoogleFonts.inter(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.primary,
+            Flexible(
+              child: Text(
+                currentSign,
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             const SizedBox(width: 4),
@@ -276,7 +291,7 @@ class _HoroscopeTabView extends ConsumerWidget {
       data: (data) {
         return RefreshIndicator(
           color: AppColors.primary,
-          backgroundColor: AppColors.surfaceDark,
+          backgroundColor: AppColors.getSurface(context),
           onRefresh: () async {
             ref.refresh(horoscopeProvider(timeframe));
           },
@@ -302,7 +317,7 @@ class _HoroscopeTabView extends ConsumerWidget {
                           style: GoogleFonts.outfit(
                             fontSize: 28,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.textPrimaryDark,
+                            color: AppColors.getTextPrimary(context),
                           ),
                         ),
                         Text(
@@ -328,7 +343,7 @@ class _HoroscopeTabView extends ConsumerWidget {
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       height: 1.7,
-                      color: AppColors.textPrimaryDark,
+                      color: AppColors.getTextPrimary(context),
                     ),
                   ),
                 ).fadeSlideUp(delay: 100.ms),
@@ -340,6 +355,7 @@ class _HoroscopeTabView extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: _buildInfoCard(
+                        context,
                         'Lucky Number',
                         data.luckyNumber.toString(),
                         Icons.tag_rounded,
@@ -349,6 +365,7 @@ class _HoroscopeTabView extends ConsumerWidget {
                     const SizedBox(width: 14),
                     Expanded(
                       child: _buildInfoCard(
+                        context,
                         'Lucky Color',
                         data.luckyColor,
                         Icons.palette_rounded,
@@ -380,6 +397,7 @@ class _HoroscopeTabView extends ConsumerWidget {
   }
 
   Widget _buildInfoCard(
+    BuildContext context,
     String title,
     String value,
     IconData icon,
@@ -405,8 +423,8 @@ class _HoroscopeTabView extends ConsumerWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
-                    color: AppColors.textSecondaryDark,
+                  style: TextStyle(
+                    color: AppColors.getTextSecondary(context),
                     fontSize: 11.5,
                     fontWeight: FontWeight.w500,
                   ),
@@ -420,7 +438,7 @@ class _HoroscopeTabView extends ConsumerWidget {
           Text(
             value,
             style: GoogleFonts.outfit(
-              color: AppColors.textPrimaryDark,
+              color: AppColors.getTextPrimary(context),
               fontSize: 18,
               fontWeight: FontWeight.w700,
             ),

@@ -8,8 +8,10 @@ class CareerCenterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: CosmicParticleBackground(
         child: SafeArea(
           child: SingleChildScrollView(
@@ -53,7 +55,7 @@ class CareerCenterScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    gradient: AppColors.cardGradient,
+                    gradient: AppColors.getCardGradient(context),
                     borderRadius: BorderRadius.circular(28),
                     border: Border.all(color: AppColors.primary.withOpacity(0.4)),
                   ),
@@ -63,7 +65,7 @@ class CareerCenterScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Career Score Today', style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark)),
+                            Text('Career Score Today', style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context))),
                             const SizedBox(height: 4),
                             const Text('8.9 / 10', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.primary)),
                             const SizedBox(height: 4),

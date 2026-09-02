@@ -97,11 +97,14 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
     final lifePath = _calculateLifePath(activeProfile.dob);
     final destiny = _calculateDestiny(activeProfile.name);
 
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.cosmicRadialGradient,
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: SafeArea(
           bottom: false,
@@ -116,19 +119,20 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildProfileInfo(activeProfile).animate().fadeIn(delay: 100.ms),
+                        _buildProfileInfo(context, activeProfile).animate().fadeIn(delay: 100.ms),
                         const SizedBox(height: 24),
                         Text(
                           'YOUR CORE NUMBERS',
                           style: GoogleFonts.outfit(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
-                            color: AppColors.primary,
+                            color: AppColors.getPrimary(context),
                             letterSpacing: 1.2,
                           ),
                         ).animate().fadeIn(delay: 150.ms),
                         const SizedBox(height: 12),
                         _buildNumberCard(
+                          context: context,
                           title: 'Life Path Number',
                           number: lifePath,
                           subtitle: 'Derived from your Date of Birth',
@@ -137,6 +141,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
                         ),
                         const SizedBox(height: 16),
                         _buildNumberCard(
+                          context: context,
                           title: 'Destiny Number',
                           number: destiny,
                           subtitle: 'Derived from your Name',
@@ -162,7 +167,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
         child: Row(
           children: [
             IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+              icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.getTextPrimary(context), size: 20),
               onPressed: () => Navigator.pop(context),
             ),
             const SizedBox(width: 8),
@@ -195,14 +200,14 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
                     style: GoogleFonts.outfit(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimaryDark,
+                      color: AppColors.getTextPrimary(context),
                     ),
                   ),
                   Text(
                     'Vedic & Chaldean Insights',
                     style: GoogleFonts.inter(
                       fontSize: 13,
-                      color: AppColors.textSecondaryDark,
+                      color: AppColors.getTextSecondary(context),
                     ),
                   ),
                 ],
@@ -214,7 +219,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
     );
   }
 
-  Widget _buildProfileInfo(BirthProfileData profile) {
+  Widget _buildProfileInfo(BuildContext context, BirthProfileData profile) {
     return GlassCard(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       borderRadius: 16,
@@ -223,10 +228,10 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.12),
+              color: AppColors.getPrimary(context).withOpacity(0.12),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.person_rounded, color: AppColors.primary, size: 20),
+            child: Icon(Icons.person_rounded, color: AppColors.getPrimary(context), size: 20),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -238,14 +243,14 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
                   style: GoogleFonts.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                   ),
                 ),
                 Text(
                   profile.dob.isNotEmpty ? profile.dob : 'Date of Birth not set',
                   style: GoogleFonts.inter(
                     fontSize: 13,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getTextSecondary(context),
                   ),
                 ),
               ],
@@ -257,6 +262,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
   }
 
   Widget _buildNumberCard({
+    required BuildContext context,
     required String title,
     required int number,
     required String subtitle,
@@ -266,7 +272,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
     return GlassCard(
       padding: const EdgeInsets.all(20),
       borderRadius: 20,
-      glowColor: AppColors.primary.withOpacity(0.15),
+      glowColor: AppColors.getPrimary(context).withOpacity(0.15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -278,7 +284,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: AppColors.goldSubtleGradient,
-                  border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                  border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.3)),
                 ),
                 child: Center(
                   child: Text(
@@ -286,7 +292,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
                     style: GoogleFonts.outfit(
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
+                      color: AppColors.getPrimary(context),
                     ),
                   ),
                 ),
@@ -301,14 +307,14 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
                       style: GoogleFonts.outfit(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimaryDark,
+                        color: AppColors.getTextPrimary(context),
                       ),
                     ),
                     Text(
                       subtitle,
                       style: GoogleFonts.inter(
                         fontSize: 12,
-                        color: AppColors.textTertiaryDark,
+                        color: AppColors.getTextMuted(context),
                       ),
                     ),
                   ],
@@ -320,7 +326,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppColors.surfaceHighlightDark,
+              color: AppColors.getSurfaceSecondary(context),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Row(
@@ -333,7 +339,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
                     interpretation,
                     style: GoogleFonts.inter(
                       fontSize: 14,
-                      color: AppColors.textSecondaryDark,
+                      color: AppColors.getTextSecondary(context),
                       height: 1.5,
                     ),
                   ),

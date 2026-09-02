@@ -16,9 +16,9 @@ class AboutScreen extends StatelessWidget {
     final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : Colors.transparent,
         elevation: 0,
         title: Text(
           'About AstroSaathi',
@@ -188,9 +188,9 @@ class AboutScreen extends StatelessWidget {
           color: AppColors.getTextPrimary(context),
         ),
       ),
-      trailing: const Icon(
+      trailing: Icon(
         Icons.chevron_right_rounded,
-        color: AppColors.textTertiaryDark,
+        color: AppColors.getTextMuted(context),
       ),
       contentPadding: EdgeInsets.zero,
     );

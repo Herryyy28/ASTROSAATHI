@@ -20,6 +20,8 @@ class VipBadgeButton extends ConsumerWidget {
     final subState = ref.watch(subscriptionProvider);
     final isPremium = subState.isPremium;
 
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return GestureDetector(
       onTap: () {
         PremiumUpgradeModal.show(context);
@@ -34,9 +36,9 @@ class VipBadgeButton extends ConsumerWidget {
               ? AppColors.goldGradient
               : LinearGradient(
                   colors: [
-                    const Color(0xFF231E14),
-                    const Color(0xFF382F1B),
-                    AppColors.surfaceDark,
+                    isLight ? const Color(0xFFFFF7E6) : const Color(0xFF231E14),
+                    isLight ? const Color(0xFFFEEDC9) : const Color(0xFF382F1B),
+                    AppColors.getSurface(context),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,

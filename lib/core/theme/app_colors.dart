@@ -179,6 +179,17 @@ class AppColors {
     end: Alignment.bottomRight,
   );
 
+  static LinearGradient getCardGradient(BuildContext context) {
+    if (isLight(context)) {
+      return const LinearGradient(
+        colors: [Color(0xFFFFFFFF), Color(0xFFF1F2F4)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      );
+    }
+    return cardGradient;
+  }
+
   static const RadialGradient cosmicRadialGradient = RadialGradient(
     center: Alignment.topRight,
     radius: 1.5,

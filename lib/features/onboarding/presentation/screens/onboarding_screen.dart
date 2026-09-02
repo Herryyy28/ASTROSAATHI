@@ -301,10 +301,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.cosmicGradient),
+        decoration: BoxDecoration(
+          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
+          gradient: isLight ? null : AppColors.cosmicGradient,
+        ),
         child: SafeArea(
           child: ResponsiveLayout(
             child: Column(
@@ -323,9 +328,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     children: [
                       if (_currentIndex > 0 && _currentIndex < 3)
                         IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.arrow_back_ios_new_rounded,
-                            color: Colors.white,
+                            color: isLight ? AppColors.textPrimaryLight : Colors.white,
                             size: 20,
                           ),
                           onPressed: _previousPage,
@@ -334,7 +339,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                         const SizedBox(width: 40),
                       Expanded(
                         child: _currentIndex < 3
-                            ? _buildSegmentedProgress()
+                            ? _buildSegmentedProgress(isLight)
                             : const SizedBox.shrink(),
                       ),
                       if (_currentIndex < 3)
@@ -344,10 +349,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.15),
+                            color: AppColors.getPrimary(context).withOpacity(0.15),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: AppColors.primary.withOpacity(0.3),
+                              color: AppColors.getPrimary(context).withOpacity(0.3),
                             ),
                           ),
                           child: Text(
@@ -355,7 +360,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                             style: GoogleFonts.outfit(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.primary,
+                              color: AppColors.getPrimary(context),
                             ),
                           ),
                         )
@@ -389,7 +394,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     );
   }
 
-  Widget _buildSegmentedProgress() {
+  Widget _buildSegmentedProgress(bool isLight) {
     return Row(
       children: List.generate(3, (index) {
         final isActive = index <= _currentIndex;
@@ -403,7 +408,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(3),
               gradient: isActive ? AppColors.goldGradient : null,
-              color: isActive ? null : Colors.white.withOpacity(0.12),
+              color: isActive
+                  ? null
+                  : (isLight ? AppColors.borderLight : Colors.white.withOpacity(0.12)),
               boxShadow: isCurrent
                   ? [
                       BoxShadow(
@@ -421,6 +428,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   }
 
   Widget _buildWelcomeStep() {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -486,12 +495,18 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
                     // Gold Mask Title
                     ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [
-                          Color(0xFFFFFFFF),
-                          Color(0xFFFFE899),
-                          Color(0xFFE5B842),
-                        ],
+                      shaderCallback: (bounds) => LinearGradient(
+                        colors: isLight
+                            ? [
+                                AppColors.primaryLightMode,
+                                AppColors.primaryDarkLightMode,
+                                AppColors.secondary,
+                              ]
+                            : [
+                                const Color(0xFFFFFFFF),
+                                const Color(0xFFFFE899),
+                                const Color(0xFFE5B842),
+                              ],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ).createShader(bounds),
@@ -501,7 +516,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 28,
                           fontWeight: FontWeight.w800,
-                          color: Colors.white,
+                          color: isLight ? AppColors.primaryLightMode : Colors.white,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -514,7 +529,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
                         fontSize: 14,
-                        color: AppColors.textSecondaryDark,
+                        color: AppColors.getTextSecondary(context),
                         height: 1.4,
                       ),
                     ).fadeSlideUp(delay: 250.ms),
@@ -525,15 +540,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     GlassCard(
                       borderRadius: 20,
                       padding: const EdgeInsets.all(18),
-                      borderColor: Colors.white.withOpacity(0.15),
+                      borderColor: AppColors.getGlassBorder(context),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.language_rounded,
-                                color: AppColors.primary,
+                                color: AppColors.getPrimary(context),
                                 size: 18,
                               ),
                               const SizedBox(width: 8),
@@ -542,7 +557,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                                 style: GoogleFonts.outfit(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: AppColors.getTextPrimary(context),
                                 ),
                               ),
                             ],
@@ -576,13 +591,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                                         ),
                                         decoration: BoxDecoration(
                                           color: isSelected
-                                              ? AppColors.primary.withOpacity(0.2)
-                                              : Colors.white.withOpacity(0.04),
+                                              ? AppColors.getPrimary(context).withOpacity(0.18)
+                                              : (isLight
+                                                  ? AppColors.surfaceSecondaryLight
+                                                  : Colors.white.withOpacity(0.04)),
                                           borderRadius: BorderRadius.circular(14),
                                           border: Border.all(
                                             color: isSelected
-                                                ? AppColors.primary
-                                                : Colors.white.withOpacity(0.1),
+                                                ? AppColors.getPrimary(context)
+                                                : AppColors.getGlassBorder(context),
                                             width: isSelected ? 1.5 : 0.8,
                                           ),
                                         ),
@@ -602,21 +619,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                                                       ? FontWeight.bold
                                                       : FontWeight.w500,
                                                   color: isSelected
-                                                      ? AppColors.primary
-                                                      : Colors.white,
+                                                      ? AppColors.getPrimary(context)
+                                                      : AppColors.getTextPrimary(context),
                                                 ),
                                               ),
                                             ),
                                             if (isSelected)
-                                              const Icon(
+                                              Icon(
                                                 Icons.check_circle_rounded,
-                                                color: AppColors.primary,
+                                                color: AppColors.getPrimary(context),
                                                 size: 20,
                                               )
                                             else
                                               Icon(
                                                 Icons.circle_outlined,
-                                                color: Colors.white.withOpacity(0.3),
+                                                color: isLight
+                                                    ? AppColors.textMutedLight
+                                                    : Colors.white.withOpacity(0.3),
                                                 size: 18,
                                               ),
                                           ],
@@ -638,17 +657,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.verified_user_outlined,
                           size: 14,
-                          color: AppColors.primary,
+                          color: AppColors.getPrimary(context),
                         ),
                         const SizedBox(width: 6),
-                        Text(
-                          '100% Accurate Vedic Calculations • Privacy Protected',
-                          style: GoogleFonts.inter(
-                            fontSize: 11.5,
-                            color: AppColors.textTertiaryDark,
+                        Flexible(
+                          child: Text(
+                            '100% Accurate Vedic Calculations • Privacy Protected',
+                            style: GoogleFonts.inter(
+                              fontSize: 11.5,
+                              color: AppColors.getTextMuted(context),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -674,6 +697,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   }
 
   Widget _buildNameStep() {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return _buildInputStep(
       badgeTitle: 'PERSONALIZATION',
       title: 'What should we call you?',
@@ -686,13 +711,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             controller: _nameController,
             textCapitalization: TextCapitalization.words,
             style: GoogleFonts.outfit(
-              color: Colors.white,
+              color: AppColors.getTextPrimary(context),
               fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
             decoration: AppDecorations.premiumInput(
               hintText: 'Enter your full name',
               prefixIcon: Icons.person_outline_rounded,
+              context: context,
             ),
           ),
 
@@ -707,7 +733,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 style: GoogleFonts.outfit(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textSecondaryDark,
+                  color: AppColors.getTextSecondary(context),
                 ),
               ),
               const SizedBox(height: 8),
@@ -724,13 +750,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? AppColors.primary.withOpacity(0.2)
-                                : Colors.white.withOpacity(0.05),
+                                ? AppColors.getPrimary(context).withOpacity(0.2)
+                                : (isLight
+                                    ? AppColors.surfaceSecondaryLight
+                                    : Colors.white.withOpacity(0.05)),
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(
                               color: isSelected
-                                  ? AppColors.primary
-                                  : Colors.white.withOpacity(0.15),
+                                  ? AppColors.getPrimary(context)
+                                  : AppColors.getGlassBorder(context),
                               width: isSelected ? 1.5 : 0.8,
                             ),
                           ),
@@ -740,7 +768,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                               style: GoogleFonts.outfit(
                                 fontSize: 14,
                                 fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                                color: isSelected ? AppColors.primary : Colors.white,
+                                color: isSelected
+                                    ? AppColors.getPrimary(context)
+                                    : AppColors.getTextPrimary(context),
                               ),
                             ),
                           ),
@@ -760,8 +790,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             GlassCard(
               borderRadius: 18,
               padding: const EdgeInsets.all(16),
-              borderColor: AppColors.primary.withOpacity(0.5),
-              glowColor: AppColors.primary.withOpacity(0.2),
+              borderColor: AppColors.getPrimary(context).withOpacity(0.5),
+              glowColor: AppColors.getPrimary(context).withOpacity(0.2),
               child: Row(
                 children: [
                   Container(
@@ -769,8 +799,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     height: 52,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.primary.withOpacity(0.15),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                      color: AppColors.getPrimary(context).withOpacity(0.15),
+                      border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.4)),
                     ),
                     child: Center(
                       child: Text(
@@ -786,12 +816,16 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       children: [
                         Row(
                           children: [
-                            Text(
-                              'Nam Rashi: ${_detectedZodiac!.englishName}',
-                              style: GoogleFonts.outfit(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary,
+                            Flexible(
+                              child: Text(
+                                'Nam Rashi: ${_detectedZodiac!.englishName}',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.getPrimary(context),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             const SizedBox(width: 6),
@@ -799,7 +833,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                               '(${_detectedZodiac!.hindiName})',
                               style: GoogleFonts.outfit(
                                 fontSize: 13,
-                                color: Colors.white70,
+                                color: AppColors.getTextSecondary(context),
                               ),
                             ),
                           ],
@@ -809,7 +843,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                           'Element: ${_detectedZodiac!.element} • Ruler: ${_detectedZodiac!.rulingPlanet}',
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: AppColors.textSecondaryDark,
+                            color: AppColors.getTextSecondary(context),
                           ),
                         ),
                       ],
@@ -832,6 +866,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   }
 
   Widget _buildBirthDetailsStep() {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return _buildInputStep(
       badgeTitle: 'VEDIC KUNDLI CALCULATION',
       title: 'Enter Precise Birth Details',
@@ -850,12 +886,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 builder: (context, child) {
                   return Theme(
                     data: Theme.of(context).copyWith(
-                      colorScheme: const ColorScheme.dark(
-                        primary: AppColors.primary,
-                        onPrimary: Colors.black,
-                        surface: AppColors.surfaceDark,
-                        onSurface: Colors.white,
-                      ),
+                      colorScheme: isLight
+                          ? const ColorScheme.light(
+                              primary: AppColors.primaryLightMode,
+                              onPrimary: Colors.white,
+                              surface: AppColors.surfaceLight,
+                              onSurface: AppColors.textPrimaryLight,
+                            )
+                          : const ColorScheme.dark(
+                              primary: AppColors.primary,
+                              onPrimary: Colors.black,
+                              surface: AppColors.surfaceDark,
+                              onSurface: Colors.white,
+                            ),
                     ),
                     child: child!,
                   );
@@ -871,10 +914,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             child: AbsorbPointer(
               child: TextField(
                 controller: _dobController,
-                style: GoogleFonts.outfit(color: Colors.white, fontSize: 16),
+                style: GoogleFonts.outfit(color: AppColors.getTextPrimary(context), fontSize: 16),
                 decoration: AppDecorations.premiumInput(
                   hintText: 'Date of Birth (YYYY-MM-DD)',
                   prefixIcon: Icons.calendar_today_rounded,
+                  context: context,
                 ),
               ),
             ),
@@ -895,12 +939,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       builder: (context, child) {
                         return Theme(
                           data: Theme.of(context).copyWith(
-                            colorScheme: const ColorScheme.dark(
-                              primary: AppColors.primary,
-                              onPrimary: Colors.black,
-                              surface: AppColors.surfaceDark,
-                              onSurface: Colors.white,
-                            ),
+                            colorScheme: isLight
+                                ? const ColorScheme.light(
+                                    primary: AppColors.primaryLightMode,
+                                    onPrimary: Colors.white,
+                                    surface: AppColors.surfaceLight,
+                                    onSurface: AppColors.textPrimaryLight,
+                                  )
+                                : const ColorScheme.dark(
+                                    primary: AppColors.primary,
+                                    onPrimary: Colors.black,
+                                    surface: AppColors.surfaceDark,
+                                    onSurface: Colors.white,
+                                  ),
                           ),
                           child: child!,
                         );
@@ -920,10 +971,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                   child: AbsorbPointer(
                     child: TextField(
                       controller: _timeController,
-                      style: GoogleFonts.outfit(color: Colors.white, fontSize: 16),
+                      style: GoogleFonts.outfit(color: AppColors.getTextPrimary(context), fontSize: 16),
                       decoration: AppDecorations.premiumInput(
                         hintText: 'Time (HH:MM)',
                         prefixIcon: Icons.access_time_rounded,
+                        context: context,
                       ),
                     ),
                   ),
@@ -936,9 +988,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                   height: 54,
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.06),
+                    color: isLight
+                        ? AppColors.surfaceSecondaryLight
+                        : Colors.white.withOpacity(0.06),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withOpacity(0.15)),
+                    border: Border.all(color: AppColors.getGlassBorder(context)),
                   ),
                   child: Row(
                     children: ['AM', 'PM'].map((period) {
@@ -949,7 +1003,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             decoration: BoxDecoration(
-                              color: isSelected ? AppColors.primary : Colors.transparent,
+                              color: isSelected ? AppColors.getPrimary(context) : Colors.transparent,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Center(
@@ -958,7 +1012,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                                 style: GoogleFonts.outfit(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color: isSelected ? Colors.black : Colors.white,
+                                  color: isSelected
+                                      ? Colors.black
+                                      : AppColors.getTextPrimary(context),
                                 ),
                               ),
                             ),
@@ -979,9 +1035,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             height: 54,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.06),
+              color: isLight
+                  ? AppColors.surfaceSecondaryLight
+                  : Colors.white.withOpacity(0.06),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withOpacity(0.15)),
+              border: Border.all(color: AppColors.getGlassBorder(context)),
             ),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
@@ -989,10 +1047,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     ? _selectedCity
                     : 'Custom Location',
                 isExpanded: true,
-                dropdownColor: AppColors.surfaceDark,
-                icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.primary),
+                dropdownColor: AppColors.getSurface(context),
+                icon: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.getPrimary(context)),
                 style: GoogleFonts.outfit(
-                  color: Colors.white,
+                  color: AppColors.getTextPrimary(context),
                   fontSize: 15,
                 ),
                 items: _popularCities
@@ -1001,21 +1059,25 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                         value: city,
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.location_on_outlined,
                               size: 18,
-                              color: AppColors.primary,
+                              color: AppColors.getPrimary(context),
                             ),
                             const SizedBox(width: 10),
-                            Text(
-                              city,
-                              style: GoogleFonts.outfit(
-                                color: city == 'Custom Location'
-                                    ? AppColors.primary
-                                    : Colors.white,
-                                fontWeight: city == 'Custom Location'
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
+                            Flexible(
+                              child: Text(
+                                city,
+                                style: GoogleFonts.outfit(
+                                  color: city == 'Custom Location'
+                                      ? AppColors.getPrimary(context)
+                                      : AppColors.getTextPrimary(context),
+                                  fontWeight: city == 'Custom Location'
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
@@ -1043,10 +1105,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             const SizedBox(height: 12),
             TextField(
               controller: _placeController,
-              style: GoogleFonts.outfit(color: Colors.white, fontSize: 16),
+              style: GoogleFonts.outfit(color: AppColors.getTextPrimary(context), fontSize: 16),
               decoration: AppDecorations.premiumInput(
                 hintText: 'Enter City, State, Country',
                 prefixIcon: Icons.edit_location_alt_outlined,
+                context: context,
               ),
             ),
           ],
@@ -1177,11 +1240,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                 style: GoogleFonts.plusJakartaSans(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: AppColors.getTextPrimary(context),
                 ),
               ).animate(onPlay: (c) => c.repeat(reverse: true)).shimmer(
                     duration: 1600.ms,
-                    color: AppColors.primaryLight,
+                    color: AppColors.getPrimary(context),
                   ),
 
               const SizedBox(height: 24),
@@ -1189,12 +1252,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               GlassCard(
                 borderRadius: 20,
                 padding: const EdgeInsets.all(18),
+                borderColor: AppColors.getGlassBorder(context),
                 child: Column(
                   children: [
                     _buildCheckItem('Nam Rashi & Zodiac Sign Mapped', 0),
-                    const Divider(color: Colors.white10, height: 16),
+                    Divider(color: Theme.of(context).brightness == Brightness.light ? AppColors.dividerLight : Colors.white10, height: 16),
                     _buildCheckItem('Planetary Positions & Kundli Calculated', 1),
-                    const Divider(color: Colors.white10, height: 16),
+                    Divider(color: Theme.of(context).brightness == Brightness.light ? AppColors.dividerLight : Colors.white10, height: 16),
                     _buildCheckItem('Vedic Guidance & Daily Horoscope Ready', 2),
                   ],
                 ),
@@ -1232,7 +1296,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               style: GoogleFonts.outfit(
                 fontSize: 14.5,
                 fontWeight: FontWeight.w500,
-                color: Colors.white,
+                color: AppColors.getTextPrimary(context),
               ),
             ),
           ),
@@ -1268,10 +1332,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.12),
+                            color: AppColors.getPrimary(context).withOpacity(0.12),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: AppColors.primary.withOpacity(0.35),
+                              color: AppColors.getPrimary(context).withOpacity(0.35),
                               width: 0.8,
                             ),
                           ),
@@ -1280,7 +1344,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                             style: GoogleFonts.plusJakartaSans(
                               fontSize: 10.5,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.primary,
+                              color: AppColors.getPrimary(context),
                               letterSpacing: 1.2,
                             ),
                           ),
@@ -1295,7 +1359,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       style: GoogleFonts.plusJakartaSans(
                         fontSize: 26,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                        color: AppColors.getTextPrimary(context),
                         letterSpacing: -0.4,
                       ),
                     ).fadeSlideUp(delay: 100.ms),
@@ -1306,7 +1370,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       subtitle,
                       style: GoogleFonts.inter(
                         fontSize: 14,
-                        color: AppColors.textSecondaryDark,
+                        color: AppColors.getTextSecondary(context),
                         height: 1.35,
                       ),
                     ).fadeSlideUp(delay: 200.ms),

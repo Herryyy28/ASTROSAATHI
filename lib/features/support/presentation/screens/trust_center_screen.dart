@@ -977,22 +977,27 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
             ),
           ),
         ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: isPositive ? Colors.green.withOpacity(0.15) : AppColors.primary.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: isPositive ? Colors.green.shade400 : AppColors.primary,
-              width: 0.8,
+        const SizedBox(width: 8),
+        Flexible(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: isPositive ? Colors.green.withOpacity(0.15) : AppColors.primary.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isPositive ? Colors.green.shade400 : AppColors.primary,
+                width: 0.8,
+              ),
             ),
-          ),
-          child: Text(
-            value,
-            style: GoogleFonts.outfit(
-              color: isPositive ? Colors.greenAccent : AppColors.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 12.5,
+            child: Text(
+              value,
+              style: GoogleFonts.outfit(
+                color: isPositive ? Colors.greenAccent : AppColors.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 12.5,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ),

@@ -263,38 +263,45 @@ class HomeScreen extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                GestureDetector(
-                  onTap: () => ProfileSwitcherModal.show(context),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: AppColors.getPrimary(context).withOpacity(0.12),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.4), width: 1.0),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.star_rounded,
-                          size: 13,
-                          color: AppColors.getPrimary(context),
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          activeProfile.name.isNotEmpty ? activeProfile.name : 'Profile',
-                          style: GoogleFonts.outfit(
-                            fontSize: 12.5,
-                            fontWeight: FontWeight.w800,
+                Flexible(
+                  child: GestureDetector(
+                    onTap: () => ProfileSwitcherModal.show(context),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: AppColors.getPrimary(context).withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.4), width: 1.0),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.star_rounded,
+                            size: 13,
                             color: AppColors.getPrimary(context),
                           ),
-                        ),
-                        const SizedBox(width: 4),
-                        Icon(Icons.swap_vert_rounded, size: 14, color: AppColors.getPrimary(context)),
-                      ],
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              activeProfile.name.isNotEmpty ? activeProfile.name : 'Profile',
+                              style: GoogleFonts.outfit(
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.getPrimary(context),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(Icons.swap_vert_rounded, size: 14, color: AppColors.getPrimary(context)),
+                        ],
+                      ),
                     ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     _formatDate(lang),
@@ -651,7 +658,7 @@ class HomeScreen extends ConsumerWidget {
               ),
               Icon(
                 Icons.chevron_right_rounded,
-                color: AppColors.textTertiaryDark,
+                color: AppColors.getTextMuted(context),
               ),
             ],
           ),

@@ -23,50 +23,56 @@ class ProfileSwitcherModal extends ConsumerWidget {
     final profiles = ref.watch(profilesListProvider);
     final activeProfile = ref.watch(activeProfileProvider);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.getBackground(context),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-        border: Border(
-          top: BorderSide(color: AppColors.getGlassBorder(context), width: 1.5),
-        ),
-      ),
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Drag Handle
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: AppColors.getTextMuted(context).withOpacity(0.4),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.getBackground(context),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          border: Border(
+            top: BorderSide(color: AppColors.getGlassBorder(context), width: 1.5),
           ),
-          const SizedBox(height: 16),
-
-          // Header Title
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        ),
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Switch Active Profile',
-                style: GoogleFonts.outfit(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.getTextPrimary(context),
+              // Drag Handle
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.getTextMuted(context).withOpacity(0.4),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context)),
-                onPressed: () => Navigator.pop(context),
+              const SizedBox(height: 16),
+
+              // Header Title
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Switch Active Profile',
+                      style: GoogleFonts.outfit(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.getTextPrimary(context),
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context)),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
               ),
-            ],
-          ),
           Text(
             'Select a profile to update charts, insights & calculations across the app.',
             style: GoogleFonts.inter(
@@ -204,6 +210,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
                         )
                       else
                         PopupMenuButton<String>(
+                          color: AppColors.getSurface(context),
                           icon: Icon(Icons.more_vert_rounded, color: AppColors.getTextMuted(context)),
                           onSelected: (val) {
                             if (val == 'select') {
@@ -215,14 +222,14 @@ class ProfileSwitcherModal extends ConsumerWidget {
                             }
                           },
                           itemBuilder: (context) => [
-                            const PopupMenuItem(
+                            PopupMenuItem(
                               value: 'select',
-                              child: Text('Switch to this Profile'),
+                              child: Text('Switch to this Profile', style: TextStyle(color: AppColors.getTextPrimary(context))),
                             ),
                             if (!isPrimary)
-                              const PopupMenuItem(
+                              PopupMenuItem(
                                 value: 'set_primary',
-                                child: Text('Set as Primary Account'),
+                                child: Text('Set as Primary Account', style: TextStyle(color: AppColors.getTextPrimary(context))),
                               ),
                           ],
                         ),
@@ -234,6 +241,8 @@ class ProfileSwitcherModal extends ConsumerWidget {
           ),
         ],
       ),
-    );
+    ),
+  ),
+);
   }
 }

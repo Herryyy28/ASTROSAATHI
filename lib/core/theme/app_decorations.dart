@@ -116,14 +116,18 @@ class AppDecorations {
   static BoxDecoration alertCard({
     required Color alertColor,
     double radius = 16,
-  }) => BoxDecoration(
-    color: AppColors.surfaceDark,
-    borderRadius: BorderRadius.circular(radius),
-    border: Border.all(color: alertColor.withOpacity(0.4), width: 1),
-    boxShadow: [
-      BoxShadow(color: alertColor.withOpacity(0.15), blurRadius: 16, spreadRadius: -2),
-    ],
-  );
+    BuildContext? context,
+  }) {
+    final isLight = context != null && Theme.of(context).brightness == Brightness.light;
+    return BoxDecoration(
+      color: isLight ? AppColors.surfaceLight : AppColors.surfaceDark,
+      borderRadius: BorderRadius.circular(radius),
+      border: Border.all(color: isLight ? alertColor.withOpacity(0.4) : alertColor.withOpacity(0.4), width: 1),
+      boxShadow: [
+        BoxShadow(color: alertColor.withOpacity(isLight ? 0.08 : 0.15), blurRadius: 16, spreadRadius: -2),
+      ],
+    );
+  }
 
   // ── Bottom Nav Bar ────────────────────────────────────────────────
   static BoxDecoration get bottomNavBar => BoxDecoration(

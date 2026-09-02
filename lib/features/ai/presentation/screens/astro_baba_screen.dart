@@ -257,12 +257,16 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                     size: 14,
                   ),
                   const SizedBox(width: 6),
-                  Text(
-                    '${l10n.translate('based_on_kundli')} ($profileName)',
-                    style: GoogleFonts.inter(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.secondary,
+                  Flexible(
+                    child: Text(
+                      '${l10n.translate('based_on_kundli')} ($profileName)',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.secondary,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

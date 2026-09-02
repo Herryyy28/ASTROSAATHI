@@ -56,9 +56,10 @@ class _DecisionAssistantScreenState extends State<DecisionAssistantScreen> {
   Widget build(BuildContext context) {
     final decision = getDecisionVerdict(selectedQuestion);
     final Color verdictColor = decision['color'] as Color;
+    final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: CosmicParticleBackground(
         child: SafeArea(
           child: SingleChildScrollView(
@@ -79,18 +80,20 @@ class _DecisionAssistantScreenState extends State<DecisionAssistantScreen> {
                       child: const Icon(Icons.explore_rounded, color: Colors.black, size: 20),
                     ),
                     const SizedBox(width: 12),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Daily Decision Assistant',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
-                        ),
-                        Text(
-                          'Vedic Timing & Planetary Alignment Evaluator',
-                          style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Daily Decision Assistant',
+                            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                          ),
+                          Text(
+                            'Vedic Timing & Planetary Alignment Evaluator',
+                            style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context)),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -100,23 +103,23 @@ class _DecisionAssistantScreenState extends State<DecisionAssistantScreen> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceHighlightDark.withOpacity(0.4),
+                    color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: AppColors.glassBorder),
+                    border: Border.all(color: AppColors.getGlassBorder(context)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('What decision are you considering?', style: TextStyle(fontSize: 13, color: AppColors.textSecondaryDark)),
+                      Text('What decision are you considering?', style: TextStyle(fontSize: 13, color: AppColors.getTextSecondary(context))),
                       const SizedBox(height: 8),
                       DropdownButtonFormField<String>(
                         value: selectedQuestion,
                         isExpanded: true,
-                        dropdownColor: AppColors.surfaceDark,
+                        dropdownColor: AppColors.getSurface(context),
                         style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 13),
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: AppColors.surfaceDark,
+                          fillColor: AppColors.getSurfaceSecondary(context),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
                         ),
                         items: questions.map((q) => DropdownMenuItem(value: q, child: Text(q, overflow: TextOverflow.ellipsis))).toList(),
@@ -133,7 +136,7 @@ class _DecisionAssistantScreenState extends State<DecisionAssistantScreen> {
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    color: verdictColor.withOpacity(0.12),
+                    color: verdictColor.withOpacity(isLight ? 0.08 : 0.12),
                     borderRadius: BorderRadius.circular(28),
                     border: Border.all(color: verdictColor.withOpacity(0.5), width: 1.5),
                   ),
@@ -147,7 +150,7 @@ class _DecisionAssistantScreenState extends State<DecisionAssistantScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('Astrological Verdict', style: TextStyle(fontSize: 11, color: AppColors.textSecondaryDark)),
+                              Text('Astrological Verdict', style: TextStyle(fontSize: 11, color: AppColors.getTextSecondary(context))),
                               Text(
                                 decision['verdict'] as String,
                                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: verdictColor),
@@ -160,7 +163,7 @@ class _DecisionAssistantScreenState extends State<DecisionAssistantScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.surfaceDark,
+                          color: AppColors.getSurfaceSecondary(context),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -171,7 +174,7 @@ class _DecisionAssistantScreenState extends State<DecisionAssistantScreen> {
                       const SizedBox(height: 14),
                       Text(
                         decision['reason'] as String,
-                        style: const TextStyle(fontSize: 13, color: AppColors.textPrimaryDark, height: 1.4),
+                        style: TextStyle(fontSize: 13, color: AppColors.getTextPrimary(context), height: 1.4),
                       ),
                       const SizedBox(height: 16),
                       OutlinedButton.icon(

@@ -13,10 +13,13 @@ export class UsersService {
     @InjectRepository(UserProfile) private readonly profileRepository: Repository<UserProfile>,
   ) {}
 
-  async findOrCreateUser(firebaseUid: string, email: string): Promise<User> {
+  async findOrCreateUser(firebaseUid: string, email: string, authProvider: string = 'GOOGLE'): Promise<User> {
     let user = await this.userRepository.findOne({ where: { firebaseUid } });
     if (!user) {
-      user = this.userRepository.create({ firebaseUid, email });
+      user = this.userRepository.create({ firebaseUid, email, authProvider });
+      await this.userRepository.save(user);
+    } else if (authProvider && user.authProvider !== authProvider) {
+      user.authProvider = authProvider;
       await this.userRepository.save(user);
     }
     return user;

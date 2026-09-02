@@ -237,8 +237,10 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
     final selectedPlanet = planetKeys[_selectedPlanetIndex];
     final remedy = planetRemedies[selectedPlanet]!;
 
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: CosmicParticleBackground(
         child: SafeArea(
           child: SingleChildScrollView(
@@ -273,17 +275,17 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                             children: [
                               Text(
                                 l10n.remediesTitle,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.textPrimaryDark,
+                                  color: AppColors.getTextPrimary(context),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 l10n.remediesSub,
-                                style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                                style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context)),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -318,9 +320,9 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                           label: Text(planetName),
                           selected: isSelected,
                           selectedColor: AppColors.primary,
-                          backgroundColor: AppColors.surfaceDark,
+                          backgroundColor: AppColors.getSurfaceSecondary(context),
                           labelStyle: TextStyle(
-                            color: isSelected ? Colors.black : AppColors.textPrimaryDark,
+                            color: isSelected ? Colors.black : AppColors.getTextPrimary(context),
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                           ),
@@ -340,7 +342,7 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    gradient: AppColors.cardGradient,
+                    gradient: AppColors.getCardGradient(context),
                     borderRadius: BorderRadius.circular(28),
                     border: Border.all(color: AppColors.primary.withOpacity(0.4)),
                     boxShadow: [
@@ -377,12 +379,12 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                             const SizedBox(height: 4),
                             Text(
                               remedy['benefit'] as String,
-                              style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark, height: 1.3),
+                              style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context), height: 1.3),
                             ),
                             const SizedBox(height: 8),
                             Text(
                               remedy['wearing'] as String,
-                              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                             ),
                           ],
                         ),
@@ -403,19 +405,19 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceHighlightDark.withOpacity(0.4),
+                    color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: AppColors.glassBorder),
+                    border: Border.all(color: AppColors.getGlassBorder(context)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Authentic Upay for $selectedPlanet',
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                       ),
                       const SizedBox(height: 12),
-                      ...(remedy['rituals'] as List<String>).map((r) => _buildRitualTile(r)),
+                      ...(remedy['rituals'] as List<String>).map((r) => _buildRitualTile(context, r)),
                     ],
                   ),
                 ).animate().fade(delay: 300.ms).slideY(begin: 0.1),
@@ -427,7 +429,7 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
     );
   }
 
-  Widget _buildRitualTile(String title) {
+  Widget _buildRitualTile(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -441,9 +443,9 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
-                color: AppColors.textPrimaryDark,
+                color: AppColors.getTextPrimary(context),
               ),
             ),
           ),

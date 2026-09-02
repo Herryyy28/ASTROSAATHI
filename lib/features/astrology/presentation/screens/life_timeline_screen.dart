@@ -40,8 +40,10 @@ class _LifeTimelineScreenState extends State<LifeTimelineScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: CosmicParticleBackground(
         child: SafeArea(
           child: SingleChildScrollView(
@@ -68,13 +70,13 @@ class _LifeTimelineScreenState extends State<LifeTimelineScreen> {
                         children: [
                           Text(
                             'Life Timeline & Dasha Phases',
-                            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             'Past → Present → Future Vimshottari Cycles',
-                            style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                            style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context)),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -105,14 +107,14 @@ class _LifeTimelineScreenState extends State<LifeTimelineScreen> {
                         child: const Center(child: Icon(Icons.auto_awesome, color: Colors.black, size: 22)),
                       ),
                       const SizedBox(width: 14),
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Current Life Phase', style: TextStyle(fontSize: 11, color: AppColors.textSecondaryDark)),
-                            SizedBox(height: 2),
-                            Text('Jupiter (Guru) Mahadasha', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: AppColors.primary)),
-                            Text('2020 – 2036 • Active Growth Era', style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark)),
+                            Text('Current Life Phase', style: TextStyle(fontSize: 11, color: AppColors.getTextSecondary(context))),
+                            const SizedBox(height: 2),
+                            const Text('Jupiter (Guru) Mahadasha', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: AppColors.primary)),
+                            Text('2020 – 2036 • Active Growth Era', style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context))),
                           ],
                         ),
                       ),
@@ -122,9 +124,9 @@ class _LifeTimelineScreenState extends State<LifeTimelineScreen> {
                 const SizedBox(height: 24),
 
                 // Dasha Timeline Cards
-                const Text(
+                Text(
                   'Vimshottari Dasha Progression',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                 ),
                 const SizedBox(height: 12),
                 ...dashaPhases.map((phase) {
@@ -135,10 +137,10 @@ class _LifeTimelineScreenState extends State<LifeTimelineScreen> {
                     margin: const EdgeInsets.only(bottom: 16),
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: isActive ? themeColor.withOpacity(0.12) : AppColors.surfaceHighlightDark.withOpacity(0.4),
+                      color: isActive ? themeColor.withOpacity(0.12) : (isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4)),
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(
-                        color: isActive ? themeColor.withOpacity(0.6) : AppColors.glassBorder,
+                        color: isActive ? themeColor.withOpacity(0.6) : AppColors.getGlassBorder(context),
                         width: isActive ? 1.5 : 1.0,
                       ),
                     ),
@@ -177,22 +179,22 @@ class _LifeTimelineScreenState extends State<LifeTimelineScreen> {
                         const SizedBox(height: 8),
                         Text(
                           phase['mahadasha'] as String,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                         ),
                         const SizedBox(height: 6),
                         Text(
                           phase['summary'] as String,
-                          style: const TextStyle(fontSize: 13, color: AppColors.textSecondaryDark, height: 1.4),
+                          style: TextStyle(fontSize: 13, color: AppColors.getTextSecondary(context), height: 1.4),
                         ),
                         const SizedBox(height: 12),
                         Row(
                           children: [
-                            const Icon(Icons.star_outline_rounded, color: AppColors.primaryLight, size: 16),
+                            Icon(Icons.star_outline_rounded, color: AppColors.getPrimary(context), size: 16),
                             const SizedBox(width: 6),
                             Expanded(
                               child: Text(
                                 'Favorable for: ${phase['favorableFor']}',
-                                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.primaryLight),
+                                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.getPrimary(context)),
                               ),
                             ),
                           ],

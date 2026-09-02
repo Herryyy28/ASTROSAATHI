@@ -189,3 +189,36 @@ class SafeText extends StatelessWidget {
     );
   }
 }
+
+/// ── Overflow-safe flexible text for use directly inside Rows ────────────────
+class FlexText extends StatelessWidget {
+  final String text;
+  final TextStyle? style;
+  final int maxLines;
+  final TextAlign? textAlign;
+  final FlexFit fit;
+
+  const FlexText(
+    this.text, {
+    super.key,
+    this.style,
+    this.maxLines = 1,
+    this.textAlign,
+    this.fit = FlexFit.loose,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Flexible(
+      fit: fit,
+      child: Text(
+        text,
+        style: style,
+        maxLines: maxLines,
+        overflow: TextOverflow.ellipsis,
+        textAlign: textAlign,
+      ),
+    );
+  }
+}
+

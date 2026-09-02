@@ -46,8 +46,10 @@ class CosmicInboxScreen extends ConsumerWidget {
       ];
     }
 
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
+      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
       body: CosmicParticleBackground(
         child: SafeArea(
           child: SingleChildScrollView(
@@ -68,18 +70,20 @@ class CosmicInboxScreen extends ConsumerWidget {
                       child: const Icon(Icons.inbox_rounded, color: Colors.white, size: 20),
                     ),
                     const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.textPrimaryDark),
-                        ),
-                        Text(
-                          subTitle,
-                          style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                          ),
+                          Text(
+                            subTitle,
+                            style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context)),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -90,9 +94,9 @@ class CosmicInboxScreen extends ConsumerWidget {
                     margin: const EdgeInsets.only(bottom: 12),
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.surfaceHighlightDark.withOpacity(0.4),
+                      color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: AppColors.glassBorder),
+                      border: Border.all(color: AppColors.getGlassBorder(context)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,14 +112,14 @@ class CosmicInboxScreen extends ConsumerWidget {
                             ),
                             Text(
                               a['time']!,
-                              style: const TextStyle(fontSize: 11, color: AppColors.textTertiaryDark),
+                              style: TextStyle(fontSize: 11, color: AppColors.getTextMuted(context)),
                             ),
                           ],
                         ),
                         const SizedBox(height: 6),
                         Text(
                           a['desc']!,
-                          style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark, height: 1.3),
+                          style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context), height: 1.3),
                         ),
                       ],
                     ),

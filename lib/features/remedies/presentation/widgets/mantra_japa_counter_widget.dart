@@ -35,12 +35,14 @@ class _MantraJapaCounterWidgetState extends State<MantraJapaCounterWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppColors.surfaceHighlightDark.withOpacity(0.4),
+        color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4),
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: AppColors.glassBorder),
+        border: Border.all(color: AppColors.getGlassBorder(context)),
       ),
       child: Column(
         children: [
@@ -61,15 +63,19 @@ class _MantraJapaCounterWidgetState extends State<MantraJapaCounterWidget> {
                   children: [
                     Text(
                       widget.mantraTitle,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimaryDark,
+                        color: AppColors.getTextPrimary(context),
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const Text(
+                    Text(
                       'Interactive 108-Bead Japa Counter',
-                      style: TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                      style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context)),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
@@ -90,18 +96,19 @@ class _MantraJapaCounterWidgetState extends State<MantraJapaCounterWidget> {
           ),
           const SizedBox(height: 16),
           Container(
+            width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: AppColors.surfaceDark,
+              color: AppColors.getSurfaceSecondary(context),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
               widget.mantraText,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
                 fontStyle: FontStyle.italic,
-                color: AppColors.primaryLight,
+                color: AppColors.getPrimary(context),
                 height: 1.4,
               ),
             ),
@@ -134,16 +141,16 @@ class _MantraJapaCounterWidgetState extends State<MantraJapaCounterWidget> {
                     ),
                     Text(
                       '/ $totalBeads Japa',
-                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryDark),
+                      style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context)),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
+                    Text(
                       'TAP BEAD',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.2,
-                        color: AppColors.primaryLight,
+                        color: AppColors.getPrimary(context),
                       ),
                     ),
                   ],
@@ -158,8 +165,8 @@ class _MantraJapaCounterWidgetState extends State<MantraJapaCounterWidget> {
                 count = 0;
               });
             },
-            icon: const Icon(Icons.refresh_rounded, size: 16, color: AppColors.textSecondaryDark),
-            label: const Text('Reset Count', style: TextStyle(color: AppColors.textSecondaryDark, fontSize: 12)),
+            icon: Icon(Icons.refresh_rounded, size: 16, color: AppColors.getTextSecondary(context)),
+            label: Text('Reset Count', style: TextStyle(color: AppColors.getTextSecondary(context), fontSize: 12)),
           ),
         ],
       ),

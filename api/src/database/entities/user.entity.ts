@@ -13,6 +13,9 @@ export class User {
   @Column({ type: 'varchar', length: 255, nullable: true })
   firebaseUid!: string;
 
+  @Column({ type: 'varchar', length: 50, default: 'GOOGLE' })
+  authProvider!: string;
+
   @CreateDateColumn()
   createdAt!: Date;
 

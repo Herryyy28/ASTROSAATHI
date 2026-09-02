@@ -74,7 +74,8 @@ class _WhatShouldIDoNowModalState extends State<WhatShouldIDoNowModal> {
             color: AppColors.surfaceDark.withOpacity(0.95),
             border: const Border(top: BorderSide(color: AppColors.glassBorder, width: 0.5)),
           ),
-          child: SingleChildScrollView(
+          child: SafeArea(
+            child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
               mainAxisSize: MainAxisSize.min,

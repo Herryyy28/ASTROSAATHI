@@ -120,7 +120,7 @@ class KundliScreen extends ConsumerWidget {
                   style: GoogleFonts.outfit(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                   ),
                 ),
                 Text(
@@ -129,7 +129,7 @@ class KundliScreen extends ConsumerWidget {
                       : 'Create your Kundli to begin',
                   style: GoogleFonts.inter(
                     fontSize: 12,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getTextSecondary(context),
                   ),
                 ),
               ],
@@ -146,6 +146,7 @@ class KundliScreen extends ConsumerWidget {
     List<String> tabs,
     int selectedTab,
   ) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
     return Container(
       height: 44,
       margin: const EdgeInsets.symmetric(vertical: 10),
@@ -166,12 +167,12 @@ class KundliScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: isActive
                     ? AppColors.primary.withOpacity(0.15)
-                    : AppColors.glassSurface,
+                    : (isLight ? AppColors.surfaceSecondaryLight : AppColors.glassSurface),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
                   color: isActive
                       ? AppColors.primary.withOpacity(0.5)
-                      : AppColors.glassBorder,
+                      : AppColors.getGlassBorder(context),
                   width: isActive ? 1 : 0.5,
                 ),
               ),
@@ -182,7 +183,7 @@ class KundliScreen extends ConsumerWidget {
                   fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
                   color: isActive
                       ? AppColors.primary
-                      : AppColors.textSecondaryDark,
+                      : AppColors.getTextSecondary(context),
                 ),
               ),
             ),
@@ -239,7 +240,7 @@ class KundliScreen extends ConsumerWidget {
                 const SizedBox(height: 20),
 
                 // Ascendant Summary Card
-                _buildAscendantCard(chartData).animate().fadeIn(delay: 100.ms),
+                _buildAscendantCard(context, chartData).animate().fadeIn(delay: 100.ms),
                 const SizedBox(height: 16),
 
                 // Key Planets Summary
@@ -248,7 +249,7 @@ class KundliScreen extends ConsumerWidget {
                   style: GoogleFonts.outfit(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -266,7 +267,7 @@ class KundliScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAscendantCard(Map<String, dynamic> chartData) {
+  Widget _buildAscendantCard(BuildContext context, Map<String, dynamic> chartData) {
     final ascendant = chartData['ascendant'] as String? ?? 'Aries';
     final ascendantLord = chartData['ascendantLord'] as String? ?? 'Mars';
 
@@ -302,7 +303,7 @@ class KundliScreen extends ConsumerWidget {
                   'Ascendant / Lagna',
                   style: GoogleFonts.inter(
                     fontSize: 11,
-                    color: AppColors.textTertiaryDark,
+                    color: AppColors.getTextMuted(context),
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0.5,
                   ),
@@ -313,14 +314,14 @@ class KundliScreen extends ConsumerWidget {
                   style: GoogleFonts.outfit(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimaryDark,
+                    color: AppColors.getTextPrimary(context),
                   ),
                 ),
                 Text(
                   'Lord: $ascendantLord',
                   style: GoogleFonts.inter(
                     fontSize: 13,
-                    color: AppColors.textSecondaryDark,
+                    color: AppColors.getTextSecondary(context),
                   ),
                 ),
               ],
@@ -535,7 +536,7 @@ class KundliScreen extends ConsumerWidget {
                         style: GoogleFonts.outfit(
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryDark,
+                          color: AppColors.getTextPrimary(context),
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -543,7 +544,7 @@ class KundliScreen extends ConsumerWidget {
                         '$antardasha Antardasha',
                         style: GoogleFonts.inter(
                           fontSize: 15,
-                          color: AppColors.textSecondaryDark,
+                          color: AppColors.getTextSecondary(context),
                         ),
                       ),
                       if (startDate.isNotEmpty) ...[
@@ -552,7 +553,7 @@ class KundliScreen extends ConsumerWidget {
                           '$startDate → $endDate',
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: AppColors.textTertiaryDark,
+                            color: AppColors.getTextMuted(context),
                           ),
                         ),
                       ],
@@ -563,7 +564,9 @@ class KundliScreen extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(6),
                         child: LinearProgressIndicator(
                           value: progress,
-                          backgroundColor: AppColors.surfaceHighlightDark,
+                          backgroundColor: Theme.of(context).brightness == Brightness.light
+                              ? AppColors.surfaceSecondaryLight
+                              : AppColors.surfaceHighlightDark,
                           color: AppColors.secondary,
                           minHeight: 8,
                         ),
@@ -573,7 +576,7 @@ class KundliScreen extends ConsumerWidget {
                         '${(progress * 100).toInt()}% Complete',
                         style: GoogleFonts.inter(
                           fontSize: 12,
-                          color: AppColors.textTertiaryDark,
+                          color: AppColors.getTextMuted(context),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -603,7 +606,7 @@ class KundliScreen extends ConsumerWidget {
                                 meaning,
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
-                                  color: AppColors.textSecondaryDark,
+                                  color: AppColors.getTextSecondary(context),
                                   height: 1.5,
                                 ),
                               ),
@@ -678,7 +681,7 @@ class KundliScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             borderColor: present
                 ? (isYoga ? AppColors.success.withOpacity(0.4) : AppColors.warning.withOpacity(0.4))
-                : AppColors.glassBorder,
+                : AppColors.getGlassBorder(context),
             child: Row(
               children: [
                 Container(
@@ -688,13 +691,13 @@ class KundliScreen extends ConsumerWidget {
                     shape: BoxShape.circle,
                     color: present
                         ? (isYoga ? AppColors.success.withOpacity(0.15) : AppColors.warning.withOpacity(0.15))
-                        : AppColors.surfaceHighlightDark,
+                        : AppColors.getSurfaceSecondary(context),
                   ),
                   child: Icon(
                     isYoga ? Icons.star_rounded : Icons.warning_amber_rounded,
                     color: present
                         ? (isYoga ? AppColors.success : AppColors.warning)
-                        : AppColors.textTertiaryDark,
+                        : AppColors.getTextMuted(context),
                     size: 20,
                   ),
                 ),
@@ -708,7 +711,7 @@ class KundliScreen extends ConsumerWidget {
                         style: GoogleFonts.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryDark,
+                          color: AppColors.getTextPrimary(context),
                         ),
                       ),
                       if (description.isNotEmpty) ...[
@@ -717,7 +720,7 @@ class KundliScreen extends ConsumerWidget {
                           description,
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: AppColors.textSecondaryDark,
+                            color: AppColors.getTextSecondary(context),
                             height: 1.4,
                           ),
                           maxLines: 2,
@@ -733,7 +736,7 @@ class KundliScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(10),
                     color: present
                         ? (isYoga ? AppColors.success.withOpacity(0.15) : AppColors.warning.withOpacity(0.15))
-                        : AppColors.surfaceHighlightDark,
+                        : AppColors.getSurfaceSecondary(context),
                   ),
                   child: Text(
                     present ? (isYoga ? 'Active' : 'Present') : 'Absent',
@@ -742,7 +745,7 @@ class KundliScreen extends ConsumerWidget {
                       fontWeight: FontWeight.w700,
                       color: present
                           ? (isYoga ? AppColors.success : AppColors.warning)
-                          : AppColors.textTertiaryDark,
+                          : AppColors.getTextMuted(context),
                     ),
                   ),
                 ),
@@ -775,7 +778,7 @@ class KundliScreen extends ConsumerWidget {
                 'Personalized remedies based on your Kundli will appear here',
                 style: GoogleFonts.outfit(
                   fontSize: 16,
-                  color: AppColors.textSecondaryDark,
+                  color: AppColors.getTextSecondary(context),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -825,7 +828,7 @@ class KundliScreen extends ConsumerWidget {
                         style: GoogleFonts.outfit(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimaryDark,
+                          color: AppColors.getTextPrimary(context),
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -843,7 +846,7 @@ class KundliScreen extends ConsumerWidget {
                           description,
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: AppColors.textSecondaryDark,
+                            color: AppColors.getTextSecondary(context),
                             height: 1.4,
                           ),
                           maxLines: 2,
@@ -919,7 +922,7 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
-                                color: Theme.of(context).textTheme.titleMedium?.color ?? AppColors.textPrimaryDark,
+                                color: AppColors.getTextPrimary(context),
                               ),
                             ),
                           ),
@@ -948,7 +951,7 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
                         widget.subtitle,
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 13,
-                          color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textSecondaryDark,
+                          color: AppColors.getTextSecondary(context),
                         ),
                       ),
                     ],
@@ -994,7 +997,7 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
                           widget.meaningText,
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: AppColors.textSecondaryDark,
+                            color: AppColors.getTextSecondary(context),
                             height: 1.4,
                           ),
                           maxLines: 2,
@@ -1017,7 +1020,7 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
                     _showDetails
                         ? Icons.expand_less_rounded
                         : Icons.expand_more_rounded,
-                    color: AppColors.textTertiaryDark,
+                    color: AppColors.getTextMuted(context),
                     size: 18,
                   ),
                   const SizedBox(width: 4),
@@ -1025,7 +1028,7 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
                     widget.viewDetailsLabel,
                     style: GoogleFonts.inter(
                       fontSize: 11,
-                      color: AppColors.textTertiaryDark,
+                      color: AppColors.getTextMuted(context),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -1040,14 +1043,14 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceHighlightDark.withOpacity(0.5),
+                    color: AppColors.getSurfaceSecondary(context),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     widget.technicalDetails,
                     style: GoogleFonts.jetBrainsMono(
                       fontSize: 11,
-                      color: AppColors.textTertiaryDark,
+                      color: AppColors.getTextMuted(context),
                       height: 1.5,
                     ),
                   ),

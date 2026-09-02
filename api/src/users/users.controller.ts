@@ -8,8 +8,9 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('sync')
-  async syncUser(@Req() req: any) {
-    const user = await this.usersService.findOrCreateUser(req.user.uid, req.user.email);
+  async syncUser(@Req() req: any, @Body() body: any) {
+    const provider = body?.authProvider || req.user?.firebase?.sign_in_provider === 'password' ? 'EMAIL_PASSWORD' : 'GOOGLE';
+    const user = await this.usersService.findOrCreateUser(req.user.uid, req.user.email, provider);
     return { success: true, data: user };
   }
 
