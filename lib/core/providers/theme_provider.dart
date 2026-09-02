@@ -30,14 +30,16 @@ enum AppThemeMode {
         return AppThemeMode.light;
       case 'dark':
         return AppThemeMode.dark;
+      case 'system':
+        return AppThemeMode.system;
       default:
-        return AppThemeMode.dark;
+        return AppThemeMode.system;
     }
   }
 }
 
 class ThemeModeNotifier extends StateNotifier<AppThemeMode> {
-  ThemeModeNotifier() : super(AppThemeMode.dark) {
+  ThemeModeNotifier() : super(AppThemeMode.system) {
     _loadSavedThemeMode();
   }
 

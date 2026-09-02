@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import 'astrology_engine.dart';
 import 'mock_astrology_engine.dart';
+import '../config/app_config.dart';
 import 'models/game_plan_data.dart';
 import 'models/panchang_data.dart';
 import 'models/muhurat_data.dart';
@@ -14,11 +15,7 @@ import 'models/horoscope_data.dart';
 class ApiAstrologyEngine implements AstrologyEngine {
   final MockAstrologyEngine _fallback = MockAstrologyEngine();
 
-  String get baseUrl {
-    if (kIsWeb) return 'http://localhost:3000/api/v1';
-    if (Platform.isAndroid) return 'http://10.0.2.2:3000/api/v1';
-    return 'http://localhost:3000/api/v1';
-  }
+  String get baseUrl => AppConfig.apiBaseUrl;
 
   Map<String, String> _parseLocation(String location) {
     String lat = '28.6139';

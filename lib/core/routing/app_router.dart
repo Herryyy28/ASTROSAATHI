@@ -30,9 +30,6 @@ class RouterNotifier extends ChangeNotifier {
   String? redirect(BuildContext context, GoRouterState state) {
     final isDone = _ref.read(onboardingCompleteProvider);
 
-    final isSplashLocation = state.matchedLocation == '/splash';
-    if (isSplashLocation) return null; // Allow splash screen to show initially
-
     final isOnboardingLocation = state.matchedLocation == '/onboarding';
     if (!isDone && !isOnboardingLocation) {
       return '/onboarding';
@@ -49,7 +46,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final notifier = ref.read(routerNotifierProvider);
 
   return GoRouter(
-    initialLocation: '/splash',
+    initialLocation: '/',
     refreshListenable: notifier,
     redirect: notifier.redirect,
     routes: [

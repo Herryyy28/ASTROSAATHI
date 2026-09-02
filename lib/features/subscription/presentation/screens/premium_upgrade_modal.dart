@@ -691,17 +691,26 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
         options = {
           'key': RazorpayConfig.keyId,
           'amount': orderRes['amount'],
+          'currency': RazorpayConfig.currency,
           'name': RazorpayConfig.merchantName,
           'order_id': _currentOrderId,
-          'description': 'Payment for $planName',
+          'description': 'AstroSaathi VIP Subscription - $planName',
           'prefill': {
             'contact': '9876543210',
-            'email': userEmail,
+            'email': userEmail.isNotEmpty ? userEmail : 'user@astrosaathi.com',
           },
           'theme': {
-            'color': '#0066FF'
+            'color': '#7C4DFF',
+            'backdrop_color': '#0A0C16',
+          },
+          'retry': {
+            'enabled': true,
+            'max_count': 3,
           },
           'send_sms_hash': true,
+          'external': {
+            'wallets': ['paytm']
+          }
         };
       } else {
         throw Exception('Server order failed');
@@ -711,45 +720,59 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
       options = {
         'key': RazorpayConfig.keyId,
         'amount': (amount * 100).toInt(),
+        'currency': RazorpayConfig.currency,
         'name': RazorpayConfig.merchantName,
-        'description': 'Payment for $planName',
+        'description': 'AstroSaathi VIP Subscription - $planName',
         'prefill': {
           'contact': '9876543210',
-          'email': userEmail,
+          'email': userEmail.isNotEmpty ? userEmail : 'user@astrosaathi.com',
         },
         'theme': {
-          'color': '#0066FF'
+          'color': '#7C4DFF',
+          'backdrop_color': '#0A0C16',
+        },
+        'retry': {
+          'enabled': true,
+          'max_count': 3,
         },
         'send_sms_hash': true,
+        'external': {
+          'wallets': ['paytm']
+        }
       };
     }
 
     try {
-      if (_razorpay == null) {
-        final launched = await RazorpayService.instance.launchRazorpayHostedCheckout(
-          orderId: _currentOrderId,
-          amount: amount,
-          userEmail: userEmail,
-        );
-        if (launched) {
-          if (mounted) {
-            setState(() => _isProcessing = false);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Payment opened in browser! Please complete it there.')),
-            );
-          }
-          return;
-        }
-        throw Exception('Razorpay is not supported on this platform. Please use Android or iOS.');
+      if (_razorpay != null) {
+        _razorpay!.open(options);
+        return;
       }
-      _razorpay!.open(options);
     } catch (e) {
-      if (mounted) {
-        setState(() => _isProcessing = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Payment initiation failed. Please try again.')),
-        );
+      debugPrint('Native Razorpay open error: $e');
+    }
+
+    try {
+      final launched = await RazorpayService.instance.launchRazorpayHostedCheckout(
+        orderId: _currentOrderId,
+        amount: amount,
+        userEmail: userEmail,
+      );
+      if (launched) {
+        if (mounted) {
+          setState(() => _isProcessing = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Payment opened in browser! Please complete it there.')),
+          );
+        }
+        return;
       }
+    } catch (_) {}
+
+    if (mounted) {
+      setState(() => _isProcessing = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Payment initiation failed. Please try again.')),
+      );
     }
   }
 
@@ -813,12 +836,32 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     }
   }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
+  void _handlePaymentError(PaymentFailureResponse response) async {
     if (!mounted) return;
     setState(() => _isProcessing = false);
-    
+
+    debugPrint('Razorpay Failure Code: ${response.code}, Message: ${response.message}');
+
+    // If native Razorpay SDK fails (e.g., Key ID not active on native SDK), attempt Web Browser fallback!
     final session = ref.read(userSessionProvider);
+    final double amount = _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199);
+
+    final launched = await RazorpayService.instance.launchRazorpayHostedCheckout(
+      orderId: _currentOrderId,
+      amount: amount,
+      userEmail: session.email ?? '',
+    );
+
+    if (launched) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Opening Razorpay Payment Checkout in your browser...')),
+        );
+      }
+      return;
+    }
     
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -827,7 +870,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           onRetry: () {
             Navigator.pop(context);
             _startRazorpayCheckout(
-              _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199),
+              amount,
               _selectedTier.displayName,
               session.userId ?? 'user',
               session.email ?? ''
