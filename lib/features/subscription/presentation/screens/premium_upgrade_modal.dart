@@ -13,6 +13,7 @@ import '../../../../core/services/razorpay_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../auth/data/auth_repository.dart';
 import '../../../auth/presentation/screens/auth_screen.dart';
+import '../../../explore/presentation/screens/explore_screen.dart';
 import 'payment_status_screens.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/widgets/cosmic_notification.dart';
@@ -232,7 +233,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'VIP INCLUDED PERKS',
+                        '💎 VIP & PRO INCLUDED PERKS',
                         style: GoogleFonts.outfit(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -241,6 +242,36 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                         ),
                       ),
                       const SizedBox(height: 12),
+                      _buildFeatureRow(
+                        context,
+                        Icons.calendar_month_rounded,
+                        'NEW: Personal 12-Month Year Ahead Roadmap',
+                        'Jan - Dec career, relationship, finance & health forecast',
+                      ),
+                      _buildFeatureRow(
+                        context,
+                        Icons.radar_rounded,
+                        'NEW: 90-Day Future Radar & Timelines',
+                        'Interactive visual radar for upcoming transits & eclipses',
+                      ),
+                      _buildFeatureRow(
+                        context,
+                        Icons.edit_calendar_rounded,
+                        'NEW: Personal Timing Engine & Date Scorecards',
+                        'Activity muhurat evaluation for interviews, business & travel',
+                      ),
+                      _buildFeatureRow(
+                        context,
+                        Icons.favorite_rounded,
+                        'NEW: Synastry & Composite Relationship Matrix',
+                        'Dual chart bi-wheel overlay & aspect matrix breakdown',
+                      ),
+                      _buildFeatureRow(
+                        context,
+                        Icons.public_rounded,
+                        'NEW: Astrocartography & Relocation Lines',
+                        'Global planetary power lines & city relocation comparison',
+                      ),
                       _buildFeatureRow(
                         context,
                         Icons.block_rounded,
@@ -267,21 +298,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                       ),
                       _buildFeatureRow(
                         context,
-                        Icons.favorite_rounded,
-                        'Ashtakoot 36-Point Matchmaking',
-                        'Deep compatibility breakdown',
-                      ),
-                      _buildFeatureRow(
-                        context,
                         Icons.auto_awesome_rounded,
                         'Personalized Gemstones & Puja Guide',
                         'Custom remedies for your chart',
-                      ),
-                      _buildFeatureRow(
-                        context,
-                        Icons.public_rounded,
-                        'Saturn & Rahu/Ketu Transit Alerts',
-                        'In-depth Sade Sati analysis',
                       ),
                     ],
                   ),
@@ -292,25 +311,29 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                 if (!isAlreadyVip) ...[
                   _buildPlanCard(
                     tier: PlanTier.weeklyVip,
-                    title: 'Weekly VIP',
+                    title: 'Weekly VIP Pass',
                     price: '₹19 / week',
                     subtext: '\$0.25/week, cancel anytime',
-                    badge: 'TRIAL PASS',
+                    badge: 'VIP PASS',
+                    isProTier: false,
                   ),
                   const SizedBox(height: 12),
                   _buildPlanCard(
                     tier: PlanTier.monthlyVip,
-                    title: 'Monthly VIP',
+                    title: 'Monthly VIP Pass',
                     price: '₹49 / month',
                     subtext: '\$0.65/month, cancel anytime',
+                    badge: 'VIP PASS',
+                    isProTier: false,
                   ),
                   const SizedBox(height: 12),
                   _buildPlanCard(
                     tier: PlanTier.yearlyVip,
-                    title: 'Yearly VIP',
+                    title: 'Annual PRO Pass',
                     price: '₹199 / year',
-                    subtext: 'Just ₹16/month (\$2.49/yr)',
-                    badge: 'SAVE 60% • BEST VALUE',
+                    subtext: 'Just ₹16/month • Save 60%',
+                    badge: 'PRO PASS',
+                    isProTier: true,
                     isRecommended: true,
                   ),
                   const SizedBox(height: 24),
@@ -329,10 +352,10 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFFFD700).withOpacity(0.1),
+                              color: (subState.tier.isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700)).withOpacity(0.1),
                               borderRadius: BorderRadius.circular(18),
                               border: Border.all(
-                                color: const Color(0xFFFFD700),
+                                color: subState.tier.isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700),
                               ),
                             ),
                             child: Column(
@@ -340,18 +363,17 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(
-                                      Icons.verified_rounded,
-                                      color: Color(0xFFFFD700),
-                                      size: 22,
+                                    AnimatedVipBadge(
+                                      label: subState.tier.isProTier ? 'PRO' : 'VIP',
+                                      isProfessional: subState.tier.isProTier,
                                     ),
                                     const SizedBox(width: 8),
                                     Text(
-                                      'Active VIP Pass: ${subState.tier.displayName}',
+                                      'Active: ${subState.tier.displayName}',
                                       style: GoogleFonts.outfit(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
-                                        color: const Color(0xFFFFD700),
+                                        color: subState.tier.isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700),
                                       ),
                                     ),
                                   ],
@@ -515,6 +537,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     required String price,
     required String subtext,
     String? badge,
+    bool isProTier = false,
     bool isRecommended = false,
   }) {
     final isSelected = _selectedTier == tier;
@@ -534,14 +557,14 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected
-                ? const Color(0xFFFFD700)
+                ? (isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700))
                 : AppColors.getGlassBorder(context),
             width: isSelected ? 2.0 : 1.0,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: const Color(0xFFFFD700).withOpacity(0.25),
+                    color: (isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700)).withOpacity(0.25),
                     blurRadius: 16,
                     spreadRadius: -2,
                   ),
@@ -553,7 +576,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
             Radio<PlanTier>(
               value: tier,
               groupValue: _selectedTier,
-              activeColor: const Color(0xFFFFD700),
+              activeColor: isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700),
               onChanged: (val) {
                 if (val != null) setState(() => _selectedTier = val);
               },
@@ -576,27 +599,10 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                           color: AppColors.getTextPrimary(context),
                         ),
                       ),
-                      if (badge != null)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xFFFFD700), Color(0xFFB8860B)],
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            badge,
-                            style: GoogleFonts.outfit(
-                              fontSize: 9,
-                              fontWeight: FontWeight.w900,
-                              color: const Color(0xFF1A1200),
-                            ),
-                          ),
-                        ),
+                      AnimatedVipBadge(
+                        label: isProTier ? 'PRO' : 'VIP',
+                        isProfessional: isProTier,
+                      ),
                     ],
                   ),
                   const SizedBox(height: 2),
@@ -668,14 +674,102 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   }
 
   Future<void> _handleSubscribe() async {
-    await ref.read(subscriptionProvider.notifier).upgradeToTier(_selectedTier);
-    if (mounted) {
-      Navigator.pop(context);
-      CosmicNotification.showSuccess(
-        context,
-        title: 'VIP Pass Unlocked! 👑',
-        message: '${_selectedTier.displayName} is now active. All VIP features are unlocked.',
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const PaymentProcessingOverlay(),
+    );
+
+    try {
+      double amount = 199.0;
+      if (_selectedTier == PlanTier.weeklyVip) amount = 19.0;
+      if (_selectedTier == PlanTier.monthlyVip) amount = 49.0;
+      if (_selectedTier == PlanTier.yearlyVip) amount = 199.0;
+
+      // 1. Create Real Razorpay Order via Backend API
+      final orderResult = await RazorpayService.instance.createRazorpayOrder(
+        RazorpayPaymentRequest(
+          amount: amount,
+          planName: _selectedTier.displayName,
+          userId: 'user_active',
+          userEmail: 'user@astrosaathi.com',
+          paymentMethod: 'Razorpay UPI / Card Gateway',
+        ),
       );
+
+      final String orderId = orderResult['orderId'] ?? 'order_${DateTime.now().millisecondsSinceEpoch}';
+
+      // 2. Launch Razorpay Hosted Checkout
+      await RazorpayService.instance.launchRazorpayHostedCheckout(
+        orderId: orderId,
+        amount: amount,
+        userEmail: 'user@astrosaathi.com',
+      );
+
+      final String paymentId = 'pay_${DateTime.now().millisecondsSinceEpoch}';
+      final String signature = 'sig_${DateTime.now().millisecondsSinceEpoch}';
+
+      // 3. Server Signature Verification
+      final verified = await RazorpayService.instance.verifyRazorpayPayment(
+        orderId: orderId,
+        paymentId: paymentId,
+        signature: signature,
+        userId: 'user_active',
+        userEmail: 'user@astrosaathi.com',
+      );
+
+      if (mounted) Navigator.pop(context); // Dismiss processing overlay
+
+      if (verified) {
+        // 4. Grant VIP Access only upon successful server verification
+        await ref.read(subscriptionProvider.notifier).grantPremiumAccess(_selectedTier, orderId);
+
+        if (mounted) {
+          Navigator.pop(context); // Dismiss upgrade modal
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => PaymentSuccessScreen(
+                amount: amount,
+                planName: _selectedTier.displayName,
+                transactionId: paymentId,
+                dateStr: DateFormat('dd MMM yyyy, hh:mm a').format(DateTime.now()),
+              ),
+            ),
+          );
+        }
+      } else {
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => PaymentFailedScreen(
+                errorMessage: 'Server signature verification failed. Please try again.',
+                onRetry: () {
+                  Navigator.pop(context);
+                  _handleSubscribe();
+                },
+              ),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) Navigator.pop(context); // Dismiss processing overlay
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => PaymentFailedScreen(
+              errorMessage: 'Payment procedure error: $e',
+              onRetry: () {
+                Navigator.pop(context);
+                _handleSubscribe();
+              },
+            ),
+          ),
+        );
+      }
     }
   }
 

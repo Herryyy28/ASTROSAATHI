@@ -39,6 +39,12 @@ import '../../../../core/providers/subscription_provider.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
 import '../../../reports/presentation/screens/custom_pdf_report_builder_screen.dart';
 import 'astro_academy_screen.dart';
+import 'sky_now_screen.dart';
+import 'year_ahead_screen.dart';
+import 'future_radar_screen.dart';
+import 'personal_timing_engine_screen.dart';
+import 'synastry_composite_screen.dart';
+import 'astrocartography_screen.dart';
 
 enum ExploreViewMode { grid, list, folder }
 
@@ -215,7 +221,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'subtitle': 'Live Celestial Clock & Tables',
         'gradient': const LinearGradient(colors: [Color(0xFF00ACC1), Color(0xFF00897B)]),
         'isVip': false,
-        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SkyNowEphemerisScreen())),
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SkyNowScreen())),
       },
       {
         'id': 14,
@@ -303,6 +309,86 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           }
         },
       },
+      {
+        'id': 22,
+        'category': 'PREMIUM VIP EXCLUSIVES',
+        'emoji': '🗓️',
+        'title': 'Personal Year Ahead',
+        'subtitle': '12-Month Jan-Dec Forecast',
+        'gradient': const LinearGradient(colors: [Color(0xFFD9901A), Color(0xFFE5A63C)]),
+        'isVip': true,
+        'action': () {
+          if (isPremium) {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const YearAheadScreen()));
+          } else {
+            PremiumUpgradeModal.show(context);
+          }
+        },
+      },
+      {
+        'id': 23,
+        'category': 'PREMIUM VIP EXCLUSIVES',
+        'emoji': '📡',
+        'title': '90-Day Future Radar',
+        'subtitle': 'Visual Timeline & Events',
+        'gradient': const LinearGradient(colors: [Color(0xFF00E5FF), Color(0xFF00897B)]),
+        'isVip': true,
+        'action': () {
+          if (isPremium) {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const FutureRadarScreen()));
+          } else {
+            PremiumUpgradeModal.show(context);
+          }
+        },
+      },
+      {
+        'id': 24,
+        'category': 'PREMIUM VIP EXCLUSIVES',
+        'emoji': '⏱️',
+        'title': 'Personal Timing Engine',
+        'subtitle': 'Date Comparison Scorecard',
+        'gradient': const LinearGradient(colors: [Color(0xFFFF1744), Color(0xFFC62828)]),
+        'isVip': true,
+        'action': () {
+          if (isPremium) {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const PersonalTimingEngineScreen()));
+          } else {
+            PremiumUpgradeModal.show(context);
+          }
+        },
+      },
+      {
+        'id': 25,
+        'category': 'PREMIUM VIP EXCLUSIVES',
+        'emoji': '💞',
+        'title': 'Synastry & Composite',
+        'subtitle': 'Dual Chart & Aspect Matrix',
+        'gradient': const LinearGradient(colors: [Color(0xFF833AB4), Color(0xFFFD1D1D)]),
+        'isVip': true,
+        'action': () {
+          if (isPremium) {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const SynastryCompositeScreen()));
+          } else {
+            PremiumUpgradeModal.show(context);
+          }
+        },
+      },
+      {
+        'id': 26,
+        'category': 'PREMIUM VIP EXCLUSIVES',
+        'emoji': '🌍',
+        'title': 'Astrocartography',
+        'subtitle': 'Global Power Lines & City Move',
+        'gradient': const LinearGradient(colors: [Color(0xFF11998E), Color(0xFF38EF7D)]),
+        'isVip': true,
+        'action': () {
+          if (isPremium) {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const AstrocartographyScreen()));
+          } else {
+            PremiumUpgradeModal.show(context);
+          }
+        },
+      },
 
       // Section 4: Remedies & Numerology
       {
@@ -327,12 +413,13 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
       },
     ];
 
-    // Filter features
+    // Filter & Sort features alphabetically (A-Z)
     final filteredFeatures = allFeatures.where((item) {
       if (_filter == ExploreFilter.vipOnly) return item['isVip'] == true;
       if (_filter == ExploreFilter.freeOnly) return item['isVip'] == false;
       return true;
-    }).toList();
+    }).toList()
+      ..sort((a, b) => (a['title'] as String).toLowerCase().compareTo((b['title'] as String).toLowerCase()));
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -600,7 +687,8 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
 
     List<Widget> slivers = [];
     for (final cat in categories) {
-      final items = features.where((f) => f['category'] == cat).toList();
+      final items = features.where((f) => f['category'] == cat).toList()
+        ..sort((a, b) => (a['title'] as String).toLowerCase().compareTo((b['title'] as String).toLowerCase()));
       IconData catIcon = Icons.auto_awesome_rounded;
       if (cat.contains('EPHEMERIS')) catIcon = Icons.wb_twilight_rounded;
       if (cat.contains('PREMIUM')) catIcon = Icons.workspace_premium_rounded;
@@ -716,20 +804,9 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                                 ),
                                 if (item['isVip'] == true) ...[
                                   const SizedBox(width: 8),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      gradient: AppColors.goldGradient,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      'VIP 💎',
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 9,
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.black,
-                                      ),
-                                    ),
+                                  AnimatedVipBadge(
+                                    label: 'VIP',
+                                    isProfessional: (item['title'] as String).contains('Sky') || (item['title'] as String).contains('Aspect'),
                                   ),
                                 ],
                               ],
@@ -1049,20 +1126,9 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 ),
               ),
               if (isVip)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  decoration: BoxDecoration(
-                    gradient: AppColors.goldGradient,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    'VIP 💎',
-                    style: GoogleFonts.outfit(
-                      fontSize: 8.5,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black,
-                    ),
-                  ),
+                AnimatedVipBadge(
+                  label: 'VIP',
+                  isProfessional: title.contains('Sky') || title.contains('Aspect') || title.contains('Chart') || title.contains('Return'),
                 )
               else
                 Icon(
@@ -1100,5 +1166,73 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     ).animate()
         .fadeIn(duration: 350.ms, delay: Duration(milliseconds: 30 * index))
         .scale(begin: const Offset(0.96, 0.96), duration: 350.ms, delay: Duration(milliseconds: 30 * index));
+  }
+}
+
+class AnimatedVipBadge extends StatelessWidget {
+  final String label;
+  final bool isProfessional;
+
+  const AnimatedVipBadge({
+    super.key,
+    this.label = 'VIP',
+    this.isProfessional = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textLabel = isProfessional ? 'PRO' : label;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+      decoration: BoxDecoration(
+        gradient: isProfessional
+            ? const LinearGradient(
+                colors: [Color(0xFF00E5FF), Color(0xFF00897B)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : AppColors.goldGradient,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: (isProfessional ? const Color(0xFF00E5FF) : const Color(0xFFE0A13A)).withOpacity(0.4),
+            blurRadius: 6,
+            spreadRadius: 0,
+          ),
+        ],
+        border: Border.all(
+          color: Colors.white.withOpacity(0.7),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            textLabel,
+            style: GoogleFonts.outfit(
+              fontSize: 9,
+              fontWeight: FontWeight.w900,
+              color: isProfessional ? Colors.white : Colors.black,
+              letterSpacing: 0.5,
+            ),
+          ),
+          const SizedBox(width: 2.5),
+          Icon(
+            isProfessional ? Icons.verified_rounded : Icons.diamond_rounded,
+            size: 10,
+            color: isProfessional ? Colors.white : Colors.black87,
+          ),
+        ],
+      ),
+    )
+    .animate(onPlay: (controller) => controller.repeat(reverse: true))
+    .shimmer(duration: 2000.ms, color: Colors.white.withOpacity(0.6))
+    .scale(
+      begin: const Offset(0.97, 0.97),
+      end: const Offset(1.03, 1.03),
+      duration: 1400.ms,
+      curve: Curves.easeInOut,
+    );
   }
 }

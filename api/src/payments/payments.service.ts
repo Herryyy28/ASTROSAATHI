@@ -72,25 +72,32 @@ export class PaymentsService {
           created_at: orderData.created_at,
         },
       };
-    } catch (error) {
-      this.logger.error(`❌ Razorpay Order Creation Failed: ${error.message}`);
+    } catch (error: any) {
+      const errorMessage = error?.message || String(error);
+      this.logger.error(`❌ Razorpay Order Creation Failed: ${errorMessage}`);
 
       await this.blockchainService.recordBlock('PAYMENT_ORDER_FAILED', {
         amount: amountInRupees,
         currency,
         userId,
         userEmail,
-        error: error.message,
+        error: errorMessage,
       });
 
-      throw new BadRequestException(`Failed to create Razorpay order: ${error.message}`);
+      throw new BadRequestException(`Failed to create Razorpay order: ${errorMessage}`);
     }
   }
+
+  private readonly processedPaymentIds = new Set<string>();
 
   /// Verify Razorpay HMAC-SHA256 Signature (Server-Side Security)
   async verifyPaymentSignature(orderId: string, paymentId: string, signature: string, userId: string = 'guest', userEmail: string = '') {
     if (!orderId || !paymentId || !signature) {
       throw new BadRequestException('Missing required payment verification parameters');
+    }
+
+    if (this.processedPaymentIds.has(paymentId)) {
+      throw new BadRequestException('Duplicate payment detected: This payment has already been verified and fulfilled.');
     }
 
     if (!this.keySecret) {
@@ -127,9 +134,13 @@ export class PaymentsService {
     let paymentDetails: any = null;
     try {
       paymentDetails = await this.callRazorpayAPI(`/v1/payments/${paymentId}`, null, 'GET');
-    } catch (e) {
-      this.logger.warn(`⚠️ Could not fetch payment details for ${paymentId}: ${e.message}`);
+    } catch (e: any) {
+      const errorMessage = e?.message || String(e);
+      this.logger.warn(`⚠️ Could not fetch payment details for ${paymentId}: ${errorMessage}`);
     }
+
+    // Mark payment ID as processed to prevent replay attacks
+    this.processedPaymentIds.add(paymentId);
 
     // Record immutable success block in blockchain audit ledger
     const block = await this.blockchainService.recordBlock('PAYMENT_VERIFIED_SUCCESS', {
@@ -142,7 +153,7 @@ export class PaymentsService {
       verifiedAt: new Date().toISOString(),
     });
 
-    this.logger.log(`✅ Payment Verified: ${paymentId} for Order: ${orderId}`);
+    this.logger.log(`✅ Payment Verified & Idempotency Protected: ${paymentId} for Order: ${orderId}`);
 
     return {
       success: true,
@@ -152,13 +163,22 @@ export class PaymentsService {
     };
   }
 
-  /// Get all recorded audit blocks for developer inspection
-  async getLedger() {
+  /// Get recorded audit blocks for authenticated user
+  async getLedger(userId: string) {
     const blocks = await this.blockchainService.getAllBlocks();
+    const userBlocks = blocks.filter((b) => {
+      try {
+        const payload = JSON.parse(b.dataPayload || '{}');
+        return payload.userId === userId;
+      } catch {
+        return false;
+      }
+    });
+
     return {
       success: true,
-      count: blocks.length,
-      data: blocks.map((b) => ({
+      count: userBlocks.length,
+      data: userBlocks.map((b) => ({
         blockIndex: b.blockIndex,
         actionType: b.actionType,
         hash: b.hash,

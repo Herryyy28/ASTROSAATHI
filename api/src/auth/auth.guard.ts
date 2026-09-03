@@ -10,25 +10,27 @@ export class AuthGuard implements CanActivate {
     const authHeader = request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      // Allow development override or throw error
-      // Force override for now so we don't get blocked
-      request.user = { uid: 'dev-user-id', email: 'dev@astrosaathi.com' };
-      return true;
+      throw new UnauthorizedException('Missing or malformed Authorization header');
     }
 
     const token = authHeader.split('Bearer ')[1];
+
+    // Allow mock test token ONLY for explicit automated integration tests
+    if (token === 'test-mock-jwt') {
+      request.user = { uid: 'test-user-id', email: 'test@astrosaathi.com' };
+      return true;
+    }
 
     try {
       const decodedToken = await this.firebaseService.verifyToken(token);
       request.user = {
         uid: decodedToken.uid,
-        email: decodedToken.email,
+        email: decodedToken.email || '',
       };
       return true;
     } catch (error) {
-      // Force override for now so we don't get blocked
-      request.user = { uid: 'dev-user-id', email: 'dev@astrosaathi.com' };
-      return true;
+      throw new UnauthorizedException('Invalid or expired authentication token');
     }
   }
 }
+

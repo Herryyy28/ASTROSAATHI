@@ -22,6 +22,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AiModule } from '../ai/ai.module';
 import { forwardRef } from '@nestjs/common';
 
+import { AdvancedAstrologyEngine } from './engines/astrology-advanced.engine';
+import { VipIntelligenceEngine } from './engines/astrology-vip.engine';
+
 @Module({
   imports: [
     /* BullModule.registerQueue({
@@ -43,6 +46,8 @@ import { forwardRef } from '@nestjs/common';
     AstrologyRuleEngine,
     GamePlanEngine,
     MuhuratEngine,
+    AdvancedAstrologyEngine,
+    VipIntelligenceEngine,
     RashiBhavishyaService,
     AstrologyDataIntegrityService,
     {
@@ -51,6 +56,6 @@ import { forwardRef } from '@nestjs/common';
     },
   ],
   controllers: [AstrologyController],
-  exports: [AstrologyService, AstrologySyncService, MatchingService, GamePlanEngine, MuhuratEngine, RashiBhavishyaService],
+  exports: [AstrologyService, AstrologySyncService, MatchingService, GamePlanEngine, MuhuratEngine, AdvancedAstrologyEngine, VipIntelligenceEngine, RashiBhavishyaService],
 })
 export class AstrologyModule { }

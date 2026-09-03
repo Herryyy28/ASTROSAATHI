@@ -16,47 +16,25 @@ export interface BirthProfileDto {
 
 @Injectable()
 export class ProfilesService {
-  private profilesStore: BirthProfileDto[] = [
-    {
-      id: 'default-primary-1',
-      userId: 'user-123',
-      name: 'My Kundli (Self)',
-      relationship: 'Self',
-      dob: '1996-08-15',
-      birthTime: '07:30',
-      birthPlace: 'New Delhi, India',
-      latitude: 28.6139,
-      longitude: 77.2090,
-      timezone: '5.5',
-      isPrimary: true,
-    },
-    {
-      id: 'default-partner-2',
-      userId: 'user-123',
-      name: 'Priya (Partner)',
-      relationship: 'Partner',
-      dob: '1998-05-20',
-      birthTime: '14:15',
-      birthPlace: 'Mumbai, India',
-      latitude: 19.0760,
-      longitude: 72.8777,
-      timezone: '5.5',
-      isPrimary: false,
-    },
-  ];
+  private profilesStore: BirthProfileDto[] = [];
 
   async getProfiles(userId: string): Promise<BirthProfileDto[]> {
-    return this.profilesStore.filter((p) => p.userId === userId || p.userId === 'user-123');
+    return this.profilesStore.filter((p) => p.userId === userId);
   }
 
-  async createProfile(dto: BirthProfileDto): Promise<BirthProfileDto> {
+  async createProfile(userId: string, dto: Omit<BirthProfileDto, 'userId'>): Promise<BirthProfileDto> {
     const newProfile: BirthProfileDto = {
       ...dto,
-      id: `profile-${Date.now()}`,
+      userId,
+      id: `profile-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
       isPrimary: dto.isPrimary ?? false,
     };
     if (newProfile.isPrimary) {
-      this.profilesStore.forEach((p) => (p.isPrimary = false));
+      this.profilesStore.forEach((p) => {
+        if (p.userId === userId) {
+          p.isPrimary = false;
+        }
+      });
     }
     this.profilesStore.push(newProfile);
     return newProfile;
@@ -64,20 +42,29 @@ export class ProfilesService {
 
   async setPrimary(userId: string, profileId: string): Promise<BirthProfileDto | null> {
     let found: BirthProfileDto | null = null;
+    // Check ownership first
+    const profile = this.profilesStore.find((p) => p.id === profileId && p.userId === userId);
+    if (!profile) {
+      return null;
+    }
     this.profilesStore.forEach((p) => {
-      if (p.id === profileId) {
-        p.isPrimary = true;
-        found = p;
-      } else {
-        p.isPrimary = false;
+      if (p.userId === userId) {
+        if (p.id === profileId) {
+          p.isPrimary = true;
+          found = p;
+        } else {
+          p.isPrimary = false;
+        }
       }
     });
     return found;
   }
 
-  async deleteProfile(profileId: string): Promise<boolean> {
+  async deleteProfile(userId: string, profileId: string): Promise<boolean> {
     const initialLen = this.profilesStore.length;
-    this.profilesStore = this.profilesStore.filter((p) => p.id !== profileId);
+    this.profilesStore = this.profilesStore.filter(
+      (p) => !(p.id === profileId && p.userId === userId),
+    );
     return this.profilesStore.length < initialLen;
   }
 }

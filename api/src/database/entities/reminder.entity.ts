@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { User } from './user.entity';
 
 export enum EventCategory {
   BUSINESS = 'Business',
@@ -34,7 +34,7 @@ export class Reminder {
   })
   category: EventCategory;
 
-  @Column({ type: 'timestamp' })
+  @Column()
   eventTime: Date;
 
   @Column({ nullable: true })

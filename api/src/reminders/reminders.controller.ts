@@ -1,14 +1,20 @@
-import { Controller, Get, Post, Delete, Patch, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Patch, Body, Param, Query, Req, UseGuards } from '@nestjs/common';
 import { RemindersService, CreateReminderDto } from './reminders.service';
 import { EventCategory } from '../database/entities/reminder.entity';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('reminders')
+@UseGuards(AuthGuard)
 export class RemindersController {
   constructor(private readonly remindersService: RemindersService) {}
 
   @Post()
-  async createReminder(@Body() dto: CreateReminderDto) {
-    const reminder = await this.remindersService.createReminder(dto);
+  async createReminder(@Req() req: any, @Body() dto: CreateReminderDto) {
+    const userId = req.user.uid;
+    const reminder = await this.remindersService.createReminder({
+      ...dto,
+      userId,
+    });
     return {
       success: true,
       data: reminder,
@@ -16,8 +22,9 @@ export class RemindersController {
   }
 
   @Get()
-  async getUserReminders(@Query('userId') userId: string) {
-    const reminders = await this.remindersService.getUserReminders(userId || 'guest-user');
+  async getUserReminders(@Req() req: any) {
+    const userId = req.user.uid;
+    const reminders = await this.remindersService.getUserReminders(userId);
     return {
       success: true,
       count: reminders.length,
@@ -42,11 +49,12 @@ export class RemindersController {
 
   @Patch(':id/toggle')
   async toggleReminder(
+    @Req() req: any,
     @Param('id') id: string,
-    @Query('userId') userId: string,
     @Body('enabled') enabled: boolean,
   ) {
-    const updated = await this.remindersService.toggleReminderEnabled(id, userId || 'guest-user', enabled);
+    const userId = req.user.uid;
+    const updated = await this.remindersService.toggleReminderEnabled(id, userId, enabled);
     return {
       success: true,
       data: updated,
@@ -54,8 +62,9 @@ export class RemindersController {
   }
 
   @Delete(':id')
-  async deleteReminder(@Param('id') id: string, @Query('userId') userId: string) {
-    const success = await this.remindersService.deleteReminder(id, userId || 'guest-user');
+  async deleteReminder(@Req() req: any, @Param('id') id: string) {
+    const userId = req.user.uid;
+    const success = await this.remindersService.deleteReminder(id, userId);
     return {
       success,
     };

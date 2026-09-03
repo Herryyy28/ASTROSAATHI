@@ -11,6 +11,9 @@ import { MatchingService } from './matching.service';
 import { KundliDataValidator } from './validators/kundli-data.validator';
 import { CanonicalKundli, CanonicalPlanet } from './interfaces/canonical-kundli.interface';
 
+import { AdvancedAstrologyEngine } from './engines/astrology-advanced.engine';
+import { VipIntelligenceEngine } from './engines/astrology-vip.engine';
+
 @Controller('astrology')
 export class AstrologyController {
   constructor(
@@ -20,6 +23,8 @@ export class AstrologyController {
     private readonly muhuratEngine: MuhuratEngine,
     private readonly usersService: UsersService,
     private readonly matchingService: MatchingService,
+    private readonly advancedAstrologyEngine: AdvancedAstrologyEngine,
+    private readonly vipEngine: VipIntelligenceEngine,
   ) { }
 
   private parseLocation(dateStr: string, timeStr: string, lat: string, lon: string, tz: string) {
@@ -188,5 +193,36 @@ export class AstrologyController {
     @Query('p2Sign') p2Sign: string,
   ) {
     return this.matchingService.calculateGunMilan(p1Sign || 'Aries', p2Sign || 'Leo');
+  }
+
+  @Get('biwheel')
+  async getBiWheelData(
+    @Query('lat') lat: string,
+    @Query('lon') lon: string,
+    @Query('tz') tz: string,
+    @Query('date') dateStr: string,
+  ) {
+    const { date, location } = this.parseLocation(dateStr, '12:00', lat, lon, tz);
+    const { planets } = await this.syncService.getCombinedData(date, location);
+    
+    return this.advancedAstrologyEngine.generateBiWheelPayload(
+      'Natal Chart',
+      'Live Sky Transits',
+      planets.data as any,
+      planets.data as any,
+    );
+  }
+
+  @Get('aspect-patterns')
+  async getAspectPatterns(
+    @Query('lat') lat: string,
+    @Query('lon') lon: string,
+    @Query('tz') tz: string,
+    @Query('date') dateStr: string,
+  ) {
+    const { date, location } = this.parseLocation(dateStr, '12:00', lat, lon, tz);
+    const { planets } = await this.syncService.getCombinedData(date, location);
+    
+    return this.advancedAstrologyEngine.detectAspectPatterns(planets.data as any);
   }
 }

@@ -93,7 +93,7 @@ export class RemindersService {
     return Math.min(10.0, Math.max(4.0, Number(baseScore.toFixed(1))));
   }
 
-  private generateAstroRecommendation(category: EventCategory, score: number): String {
+  private generateAstroRecommendation(category: EventCategory, score: number): string {
     if (score >= 8.5) {
       return `✦ Peak Astrological Alignment (${score}/10). Auspicious planetary transits favor high success for ${category.toLowerCase()} initiatives.`;
     } else if (score >= 6.5) {
