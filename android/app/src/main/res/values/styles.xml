@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Dark Cosmic Theme applied to the Android Window while the process is starting -->
-    <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
-        <item name="android:windowBackground">@drawable/launch_background</item>
-        <item name="android:forceDarkAllowed">false</item>
-    </style>
-    <!-- Dark Cosmic Theme applied to the Android Window as soon as process starts -->
-    <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
-        <item name="android:windowBackground">@color/splash_background</item>
-        <item name="android:forceDarkAllowed">false</item>
-    </style>
+<res<style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
+    <item name="android:windowBackground">@drawable/launch_background</item>
+    <item name="android:forceDarkAllowed">false</item>
+</style>ources>
+<!-- Dark Cosmic Theme applied to the Android Window while the process is starting -->
+
+<!-- Dark Cosmic Theme applied to the Android Window as soon as process starts -->
+<style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
+    <item name="android:windowBackground">@color/splash_background</item>
+    <item name="android:forceDarkAllowed">false</item>
+</style>
 </resources>

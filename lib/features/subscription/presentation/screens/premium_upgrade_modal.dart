@@ -29,7 +29,8 @@ class PremiumUpgradeModal extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<PremiumUpgradeModal> createState() => _PremiumUpgradeModalState();
+  ConsumerState<PremiumUpgradeModal> createState() =>
+      _PremiumUpgradeModalState();
 }
 
 class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
@@ -69,7 +70,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
             maxHeight: MediaQuery.of(context).size.height * 0.9,
           ),
           decoration: BoxDecoration(
-            color: isLight ? AppColors.surfaceLight.withOpacity(0.96) : const Color(0xF20F141C),
+            color: isLight
+                ? AppColors.surfaceLight.withOpacity(0.96)
+                : const Color(0xF20F141C),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(36)),
             border: Border.all(
               color: const Color(0xFFFFD700).withOpacity(0.4),
@@ -120,7 +123,11 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context), size: 24),
+                      icon: Icon(
+                        Icons.close_rounded,
+                        color: AppColors.getTextSecondary(context),
+                        size: 24,
+                      ),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
@@ -132,35 +139,46 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: RadialGradient(
-                            colors: [
-                              const Color(0xFFFFD700).withOpacity(0.4),
-                              const Color(0xFFD4AF37).withOpacity(0.1),
-                              Colors.transparent,
-                            ],
+                            width: 90,
+                            height: 90,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: RadialGradient(
+                                colors: [
+                                  const Color(0xFFFFD700).withOpacity(0.4),
+                                  const Color(0xFFD4AF37).withOpacity(0.1),
+                                  Colors.transparent,
+                                ],
+                              ),
+                            ),
+                          )
+                          .animate(onPlay: (c) => c.repeat(reverse: true))
+                          .scale(
+                            duration: 1800.ms,
+                            begin: const Offset(0.9, 0.9),
+                            end: const Offset(1.2, 1.2),
                           ),
-                        ),
-                      ).animate(onPlay: (c) => c.repeat(reverse: true))
-                       .scale(duration: 1800.ms, begin: const Offset(0.9, 0.9), end: const Offset(1.2, 1.2)),
                       Container(
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: LinearGradient(
                             colors: isLight
-                                ? [const Color(0xFFFFF7E6), const Color(0xFFFEEDC9)]
-                                : [const Color(0xFF382909), const Color(0xFF1E1705)],
+                                ? [
+                                    const Color(0xFFFFF7E6),
+                                    const Color(0xFFFEEDC9),
+                                  ]
+                                : [
+                                    const Color(0xFF382909),
+                                    const Color(0xFF1E1705),
+                                  ],
                           ),
-                          border: Border.all(color: const Color(0xFFFFD700), width: 2),
+                          border: Border.all(
+                            color: const Color(0xFFFFD700),
+                            width: 2,
+                          ),
                           boxShadow: const [
-                            BoxShadow(
-                              color: Color(0x80FFD700),
-                              blurRadius: 20,
-                            ),
+                            BoxShadow(color: Color(0x80FFD700), blurRadius: 20),
                           ],
                         ),
                         child: const Text('👑', style: TextStyle(fontSize: 42)),
@@ -172,7 +190,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
                 // Main Title & Tagline
                 Text(
-                  isAlreadyVip ? 'You Are a VIP Member!' : 'Unlock AstroSaathi VIP',
+                  isAlreadyVip
+                      ? 'You Are a VIP Member!'
+                      : 'Unlock AstroSaathi VIP',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.outfit(
                     fontSize: 26,
@@ -198,9 +218,13 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isLight ? AppColors.getSurfaceSecondary(context) : Colors.white.withOpacity(0.04),
+                    color: isLight
+                        ? AppColors.getSurfaceSecondary(context)
+                        : Colors.white.withOpacity(0.04),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.getGlassBorder(context)),
+                    border: Border.all(
+                      color: AppColors.getGlassBorder(context),
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,13 +239,48 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      _buildFeatureRow(context, Icons.block_rounded, '100% Ad-Free Experience', 'No banner ads or promotional popups'),
-                      _buildFeatureRow(context, Icons.smart_toy_rounded, 'Unlimited 24/7 AI Astro Baba Chat', 'Free users limited to 5 queries/day'),
-                      _buildFeatureRow(context, Icons.picture_as_pdf_rounded, 'Full 25+ Page Vedic PDF Export', 'High-res downloadable Kundli reports'),
-                      _buildFeatureRow(context, Icons.people_alt_rounded, 'Unlimited Family Birth Profiles', 'Save all your relatives & friends'),
-                      _buildFeatureRow(context, Icons.favorite_rounded, 'Ashtakoot 36-Point Matchmaking', 'Deep compatibility breakdown'),
-                      _buildFeatureRow(context, Icons.auto_awesome_rounded, 'Personalized Gemstones & Puja Guide', 'Custom remedies for your chart'),
-                      _buildFeatureRow(context, Icons.public_rounded, 'Saturn & Rahu/Ketu Transit Alerts', 'In-depth Sade Sati analysis'),
+                      _buildFeatureRow(
+                        context,
+                        Icons.block_rounded,
+                        '100% Ad-Free Experience',
+                        'No banner ads or promotional popups',
+                      ),
+                      _buildFeatureRow(
+                        context,
+                        Icons.smart_toy_rounded,
+                        'Unlimited 24/7 AI Astro Baba Chat',
+                        'Free users limited to 5 queries/day',
+                      ),
+                      _buildFeatureRow(
+                        context,
+                        Icons.picture_as_pdf_rounded,
+                        'Full 25+ Page Vedic PDF Export',
+                        'High-res downloadable Kundli reports',
+                      ),
+                      _buildFeatureRow(
+                        context,
+                        Icons.people_alt_rounded,
+                        'Unlimited Family Birth Profiles',
+                        'Save all your relatives & friends',
+                      ),
+                      _buildFeatureRow(
+                        context,
+                        Icons.favorite_rounded,
+                        'Ashtakoot 36-Point Matchmaking',
+                        'Deep compatibility breakdown',
+                      ),
+                      _buildFeatureRow(
+                        context,
+                        Icons.auto_awesome_rounded,
+                        'Personalized Gemstones & Puja Guide',
+                        'Custom remedies for your chart',
+                      ),
+                      _buildFeatureRow(
+                        context,
+                        Icons.public_rounded,
+                        'Saturn & Rahu/Ketu Transit Alerts',
+                        'In-depth Sade Sati analysis',
+                      ),
                     ],
                   ),
                 ),
@@ -257,71 +316,90 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
                 // CTA Button (BUY IT Below Price Options)
                 if (isAlreadyVip) ...[
-                  Builder(builder: (context) {
-                    final remainingDays = ref.watch(subscriptionProvider.notifier).remainingDaysOfSubscription;
-                    return Column(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFFD700).withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(18),
-                            border: Border.all(color: const Color(0xFFFFD700)),
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.verified_rounded, color: Color(0xFFFFD700), size: 22),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    'Active VIP Pass: ${subState.tier.displayName}',
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFFFFD700),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                '$remainingDays Days Remaining • Non-Recurring Pass',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 13,
-                                  color: Colors.white70,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          width: double.infinity,
-                          child: OutlinedButton.icon(
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Color(0xFFFFD700)),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                            ),
-                            icon: const Icon(Icons.add_shopping_cart_rounded, color: Color(0xFFFFD700)),
-                            label: Text(
-                              'RE-BUY / EXTEND VIP PASS',
-                              style: GoogleFonts.outfit(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                  Builder(
+                    builder: (context) {
+                      final remainingDays = ref
+                          .watch(subscriptionProvider.notifier)
+                          .remainingDaysOfSubscription;
+                      return Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFD700).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(18),
+                              border: Border.all(
                                 color: const Color(0xFFFFD700),
                               ),
                             ),
-                            onPressed: _handleSubscribe,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.verified_rounded,
+                                      color: Color(0xFFFFD700),
+                                      size: 22,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'Active VIP Pass: ${subState.tier.displayName}',
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFFFFD700),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  '$remainingDays Days Remaining • Non-Recurring Pass',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 13,
+                                    color: Colors.white70,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  }),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton.icon(
+                              style: OutlinedButton.styleFrom(
+                                side: const BorderSide(
+                                  color: Color(0xFFFFD700),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
+                              icon: const Icon(
+                                Icons.add_shopping_cart_rounded,
+                                color: Color(0xFFFFD700),
+                              ),
+                              label: Text(
+                                'RE-BUY / EXTEND VIP PASS',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFFFFD700),
+                                ),
+                              ),
+                              onPressed: _handleSubscribe,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ] else ...[
                   SizedBox(
                     width: double.infinity,
@@ -329,7 +407,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
                         elevation: 8,
                         shadowColor: AppColors.goldGlow,
                       ),
@@ -345,12 +425,18 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                               ? const SizedBox(
                                   width: 24,
                                   height: 24,
-                                  child: CircularProgressIndicator(color: Color(0xFF1E1705), strokeWidth: 2.5),
+                                  child: CircularProgressIndicator(
+                                    color: Color(0xFF1E1705),
+                                    strokeWidth: 2.5,
+                                  ),
                                 )
                               : Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text('👑', style: TextStyle(fontSize: 20)),
+                                    const Text(
+                                      '👑',
+                                      style: TextStyle(fontSize: 20),
+                                    ),
                                     const SizedBox(width: 10),
                                     Text(
                                       'BUY IT - Unlock ${_selectedTier.displayName}',
@@ -385,15 +471,24 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                       },
                       child: Text(
                         'Restore Purchases',
-                        style: GoogleFonts.outfit(fontSize: 12, color: AppColors.getTextSecondary(context)),
+                        style: GoogleFonts.outfit(
+                          fontSize: 12,
+                          color: AppColors.getTextSecondary(context),
+                        ),
                       ),
                     ),
-                    Text('•', style: TextStyle(color: AppColors.getTextMuted(context))),
+                    Text(
+                      '•',
+                      style: TextStyle(color: AppColors.getTextMuted(context)),
+                    ),
                     TextButton(
                       onPressed: () {},
                       child: Text(
                         'Privacy Policy & Terms',
-                        style: GoogleFonts.outfit(fontSize: 12, color: AppColors.getTextSecondary(context)),
+                        style: GoogleFonts.outfit(
+                          fontSize: 12,
+                          color: AppColors.getTextSecondary(context),
+                        ),
                       ),
                     ),
                   ],
@@ -424,11 +519,15 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? (isLight ? const Color(0xFFFFF7E6) : const Color(0xFF2E2410).withOpacity(0.9))
+              ? (isLight
+                    ? const Color(0xFFFFF7E6)
+                    : const Color(0xFF2E2410).withOpacity(0.9))
               : AppColors.getSurfaceSecondary(context),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? const Color(0xFFFFD700) : AppColors.getGlassBorder(context),
+            color: isSelected
+                ? const Color(0xFFFFD700)
+                : AppColors.getGlassBorder(context),
             width: isSelected ? 2.0 : 1.0,
           ),
           boxShadow: isSelected
@@ -471,7 +570,10 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                       ),
                       if (badge != null)
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
                           decoration: BoxDecoration(
                             gradient: const LinearGradient(
                               colors: [Color(0xFFFFD700), Color(0xFFB8860B)],
@@ -505,7 +607,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
               style: GoogleFonts.outfit(
                 fontSize: 15,
                 fontWeight: FontWeight.w800,
-                color: isSelected ? const Color(0xFFFFD700) : AppColors.getTextPrimary(context),
+                color: isSelected
+                    ? const Color(0xFFFFD700)
+                    : AppColors.getTextPrimary(context),
               ),
             ),
           ],
@@ -514,7 +618,12 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     );
   }
 
-  Widget _buildFeatureRow(BuildContext context, IconData icon, String title, String subtitle) {
+  Widget _buildFeatureRow(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String subtitle,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -557,10 +666,17 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
       return;
     }
 
-    final double amount = _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199);
+    final double amount = _selectedTier == PlanTier.weeklyVip
+        ? 19
+        : (_selectedTier == PlanTier.monthlyVip ? 49 : 199);
     final String planName = _selectedTier.displayName;
 
-    _startRazorpayCheckout(amount, planName, session.userId ?? 'user', session.email ?? '');
+    _startRazorpayCheckout(
+      amount,
+      planName,
+      session.userId ?? 'user',
+      session.email ?? '',
+    );
   }
 
   void _showAuthRequiredSheet(BuildContext context) {
@@ -577,7 +693,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
             child: Container(
-              color: isLight ? AppColors.surfaceLight.withOpacity(0.96) : const Color(0xF20B0F19),
+              color: isLight
+                  ? AppColors.surfaceLight.withOpacity(0.96)
+                  : const Color(0xF20B0F19),
               padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -605,7 +723,11 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                   Text(
                     'To maintain privacy and save your VIP membership receipt, please sign in with your Google Account or Email before payment.',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.outfit(fontSize: 13, color: AppColors.getTextSecondary(ctx), height: 1.4),
+                    style: GoogleFonts.outfit(
+                      fontSize: 13,
+                      color: AppColors.getTextSecondary(ctx),
+                      height: 1.4,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   SizedBox(
@@ -613,22 +735,37 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                     height: 50,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isLight ? AppColors.surfaceElevatedLight : Colors.white,
+                        backgroundColor: isLight
+                            ? AppColors.surfaceElevatedLight
+                            : Colors.white,
                         foregroundColor: AppColors.getTextPrimary(ctx),
                         elevation: isLight ? 1 : 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
-                          side: BorderSide(color: AppColors.getBorder(ctx), width: 0.8),
+                          side: BorderSide(
+                            color: AppColors.getBorder(ctx),
+                            width: 0.8,
+                          ),
                         ),
                       ),
-                      icon: const Icon(Icons.g_mobiledata_rounded, size: 32, color: Colors.red),
+                      icon: const Icon(
+                        Icons.g_mobiledata_rounded,
+                        size: 32,
+                        color: Colors.red,
+                      ),
                       label: Text(
                         'Sign In with Google',
-                        style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(ctx)),
+                        style: GoogleFonts.outfit(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getTextPrimary(ctx),
+                        ),
                       ),
                       onPressed: () async {
                         Navigator.pop(ctx);
-                        final success = await ref.read(userSessionProvider.notifier).loginWithGoogle();
+                        final success = await ref
+                            .read(userSessionProvider.notifier)
+                            .loginWithGoogle();
                         if (success && mounted) {
                           _handleSubscribe();
                         }
@@ -642,12 +779,21 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                     child: OutlinedButton.icon(
                       style: OutlinedButton.styleFrom(
                         side: BorderSide(color: AppColors.getBorder(ctx)),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
                       ),
-                      icon: Icon(Icons.email_rounded, color: AppColors.getTextPrimary(ctx)),
+                      icon: Icon(
+                        Icons.email_rounded,
+                        color: AppColors.getTextPrimary(ctx),
+                      ),
                       label: Text(
                         'Sign In with Email',
-                        style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(ctx)),
+                        style: GoogleFonts.outfit(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getTextPrimary(ctx),
+                        ),
                       ),
                       onPressed: () {
                         Navigator.pop(ctx);
@@ -670,7 +816,12 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
   String _currentOrderId = '';
 
-  Future<void> _startRazorpayCheckout(double amount, String planName, String userId, String userEmail) async {
+  Future<void> _startRazorpayCheckout(
+    double amount,
+    String planName,
+    String userId,
+    String userEmail,
+  ) async {
     setState(() => _isProcessing = true);
 
     Map<String, dynamic> options;
@@ -699,18 +850,12 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
             'contact': '9876543210',
             'email': userEmail.isNotEmpty ? userEmail : 'user@astrosaathi.com',
           },
-          'theme': {
-            'color': '#7C4DFF',
-            'backdrop_color': '#0A0C16',
-          },
-          'retry': {
-            'enabled': true,
-            'max_count': 3,
-          },
+          'theme': {'color': '#7C4DFF', 'backdrop_color': '#0A0C16'},
+          'retry': {'enabled': true, 'max_count': 3},
           'send_sms_hash': true,
           'external': {
-            'wallets': ['paytm']
-          }
+            'wallets': ['paytm'],
+          },
         };
       } else {
         throw Exception('Server order failed');
@@ -724,21 +869,15 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
         'name': RazorpayConfig.merchantName,
         'description': 'AstroSaathi VIP Subscription - $planName',
         'prefill': {
-          'contact': '9876543210',
+          'contact': '91xxxxxxxx',
           'email': userEmail.isNotEmpty ? userEmail : 'user@astrosaathi.com',
         },
-        'theme': {
-          'color': '#7C4DFF',
-          'backdrop_color': '#0A0C16',
-        },
-        'retry': {
-          'enabled': true,
-          'max_count': 3,
-        },
+        'theme': {'color': '#7C4DFF', 'backdrop_color': '#0A0C16'},
+        'retry': {'enabled': true, 'max_count': 3},
         'send_sms_hash': true,
         'external': {
-          'wallets': ['paytm']
-        }
+          'wallets': ['paytm'],
+        },
       };
     }
 
@@ -752,16 +891,21 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     }
 
     try {
-      final launched = await RazorpayService.instance.launchRazorpayHostedCheckout(
-        orderId: _currentOrderId,
-        amount: amount,
-        userEmail: userEmail,
-      );
+      final launched = await RazorpayService.instance
+          .launchRazorpayHostedCheckout(
+            orderId: _currentOrderId,
+            amount: amount,
+            userEmail: userEmail,
+          );
       if (launched) {
         if (mounted) {
           setState(() => _isProcessing = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Payment opened in browser! Please complete it there.')),
+            const SnackBar(
+              content: Text(
+                'Payment opened in browser! Please complete it there.',
+              ),
+            ),
           );
         }
         return;
@@ -771,7 +915,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     if (mounted) {
       setState(() => _isProcessing = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Payment initiation failed. Please try again.')),
+        const SnackBar(
+          content: Text('Payment initiation failed. Please try again.'),
+        ),
       );
     }
   }
@@ -779,7 +925,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   void _handlePaymentSuccess(PaymentSuccessResponse response) async {
     if (!mounted) return;
     setState(() => _isProcessing = false);
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -800,15 +946,19 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     Navigator.pop(context); // close processing overlay
 
     if (isVerified) {
-      await ref.read(subscriptionProvider.notifier).grantPremiumAccess(_selectedTier, _currentOrderId);
-      
+      await ref
+          .read(subscriptionProvider.notifier)
+          .grantPremiumAccess(_selectedTier, _currentOrderId);
+
       Navigator.pop(context); // Close VIP upgrade modal
-      
+
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => PaymentSuccessScreen(
-            amount: _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199),
+            amount: _selectedTier == PlanTier.weeklyVip
+                ? 19
+                : (_selectedTier == PlanTier.monthlyVip ? 49 : 199),
             planName: _selectedTier.displayName,
             transactionId: response.paymentId ?? '',
             dateStr: DateFormat('dd MMM yyyy, hh:mm a').format(DateTime.now()),
@@ -820,14 +970,17 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
         context,
         MaterialPageRoute(
           builder: (_) => PaymentFailedScreen(
-            errorMessage: "We couldn't verify your payment with the server. If money was deducted, it will be refunded automatically.",
+            errorMessage:
+                "We couldn't verify your payment with the server. If money was deducted, it will be refunded automatically.",
             onRetry: () {
               Navigator.pop(context);
               _startRazorpayCheckout(
-                _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199),
+                _selectedTier == PlanTier.weeklyVip
+                    ? 19
+                    : (_selectedTier == PlanTier.monthlyVip ? 49 : 199),
                 _selectedTier.displayName,
                 session.userId ?? 'user',
-                session.email ?? ''
+                session.email ?? '',
               );
             },
           ),
@@ -840,27 +993,36 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     if (!mounted) return;
     setState(() => _isProcessing = false);
 
-    debugPrint('Razorpay Failure Code: ${response.code}, Message: ${response.message}');
+    debugPrint(
+      'Razorpay Failure Code: ${response.code}, Message: ${response.message}',
+    );
 
     // If native Razorpay SDK fails (e.g., Key ID not active on native SDK), attempt Web Browser fallback!
     final session = ref.read(userSessionProvider);
-    final double amount = _selectedTier == PlanTier.weeklyVip ? 19 : (_selectedTier == PlanTier.monthlyVip ? 49 : 199);
+    final double amount = _selectedTier == PlanTier.weeklyVip
+        ? 19
+        : (_selectedTier == PlanTier.monthlyVip ? 49 : 199);
 
-    final launched = await RazorpayService.instance.launchRazorpayHostedCheckout(
-      orderId: _currentOrderId,
-      amount: amount,
-      userEmail: session.email ?? '',
-    );
+    final launched = await RazorpayService.instance
+        .launchRazorpayHostedCheckout(
+          orderId: _currentOrderId,
+          amount: amount,
+          userEmail: session.email ?? '',
+        );
 
     if (launched) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Opening Razorpay Payment Checkout in your browser...')),
+          const SnackBar(
+            content: Text(
+              'Opening Razorpay Payment Checkout in your browser...',
+            ),
+          ),
         );
       }
       return;
     }
-    
+
     if (!mounted) return;
     Navigator.push(
       context,
@@ -873,7 +1035,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
               amount,
               _selectedTier.displayName,
               session.userId ?? 'user',
-              session.email ?? ''
+              session.email ?? '',
             );
           },
         ),
@@ -885,7 +1047,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     if (!mounted) return;
     setState(() => _isProcessing = false);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('External Wallet Selected: ${response.walletName}')),
+      SnackBar(
+        content: Text('External Wallet Selected: ${response.walletName}'),
+      ),
     );
   }
 }
@@ -910,7 +1074,8 @@ class _PaymentGatewaySheet extends StatefulWidget {
 }
 
 class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
-  int _step = 0; // 0: Razorpay Selection, 1: Creating Razorpay Order, 2: Verifying Signature, 3: Verified Success
+  int _step =
+      0; // 0: Razorpay Selection, 1: Creating Razorpay Order, 2: Verifying Signature, 3: Verified Success
   bool _acceptedPolicy = true;
   String _selectedMethod = 'Razorpay Instant UPI';
   final TextEditingController _cardNumber = TextEditingController();
@@ -919,7 +1084,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
   String _statusMessage = 'Initializing Razorpay 256-bit SSL Secure Session...';
   String _razorpayOrderId = '';
   String _razorpayPaymentId = '';
-  
+
   late Razorpay _razorpay;
 
   @override
@@ -944,7 +1109,8 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
     setState(() {
       _razorpayPaymentId = response.paymentId ?? '';
       _step = 2; // Verifying Signature
-      _statusMessage = 'Verifying Razorpay HMAC-SHA256 Signature with Bank Server...';
+      _statusMessage =
+          'Verifying Razorpay HMAC-SHA256 Signature with Bank Server...';
     });
 
     final isVerified = await RazorpayService.instance.verifyRazorpayPayment(
@@ -963,7 +1129,11 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Razorpay Signature Verification Failed. Please contact support.')),
+        const SnackBar(
+          content: Text(
+            'Razorpay Signature Verification Failed. Please contact support.',
+          ),
+        ),
       );
       setState(() {
         _step = 0;
@@ -987,7 +1157,9 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
   void _handleExternalWallet(ExternalWalletResponse response) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('External Wallet Selected: ${response.walletName}')),
+      SnackBar(
+        content: Text('External Wallet Selected: ${response.walletName}'),
+      ),
     );
   }
 
@@ -995,7 +1167,9 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
     if (!_acceptedPolicy) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please accept Razorpay Gateway Terms & Conditions to proceed.'),
+          content: Text(
+            'Please accept Razorpay Gateway Terms & Conditions to proceed.',
+          ),
           backgroundColor: Colors.amber,
           behavior: SnackBarBehavior.floating,
         ),
@@ -1023,7 +1197,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
 
     if (orderRes['success'] == true) {
       _razorpayOrderId = orderRes['orderId'];
-      
+
       var options = {
         'key': RazorpayConfig.keyId,
         'amount': orderRes['amount'], // in paise
@@ -1034,9 +1208,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
           'contact': '9876543210', // Or dynamically load from user profile
           'email': widget.userEmail,
         },
-        'theme': {
-          'color': '#0066FF'
-        },
+        'theme': {'color': '#0066FF'},
         'send_sms_hash': true,
       };
 
@@ -1048,7 +1220,9 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to create secure Razorpay order.')),
+        const SnackBar(
+          content: Text('Failed to create secure Razorpay order.'),
+        ),
       );
       setState(() => _step = 0);
     }
@@ -1066,8 +1240,15 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * 0.88,
           ),
-          color: isLight ? AppColors.surfaceLight.withOpacity(0.96) : const Color(0xF2090D16),
-          padding: EdgeInsets.fromLTRB(20, 16, 20, MediaQuery.of(context).viewInsets.bottom + 24),
+          color: isLight
+              ? AppColors.surfaceLight.withOpacity(0.96)
+              : const Color(0xF2090D16),
+          padding: EdgeInsets.fromLTRB(
+            20,
+            16,
+            20,
+            MediaQuery.of(context).viewInsets.bottom + 24,
+          ),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -1150,7 +1331,10 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
               ),
               const SizedBox(width: 6),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFD700),
                   borderRadius: BorderRadius.circular(12),
@@ -1184,10 +1368,30 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
         // Responsive Razorpay UPI Options Row
         Row(
           children: [
-            _buildRazorpayOptionButton(context, 'Google Pay', 'Razorpay UPI (GPay)', Icons.account_balance_wallet_rounded),
-            _buildRazorpayOptionButton(context, 'PhonePe', 'Razorpay UPI (PhonePe)', Icons.payment_rounded),
-            _buildRazorpayOptionButton(context, 'Paytm', 'Razorpay UPI (Paytm)', Icons.account_balance_rounded),
-            _buildRazorpayOptionButton(context, 'BHIM UPI', 'Razorpay UPI (BHIM)', Icons.qr_code_scanner_rounded),
+            _buildRazorpayOptionButton(
+              context,
+              'Google Pay',
+              'Razorpay UPI (GPay)',
+              Icons.account_balance_wallet_rounded,
+            ),
+            _buildRazorpayOptionButton(
+              context,
+              'PhonePe',
+              'Razorpay UPI (PhonePe)',
+              Icons.payment_rounded,
+            ),
+            _buildRazorpayOptionButton(
+              context,
+              'Paytm',
+              'Razorpay UPI (Paytm)',
+              Icons.account_balance_rounded,
+            ),
+            _buildRazorpayOptionButton(
+              context,
+              'BHIM UPI',
+              'Razorpay UPI (BHIM)',
+              Icons.qr_code_scanner_rounded,
+            ),
           ],
         ),
         const SizedBox(height: 16),
@@ -1205,7 +1409,11 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.credit_card_rounded, color: Color(0xFF0066FF), size: 20),
+                  const Icon(
+                    Icons.credit_card_rounded,
+                    color: Color(0xFF0066FF),
+                    size: 20,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -1223,7 +1431,10 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                     fit: BoxFit.scaleDown,
                     child: Text(
                       'Visa • MC • RuPay',
-                      style: GoogleFonts.outfit(fontSize: 10, color: AppColors.getTextMuted(context)),
+                      style: GoogleFonts.outfit(
+                        fontSize: 10,
+                        color: AppColors.getTextMuted(context),
+                      ),
                     ),
                   ),
                 ],
@@ -1232,15 +1443,29 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
               TextField(
                 controller: _cardNumber,
                 keyboardType: TextInputType.number,
-                style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
+                style: TextStyle(
+                  color: AppColors.getTextPrimary(context),
+                  fontSize: 13,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Card Number (4532 XXXX XXXX 8921)',
-                  hintStyle: TextStyle(color: AppColors.getTextMuted(context), fontSize: 12),
+                  hintStyle: TextStyle(
+                    color: AppColors.getTextMuted(context),
+                    fontSize: 12,
+                  ),
                   filled: true,
                   fillColor: isLight ? Colors.white : Colors.black12,
                   isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: AppColors.getGlassBorder(context))),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      color: AppColors.getGlassBorder(context),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
@@ -1250,15 +1475,29 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                     child: TextField(
                       controller: _cardExpiry,
                       keyboardType: TextInputType.datetime,
-                      style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
+                      style: TextStyle(
+                        color: AppColors.getTextPrimary(context),
+                        fontSize: 13,
+                      ),
                       decoration: InputDecoration(
                         hintText: 'MM/YY',
-                        hintStyle: TextStyle(color: AppColors.getTextMuted(context), fontSize: 12),
+                        hintStyle: TextStyle(
+                          color: AppColors.getTextMuted(context),
+                          fontSize: 12,
+                        ),
                         filled: true,
                         fillColor: isLight ? Colors.white : Colors.black12,
                         isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: AppColors.getGlassBorder(context))),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: AppColors.getGlassBorder(context),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -1268,15 +1507,29 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                       controller: _cardCvv,
                       keyboardType: TextInputType.number,
                       obscureText: true,
-                      style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
+                      style: TextStyle(
+                        color: AppColors.getTextPrimary(context),
+                        fontSize: 13,
+                      ),
                       decoration: InputDecoration(
                         hintText: 'CVV',
-                        hintStyle: TextStyle(color: AppColors.getTextMuted(context), fontSize: 12),
+                        hintStyle: TextStyle(
+                          color: AppColors.getTextMuted(context),
+                          fontSize: 12,
+                        ),
                         filled: true,
                         fillColor: isLight ? Colors.white : Colors.black12,
                         isDense: true,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: AppColors.getGlassBorder(context))),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            color: AppColors.getGlassBorder(context),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -1304,14 +1557,19 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                   value: _acceptedPolicy,
                   activeColor: const Color(0xFF0066FF),
                   checkColor: Colors.white,
-                  onChanged: (v) => setState(() => _acceptedPolicy = v ?? false),
+                  onChanged: (v) =>
+                      setState(() => _acceptedPolicy = v ?? false),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   'I agree to Razorpay Terms of Service (Non-Refundable 1-Time VIP Pass)',
-                  style: GoogleFonts.outfit(color: AppColors.getTextSecondary(context), fontSize: 11, height: 1.2),
+                  style: GoogleFonts.outfit(
+                    color: AppColors.getTextSecondary(context),
+                    fontSize: 11,
+                    height: 1.2,
+                  ),
                 ),
               ),
             ],
@@ -1328,7 +1586,9 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
               backgroundColor: const Color(0xFF0066FF),
               foregroundColor: Colors.white,
               elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
             onPressed: () {
               if (_cardNumber.text.isNotEmpty) {
@@ -1346,7 +1606,10 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                   fit: BoxFit.scaleDown,
                   child: Text(
                     'Pay ₹${widget.amount.toStringAsFixed(0)} via Razorpay',
-                    style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.outfit(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
@@ -1357,7 +1620,12 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
     );
   }
 
-  Widget _buildRazorpayOptionButton(BuildContext context, String display, String method, IconData icon) {
+  Widget _buildRazorpayOptionButton(
+    BuildContext context,
+    String display,
+    String method,
+    IconData icon,
+  ) {
     final isSelected = _selectedMethod == method;
 
     return Expanded(
@@ -1368,23 +1636,35 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
           margin: const EdgeInsets.symmetric(horizontal: 3),
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF0066FF).withOpacity(0.12) : AppColors.getSurfaceSecondary(context),
+            color: isSelected
+                ? const Color(0xFF0066FF).withOpacity(0.12)
+                : AppColors.getSurfaceSecondary(context),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: isSelected ? const Color(0xFF0066FF) : AppColors.getGlassBorder(context),
+              color: isSelected
+                  ? const Color(0xFF0066FF)
+                  : AppColors.getGlassBorder(context),
               width: isSelected ? 1.8 : 1.0,
             ),
           ),
           child: Column(
             children: [
-              Icon(icon, color: isSelected ? const Color(0xFF0066FF) : AppColors.getPrimary(context), size: 20),
+              Icon(
+                icon,
+                color: isSelected
+                    ? const Color(0xFF0066FF)
+                    : AppColors.getPrimary(context),
+                size: 20,
+              ),
               const SizedBox(height: 4),
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
                   display,
                   style: GoogleFonts.outfit(
-                    color: isSelected ? const Color(0xFF0066FF) : AppColors.getTextSecondary(context),
+                    color: isSelected
+                        ? const Color(0xFF0066FF)
+                        : AppColors.getTextSecondary(context),
                     fontSize: 10,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                   ),
@@ -1406,16 +1686,29 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
           const SizedBox(
             width: 48,
             height: 48,
-            child: CircularProgressIndicator(color: Color(0xFF0066FF), strokeWidth: 3.5),
+            child: CircularProgressIndicator(
+              color: Color(0xFF0066FF),
+              strokeWidth: 3.5,
+            ),
           ),
           const SizedBox(height: 24),
           Text(
             _statusMessage,
             textAlign: TextAlign.center,
-            style: GoogleFonts.outfit(color: AppColors.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.w600),
+            style: GoogleFonts.outfit(
+              color: AppColors.getTextPrimary(context),
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           const SizedBox(height: 8),
-          Text('Razorpay 256-Bit SSL Encrypted Transaction', style: TextStyle(color: AppColors.getTextMuted(context), fontSize: 11)),
+          Text(
+            'Razorpay 256-Bit SSL Encrypted Transaction',
+            style: TextStyle(
+              color: AppColors.getTextMuted(context),
+              fontSize: 11,
+            ),
+          ),
         ],
       ),
     );
@@ -1428,23 +1721,43 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
         children: [
           Container(
             padding: const EdgeInsets.all(14),
-            decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0x1F0066FF)),
-            child: const Icon(Icons.shield_outlined, color: Color(0xFF0066FF), size: 36),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0x1F0066FF),
+            ),
+            child: const Icon(
+              Icons.shield_outlined,
+              color: Color(0xFF0066FF),
+              size: 36,
+            ),
           ),
           const SizedBox(height: 24),
           const SizedBox(
             width: 32,
             height: 32,
-            child: CircularProgressIndicator(color: Color(0xFF0066FF), strokeWidth: 3),
+            child: CircularProgressIndicator(
+              color: Color(0xFF0066FF),
+              strokeWidth: 3,
+            ),
           ),
           const SizedBox(height: 24),
           Text(
             _statusMessage,
             textAlign: TextAlign.center,
-            style: GoogleFonts.outfit(color: AppColors.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.w600),
+            style: GoogleFonts.outfit(
+              color: AppColors.getTextPrimary(context),
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           const SizedBox(height: 8),
-          Text('End-to-End Secure Processing', style: TextStyle(color: AppColors.getTextMuted(context), fontSize: 11)),
+          Text(
+            'End-to-End Secure Processing',
+            style: TextStyle(
+              color: AppColors.getTextMuted(context),
+              fontSize: 11,
+            ),
+          ),
         ],
       ),
     );
@@ -1462,14 +1775,31 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
               color: Colors.green.withOpacity(0.12),
               border: Border.all(color: Colors.green, width: 2),
             ),
-            child: const Icon(Icons.check_rounded, color: Colors.green, size: 44),
+            child: const Icon(
+              Icons.check_rounded,
+              color: Colors.green,
+              size: 44,
+            ),
           ),
           const SizedBox(height: 20),
-          Text('Razorpay Payment Verified!', style: GoogleFonts.outfit(color: AppColors.getTextPrimary(context), fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(
+            'Razorpay Payment Verified!',
+            style: GoogleFonts.outfit(
+              color: AppColors.getTextPrimary(context),
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 4),
           FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text('Payment ID: $_razorpayPaymentId', style: TextStyle(color: AppColors.getTextSecondary(context), fontSize: 12)),
+            child: Text(
+              'Payment ID: $_razorpayPaymentId',
+              style: TextStyle(
+                color: AppColors.getTextSecondary(context),
+                fontSize: 12,
+              ),
+            ),
           ),
           const SizedBox(height: 24),
           SizedBox(
@@ -1479,10 +1809,18 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               onPressed: widget.onPaymentSuccess,
-              child: Text('Unlock VIP Features', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 15)),
+              child: Text(
+                'Unlock VIP Features',
+                style: GoogleFonts.outfit(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
             ),
           ),
         ],

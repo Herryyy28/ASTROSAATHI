@@ -13,6 +13,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { PaymentsModule } from './payments/payments.module';
 import { AdminModule } from './admin/admin.module';
+import { RemindersModule } from './reminders/reminders.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { AdminModule } from './admin/admin.module';
     AiModule,
     PaymentsModule,
     AdminModule,
+    RemindersModule,
   ],
   controllers: [],
   providers: [],

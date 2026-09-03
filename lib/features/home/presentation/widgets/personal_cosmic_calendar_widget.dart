@@ -8,6 +8,8 @@ import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/providers/locale_provider.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../reminders/providers/reminder_provider.dart';
+import 'add_event_modal.dart';
 
 class CosmicCalendarDay {
   final DateTime date;
@@ -663,6 +665,164 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                         ),
                       ],
                     ),
+                  ),
+                  const SizedBox(height: 14),
+
+                  // Scheduled Personal Events Section
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final reminderState = ref.watch(reminderProvider);
+                      final dayReminders = reminderState.reminders.where((r) {
+                        return r.eventTime.day == selectedDay.date.day &&
+                               r.eventTime.month == selectedDay.date.month &&
+                               r.eventTime.year == selectedDay.date.year;
+                      }).toList();
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'SCHEDULED PERSONAL EVENTS',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 1.0,
+                                  color: AppColors.getPrimary(context),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () => AddEventModal.show(context, initialDate: selectedDay.date),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.getPrimary(context).withOpacity(0.12),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.3)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.add_rounded, size: 12, color: AppColors.getPrimary(context)),
+                                      const SizedBox(width: 2),
+                                      Text(
+                                        'Add Event',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.getPrimary(context),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          if (dayReminders.isEmpty)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Text(
+                                'No personal events scheduled for this day. Tap "+ Add Event" to analyze timing.',
+                                style: GoogleFonts.inter(
+                                  fontSize: 11,
+                                  fontStyle: FontStyle.italic,
+                                  color: AppColors.getTextMuted(context),
+                                ),
+                              ),
+                            )
+                          else
+                            ...dayReminders.map((r) {
+                              final isEnabled = r.reminderEnabled;
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: AppColors.getSurfaceElevated(context),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: AppColors.getGlassBorder(context), width: 0.5),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: r.category.color.withOpacity(0.18),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(r.category.icon, size: 14, color: r.category.color),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  r.title,
+                                                  style: GoogleFonts.outfit(
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: AppColors.getTextPrimary(context),
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                                decoration: BoxDecoration(
+                                                  color: AppColors.getPrimary(context).withOpacity(0.15),
+                                                  borderRadius: BorderRadius.circular(8),
+                                                ),
+                                                child: Text(
+                                                  '★ ${r.astroScore}/10',
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: AppColors.getPrimary(context),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            r.astroRecommendation,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: AppColors.getTextSecondary(context),
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    IconButton(
+                                      constraints: const BoxConstraints(),
+                                      padding: EdgeInsets.zero,
+                                      icon: Icon(
+                                        isEnabled ? Icons.notifications_active_rounded : Icons.notifications_off_outlined,
+                                        size: 18,
+                                        color: isEnabled ? AppColors.getPrimary(context) : AppColors.getTextMuted(context),
+                                      ),
+                                      onPressed: () {
+                                        ref.read(reminderProvider.notifier).toggleReminder(r.id);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),

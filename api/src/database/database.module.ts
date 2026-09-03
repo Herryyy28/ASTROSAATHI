@@ -10,6 +10,7 @@ import { BirthProfile } from './entities/birth_profile.entity';
 import { AstroMessage } from './entities/astro_message.entity';
 
 import { AuditBlock } from './entities/audit_block.entity';
+import { Reminder } from './entities/reminder.entity';
 import { BlockchainService } from './services/blockchain.service';
 
 @Module({
@@ -23,7 +24,7 @@ import { BlockchainService } from './services/blockchain.service';
           return {
             type: 'sqlite',
             database: 'database.sqlite',
-            entities: [User, UserProfile, KnowledgeRashi, KnowledgeBhava, KnowledgeGraha, BirthProfile, AstroMessage, AuditBlock],
+            entities: [User, UserProfile, KnowledgeRashi, KnowledgeBhava, KnowledgeGraha, BirthProfile, AstroMessage, AuditBlock, Reminder],
             synchronize: true,
           };
         }
@@ -35,13 +36,13 @@ import { BlockchainService } from './services/blockchain.service';
           username: configService.get<string>('DB_USERNAME', 'postgres'),
           password: configService.get<string>('DB_PASSWORD', 'postgres'),
           database: configService.get<string>('DB_DATABASE', 'astrosaathi'),
-          entities: [User, UserProfile, KnowledgeRashi, KnowledgeBhava, KnowledgeGraha, BirthProfile, AstroMessage, AuditBlock],
+          entities: [User, UserProfile, KnowledgeRashi, KnowledgeBhava, KnowledgeGraha, BirthProfile, AstroMessage, AuditBlock, Reminder],
           synchronize: true,
         };
       },
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([User, UserProfile, KnowledgeRashi, KnowledgeBhava, KnowledgeGraha, BirthProfile, AstroMessage, AuditBlock]),
+    TypeOrmModule.forFeature([User, UserProfile, KnowledgeRashi, KnowledgeBhava, KnowledgeGraha, BirthProfile, AstroMessage, AuditBlock, Reminder]),
   ],
   providers: [BlockchainService],
   exports: [TypeOrmModule, BlockchainService],

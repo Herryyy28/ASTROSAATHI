@@ -25,6 +25,7 @@ import 'settings/saved_insights_screen.dart';
 import 'settings/data_privacy_screen.dart';
 import 'settings/about_screen.dart';
 import '../widgets/profile_switcher_modal.dart';
+import '../../../reminders/presentation/screens/astro_reminders_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -147,10 +148,10 @@ class ProfileScreen extends ConsumerWidget {
                           icon: Icons.notifications_rounded,
                           iconColor: AppColors.warning,
                           title: l10n.notifications,
-                          subtitle: 'Daily cosmic plan alerts',
+                          subtitle: 'Smart Astro Reminders & Event Alerts',
                           onTap: () => Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const NotificationsScreen()),
+                            MaterialPageRoute(builder: (_) => const AstroRemindersScreen()),
                           ),
                         ).animate().fadeIn(delay: 360.ms),
                         const SizedBox(height: 8),
