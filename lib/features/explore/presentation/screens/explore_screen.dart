@@ -29,15 +29,310 @@ import '../../../astrology/presentation/screens/astro_scenario_simulator_screen.
 import '../../../astrology/presentation/screens/future_event_radar_screen.dart';
 import '../../../workspace/presentation/screens/astro_workspace_screen.dart';
 import '../../../family/presentation/screens/family_astrology_dashboard_screen.dart';
+import '../../../astrology/presentation/screens/returns_center_screen.dart';
+import '../../../astrology/presentation/screens/saturn_return_screen.dart';
+import '../../../astrology/presentation/screens/sky_now_ephemeris_screen.dart';
+import '../../../astrology/presentation/screens/chart_patterns_screen.dart';
+import '../../../divination/presentation/screens/human_design_screen.dart';
+import '../../../astrology/presentation/screens/astro_research_screen.dart';
+import '../../../../core/providers/subscription_provider.dart';
+import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
+import '../../../reports/presentation/screens/custom_pdf_report_builder_screen.dart';
 import 'astro_academy_screen.dart';
 
-class ExploreScreen extends ConsumerWidget {
+enum ExploreViewMode { grid, list, folder }
+
+enum ExploreFilter { all, vipOnly, freeOnly }
+
+class ExploreScreen extends ConsumerStatefulWidget {
   const ExploreScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ExploreScreen> createState() => _ExploreScreenState();
+}
+
+class _ExploreScreenState extends ConsumerState<ExploreScreen> {
+  ExploreViewMode _viewMode = ExploreViewMode.grid;
+  ExploreFilter _filter = ExploreFilter.all;
+
+  // Track expanded folder categories for Folder View
+  final Set<String> _expandedFolders = {
+    'DAILY EPHEMERIS & TIMINGS',
+    'ANALYSIS & COMPATIBILITY',
+    'PREMIUM VIP EXCLUSIVES',
+    'REMEDIES & NUMEROLOGY',
+  };
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context, ref);
     final isLight = Theme.of(context).brightness == Brightness.light;
+    final isPremium = ref.watch(subscriptionProvider).isPremium;
+
+    // Feature items model
+    final List<Map<String, dynamic>> allFeatures = [
+      // Section 1: Ephemeris & Timings
+      {
+        'id': 0,
+        'category': 'DAILY EPHEMERIS & TIMINGS',
+        'emoji': '🌅',
+        'title': l10n.explorePanchang,
+        'subtitle': 'Tithi • Nakshatra • Yoga',
+        'gradient': const LinearGradient(colors: [Color(0xFF1E3C72), Color(0xFF2A5298)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PanchangScreen())),
+      },
+      {
+        'id': 1,
+        'category': 'DAILY EPHEMERIS & TIMINGS',
+        'emoji': '⏱️',
+        'title': l10n.exploreMuhurat,
+        'subtitle': 'Abhijit • Rahu Kaal',
+        'gradient': const LinearGradient(colors: [Color(0xFF3A1C71), Color(0xFFD76D77)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MuhuratScreen())),
+      },
+      {
+        'id': 2,
+        'category': 'DAILY EPHEMERIS & TIMINGS',
+        'emoji': '♋',
+        'title': l10n.exploreHoroscope,
+        'subtitle': 'Daily • Weekly • Yearly',
+        'gradient': const LinearGradient(colors: [Color(0xFF11998E), Color(0xFF38EF7D)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HoroscopeScreen())),
+      },
+
+      // Section 2: Analysis & Compatibility
+      {
+        'id': 3,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '⚡',
+        'title': l10n.exploreDosha,
+        'subtitle': 'Mangal • Kaal Sarp • Yoga',
+        'gradient': const LinearGradient(colors: [Color(0xFFFF512F), Color(0xFFDD2476)]),
+        'isVip': false,
+        'action': () {
+          ref.read(kundliTabProvider.notifier).update((_) => 4);
+          ref.read(mainNavIndexProvider.notifier).update((_) => 1);
+        },
+      },
+      {
+        'id': 4,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '💞',
+        'title': l10n.exploreCompatibility,
+        'subtitle': '36 Gun Milan Analysis',
+        'gradient': const LinearGradient(colors: [Color(0xFF833AB4), Color(0xFFFD1D1D)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MatchingScreen())),
+      },
+      {
+        'id': 5,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '🪐',
+        'title': 'Transit & Sade Sati',
+        'subtitle': 'Live Saturn & Gochar Impact',
+        'gradient': const LinearGradient(colors: [Color(0xFF4776E6), Color(0xFF8E54E9)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TransitCenterScreen())),
+      },
+      {
+        'id': 6,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '👥',
+        'title': 'Chart Synastry',
+        'subtitle': 'Compare Any Two Profiles',
+        'gradient': const LinearGradient(colors: [Color(0xFFD9901A), Color(0xFFE5A63C)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChartComparisonScreen())),
+      },
+      {
+        'id': 7,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '📖',
+        'title': 'Astro Academy',
+        'subtitle': 'Glossary & Beginner Mode',
+        'gradient': const LinearGradient(colors: [Color(0xFF11998E), Color(0xFF38EF7D)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroAcademyScreen())),
+      },
+      {
+        'id': 8,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '🎯',
+        'title': 'Astro Decision Engine',
+        'subtitle': 'Muhurat & Quantitative Timing',
+        'gradient': const LinearGradient(colors: [Color(0xFFE0A13A), Color(0xFFF9D38D)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroDecisionEngineScreen())),
+      },
+      {
+        'id': 9,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '🧪',
+        'title': 'Scenario Simulator',
+        'subtitle': 'Location & Planetary Shift Test',
+        'gradient': const LinearGradient(colors: [Color(0xFF00C9FF), Color(0xFF92FE9D)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroScenarioSimulatorScreen())),
+      },
+      {
+        'id': 10,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '🔭',
+        'title': 'Future Event Radar',
+        'subtitle': '90-Day Planetary Milestones',
+        'gradient': const LinearGradient(colors: [Color(0xFFF857A6), Color(0xFFFF5858)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FutureEventRadarScreen())),
+      },
+      {
+        'id': 11,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '🏢',
+        'title': 'Astro Workspace',
+        'subtitle': 'Executive Command Workspace',
+        'gradient': const LinearGradient(colors: [Color(0xFFFFD700), Color(0xFFFFA500)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroWorkspaceScreen())),
+      },
+      {
+        'id': 12,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '👨‍👩‍👧‍👦',
+        'title': 'Family Dashboard',
+        'subtitle': 'Spouse, Kids & Partner Synergy',
+        'gradient': const LinearGradient(colors: [Color(0xFFFF758C), Color(0xFFFF7EB3)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FamilyAstrologyDashboardScreen())),
+      },
+      {
+        'id': 13,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '⏱️',
+        'title': 'Sky Now & Ephemeris',
+        'subtitle': 'Live Celestial Clock & Tables',
+        'gradient': const LinearGradient(colors: [Color(0xFF00ACC1), Color(0xFF00897B)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SkyNowEphemerisScreen())),
+      },
+      {
+        'id': 14,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '📐',
+        'title': 'Aspect Patterns',
+        'subtitle': 'Grand Trines & Dominance',
+        'gradient': const LinearGradient(colors: [Color(0xFF43A047), Color(0xFF1B5E20)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChartPatternsScreen())),
+      },
+      {
+        'id': 15,
+        'category': 'ANALYSIS & COMPATIBILITY',
+        'emoji': '🧬',
+        'title': 'Human Design',
+        'subtitle': 'BodyGraph & Sacral Authority',
+        'gradient': const LinearGradient(colors: [Color(0xFFE91E63), Color(0xFF9C27B0)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HumanDesignScreen())),
+      },
+
+      // Section 3: VIP Exclusives
+      {
+        'id': 16,
+        'category': 'PREMIUM VIP EXCLUSIVES',
+        'emoji': '☀️',
+        'title': 'Solar & Lunar Returns',
+        'subtitle': 'Annual & Monthly Forecasts',
+        'gradient': const LinearGradient(colors: [Color(0xFFFFB300), Color(0xFFF57C00)]),
+        'isVip': true,
+        'action': () {
+          if (isPremium) {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const ReturnsCenterScreen()));
+          } else {
+            PremiumUpgradeModal.show(context);
+          }
+        },
+      },
+      {
+        'id': 17,
+        'category': 'PREMIUM VIP EXCLUSIVES',
+        'emoji': '🪐',
+        'title': 'Saturn Return Center',
+        'subtitle': '29.5-Year Maturity Tracker',
+        'gradient': const LinearGradient(colors: [Color(0xFF8E24AA), Color(0xFFD81B60)]),
+        'isVip': true,
+        'action': () {
+          if (isPremium) {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const SaturnReturnScreen()));
+          } else {
+            PremiumUpgradeModal.show(context);
+          }
+        },
+      },
+      {
+        'id': 18,
+        'category': 'PREMIUM VIP EXCLUSIVES',
+        'emoji': '🔬',
+        'title': 'Astro Research Mode',
+        'subtitle': 'Raw Arc-Seconds & Notes',
+        'gradient': const LinearGradient(colors: [Color(0xFF546E7A), Color(0xFF263238)]),
+        'isVip': true,
+        'action': () {
+          if (isPremium) {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroResearchScreen()));
+          } else {
+            PremiumUpgradeModal.show(context);
+          }
+        },
+      },
+      {
+        'id': 19,
+        'category': 'PREMIUM VIP EXCLUSIVES',
+        'emoji': '📄',
+        'title': 'Custom PDF Builder',
+        'subtitle': 'Tailored VIP Report Export',
+        'gradient': const LinearGradient(colors: [Color(0xFFFFD700), Color(0xFFFF8C00)]),
+        'isVip': true,
+        'action': () {
+          if (isPremium) {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomPdfReportBuilderScreen()));
+          } else {
+            PremiumUpgradeModal.show(context);
+          }
+        },
+      },
+
+      // Section 4: Remedies & Numerology
+      {
+        'id': 20,
+        'category': 'REMEDIES & NUMEROLOGY',
+        'emoji': '💎',
+        'title': l10n.exploreRemedies,
+        'subtitle': 'Gemstones & Mantras',
+        'gradient': const LinearGradient(colors: [Color(0xFF00B4DB), Color(0xFF0083B0)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RemedyHubScreen())),
+      },
+      {
+        'id': 21,
+        'category': 'REMEDIES & NUMEROLOGY',
+        'emoji': '🔢',
+        'title': l10n.exploreNumerology,
+        'subtitle': 'Life Path & Destiny',
+        'gradient': const LinearGradient(colors: [Color(0xFFF7971E), Color(0xFFFFD200)]),
+        'isVip': false,
+        'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NumerologyScreen())),
+      },
+    ];
+
+    // Filter features
+    final filteredFeatures = allFeatures.where((item) {
+      if (_filter == ExploreFilter.vipOnly) return item['isVip'] == true;
+      if (_filter == ExploreFilter.freeOnly) return item['isVip'] == false;
+      return true;
+    }).toList();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -52,40 +347,178 @@ class ExploreScreen extends ConsumerWidget {
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
-                // ── Sleek Header ──────────────────────────────────
+                // ── Sleek Header with View Mode & Filter Controls ──
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Category Pill
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: AppColors.primary.withOpacity(0.3),
-                              width: 0.8,
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.explore_rounded, color: AppColors.primary, size: 14),
-                              const SizedBox(width: 6),
-                              Text(
-                                'VEDIC EXPLORE HUB',
-                                style: GoogleFonts.inter(
-                                  fontSize: 10.5,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.primary,
-                                  letterSpacing: 1.2,
+                        Row(
+                          children: [
+                            // Category Pill with FittedBox
+                            Expanded(
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primary.withOpacity(0.12),
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        color: AppColors.primary.withOpacity(0.3),
+                                        width: 0.8,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(Icons.explore_rounded, color: AppColors.primary, size: 13),
+                                        const SizedBox(width: 5),
+                                        Text(
+                                          'VEDIC EXPLORE HUB',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.primary,
+                                            letterSpacing: 1.0,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: 6),
+
+                            // Top Right View Mode & Filter Controls
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // View Mode Selector (Grid, List, Folder)
+                                Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.getSurfaceElevated(context),
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      _buildViewIconButton(
+                                        context,
+                                        mode: ExploreViewMode.grid,
+                                        icon: Icons.grid_view_rounded,
+                                        tooltip: 'Grid View',
+                                      ),
+                                      _buildViewIconButton(
+                                        context,
+                                        mode: ExploreViewMode.list,
+                                        icon: Icons.view_list_rounded,
+                                        tooltip: 'List View',
+                                      ),
+                                      _buildViewIconButton(
+                                        context,
+                                        mode: ExploreViewMode.folder,
+                                        icon: Icons.folder_copy_rounded,
+                                        tooltip: 'Folder View',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+
+                                // Filter Popup Menu Button
+                                PopupMenuButton<ExploreFilter>(
+                                  initialValue: _filter,
+                                  onSelected: (val) => setState(() => _filter = val),
+                                  tooltip: 'Filter Features',
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                  color: isLight ? AppColors.surfaceLight : AppColors.surfaceDark,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(7),
+                                    decoration: BoxDecoration(
+                                      color: _filter != ExploreFilter.all
+                                          ? AppColors.primary.withOpacity(0.2)
+                                          : AppColors.getSurfaceElevated(context),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: _filter != ExploreFilter.all
+                                            ? AppColors.primary
+                                            : AppColors.getBorder(context),
+                                        width: 0.8,
+                                      ),
+                                    ),
+                                    child: Icon(
+                                      Icons.filter_list_rounded,
+                                      color: _filter != ExploreFilter.all
+                                          ? AppColors.primary
+                                          : AppColors.getTextPrimary(context),
+                                      size: 16,
+                                    ),
+                                  ),
+                                  itemBuilder: (ctx) => [
+                                    PopupMenuItem(
+                                      value: ExploreFilter.all,
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.all_inclusive_rounded,
+                                            size: 18,
+                                            color: _filter == ExploreFilter.all ? AppColors.primary : AppColors.getTextSecondary(context),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            'All Features',
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 13,
+                                              fontWeight: _filter == ExploreFilter.all ? FontWeight.bold : FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      value: ExploreFilter.vipOnly,
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.workspace_premium_rounded, size: 18, color: Colors.amber),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            'VIP Exclusives Only',
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 13,
+                                              fontWeight: _filter == ExploreFilter.vipOnly ? FontWeight.bold : FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      value: ExploreFilter.freeOnly,
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.bolt_rounded, size: 18, color: Colors.greenAccent),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            'Free Tools Only',
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 13,
+                                              fontWeight: _filter == ExploreFilter.freeOnly ? FontWeight.bold : FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 10),
 
@@ -100,7 +533,7 @@ class ExploreScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Discover ancient astrological wisdom & daily timing tools',
+                          'Vedic astrological intelligence & daily ephemeris',
                           style: GoogleFonts.inter(
                             fontSize: 13,
                             color: Theme.of(context).textTheme.bodyMedium?.color ?? AppColors.textSecondaryDark,
@@ -108,7 +541,7 @@ class ExploreScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                  ).animate().fadeIn(duration: 350.ms).slideY(begin: -0.05),
+                  ).animate().fadeIn(duration: 350.ms),
                 ),
 
                 // ── Hero Featured Card ──────────────────────────
@@ -116,305 +549,349 @@ class ExploreScreen extends ConsumerWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                     child: _buildFeaturedHeroCard(context, ref, l10n),
-                  ).animate().fadeIn(delay: 100.ms).scale(begin: const Offset(0.97, 0.97)),
-                ),
-
-                // ── Section 1 Header ────────────────────────────
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                    child: _buildSectionHeader(context, 'DAILY EPHEMERIS & TIMINGS', Icons.wb_twilight_rounded),
                   ),
                 ),
 
-                // ── Section 1 Grid ──────────────────────────────
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: context.responsive<int>(
-                        mobile: 2,
-                        tablet: 3,
-                        desktop: 4,
-                      ),
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 1.32,
-                    ),
-                    delegate: SliverChildListDelegate([
-                      _buildCategoryCard(
-                        context: context,
-                        index: 0,
-                        emoji: '🌅',
-                        title: l10n.explorePanchang,
-                        subtitle: 'Tithi • Nakshatra • Yoga',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF1E3C72), Color(0xFF2A5298)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const PanchangScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 1,
-                        emoji: '⏱️',
-                        title: l10n.exploreMuhurat,
-                        subtitle: 'Abhijit • Rahu Kaal',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF3A1C71), Color(0xFFD76D77)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const MuhuratScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 2,
-                        emoji: '♋',
-                        title: l10n.exploreHoroscope,
-                        subtitle: 'Daily • Weekly • Yearly',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const HoroscopeScreen()),
-                        ),
-                      ),
-                    ]),
-                  ),
-                ),
+                // ── VIEW MODES ──────────────────────────────────
+                if (_viewMode == ExploreViewMode.grid) ..._buildGridViewSlivers(context, filteredFeatures),
+                if (_viewMode == ExploreViewMode.list) ..._buildListViewSlivers(context, filteredFeatures),
+                if (_viewMode == ExploreViewMode.folder) ..._buildFolderViewSlivers(context, filteredFeatures),
 
-                // ── Section 2 Header ────────────────────────────
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 10),
-                    child: _buildSectionHeader(context, 'ANALYSIS & COMPATIBILITY', Icons.auto_awesome_rounded),
-                  ),
-                ),
-
-                // ── Section 2 Grid ──────────────────────────────
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: context.responsive<int>(
-                        mobile: 2,
-                        tablet: 3,
-                        desktop: 4,
-                      ),
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 1.32,
-                    ),
-                    delegate: SliverChildListDelegate([
-                      _buildCategoryCard(
-                        context: context,
-                        index: 3,
-                        emoji: '⚡',
-                        title: l10n.exploreDosha,
-                        subtitle: 'Mangal • Kaal Sarp • Yoga',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFFF512F), Color(0xFFDD2476)],
-                        ),
-                        onTap: () {
-                          ref.read(kundliTabProvider.notifier).update((_) => 4);
-                          ref.read(mainNavIndexProvider.notifier).update((_) => 1);
-                        },
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 4,
-                        emoji: '💞',
-                        title: l10n.exploreCompatibility,
-                        subtitle: '36 Gun Milan Analysis',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF833AB4), Color(0xFFFD1D1D)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const MatchingScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 5,
-                        emoji: '🪐',
-                        title: 'Transit & Sade Sati',
-                        subtitle: 'Live Saturn & Gochar Impact',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF4776E6), Color(0xFF8E54E9)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const TransitCenterScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 6,
-                        emoji: '👥',
-                        title: 'Chart Synastry',
-                        subtitle: 'Compare Any Two Profiles',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFD9901A), Color(0xFFE5A63C)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const ChartComparisonScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 7,
-                        emoji: '📖',
-                        title: 'Astro Academy',
-                        subtitle: 'Glossary & Beginner Mode',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const AstroAcademyScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 8,
-                        emoji: '🎯',
-                        title: 'Astro Decision Engine',
-                        subtitle: 'Best Time & Show Me Math',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFE0A13A), Color(0xFFF9D38D)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const AstroDecisionEngineScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 9,
-                        emoji: '🧪',
-                        title: 'Scenario Simulator',
-                        subtitle: 'Test Location & Time Shifts',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF00C9FF), Color(0xFF92FE9D)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const AstroScenarioSimulatorScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 10,
-                        emoji: '🔭',
-                        title: 'Future Event Radar',
-                        subtitle: 'Next 90 Days Cosmic Milestones',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFF857A6), Color(0xFFFF5858)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const FutureEventRadarScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 11,
-                        emoji: '🏢',
-                        title: 'Astro Workspace',
-                        subtitle: 'Flagship Command Center',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const AstroWorkspaceScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 12,
-                        emoji: '👨‍👩‍👧‍👦',
-                        title: 'Family Dashboard',
-                        subtitle: 'Spouse, Kids & Partner Synergy',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFFF758C), Color(0xFFFF7EB3)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const FamilyAstrologyDashboardScreen()),
-                        ),
-                      ),
-                    ]),
-                  ),
-                ),
-
-                // ── Section 3 Header ────────────────────────────
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 10),
-                    child: _buildSectionHeader(context, 'REMEDIES & NUMEROLOGY', Icons.diamond_rounded),
-                  ),
-                ),
-
-                // ── Section 3 Grid ──────────────────────────────
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 120),
-                  sliver: SliverGrid(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: context.responsive<int>(
-                        mobile: 2,
-                        tablet: 3,
-                        desktop: 4,
-                      ),
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 1.32,
-                    ),
-                    delegate: SliverChildListDelegate([
-                      _buildCategoryCard(
-                        context: context,
-                        index: 6,
-                        emoji: '💎',
-                        title: l10n.exploreRemedies,
-                        subtitle: 'Gemstones & Mantras',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF00B4DB), Color(0xFF0083B0)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const RemedyHubScreen()),
-                        ),
-                      ),
-                      _buildCategoryCard(
-                        context: context,
-                        index: 7,
-                        emoji: '🔢',
-                        title: l10n.exploreNumerology,
-                        subtitle: 'Life Path & Destiny',
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFFF7971E), Color(0xFFFFD200)],
-                        ),
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const NumerologyScreen()),
-                        ),
-                      ),
-                    ]),
-                  ),
-                ),
+                const SliverPadding(padding: EdgeInsets.only(bottom: 120)),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildViewIconButton(
+    BuildContext context, {
+    required ExploreViewMode mode,
+    required IconData icon,
+    required String tooltip,
+  }) {
+    final isSelected = _viewMode == mode;
+
+    return Tooltip(
+      message: tooltip,
+      child: GestureDetector(
+        onTap: () => setState(() => _viewMode = mode),
+        child: Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primary : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            icon,
+            size: 16,
+            color: isSelected ? Colors.black : AppColors.getTextSecondary(context),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── VIEW 1: GRID VIEW ──────────────────────────────────────────
+  List<Widget> _buildGridViewSlivers(BuildContext context, List<Map<String, dynamic>> features) {
+    final categories = features.map((f) => f['category'] as String).toSet().toList();
+
+    List<Widget> slivers = [];
+    for (final cat in categories) {
+      final items = features.where((f) => f['category'] == cat).toList();
+      IconData catIcon = Icons.auto_awesome_rounded;
+      if (cat.contains('EPHEMERIS')) catIcon = Icons.wb_twilight_rounded;
+      if (cat.contains('PREMIUM')) catIcon = Icons.workspace_premium_rounded;
+      if (cat.contains('REMEDIES')) catIcon = Icons.diamond_rounded;
+
+      slivers.add(
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+            child: _buildSectionHeader(context, cat, catIcon),
+          ),
+        ),
+      );
+
+      slivers.add(
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          sliver: SliverGrid(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: context.responsive<int>(
+                mobile: 2,
+                tablet: 3,
+                desktop: 4,
+              ),
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 1.32,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final item = items[index];
+                return _buildCategoryCard(
+                  context: context,
+                  index: index,
+                  emoji: item['emoji'],
+                  title: item['title'],
+                  subtitle: item['subtitle'],
+                  gradient: item['gradient'],
+                  isVip: item['isVip'],
+                  onTap: item['action'],
+                );
+              },
+              childCount: items.length,
+            ),
+          ),
+        ),
+      );
+    }
+    return slivers;
+  }
+
+  // ── VIEW 2: LIST VIEW ──────────────────────────────────────────
+  List<Widget> _buildListViewSlivers(BuildContext context, List<Map<String, dynamic>> features) {
+    return [
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+          child: _buildSectionHeader(context, 'ALL EXPLORE TOOLS (${features.length})', Icons.view_list_rounded),
+        ),
+      ),
+      SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final item = features[index];
+              final LinearGradient gradient = item['gradient'];
+
+              return Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: GlassCard(
+                  borderRadius: 18,
+                  padding: const EdgeInsets.all(14),
+                  onTap: item['action'],
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: gradient,
+                          boxShadow: [
+                            BoxShadow(
+                              color: gradient.colors.last.withOpacity(0.3),
+                              blurRadius: 8,
+                              spreadRadius: -2,
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Text(item['emoji'], style: const TextStyle(fontSize: 20)),
+                        ),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    item['title'],
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.getTextPrimary(context),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                if (item['isVip'] == true) ...[
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      gradient: AppColors.goldGradient,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    child: Text(
+                                      'VIP 💎',
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              item['subtitle'],
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                color: AppColors.getTextSecondary(context),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.primary, size: 14),
+                    ],
+                  ),
+                ),
+              ).animate().fadeIn(delay: Duration(milliseconds: 30 * index)).slideX(begin: 0.05);
+            },
+            childCount: features.length,
+          ),
+        ),
+      ),
+    ];
+  }
+
+  // ── VIEW 3: FOLDER VIEW (CATEGORY ACCORDIONS) ──────────────────
+  List<Widget> _buildFolderViewSlivers(BuildContext context, List<Map<String, dynamic>> features) {
+    final categories = features.map((f) => f['category'] as String).toSet().toList();
+
+    List<Widget> slivers = [];
+    for (final cat in categories) {
+      final items = features.where((f) => f['category'] == cat).toList();
+      final isExpanded = _expandedFolders.contains(cat);
+
+      slivers.add(
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+            child: GlassCard(
+              borderRadius: 18,
+              padding: EdgeInsets.zero,
+              borderColor: AppColors.primary.withOpacity(0.3),
+              child: Column(
+                children: [
+                  // Folder Header Tile
+                  ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.folder_rounded, color: AppColors.primary, size: 20),
+                    ),
+                    title: Text(
+                      cat,
+                      style: GoogleFonts.outfit(
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.getTextPrimary(context),
+                        letterSpacing: 0.6,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '${items.length} Astrological Tools',
+                      style: GoogleFonts.inter(
+                        fontSize: 11,
+                        color: AppColors.getTextSecondary(context),
+                      ),
+                    ),
+                    trailing: Icon(
+                      isExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                      color: AppColors.primary,
+                      size: 24,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        if (isExpanded) {
+                          _expandedFolders.remove(cat);
+                        } else {
+                          _expandedFolders.add(cat);
+                        }
+                      });
+                    },
+                  ),
+
+                  // Folder Content Items (if expanded)
+                  if (isExpanded)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+                      child: Column(
+                        children: items.map((item) {
+                          final LinearGradient gradient = item['gradient'];
+                          return Container(
+                            margin: const EdgeInsets.only(top: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.getSurfaceElevated(context),
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(color: AppColors.getBorder(context), width: 0.6),
+                            ),
+                            child: ListTile(
+                              dense: true,
+                              onTap: item['action'],
+                              leading: Text(item['emoji'], style: const TextStyle(fontSize: 18)),
+                              title: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      item['title'],
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 13.5,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.getTextPrimary(context),
+                                      ),
+                                    ),
+                                  ),
+                                  if (item['isVip'] == true)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                                      decoration: BoxDecoration(
+                                        gradient: AppColors.goldGradient,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        'VIP',
+                                        style: GoogleFonts.outfit(
+                                          fontSize: 8.5,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              subtitle: Text(
+                                item['subtitle'],
+                                style: GoogleFonts.inter(
+                                  fontSize: 11,
+                                  color: AppColors.getTextSecondary(context),
+                                ),
+                              ),
+                              trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: AppColors.primary),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                ],
+              ),
+            ).animate().fadeIn(duration: 250.ms),
+          ),
+        ),
+      );
+    }
+    return slivers;
   }
 
   Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
@@ -536,12 +1013,13 @@ class ExploreScreen extends ConsumerWidget {
     required String subtitle,
     required LinearGradient gradient,
     required VoidCallback onTap,
+    bool isVip = false,
   }) {
     return GlassCard(
       onTap: onTap,
       borderRadius: 18,
-      borderColor: gradient.colors.last.withOpacity(0.25),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      borderColor: isVip ? AppColors.primary.withOpacity(0.5) : gradient.colors.last.withOpacity(0.25),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -550,10 +1028,10 @@ class ExploreScreen extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: 36,
-                height: 36,
+                width: 34,
+                height: 34,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                   gradient: gradient,
                   boxShadow: [
                     BoxShadow(
@@ -566,35 +1044,52 @@ class ExploreScreen extends ConsumerWidget {
                 child: Center(
                   child: Text(
                     emoji,
-                    style: const TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 17),
                   ),
                 ),
               ),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.35) ??
-                    Colors.white30,
-                size: 12,
-              ),
+              if (isVip)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    gradient: AppColors.goldGradient,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    'VIP 💎',
+                    style: GoogleFonts.outfit(
+                      fontSize: 8.5,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black,
+                    ),
+                  ),
+                )
+              else
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.35) ??
+                      Colors.white30,
+                  size: 11,
+                ),
             ],
           ),
           const Spacer(),
           Text(
             title,
             style: GoogleFonts.outfit(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
               color: Theme.of(context).textTheme.titleMedium?.color ?? AppColors.textPrimaryDark,
               height: 1.15,
             ),
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 2),
           Text(
             subtitle,
             style: GoogleFonts.inter(
-              fontSize: 10,
+              fontSize: 9.5,
               color: Theme.of(context).textTheme.bodySmall?.color ?? AppColors.textTertiaryDark,
             ),
             maxLines: 1,
@@ -603,7 +1098,7 @@ class ExploreScreen extends ConsumerWidget {
         ],
       ),
     ).animate()
-        .fadeIn(duration: 350.ms, delay: Duration(milliseconds: 50 * index))
-        .scale(begin: const Offset(0.96, 0.96), duration: 350.ms, delay: Duration(milliseconds: 50 * index));
+        .fadeIn(duration: 350.ms, delay: Duration(milliseconds: 30 * index))
+        .scale(begin: const Offset(0.96, 0.96), duration: 350.ms, delay: Duration(milliseconds: 30 * index));
   }
 }

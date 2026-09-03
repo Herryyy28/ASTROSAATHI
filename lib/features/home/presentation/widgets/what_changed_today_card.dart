@@ -27,47 +27,37 @@ class WhatChangedTodayCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: (isPositive ? AppColors.success : AppColors.warning).withOpacity(0.18),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  isPositive ? Icons.trending_up_rounded : Icons.trending_down_rounded,
+                  color: isPositive ? AppColors.success : AppColors.warning,
+                  size: 18,
+                ),
+              ),
+              const SizedBox(width: 10),
               Expanded(
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: (isPositive ? AppColors.success : AppColors.warning).withOpacity(0.18),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        isPositive ? Icons.trending_up_rounded : Icons.trending_down_rounded,
-                        color: isPositive ? AppColors.success : AppColors.warning,
-                        size: 18,
+                    Text(
+                      'WHAT CHANGED TODAY?',
+                      style: GoogleFonts.outfit(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.8,
+                        color: AppColors.getTextPrimary(context),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'WHAT CHANGED TODAY?',
-                            style: GoogleFonts.outfit(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.0,
-                              color: AppColors.getTextSecondary(context),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            'Daily Cosmic Comparison Engine',
-                            style: GoogleFonts.inter(
-                              fontSize: 10.5,
-                              color: AppColors.getTextSecondary(context),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                    Text(
+                      'Daily Cosmic Comparison Engine',
+                      style: GoogleFonts.inter(
+                        fontSize: 10,
+                        color: AppColors.getTextSecondary(context),
                       ),
                     ),
                   ],
@@ -103,17 +93,17 @@ class WhatChangedTodayCard extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.04),
+                    color: AppColors.getSurfaceSecondary(context),
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: Colors.white.withOpacity(0.08)),
+                    border: Border.all(color: AppColors.getBorder(context)),
                   ),
                   child: Column(
                     children: [
-                      Text('YESTERDAY', style: GoogleFonts.outfit(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white54)),
+                      Text('YESTERDAY', style: GoogleFonts.outfit(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.getTextSecondary(context))),
                       const SizedBox(height: 4),
                       Text(
                         '7.4',
-                        style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white70),
+                        style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                       ),
                     ],
                   ),
@@ -160,11 +150,11 @@ class WhatChangedTodayCard extends StatelessWidget {
             width: double.infinity,
             child: OutlinedButton.icon(
               style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 side: BorderSide(color: AppColors.primary.withOpacity(0.5)),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              icon: const Icon(Icons.psychology_rounded, size: 16, color: AppColors.primary),
+              icon: const Icon(Icons.smart_toy_rounded, size: 16, color: AppColors.primary),
               label: Text(
                 'Explain Changes with Astro Baba',
                 style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
@@ -197,7 +187,7 @@ class WhatChangedTodayCard extends StatelessWidget {
             text: TextSpan(
               style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context), height: 1.3),
               children: [
-                TextSpan(text: '$title: ', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                TextSpan(text: '$title: ', style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context))),
                 TextSpan(text: detail),
               ],
             ),

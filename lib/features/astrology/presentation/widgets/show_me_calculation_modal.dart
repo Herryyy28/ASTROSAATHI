@@ -17,6 +17,7 @@ class ShowMeCalculationModal extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      barrierColor: Colors.black.withOpacity(0.6),
       builder: (_) => ShowMeCalculationModal(
         title: title,
         mathDetails: mathDetails ?? {
@@ -38,9 +39,11 @@ class ShowMeCalculationModal extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isLight ? Theme.of(context).scaffoldBackgroundColor : const Color(0xFF161922),
+        color: isLight
+            ? AppColors.surfaceLight.withOpacity(0.96)
+            : const Color(0xFF161922),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+        border: Border.all(color: AppColors.getGlassBorder(context), width: 0.8),
       ),
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -50,26 +53,31 @@ class ShowMeCalculationModal extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.18),
-                      shape: BoxShape.circle,
+              Expanded(
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.18),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.calculate_rounded, color: AppColors.primary, size: 18),
                     ),
-                    child: const Icon(Icons.calculate_rounded, color: AppColors.primary, size: 18),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    title,
-                    style: GoogleFonts.outfit(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.getTextPrimary(context),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: GoogleFonts.outfit(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.getTextPrimary(context),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               IconButton(
                 icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context), size: 20),
@@ -81,7 +89,12 @@ class ShowMeCalculationModal extends StatelessWidget {
 
           Text(
             'EXACT MATHEMATICAL ENGINE INPUTS',
-            style: GoogleFonts.outfit(fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 0.8, color: AppColors.primary),
+            style: GoogleFonts.outfit(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.8,
+              color: AppColors.primary,
+            ),
           ),
           const SizedBox(height: 10),
 
@@ -90,25 +103,40 @@ class ShowMeCalculationModal extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.04),
+                color: isLight
+                    ? AppColors.getSurfaceSecondary(context)
+                    : Colors.white.withOpacity(0.04),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withOpacity(0.06)),
+                border: Border.all(color: AppColors.getGlassBorder(context)),
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
+                    flex: 2,
                     child: Text(
                       e.key,
-                      style: GoogleFonts.inter(fontSize: 11.5, color: Colors.white70),
+                      style: GoogleFonts.inter(
+                        fontSize: 11.5,
+                        color: AppColors.getTextSecondary(context),
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    e.value,
-                    style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      e.value,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.outfit(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.bold,
+                        color: isLight ? AppColors.getPrimary(context) : AppColors.primary,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ],
               ),

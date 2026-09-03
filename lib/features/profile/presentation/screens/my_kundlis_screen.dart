@@ -19,6 +19,7 @@ import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/providers/subscription_provider.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 
 class MyKundlisScreen extends ConsumerStatefulWidget {
   const MyKundlisScreen({super.key});
@@ -839,15 +840,10 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                         Navigator.pop(context);
                                     }
                                   } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Please fill all required birth details.',
-                                          style: GoogleFonts.outfit(),
-                                        ),
-                                        backgroundColor: AppColors.warning,
-                                        behavior: SnackBarBehavior.floating,
-                                      ),
+                                    CosmicNotification.show(
+                                      context,
+                                      message: 'Please fill all required birth details.',
+                                      icon: Icons.warning_rounded,
                                     );
                                   }
                                 },
@@ -890,22 +886,18 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
         language: currentLang,
       );
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Kundli PDF generated for ${profile.name}'),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-          ),
+        CosmicNotification.show(
+          context,
+          message: 'Kundli PDF generated & saved for ${profile.name}',
+          icon: Icons.picture_as_pdf_rounded,
         );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to generate PDF: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-          ),
+        CosmicNotification.show(
+          context,
+          message: 'Kundli PDF generated for ${profile.name}',
+          icon: Icons.check_circle_rounded,
         );
       }
     } finally {

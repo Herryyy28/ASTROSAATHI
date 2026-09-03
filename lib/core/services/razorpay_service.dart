@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import '../config/app_config.dart';
+import 'monitoring_service.dart';
 
 /// ─────────────────────────────────────────────────────────────────────────────
 /// Razorpay Configuration — Security Keys & Merchant Info
@@ -148,8 +149,19 @@ class RazorpayService {
       }
 
       debugPrint('Verify API response: ${response.statusCode} - ${response.body}');
-    } catch (e) {
+      MonitoringService.logError(
+        'Server payment signature verification rejected (Status ${response.statusCode})',
+        category: MetricCategory.payment,
+        contextMessage: 'Razorpay Verification',
+      );
+    } catch (e, stack) {
       debugPrint('Razorpay Verification Exception: $e');
+      MonitoringService.logError(
+        e,
+        stackTrace: stack,
+        category: MetricCategory.payment,
+        contextMessage: 'Razorpay Verification Exception',
+      );
     }
 
     return false; // MUST fail-closed if not strictly verified

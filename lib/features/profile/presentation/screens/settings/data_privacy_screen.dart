@@ -8,6 +8,7 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/widgets/glass_card.dart';
 import '../../../../../core/providers/profile_provider.dart';
 import '../../../../../core/providers/subscription_provider.dart';
+import '../../../../../core/widgets/cosmic_notification.dart';
 
 class DataPrivacyScreen extends ConsumerWidget {
   const DataPrivacyScreen({super.key});
@@ -199,11 +200,10 @@ class DataPrivacyScreen extends ConsumerWidget {
               await prefs.clear();
 
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Account erased. Returning to entry onboarding...'),
-                    backgroundColor: AppColors.success,
-                  ),
+                CosmicNotification.show(
+                  context,
+                  message: 'Account erased. Returning to entry onboarding...',
+                  icon: Icons.delete_outline_rounded,
                 );
                 // 4. Redirect to entry level Onboarding
                 context.go('/onboarding');

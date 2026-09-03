@@ -128,7 +128,7 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                                 const SizedBox(height: 6),
                                 Text(
                                   '${plan?.dayScore.toStringAsFixed(1) ?? "8.2"} / 10',
-                                  style: GoogleFonts.outfit(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                                  style: GoogleFonts.outfit(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                                 ),
                                 const SizedBox(height: 2),
                                 Text('▲ +0.8 vs Yesterday', style: GoogleFonts.inter(fontSize: 10, color: Colors.greenAccent, fontWeight: FontWeight.bold)),
@@ -148,10 +148,10 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                                 const SizedBox(height: 6),
                                 Text(
                                   'Jupiter Dasha',
-                                  style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                                  style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                                 ),
                                 const SizedBox(height: 2),
-                                Text('Career & Expansion Period', style: GoogleFonts.inter(fontSize: 10, color: Colors.white70)),
+                                Text('Career & Expansion Period', style: GoogleFonts.inter(fontSize: 10, color: AppColors.getTextSecondary(context))),
                               ],
                             ),
                           ),
@@ -202,7 +202,7 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('MY ASTRO GOALS (ACTIVE)', style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary)),
-                              Text('4 Active', style: GoogleFonts.inter(fontSize: 10, color: Colors.white54)),
+                              Text('4 Active', style: GoogleFonts.inter(fontSize: 10, color: AppColors.getTextMuted(context))),
                             ],
                           ),
                           const SizedBox(height: 12),
@@ -220,28 +220,30 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                       borderColor: AppColors.primary.withOpacity(0.5),
                       child: Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: AppColors.goldGradient,
-                            ),
-                            child: const Icon(Icons.smart_toy_rounded, color: Colors.black, size: 20),
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundColor: AppColors.primary.withOpacity(0.2),
+                            child: const Icon(Icons.smart_toy_rounded, color: AppColors.primary, size: 20),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Consult Astro Baba AI', style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white)),
-                                Text('Ask about your chart, dasha & timing', style: GoogleFonts.inter(fontSize: 11, color: Colors.white70)),
+                                Text('Astro Baba AI Co-Pilot', style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context))),
+                                Text('Ask anything about your goals or chart', style: GoogleFonts.inter(fontSize: 10, color: AppColors.getTextSecondary(context))),
                               ],
                             ),
                           ),
                           IconButton(
                             icon: const Icon(Icons.arrow_forward_rounded, color: AppColors.primary),
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroBabaScreen()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const AstroBabaScreen(initialMessage: 'Analyze my current workspace goals and planetary alignment.'),
+                                ),
+                              );
                             },
                           ),
                         ],
@@ -266,27 +268,27 @@ class AstroWorkspaceScreen extends ConsumerWidget {
           margin: const EdgeInsets.all(4),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.04),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.white.withOpacity(0.08)),
+            color: AppColors.getSurfaceSecondary(context),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.getBorder(context)),
           ),
           child: Row(
             children: [
-              Icon(icon, size: 16, color: AppColors.primary),
-              const SizedBox(width: 8),
+              Icon(icon, color: AppColors.primary, size: 20),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
-                      style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       subtitle,
-                      style: GoogleFonts.inter(fontSize: 9.5, color: Colors.white54),
+                      style: GoogleFonts.inter(fontSize: 9.5, color: AppColors.getTextSecondary(context)),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -304,22 +306,24 @@ class AstroWorkspaceScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
+        color: AppColors.getSurfaceSecondary(context),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.08)),
+        border: Border.all(color: AppColors.getBorder(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(goal, style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white)),
+              Expanded(
+                child: Text(goal, style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)), maxLines: 1, overflow: TextOverflow.ellipsis),
+              ),
+              const SizedBox(width: 8),
               Text('${(progress * 100).toInt()}% Aligned', style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
             ],
           ),
           const SizedBox(height: 4),
-          Text(timing, style: GoogleFonts.inter(fontSize: 10.5, color: Colors.white70)),
+          Text(timing, style: GoogleFonts.inter(fontSize: 10.5, color: AppColors.getTextSecondary(context))),
           const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),

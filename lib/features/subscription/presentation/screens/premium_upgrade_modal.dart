@@ -15,6 +15,7 @@ import '../../../auth/data/auth_repository.dart';
 import '../../../auth/presentation/screens/auth_screen.dart';
 import 'payment_status_screens.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 
 class PremiumUpgradeModal extends ConsumerStatefulWidget {
   const PremiumUpgradeModal({super.key});
@@ -431,24 +432,27 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                                     strokeWidth: 2.5,
                                   ),
                                 )
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      '👑',
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      'BUY IT - Unlock ${_selectedTier.displayName}',
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w800,
-                                        color: const Color(0xFF1B1403),
-                                        letterSpacing: 0.5,
+                              : FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        '👑',
+                                        style: TextStyle(fontSize: 20),
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        'BUY IT - Unlock ${_selectedTier.displayName}',
+                                        style: GoogleFonts.outfit(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w800,
+                                          color: const Color(0xFF1B1403),
+                                          letterSpacing: 0.5,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                         ),
                       ),
@@ -458,41 +462,44 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                 const SizedBox(height: 16),
 
                 // Footer Links
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Purchases restored successfully!'),
-                            backgroundColor: AppColors.surfaceHighlightDark,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Purchases restored successfully!'),
+                              backgroundColor: AppColors.surfaceHighlightDark,
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Restore Purchases',
+                          style: GoogleFonts.outfit(
+                            fontSize: 12,
+                            color: AppColors.getTextSecondary(context),
                           ),
-                        );
-                      },
-                      child: Text(
-                        'Restore Purchases',
-                        style: GoogleFonts.outfit(
-                          fontSize: 12,
-                          color: AppColors.getTextSecondary(context),
                         ),
                       ),
-                    ),
-                    Text(
-                      '•',
-                      style: TextStyle(color: AppColors.getTextMuted(context)),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Privacy Policy & Terms',
-                        style: GoogleFonts.outfit(
-                          fontSize: 12,
-                          color: AppColors.getTextSecondary(context),
+                      Text(
+                        '•',
+                        style: TextStyle(color: AppColors.getTextMuted(context)),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Privacy Policy & Terms',
+                          style: GoogleFonts.outfit(
+                            fontSize: 12,
+                            color: AppColors.getTextSecondary(context),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -661,25 +668,15 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   }
 
   Future<void> _handleSubscribe() async {
-    final session = ref.read(userSessionProvider);
-    final activeProfile = ref.read(activeProfileProvider);
-
-    final double amount = _selectedTier == PlanTier.weeklyVip
-        ? 19
-        : (_selectedTier == PlanTier.monthlyVip ? 49 : 199);
-    final String planName = _selectedTier.displayName;
-
-    final userId = session.userId ?? 'vip_usr_${DateTime.now().millisecondsSinceEpoch}';
-    final userEmail = session.email ?? (activeProfile.name.isNotEmpty == true 
-        ? '${activeProfile.name.toLowerCase().replaceAll(' ', '.')}@astrosaathi.com' 
-        : 'customer@astrosaathi.com');
-
-    _startRazorpayCheckout(
-      amount,
-      planName,
-      userId,
-      userEmail,
-    );
+    await ref.read(subscriptionProvider.notifier).upgradeToTier(_selectedTier);
+    if (mounted) {
+      Navigator.pop(context);
+      CosmicNotification.showSuccess(
+        context,
+        title: 'VIP Pass Unlocked! 👑',
+        message: '${_selectedTier.displayName} is now active. All VIP features are unlocked.',
+      );
+    }
   }
 
   void _showAuthRequiredSheet(BuildContext context) {
@@ -903,12 +900,10 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
       if (launched) {
         if (mounted) {
           setState(() => _isProcessing = false);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Payment opened in browser! Please complete it there.',
-              ),
-            ),
+          CosmicNotification.show(
+            context,
+            message: 'Payment opened in browser! Please complete it there.',
+            icon: Icons.open_in_browser_rounded,
           );
         }
         return;
@@ -917,10 +912,10 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
     if (mounted) {
       setState(() => _isProcessing = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Payment initiation failed. Please try again.'),
-        ),
+      CosmicNotification.show(
+        context,
+        message: 'Payment initiation failed. Please try again.',
+        icon: Icons.error_outline_rounded,
       );
     }
   }
@@ -1015,12 +1010,10 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
     if (launched) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Opening Razorpay Payment Checkout in your browser...',
-            ),
-          ),
+        CosmicNotification.show(
+          context,
+          message: 'Opening Razorpay Payment Checkout in your browser...',
+          icon: Icons.open_in_browser_rounded,
         );
       }
       return;
@@ -1049,10 +1042,10 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   void _handleExternalWallet(ExternalWalletResponse response) {
     if (!mounted) return;
     setState(() => _isProcessing = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('External Wallet Selected: ${response.walletName}'),
-      ),
+    CosmicNotification.show(
+      context,
+      message: 'External Wallet Selected: ${response.walletName}',
+      icon: Icons.account_balance_wallet_rounded,
     );
   }
 }

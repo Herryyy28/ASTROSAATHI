@@ -75,7 +75,7 @@ class _LifeTimelineScreenState extends State<LifeTimelineScreen> {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            'Past → Present → Future Vimshottari Cycles',
+                            'Vimshottari Dasha Lifecycle',
                             style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context)),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -114,7 +114,7 @@ class _LifeTimelineScreenState extends State<LifeTimelineScreen> {
                             Text('Current Life Phase', style: TextStyle(fontSize: 11, color: AppColors.getTextSecondary(context))),
                             const SizedBox(height: 2),
                             const Text('Jupiter (Guru) Mahadasha', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: AppColors.primary)),
-                            Text('2020 – 2036 • Active Growth Era', style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context))),
+                            Text('2020–2036 • Active Phase', style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context))),
                           ],
                         ),
                       ),

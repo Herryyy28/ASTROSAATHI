@@ -19,6 +19,7 @@ import '../../../../core/providers/subscription_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/widgets/admob_banner_widget.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 
 class AstroBabaScreen extends ConsumerStatefulWidget {
   final String? initialMessage;
@@ -85,11 +86,12 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
       _isListeningVoice = !_isListeningVoice;
     });
     if (_isListeningVoice) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Listening... Ask Astro Baba anything!'),
-          duration: Duration(seconds: 2),
-        ),
+      CosmicNotification.show(
+        context,
+        title: 'Voice Astro Baba Active 🎙️',
+        message: 'Listening... Speak your celestial query now.',
+        icon: Icons.mic_rounded,
+        duration: const Duration(seconds: 2),
       );
     }
   }
@@ -105,7 +107,10 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
 
     final double keyboardInset = MediaQuery.of(context).viewInsets.bottom;
     final double safeBottom = MediaQuery.of(context).padding.bottom;
-    final double bottomPadding = keyboardInset > 0 ? 8.0 : (84.0 + safeBottom);
+    final bool isPushed = Navigator.canPop(context);
+    final double bottomPadding = keyboardInset > 0
+        ? 8.0
+        : (isPushed ? (16.0 + safeBottom) : (92.0 + safeBottom));
 
     final isLight = Theme.of(context).brightness == Brightness.light;
 
@@ -181,67 +186,92 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
     final profileName = activeProfile?.name ?? '';
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              if (Navigator.canPop(context)) ...[
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(20),
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.getSurfaceElevated(context),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back_rounded,
+                        color: AppColors.primary,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
               CosmicOrbWidget(
                 isSpeaking: _isLoading || _isListeningVoice,
-                size: 48,
+                size: 40,
               ),
-              const SizedBox(width: 14),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       'AI ${l10n.navAstroBaba}',
                       style: GoogleFonts.outfit(
-                        fontSize: 20,
+                        fontSize: 17,
                         fontWeight: FontWeight.w700,
                         color: AppColors.getTextPrimary(context),
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       _isLoading ? l10n.loading : l10n.babaConnected,
                       style: TextStyle(
                         color: AppColors.getTextSecondary(context),
-                        fontSize: 12,
+                        fontSize: 11.5,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
+              const SizedBox(width: 6),
               GestureDetector(
                 onTap: () => PremiumUpgradeModal.show(context),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                   decoration: BoxDecoration(
                     color: isPremium
                         ? AppColors.primary.withOpacity(0.18)
                         : AppColors.primary.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isPremium
                           ? AppColors.primary
                           : AppColors.primary.withOpacity(0.4),
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      Text(
-                        isPremium ? '👑 Unlimited' : '⚡ $remaining/1 Free',
-                        style: GoogleFonts.outfit(
-                          color: isPremium
-                              ? AppColors.primary
-                              : AppColors.getDynamicTextPrimary(context),
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    isPremium ? '👑 Unlimited' : '⚡ $remaining Free',
+                    style: GoogleFonts.outfit(
+                      color: isPremium
+                          ? AppColors.primary
+                          : AppColors.getDynamicTextPrimary(context),
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),

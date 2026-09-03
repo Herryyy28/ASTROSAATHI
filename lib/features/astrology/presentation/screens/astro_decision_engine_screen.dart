@@ -455,7 +455,7 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'SHOW ME THE MATH (TRANSPARENCY)',
+                        'CALCULATION TRANSPARENCY',
                         style: GoogleFonts.outfit(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -496,11 +496,12 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
           const Divider(height: 20),
 
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'CALCULATED SCORE',
-                style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+              Expanded(
+                child: Text(
+                  'CALCULATED SCORE',
+                  style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                ),
               ),
               Text(
                 '8.6 / 10.0',

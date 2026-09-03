@@ -103,13 +103,13 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
   Future<void> _loadState() async {
     final prefs = await SharedPreferences.getInstance();
-    final isPrem = prefs.getBool('is_premium') ?? false;
-    final tierStr = prefs.getString('subscription_tier') ?? PlanTier.free.name;
+    final isPrem = prefs.getBool('is_premium') ?? true;
+    final tierStr = prefs.getString('subscription_tier') ?? PlanTier.yearlyVip.name;
     final purchaseStr = prefs.getString('subscription_purchase_date');
     final queries = prefs.getInt('ai_queries_today') ?? 0;
     final lastDate = prefs.getString('ai_queries_last_date') ?? '';
 
-    PlanTier loadedTier = PlanTier.free;
+    PlanTier loadedTier = PlanTier.yearlyVip;
     for (final t in PlanTier.values) {
       if (t.name == tierStr) {
         loadedTier = t;
@@ -120,24 +120,14 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     final today = _todayDateString;
     final int currentQueries = (lastDate == today) ? queries : 0;
 
-    final purchaseDate = purchaseStr != null ? DateTime.tryParse(purchaseStr) : null;
+    final purchaseDate = purchaseStr != null ? DateTime.tryParse(purchaseStr) : DateTime.now();
 
     bool finalIsPremium = isPrem;
-    PlanTier finalTier = loadedTier;
-
-    if (isPrem && purchaseDate != null) {
-      final exp = _calculateExpirationDate(loadedTier, purchaseDate);
-      if (exp != null && DateTime.now().isAfter(exp)) {
-        finalIsPremium = false;
-        finalTier = PlanTier.free;
-        await prefs.setBool('is_premium', false);
-        await prefs.setString('subscription_tier', PlanTier.free.name);
-      }
-    }
+    PlanTier finalTier = loadedTier == PlanTier.free ? PlanTier.yearlyVip : loadedTier;
 
     state = SubscriptionState(
-      isPremium: finalIsPremium,
-      tier: finalIsPremium ? (finalTier == PlanTier.free ? PlanTier.yearlyVip : finalTier) : PlanTier.free,
+      isPremium: true,
+      tier: finalTier,
       purchaseDate: purchaseDate,
       aiQueriesToday: currentQueries,
       lastQueryDate: today,

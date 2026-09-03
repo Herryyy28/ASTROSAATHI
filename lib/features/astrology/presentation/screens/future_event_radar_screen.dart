@@ -133,7 +133,7 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                             ],
                           ),
                           Text(
-                            'Upcoming cosmic milestones & major transits',
+                            'Planetary milestones & transit events',
                             style: GoogleFonts.inter(
                               fontSize: 11,
                               color: AppColors.getTextSecondary(context),
@@ -164,12 +164,20 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                           style: GoogleFonts.outfit(
                             fontSize: 12,
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                            color: isSelected ? Colors.black : Colors.white,
+                            color: isSelected
+                                ? Colors.black
+                                : AppColors.getTextPrimary(context),
                           ),
                         ),
                         selectedColor: AppColors.primary,
-                        backgroundColor: Colors.white.withOpacity(0.06),
-                        side: BorderSide(color: isSelected ? AppColors.primary : Colors.white.withOpacity(0.12)),
+                        backgroundColor: isLight
+                            ? AppColors.getSurfaceSecondary(context)
+                            : Colors.white.withOpacity(0.06),
+                        side: BorderSide(
+                          color: isSelected
+                              ? AppColors.primary
+                              : AppColors.getBorder(context),
+                        ),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                       ),
                     );
@@ -187,44 +195,43 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                   itemBuilder: (context, index) {
                     final item = filteredEvents[index];
                     final color = item['color'] as Color;
+                    final displayAccentColor = isLight ? AppColors.getPrimary(context) : color;
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 12),
                       child: GlassCard(
                         padding: const EdgeInsets.all(16),
-                        borderColor: color.withOpacity(0.4),
+                        borderColor: displayAccentColor.withOpacity(0.4),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: color.withOpacity(0.18),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Icon(item['icon'] as IconData, size: 16, color: color),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      item['date'] as String,
-                                      style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: color),
-                                    ),
-                                  ],
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: displayAccentColor.withOpacity(0.18),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Icon(item['icon'] as IconData, size: 16, color: displayAccentColor),
                                 ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    item['date'] as String,
+                                    style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: displayAccentColor),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.08),
+                                    color: AppColors.getSurfaceSecondary(context),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
-                                    'In ${item['daysAway']} Days',
-                                    style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w600, color: Colors.white70),
+                                    'In ${item['daysAway']}d',
+                                    style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.getTextSecondary(context)),
                                   ),
                                 ),
                               ],
@@ -233,7 +240,7 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
 
                             Text(
                               item['title'] as String,
-                              style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                              style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                             ),
                             const SizedBox(height: 4),
                             Text(
@@ -248,11 +255,14 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                   child: OutlinedButton.icon(
                                     style: OutlinedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(vertical: 8),
-                                      side: BorderSide(color: color.withOpacity(0.5)),
+                                      side: BorderSide(color: displayAccentColor.withOpacity(0.6)),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                     ),
-                                    icon: Icon(Icons.event_note_rounded, size: 14, color: color),
-                                    label: Text('Schedule Event', style: GoogleFonts.outfit(fontSize: 11, color: color, fontWeight: FontWeight.bold)),
+                                    icon: Icon(Icons.event_note_rounded, size: 14, color: displayAccentColor),
+                                    label: Text(
+                                      'Schedule Event',
+                                      style: GoogleFonts.outfit(fontSize: 11, color: displayAccentColor, fontWeight: FontWeight.bold),
+                                    ),
                                     onPressed: () => AddEventModal.show(context),
                                   ),
                                 ),
@@ -260,14 +270,28 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                 Expanded(
                                   child: ElevatedButton.icon(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: color.withOpacity(0.2),
-                                      foregroundColor: Colors.white,
+                                      backgroundColor: isLight
+                                          ? AppColors.getSurfaceSecondary(context)
+                                          : displayAccentColor.withOpacity(0.2),
+                                      foregroundColor: isLight
+                                          ? AppColors.getTextPrimary(context)
+                                          : Colors.white,
                                       elevation: 0,
                                       padding: const EdgeInsets.symmetric(vertical: 8),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: color)),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        side: BorderSide(color: displayAccentColor.withOpacity(0.6)),
+                                      ),
                                     ),
-                                    icon: const Icon(Icons.smart_toy_rounded, size: 14),
-                                    label: Text('Ask AI', style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold)),
+                                    icon: Icon(Icons.smart_toy_rounded, size: 14, color: displayAccentColor),
+                                    label: Text(
+                                      'Ask AI',
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                        color: isLight ? AppColors.getTextPrimary(context) : Colors.white,
+                                      ),
+                                    ),
                                     onPressed: () {
                                       Navigator.push(
                                         context,

@@ -89,6 +89,23 @@ class HoroscopeScreen extends ConsumerWidget {
                     ),
                     child: Row(
                       children: [
+                        IconButton(
+                          icon: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: AppColors.getSurfaceElevated(context),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                            ),
+                            child: const Icon(
+                              Icons.arrow_back_rounded,
+                              color: AppColors.primary,
+                              size: 18,
+                            ),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: Text(
                             'Horoscope',
@@ -404,46 +421,50 @@ class _HoroscopeTabView extends ConsumerWidget {
     Color accentColor,
   ) {
     return GlassCard(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Container(
-                width: 26,
-                height: 26,
+                width: 24,
+                height: 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: accentColor.withOpacity(0.12),
                 ),
-                child: Icon(icon, color: accentColor, size: 14),
+                child: Icon(icon, color: accentColor, size: 13),
               ),
               const SizedBox(width: 6),
               Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: AppColors.getTextSecondary(context),
-                    fontSize: 11.5,
-                    fontWeight: FontWeight.w500,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      color: AppColors.getTextSecondary(context),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: GoogleFonts.outfit(
-              color: AppColors.getTextPrimary(context),
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
+          const SizedBox(height: 10),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              value,
+              style: GoogleFonts.outfit(
+                color: AppColors.getTextPrimary(context),
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
 
 class WhatShouldIDoNowModal extends StatefulWidget {
@@ -10,6 +11,7 @@ class WhatShouldIDoNowModal extends StatefulWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
+      barrierColor: Colors.black.withOpacity(0.6),
       builder: (context) => const WhatShouldIDoNowModal(),
     );
   }
@@ -63,6 +65,7 @@ class _WhatShouldIDoNowModalState extends State<WhatShouldIDoNowModal> {
   Widget build(BuildContext context) {
     final info = getStatus(selectedCategory);
     final Color statusColor = info['color'] as Color;
+    final isLight = Theme.of(context).brightness == Brightness.light;
 
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
@@ -71,112 +74,133 @@ class _WhatShouldIDoNowModalState extends State<WhatShouldIDoNowModal> {
         child: Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: AppColors.surfaceDark.withOpacity(0.95),
-            border: const Border(top: BorderSide(color: AppColors.glassBorder, width: 0.5)),
+            color: isLight
+                ? AppColors.surfaceLight.withOpacity(0.96)
+                : AppColors.surfaceDark.withOpacity(0.95),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+            border: Border.all(color: AppColors.getGlassBorder(context), width: 0.8),
           ),
           child: SafeArea(
             child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Expanded(
-                      child: Row(
-                        children: [
-                          Icon(Icons.explore_rounded, color: AppColors.primary, size: 22),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              'What should I do right now?',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.primary),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close_rounded, color: AppColors.textSecondaryDark),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Categories Selector
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: categories.map((c) {
-                    final isSel = selectedCategory == c['label'];
-                    return ChoiceChip(
-                      label: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(c['icon'] as IconData, size: 14, color: isSel ? Colors.black : AppColors.primary),
-                          const SizedBox(width: 6),
-                          Text(c['label'] as String),
-                        ],
-                      ),
-                      selected: isSel,
-                      selectedColor: AppColors.primary,
-                      backgroundColor: AppColors.surfaceHighlightDark,
-                      labelStyle: TextStyle(
-                        color: isSel ? Colors.black : AppColors.textPrimaryDark,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
-                      onSelected: (val) {
-                        if (val) setState(() => selectedCategory = c['label'] as String);
-                      },
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 20),
-
-                // Status Result Box
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: statusColor.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: statusColor.withOpacity(0.5)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Icon(info['icon'] as IconData, color: statusColor, size: 28),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              info['status'] as String,
-                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: statusColor),
-                              overflow: TextOverflow.ellipsis,
+                      Expanded(
+                        child: Row(
+                          children: [
+                            const Icon(Icons.explore_rounded, color: AppColors.primary, size: 22),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                'What should I do right now?',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 12),
-                      Text(
-                        info['window'] as String,
-                        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primaryLight),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        info['reason'] as String,
-                        style: const TextStyle(fontSize: 13, color: AppColors.textPrimaryDark, height: 1.4),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context)),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
+                  const SizedBox(height: 16),
+
+                  // Categories Selector
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: categories.map((c) {
+                      final isSel = selectedCategory == c['label'];
+                      return ChoiceChip(
+                        label: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(c['icon'] as IconData, size: 14, color: isSel ? Colors.black : AppColors.primary),
+                            const SizedBox(width: 6),
+                            Text(c['label'] as String),
+                          ],
+                        ),
+                        selected: isSel,
+                        selectedColor: AppColors.primary,
+                        backgroundColor: isLight
+                            ? AppColors.getSurfaceSecondary(context)
+                            : AppColors.surfaceHighlightDark,
+                        labelStyle: GoogleFonts.outfit(
+                          color: isSel ? Colors.black : AppColors.getTextPrimary(context),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                        onSelected: (val) {
+                          if (val) setState(() => selectedCategory = c['label'] as String);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Status Result Box
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: statusColor.withOpacity(isLight ? 0.08 : 0.12),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: statusColor.withOpacity(0.5)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(info['icon'] as IconData, color: statusColor, size: 28),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                info['status'] as String,
+                                style: GoogleFonts.outfit(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: statusColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          info['window'] as String,
+                          style: GoogleFonts.outfit(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: isLight ? AppColors.primary : AppColors.primaryLight,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          info['reason'] as String,
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            color: AppColors.getTextPrimary(context),
+                            height: 1.4,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

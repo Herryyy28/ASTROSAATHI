@@ -8,6 +8,7 @@ import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/engine/models/astrology_validation.dart';
 import '../../../../core/providers/subscription_provider.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 
 class AddFamilyMemberModal extends ConsumerStatefulWidget {
   const AddFamilyMemberModal({super.key});
@@ -85,21 +86,10 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
 
   void _showError(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 18),
-            const SizedBox(width: 10),
-            Expanded(child: Text(message, style: const TextStyle(color: Colors.white))),
-          ],
-        ),
-        backgroundColor: AppColors.error,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.all(16),
-      ),
+    CosmicNotification.showError(
+      context,
+      title: 'Validation Notice',
+      message: message,
     );
   }
 

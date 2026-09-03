@@ -14,6 +14,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/providers/subscription_provider.dart';
 import '../../../onboarding/presentation/screens/onboarding_screen.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 
 /// Elite Production Trust, Privacy & Help Center Screen for AstroSaathi
 /// Delivers a hyper-professional UI with glassmorphic cards, Google Play Data Safety badges,
@@ -196,21 +197,10 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
       await prefs.clear();
 
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
-                const SizedBox(width: 10),
-                const Expanded(
-                  child: Text('Your account and local data have been permanently erased.'),
-                ),
-              ],
-            ),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-          ),
+        CosmicNotification.show(
+          context,
+          message: 'Your account and local data have been permanently erased.',
+          icon: Icons.check_circle_rounded,
         );
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const OnboardingScreen()),
@@ -223,40 +213,18 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
   void _submitReport() {
     final msg = _reportController.text.trim();
     if (msg.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Row(
-            children: [
-              const Icon(Icons.error_outline_rounded, color: Colors.white, size: 20),
-              const SizedBox(width: 10),
-              const Text('Please describe the issue before submitting.'),
-            ],
-          ),
-          backgroundColor: AppColors.error,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
+      CosmicNotification.show(
+        context,
+        message: 'Please describe the issue before submitting.',
+        icon: Icons.error_outline_rounded,
       );
       return;
     }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.verified_rounded, color: Colors.white, size: 20),
-            const SizedBox(width: 10),
-            const Expanded(
-              child: Text(
-                'Report submitted to Vedic Data Audit team! We will review this issue promptly.',
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.green.shade700,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      ),
+    CosmicNotification.show(
+      context,
+      message: 'Report submitted to Vedic Data Audit team! We will review this issue promptly.',
+      icon: Icons.verified_rounded,
     );
     _reportController.clear();
     _userEmailController.clear();

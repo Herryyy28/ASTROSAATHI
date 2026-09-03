@@ -158,28 +158,33 @@ class PanchangScreen extends ConsumerWidget {
                                   selectedDate.subtract(const Duration(days: 1));
                             },
                           ),
-                          Column(
-                            children: [
-                              Text(
-                                isToday ? 'Today ($formattedDate)' : formattedDate,
-                                style: GoogleFonts.outfit(
-                                  color: AppColors.getTextPrimary(context),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              if (!isToday)
-                                TextButton(
-                                  onPressed: () {
-                                    ref.read(selectedPanchangDateProvider.notifier).state = DateTime.now();
-                                  },
-                                  style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: const Size(0, 20)),
-                                  child: Text(
-                                    'Reset to Today',
-                                    style: GoogleFonts.inter(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w600),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(
+                                  isToday ? 'Today ($formattedDate)' : formattedDate,
+                                  style: GoogleFonts.outfit(
+                                    color: AppColors.getTextPrimary(context),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
                                   ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                            ],
+                                if (!isToday)
+                                  TextButton(
+                                    onPressed: () {
+                                      ref.read(selectedPanchangDateProvider.notifier).state = DateTime.now();
+                                    },
+                                    style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: const Size(0, 20)),
+                                    child: Text(
+                                      'Reset to Today',
+                                      style: GoogleFonts.inter(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                           IconButton(
                             icon: const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.primary, size: 18),

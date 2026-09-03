@@ -349,7 +349,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        isExploring ? 'Rashi Bhavishya (Explorer)' : 'Authentic Kundli Bhavishyavani',
+                                        isExploring ? 'Lagna Explorer' : 'Vedic Birth Chart',
                                         style: GoogleFonts.outfit(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w800,
@@ -359,7 +359,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                                       ),
                                       const SizedBox(height: 2),
                                       Text(
-                                        'Your personalized Vedic astrology insight',
+                                        'Precision planetary alignment & house positions',
                                         style: GoogleFonts.inter(
                                           fontSize: 11.5,
                                           color: AppColors.getTextSecondary(context),
@@ -481,49 +481,44 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                   const SizedBox(height: 24),
                   AspectRatio(
                     aspectRatio: 1.0,
-                    child: InteractiveViewer(
-                      minScale: 1.0,
-                      maxScale: 3.5,
-                      clipBehavior: Clip.none,
-                      child: GestureDetector(
-                        onTapUp: (details) {
-                          final RenderBox box =
-                              context.findRenderObject() as RenderBox;
-                          final size = box.size;
-                          final local = details.localPosition;
-                          final dx = local.dx / size.width;
-                          final dy = local.dy / size.height;
+                    child: GestureDetector(
+                      onTapUp: (details) {
+                        final RenderBox box =
+                            context.findRenderObject() as RenderBox;
+                        final size = box.size;
+                        final local = details.localPosition;
+                        final dx = local.dx / size.width;
+                        final dy = local.dy / size.height;
 
-                          int house = 1;
-                          if (dy < 0.33) {
-                            if (dx < 0.33)
-                              house = 2;
-                            else if (dx > 0.66)
-                              house = 12;
-                            else
-                              house = 1;
-                          } else if (dy > 0.66) {
-                            if (dx < 0.33)
-                              house = 6;
-                            else if (dx > 0.66)
-                              house = 8;
-                            else
-                              house = 7;
-                          } else {
-                            if (dx < 0.33)
-                              house = 4;
-                            else if (dx > 0.66)
-                              house = 10;
-                            else
-                              house = 9;
-                          }
-                          _showHouseDetails(context, house, activePlanets);
-                        },
-                        child: CustomPaint(
-                          painter: VedicChartPainter(
-                            housePlanets: activePlanets,
-                            context: context,
-                          ),
+                        int house = 1;
+                        if (dy < 0.33) {
+                          if (dx < 0.33)
+                            house = 2;
+                          else if (dx > 0.66)
+                            house = 12;
+                          else
+                            house = 1;
+                        } else if (dy > 0.66) {
+                          if (dx < 0.33)
+                            house = 6;
+                          else if (dx > 0.66)
+                            house = 8;
+                          else
+                            house = 7;
+                        } else {
+                          if (dx < 0.33)
+                            house = 4;
+                          else if (dx > 0.66)
+                            house = 10;
+                          else
+                            house = 9;
+                        }
+                        _showHouseDetails(context, house, activePlanets);
+                      },
+                      child: CustomPaint(
+                        painter: VedicChartPainter(
+                          housePlanets: activePlanets,
+                          context: context,
                         ),
                       ),
                     ),

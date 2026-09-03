@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 import '../../../reminders/data/models/reminder_model.dart';
 import '../../../reminders/providers/reminder_provider.dart';
 
@@ -359,8 +360,10 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                       onPressed: () async {
                         final title = _titleController.text.trim();
                         if (title.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Please enter an event title')),
+                          CosmicNotification.show(
+                            context,
+                            message: 'Please enter an event title',
+                            icon: Icons.warning_rounded,
                           );
                           return;
                         }
@@ -375,11 +378,10 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
 
                         if (mounted) {
                           Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('✦ Scheduled "$title" with Astro Score ${score}/10'),
-                              backgroundColor: AppColors.primaryDarkDarkMode,
-                            ),
+                          CosmicNotification.show(
+                            context,
+                            message: '✦ Scheduled "$title" with Astro Score ${score.toStringAsFixed(1)}/10',
+                            icon: Icons.event_available_rounded,
                           );
                         }
                       },

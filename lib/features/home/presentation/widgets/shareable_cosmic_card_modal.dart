@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/engine/models/game_plan_data.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 
 class ShareableCosmicCardModal extends ConsumerWidget {
   final GamePlanData gamePlan;
@@ -39,9 +40,11 @@ class ShareableCosmicCardModal extends ConsumerWidget {
             maxHeight: MediaQuery.of(context).size.height * 0.9,
           ),
           decoration: BoxDecoration(
-            color: const Color(0xF2090D16),
+            color: isLight
+                ? AppColors.surfaceLight.withOpacity(0.96)
+                : const Color(0xF2090D16),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-            border: Border.all(color: const Color(0xFFFFD700).withOpacity(0.3), width: 1.0),
+            border: Border.all(color: AppColors.getGlassBorder(context), width: 1.0),
           ),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -74,7 +77,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close_rounded, color: Colors.white70),
+                      icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context)),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
@@ -86,12 +89,12 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF090D16),
+                    color: isLight ? AppColors.surfaceLight : const Color(0xFF090D16),
                     borderRadius: BorderRadius.circular(28),
                     border: Border.all(color: const Color(0xFFFFD700).withOpacity(0.4), width: 1.5),
-                    boxShadow: const [
+                    boxShadow: [
                       BoxShadow(
-                        color: Color(0x40E0A13A),
+                        color: const Color(0x40E0A13A),
                         blurRadius: 30,
                         spreadRadius: -5,
                       ),
@@ -139,7 +142,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                           style: GoogleFonts.outfit(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: AppColors.getTextPrimary(context),
                           ),
                         ),
                       ),
@@ -148,7 +151,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                         'Vedic Birth Chart Alignment ✦',
                         style: GoogleFonts.inter(
                           fontSize: 12,
-                          color: const Color(0xFFAAB3C2),
+                          color: AppColors.getTextSecondary(context),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -159,10 +162,15 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                         height: 96,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: const Color(0xFF111827),
+                          color: isLight
+                              ? AppColors.getSurfaceSecondary(context)
+                              : const Color(0xFF111827),
                           border: Border.all(color: const Color(0xFFFFD700), width: 4),
-                          boxShadow: const [
-                            BoxShadow(color: Color(0x60FFD700), blurRadius: 20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0x60FFD700),
+                              blurRadius: 20,
+                            ),
                           ],
                         ),
                         child: Column(
@@ -181,7 +189,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                               'out of 10',
                               style: GoogleFonts.inter(
                                 fontSize: 10,
-                                color: Colors.white70,
+                                color: AppColors.getTextSecondary(context),
                               ),
                             ),
                           ],
@@ -200,7 +208,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                             style: GoogleFonts.outfit(
                               fontSize: 13,
                               fontStyle: FontStyle.italic,
-                              color: Colors.white,
+                              color: AppColors.getTextPrimary(context),
                               height: 1.3,
                             ),
                           ),
@@ -250,8 +258,10 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                               'Check your Vedic birth chart alignment on AstroSaathi!';
                           await Clipboard.setData(ClipboardData(text: shareText));
                           if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('✦ Cosmic Card copied to clipboard! Open Instagram to paste in Story.')),
+                            CosmicNotification.showSuccess(
+                              context,
+                              title: 'Cosmic Card Copied! ✨',
+                              message: 'Card text copied to clipboard. Ready to paste in Instagram Story.',
                             );
                           }
                         },
@@ -300,8 +310,10 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                             } else {
                               await Clipboard.setData(ClipboardData(text: shareText));
                               if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('✦ Cosmic Card copied to clipboard for WhatsApp!')),
+                                CosmicNotification.showSuccess(
+                                  context,
+                                  title: 'WhatsApp Card Copied! 💬',
+                                  message: 'Cosmic plan copied for WhatsApp sharing.',
                                 );
                               }
                             }
@@ -359,11 +371,10 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                               'Get your daily personalized Vedic astrology alignment at AstroSaathi!';
                           await Clipboard.setData(ClipboardData(text: fullText));
                           if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('📋 Full Cosmic Reading details copied to clipboard!'),
-                                duration: Duration(seconds: 2),
-                              ),
+                            CosmicNotification.showSuccess(
+                              context,
+                              title: 'Full Details Copied! 📋',
+                              message: 'Complete cosmic reading details copied to clipboard.',
                             );
                           }
                         },
@@ -402,11 +413,10 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                               'Check your Vedic alignment on AstroSaathi!';
                           await Clipboard.setData(ClipboardData(text: shareText));
                           if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('✦ Cosmic Card copied! Paste into Telegram, Twitter, or Messages.'),
-                                duration: Duration(seconds: 3),
-                              ),
+                            CosmicNotification.showSuccess(
+                              context,
+                              title: 'Cosmic Card Ready! 🚀',
+                              message: 'Card copied to clipboard. Ready to share anywhere.',
                             );
                           }
                         },

@@ -8,6 +8,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/gradient_button.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../data/auth_repository.dart';
 
@@ -37,14 +38,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   }
 
   void _showToast(String msg, {bool isError = true}) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(msg, style: const TextStyle(color: Colors.white)),
-        backgroundColor: isError ? AppColors.error : Colors.green.shade700,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      ),
+    CosmicNotification.show(
+      context,
+      message: msg,
+      icon: isError ? Icons.error_outline_rounded : Icons.check_circle_rounded,
     );
   }
 

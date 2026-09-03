@@ -18,6 +18,7 @@ import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../features/auth/data/auth_repository.dart';
 import '../../../../core/widgets/location_permission_dialog.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 import '../../../../core/utils/zodiac_sign_utils.dart';
 import '../../../../core/routing/app_router.dart';
 import '../../../../core/engine/models/astrology_validation.dart';
@@ -121,27 +122,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
   void _showError(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 20),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                message,
-                style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w500),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: AppColors.error.withOpacity(0.95),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 3),
-      ),
+    CosmicNotification.show(
+      context,
+      message: message,
+      icon: Icons.warning_amber_rounded,
     );
   }
 

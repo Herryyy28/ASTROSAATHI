@@ -19,6 +19,7 @@ import '../../../../core/providers/subscription_provider.dart';
 import '../../../../core/utils/zodiac_sign_utils.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 import '../widgets/add_family_member_modal.dart';
 import 'settings/notifications_screen.dart';
 import 'settings/saved_insights_screen.dart';
@@ -26,6 +27,8 @@ import 'settings/data_privacy_screen.dart';
 import 'settings/about_screen.dart';
 import '../widgets/profile_switcher_modal.dart';
 import '../../../reminders/presentation/screens/astro_reminders_screen.dart';
+import '../../../security/presentation/screens/security_center_screen.dart';
+import '../../../security/presentation/screens/privacy_dashboard_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -170,16 +173,30 @@ class ProfileScreen extends ConsumerWidget {
                         ).animate().fadeIn(delay: 420.ms),
                         const SizedBox(height: 8),
 
-                        // Data Privacy
+                        // Security Center
+                        _buildSettingsTile(
+                          context,
+                          icon: Icons.security_rounded,
+                          iconColor: Colors.cyanAccent,
+                          title: 'Security Center',
+                          subtitle: 'Sessions, MFA, Passkeys & Audit Logs',
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const SecurityCenterScreen()),
+                          ),
+                        ).animate().fadeIn(delay: 450.ms),
+                        const SizedBox(height: 8),
+
+                        // Privacy & Data Dashboard
                         _buildSettingsTile(
                           context,
                           icon: Icons.shield_rounded,
                           iconColor: AppColors.success,
-                          title: l10n.dataPrivacy,
-                          subtitle: 'End-to-end encrypted',
+                          title: 'Privacy & Data Controls',
+                          subtitle: 'AI Data Isolation & Data Export',
                           onTap: () => Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const DataPrivacyScreen()),
+                            MaterialPageRoute(builder: (_) => const PrivacyDashboardScreen()),
                           ),
                         ).animate().fadeIn(delay: 480.ms),
                         const SizedBox(height: 8),
@@ -787,13 +804,10 @@ class ProfileScreen extends ConsumerWidget {
               await prefs.clear();
 
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                      'Account deleted & data cleared. Returning to onboarding...',
-                    ),
-                    backgroundColor: AppColors.success,
-                  ),
+                CosmicNotification.show(
+                  context,
+                  message: 'Account deleted & data cleared. Returning to onboarding...',
+                  icon: Icons.delete_outline_rounded,
                 );
                 // 4. Redirect to entry level Onboarding
                 context.go('/onboarding');

@@ -40,8 +40,15 @@ class VedicChartPainter extends CustomPainter {
 
     // Draw the outer square
     final Rect outerRect = Rect.fromLTWH(0, 0, width, height);
-    canvas.drawRRect(RRect.fromRectAndRadius(outerRect, const Radius.circular(14)), glowPaint);
-    canvas.drawRRect(RRect.fromRectAndRadius(outerRect, const Radius.circular(14)), paint);
+    final RRect outerRRect = RRect.fromRectAndRadius(outerRect, const Radius.circular(14));
+    
+    // Draw outer rounded box border
+    canvas.drawRRect(outerRRect, glowPaint);
+    canvas.drawRRect(outerRRect, paint);
+
+    // Save canvas & clip to outerRRect so diagonal lines stay 100% inside rounded corners
+    canvas.save();
+    canvas.clipRRect(outerRRect);
 
     // Draw the diagonals
     canvas.drawLine(const Offset(0, 0), Offset(width, height), glowPaint);
@@ -60,6 +67,9 @@ class VedicChartPainter extends CustomPainter {
 
     canvas.drawPath(diamondPath, glowPaint);
     canvas.drawPath(diamondPath, paint);
+
+    // Restore canvas clip
+    canvas.restore();
 
     // Draw text for house planets
     final textPainter = TextPainter(
