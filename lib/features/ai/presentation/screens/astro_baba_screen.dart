@@ -21,7 +21,9 @@ import '../../../../core/widgets/admob_banner_widget.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
 
 class AstroBabaScreen extends ConsumerStatefulWidget {
-  const AstroBabaScreen({super.key});
+  final String? initialMessage;
+
+  const AstroBabaScreen({super.key, this.initialMessage});
 
   @override
   ConsumerState<AstroBabaScreen> createState() => _AstroBabaScreenState();
@@ -32,6 +34,16 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   bool _isListeningVoice = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initialMessage != null && widget.initialMessage!.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _sendMessage(widget.initialMessage!);
+      });
+    }
+  }
 
   @override
   void dispose() {

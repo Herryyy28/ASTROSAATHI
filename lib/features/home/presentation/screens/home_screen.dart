@@ -22,6 +22,8 @@ import '../../../../core/widgets/why_this_bottom_sheet.dart';
 import '../../../../core/widgets/admob_banner_widget.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../search/presentation/screens/astrology_search_screen.dart';
+import '../../../search/presentation/widgets/astro_command_center_modal.dart';
+import '../widgets/what_changed_today_card.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../profile/presentation/widgets/profile_switcher_modal.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
@@ -105,7 +107,11 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: 24),
                   _buildEnergyCard(context, plan).fadeSlideUp(delay: 100.ms),
                 ],
-                const SizedBox(height: 28),
+                const SizedBox(height: 20),
+
+                // ── What Changed Today? Daily Comparison Engine ──
+                WhatChangedTodayCard(gamePlan: plan).fadeSlideUp(delay: 110.ms),
+                const SizedBox(height: 24),
 
                 // ── Personal Cosmic Calendar ──────────────────────
                 const PersonalCosmicCalendarWidget().fadeSlideUp(delay: 120.ms),
@@ -271,12 +277,7 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const AstrologySearchScreen(),
-                      ),
-                    );
+                    AstroCommandCenterModal.show(context);
                   },
                 ),
               ],

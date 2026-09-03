@@ -8,6 +8,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../home/presentation/widgets/add_event_modal.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
+import '../widgets/show_me_calculation_modal.dart';
 
 enum DecisionCategory {
   career('Career & Job Switch', Icons.work_rounded, Color(0xFF4A90E2)),
@@ -506,6 +507,24 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                 style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.primary),
               ),
             ],
+          ),
+          const SizedBox(height: 12),
+
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                side: BorderSide(color: AppColors.primary.withOpacity(0.5)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              icon: const Icon(Icons.calculate_rounded, size: 16, color: AppColors.primary),
+              label: Text(
+                'Show Full Math Calculation Ledger',
+                style: GoogleFonts.outfit(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.primary),
+              ),
+              onPressed: () => ShowMeCalculationModal.show(context),
+            ),
           ),
 
           if (_showMathDetails) ...[

@@ -25,6 +25,10 @@ import '../../../kundli/presentation/screens/kundli_screen.dart';
 import '../../../astrology/presentation/screens/transit_center_screen.dart';
 import '../../../matching/presentation/screens/chart_comparison_screen.dart';
 import '../../../astrology/presentation/screens/astro_decision_engine_screen.dart';
+import '../../../astrology/presentation/screens/astro_scenario_simulator_screen.dart';
+import '../../../astrology/presentation/screens/future_event_radar_screen.dart';
+import '../../../workspace/presentation/screens/astro_workspace_screen.dart';
+import '../../../family/presentation/screens/family_astrology_dashboard_screen.dart';
 import 'astro_academy_screen.dart';
 
 class ExploreScreen extends ConsumerWidget {
@@ -284,11 +288,67 @@ class ExploreScreen extends ConsumerWidget {
                         title: 'Astro Decision Engine',
                         subtitle: 'Best Time & Show Me Math',
                         gradient: const LinearGradient(
-                          colors: [Color(0xFFFFD700), Color(0xFFFF8C00)],
+                          colors: [Color(0xFFE0A13A), Color(0xFFF9D38D)],
                         ),
                         onTap: () => Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => const AstroDecisionEngineScreen()),
+                        ),
+                      ),
+                      _buildCategoryCard(
+                        context: context,
+                        index: 9,
+                        emoji: '🧪',
+                        title: 'Scenario Simulator',
+                        subtitle: 'Test Location & Time Shifts',
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF00C9FF), Color(0xFF92FE9D)],
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AstroScenarioSimulatorScreen()),
+                        ),
+                      ),
+                      _buildCategoryCard(
+                        context: context,
+                        index: 10,
+                        emoji: '🔭',
+                        title: 'Future Event Radar',
+                        subtitle: 'Next 90 Days Cosmic Milestones',
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFF857A6), Color(0xFFFF5858)],
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const FutureEventRadarScreen()),
+                        ),
+                      ),
+                      _buildCategoryCard(
+                        context: context,
+                        index: 11,
+                        emoji: '🏢',
+                        title: 'Astro Workspace',
+                        subtitle: 'Flagship Command Center',
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AstroWorkspaceScreen()),
+                        ),
+                      ),
+                      _buildCategoryCard(
+                        context: context,
+                        index: 12,
+                        emoji: '👨‍👩‍👧‍👦',
+                        title: 'Family Dashboard',
+                        subtitle: 'Spouse, Kids & Partner Synergy',
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFFF758C), Color(0xFFFF7EB3)],
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const FamilyAstrologyDashboardScreen()),
                         ),
                       ),
                     ]),
