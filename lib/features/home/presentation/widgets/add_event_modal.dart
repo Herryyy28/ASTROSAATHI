@@ -114,26 +114,32 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              gradient: AppColors.goldGradient,
-                              borderRadius: BorderRadius.circular(12),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                gradient: AppColors.goldGradient,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Icon(Icons.event_available_rounded, color: Colors.black, size: 20),
                             ),
-                            child: const Icon(Icons.event_available_rounded, color: Colors.black, size: 20),
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            'Schedule Personal Event',
-                            style: GoogleFonts.outfit(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.getTextPrimary(context),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                'Schedule Personal Event',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.getTextPrimary(context),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       IconButton(
                         icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context)),

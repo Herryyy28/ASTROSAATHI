@@ -153,155 +153,79 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
                 const SizedBox(height: 30),
 
-                // Glass Form Card
+                // Glass Card with 1-Tap Sign-In Options
                 GlassCard(
                   padding: const EdgeInsets.all(24),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (_isSignUp) ...[
-                          TextFormField(
-                            controller: _nameController,
-                            style: TextStyle(color: AppColors.getTextPrimary(context)),
-                            decoration: const InputDecoration(
-                              labelText: 'Full Name',
-                              prefixIcon: Icon(Icons.person_outline_rounded, color: AppColors.primary),
-                            ),
-                            validator: (v) => v == null || v.trim().isEmpty ? 'Please enter your name' : null,
-                          ),
-                          const SizedBox(height: 16),
-                        ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Google Sign-In Primary Button
+                      ElevatedButton.icon(
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                setState(() => _isLoading = true);
+                                final success = await ref
+                                    .read(userSessionProvider.notifier)
+                                    .loginWithGoogle();
+                                setState(() => _isLoading = false);
 
-                        TextFormField(
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          style: TextStyle(color: AppColors.getTextPrimary(context)),
-                          decoration: const InputDecoration(
-                            labelText: 'Email Address',
-                            prefixIcon: Icon(Icons.email_outlined, color: AppColors.primary),
-                          ),
-                          validator: (v) {
-                            if (v == null || v.trim().isEmpty) return 'Please enter email';
-                            if (!v.contains('@') || !v.contains('.')) return 'Enter valid email address';
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        TextFormField(
-                          controller: _passwordController,
-                          obscureText: _obscurePassword,
-                          style: TextStyle(color: AppColors.getTextPrimary(context)),
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.primary),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                                color: AppColors.getTextMuted(context),
-                              ),
-                              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                            ),
-                          ),
-                          validator: (v) => v == null || v.length < 6 ? 'Password must be at least 6 chars' : null,
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        GradientButton(
-                          text: _isSignUp ? 'Sign Up' : 'Sign In',
-                          isLoading: _isLoading,
-                          onPressed: _handleSubmit,
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // OR Divider
-                        Row(
-                          children: [
-                            Expanded(child: Divider(color: AppColors.getGlassBorder(context))),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Text(
-                                'OR',
-                                style: TextStyle(color: AppColors.getTextMuted(context), fontSize: 12, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Expanded(child: Divider(color: AppColors.getGlassBorder(context))),
-                          ],
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Google Sign-In Button
-                        OutlinedButton.icon(
-                          onPressed: _isLoading
-                              ? null
-                              : () async {
-                                  setState(() => _isLoading = true);
-                                  final success = await ref
-                                      .read(userSessionProvider.notifier)
-                                      .loginWithGoogle();
-                                  setState(() => _isLoading = false);
-
-                                  if (success && mounted) {
-                                    _showToast('Signed in with Google successfully!', isError: false);
-                                    context.pop();
-                                  } else if (mounted) {
-                                    _showToast('Google Sign-In failed or cancelled.');
-                                  }
-                                },
-                          icon: Image.network(
-                            'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg',
-                            height: 20,
-                            errorBuilder: (context, error, stackTrace) => const Icon(
-                              Icons.g_mobiledata_rounded,
-                              color: Colors.white,
-                              size: 28,
-                            ),
-                          ),
-                          label: Text(
-                            'Continue with Google',
-                            style: GoogleFonts.outfit(
-                              color: AppColors.getTextPrimary(context),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15,
-                            ),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            side: BorderSide(color: AppColors.getGlassBorder(context)),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            backgroundColor: isLight
-                                ? AppColors.surfaceLight
-                                : Colors.white.withOpacity(0.05),
+                                if (success && mounted) {
+                                  _showToast('Signed in with Google successfully!', isError: false);
+                                  context.pop();
+                                } else if (mounted) {
+                                  _showToast('Google Sign-In failed or cancelled.');
+                                }
+                              },
+                        icon: Image.network(
+                          'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg',
+                          height: 22,
+                          errorBuilder: (context, error, stackTrace) => const Icon(
+                            Icons.g_mobiledata_rounded,
+                            color: Colors.white,
+                            size: 28,
                           ),
                         ),
-
-                        const SizedBox(height: 16),
-
-                        // Toggle Auth Mode
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              _isSignUp = !_isSignUp;
-                              _formKey.currentState?.reset();
-                            });
-                          },
-                          child: Text(
-                            _isSignUp
-                                ? 'Already have an account? Sign In'
-                                : 'Don\'t have an account? Sign Up',
-                            style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
+                        label: Text(
+                          'Continue with Google',
+                          style: GoogleFonts.outfit(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
                           ),
                         ),
-                      ],
-                    ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 2,
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Continue as Guest Option
+                      OutlinedButton(
+                        onPressed: () => context.pop(),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          side: BorderSide(color: AppColors.getGlassBorder(context)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: Text(
+                          'Continue as Guest',
+                          style: GoogleFonts.outfit(
+                            color: AppColors.getTextSecondary(context),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ).fadeSlideUp(delay: 200.ms),
 

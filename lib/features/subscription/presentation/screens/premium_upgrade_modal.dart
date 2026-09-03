@@ -8,6 +8,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../../../core/providers/subscription_provider.dart';
+import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/services/razorpay_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../auth/data/auth_repository.dart';
@@ -661,21 +662,23 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
   Future<void> _handleSubscribe() async {
     final session = ref.read(userSessionProvider);
-    if (!session.isAuthenticated) {
-      _showAuthRequiredSheet(context);
-      return;
-    }
+    final activeProfile = ref.read(activeProfileProvider);
 
     final double amount = _selectedTier == PlanTier.weeklyVip
         ? 19
         : (_selectedTier == PlanTier.monthlyVip ? 49 : 199);
     final String planName = _selectedTier.displayName;
 
+    final userId = session.userId ?? 'vip_usr_${DateTime.now().millisecondsSinceEpoch}';
+    final userEmail = session.email ?? (activeProfile.name.isNotEmpty == true 
+        ? '${activeProfile.name.toLowerCase().replaceAll(' ', '.')}@astrosaathi.com' 
+        : 'customer@astrosaathi.com');
+
     _startRazorpayCheckout(
       amount,
       planName,
-      session.userId ?? 'user',
-      session.email ?? '',
+      userId,
+      userEmail,
     );
   }
 

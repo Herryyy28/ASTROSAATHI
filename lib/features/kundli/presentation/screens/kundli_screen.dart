@@ -15,6 +15,7 @@ import '../../../../core/providers/astrology_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../astrology/presentation/widgets/birth_chart_card.dart';
+import '../widgets/interactive_dasha_timeline.dart';
 
 /// Provider for selected kundli tab index
 final kundliTabProvider = StateProvider<int>((ref) => 0);
@@ -617,6 +618,10 @@ class KundliScreen extends ConsumerWidget {
                     ],
                   ),
                 ).animate().fadeIn(duration: 400.ms),
+                const SizedBox(height: 20),
+
+                // Interactive Dasha Tree
+                const InteractiveDashaTimeline(),
               ],
             ),
           ),

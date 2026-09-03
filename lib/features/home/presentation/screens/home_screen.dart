@@ -25,6 +25,7 @@ import '../../../search/presentation/screens/astrology_search_screen.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../profile/presentation/widgets/profile_switcher_modal.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
+import '../widgets/shareable_cosmic_card_modal.dart';
 import 'main_screen.dart';
 
 
@@ -233,6 +234,27 @@ class HomeScreen extends ConsumerWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
+                ),
+                IconButton(
+                  icon: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.getSurfaceElevated(context),
+                      shape: BoxShape.circle,
+                      border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                    ),
+                    child: Icon(
+                      Icons.share_rounded,
+                      color: AppColors.getPrimary(context),
+                      size: 18,
+                    ),
+                  ),
+                  onPressed: () {
+                    final plan = ref.read(dailyGamePlanProvider).value;
+                    if (plan != null) {
+                      ShareableCosmicCardModal.show(context, plan);
+                    }
+                  },
                 ),
                 IconButton(
                   icon: Container(

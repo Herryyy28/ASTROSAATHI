@@ -303,16 +303,20 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                           children: [
                           Text('Ashtakoota Milan Score', style: TextStyle(fontSize: 13, color: AppColors.getTextSecondary(context))),
                           const SizedBox(height: 4),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.baseline,
-                            textBaseline: TextBaseline.alphabetic,
-                            children: [
-                              Text(
-                                '$totalScore',
-                                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: AppColors.primary),
-                              ),
-                              Text(' / 36 Gunas', style: TextStyle(fontSize: 14, color: AppColors.getTextSecondary(context))),
-                            ],
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.alphabetic,
+                              children: [
+                                Text(
+                                  '$totalScore',
+                                  style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: AppColors.primary),
+                                ),
+                                Text(' / 36 Gunas', style: TextStyle(fontSize: 14, color: AppColors.getTextSecondary(context))),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Container(

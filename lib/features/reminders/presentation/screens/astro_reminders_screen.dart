@@ -67,17 +67,6 @@ class AstroRemindersScreen extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    IconButton(
-                      icon: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          gradient: AppColors.goldGradient,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.add_rounded, color: Colors.black, size: 18),
-                      ),
-                      onPressed: () => AddEventModal.show(context),
-                    ),
                   ],
                 ),
               ),
@@ -98,13 +87,17 @@ class AstroRemindersScreen extends ConsumerWidget {
                             children: [
                               const Icon(Icons.notifications_active_rounded, color: AppColors.primary, size: 18),
                               const SizedBox(width: 8),
-                              Text(
-                                'DAILY HABIT ENGINE PUSH ALERTS',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1.0,
-                                  color: AppColors.primary,
+                              Expanded(
+                                child: Text(
+                                  'DAILY HABIT ENGINE PUSH ALERTS',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1.0,
+                                    color: AppColors.primary,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],
@@ -148,15 +141,20 @@ class AstroRemindersScreen extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'YOUR SCHEDULED EVENTS (${reminderState.reminders.length})',
-                          style: GoogleFonts.outfit(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.0,
-                            color: AppColors.getTextSecondary(context),
+                        Expanded(
+                          child: Text(
+                            'YOUR SCHEDULED EVENTS (${reminderState.reminders.length})',
+                            style: GoogleFonts.outfit(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.0,
+                              color: AppColors.getTextSecondary(context),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        const SizedBox(width: 8),
                         TextButton.icon(
                           onPressed: () => AddEventModal.show(context),
                           icon: const Icon(Icons.add_circle_outline_rounded, size: 14, color: AppColors.primary),

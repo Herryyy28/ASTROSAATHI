@@ -684,15 +684,20 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'SCHEDULED PERSONAL EVENTS',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 1.0,
-                                  color: AppColors.getPrimary(context),
+                              Expanded(
+                                child: Text(
+                                  'SCHEDULED PERSONAL EVENTS',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: 0.8,
+                                    color: AppColors.getPrimary(context),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
+                              const SizedBox(width: 8),
                               GestureDetector(
                                 onTap: () => AddEventModal.show(context, initialDate: selectedDay.date),
                                 child: Container(

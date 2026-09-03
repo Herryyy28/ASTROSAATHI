@@ -22,6 +22,10 @@ import '../../../astrology/presentation/screens/transits_screen.dart';
 
 import '../../../home/presentation/screens/main_screen.dart';
 import '../../../kundli/presentation/screens/kundli_screen.dart';
+import '../../../astrology/presentation/screens/transit_center_screen.dart';
+import '../../../matching/presentation/screens/chart_comparison_screen.dart';
+import '../../../astrology/presentation/screens/astro_decision_engine_screen.dart';
+import 'astro_academy_screen.dart';
 
 class ExploreScreen extends ConsumerWidget {
   const ExploreScreen({super.key});
@@ -131,7 +135,7 @@ class ExploreScreen extends ConsumerWidget {
                       ),
                       mainAxisSpacing: 12,
                       crossAxisSpacing: 12,
-                      childAspectRatio: 1.5,
+                      childAspectRatio: 1.32,
                     ),
                     delegate: SliverChildListDelegate([
                       _buildCategoryCard(
@@ -200,7 +204,7 @@ class ExploreScreen extends ConsumerWidget {
                       ),
                       mainAxisSpacing: 12,
                       crossAxisSpacing: 12,
-                      childAspectRatio: 1.5,
+                      childAspectRatio: 1.32,
                     ),
                     delegate: SliverChildListDelegate([
                       _buildCategoryCard(
@@ -235,14 +239,56 @@ class ExploreScreen extends ConsumerWidget {
                         context: context,
                         index: 5,
                         emoji: '🪐',
-                        title: l10n.exploreTransits,
-                        subtitle: 'Planetary Gochar',
+                        title: 'Transit & Sade Sati',
+                        subtitle: 'Live Saturn & Gochar Impact',
                         gradient: const LinearGradient(
                           colors: [Color(0xFF4776E6), Color(0xFF8E54E9)],
                         ),
                         onTap: () => Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const TransitsScreen()),
+                          MaterialPageRoute(builder: (_) => const TransitCenterScreen()),
+                        ),
+                      ),
+                      _buildCategoryCard(
+                        context: context,
+                        index: 6,
+                        emoji: '👥',
+                        title: 'Chart Synastry',
+                        subtitle: 'Compare Any Two Profiles',
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFD9901A), Color(0xFFE5A63C)],
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const ChartComparisonScreen()),
+                        ),
+                      ),
+                      _buildCategoryCard(
+                        context: context,
+                        index: 7,
+                        emoji: '📖',
+                        title: 'Astro Academy',
+                        subtitle: 'Glossary & Beginner Mode',
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF11998E), Color(0xFF38EF7D)],
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AstroAcademyScreen()),
+                        ),
+                      ),
+                      _buildCategoryCard(
+                        context: context,
+                        index: 8,
+                        emoji: '🎯',
+                        title: 'Astro Decision Engine',
+                        subtitle: 'Best Time & Show Me Math',
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFFFD700), Color(0xFFFF8C00)],
+                        ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AstroDecisionEngineScreen()),
                         ),
                       ),
                     ]),
@@ -269,7 +315,7 @@ class ExploreScreen extends ConsumerWidget {
                       ),
                       mainAxisSpacing: 12,
                       crossAxisSpacing: 12,
-                      childAspectRatio: 1.5,
+                      childAspectRatio: 1.32,
                     ),
                     delegate: SliverChildListDelegate([
                       _buildCategoryCard(
