@@ -137,30 +137,54 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                 ),
 
                 // Glowing Crown Emblem
+                // Glowing 3D Celestial Crown Emblem
                 Center(
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
+                      // Outer Celestial Orbit Ring
                       Container(
-                            width: 90,
-                            height: 90,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: RadialGradient(
-                                colors: [
-                                  const Color(0xFFFFD700).withOpacity(0.4),
-                                  const Color(0xFFD4AF37).withOpacity(0.1),
-                                  Colors.transparent,
-                                ],
-                              ),
-                            ),
+                        width: 105,
+                        height: 105,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color(0xFFFFD700).withOpacity(0.35),
+                            width: 1.2,
+                          ),
+                        ),
+                      )
+                          .animate(onPlay: (c) => c.repeat())
+                          .scale(
+                            duration: 2200.ms,
+                            begin: const Offset(0.88, 0.88),
+                            end: const Offset(1.22, 1.22),
                           )
+                          .fadeOut(duration: 2200.ms),
+
+                      // Outer Pulsing Gold Aura
+                      Container(
+                        width: 88,
+                        height: 88,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: RadialGradient(
+                            colors: [
+                              const Color(0xFFFFD700).withOpacity(0.45),
+                              const Color(0xFFD4AF37).withOpacity(0.15),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+                      )
                           .animate(onPlay: (c) => c.repeat(reverse: true))
                           .scale(
                             duration: 1800.ms,
-                            begin: const Offset(0.9, 0.9),
-                            end: const Offset(1.2, 1.2),
+                            begin: const Offset(0.92, 0.92),
+                            end: const Offset(1.15, 1.15),
                           ),
+
+                      // Inner 3D Metallic Emblem Box
                       Container(
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
@@ -168,24 +192,31 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                           gradient: LinearGradient(
                             colors: isLight
                                 ? [
-                                    const Color(0xFFFFF7E6),
+                                    const Color(0xFFFFF8EA),
                                     const Color(0xFFFEEDC9),
+                                    const Color(0xFFFFF0D3),
                                   ]
                                 : [
                                     const Color(0xFF382909),
-                                    const Color(0xFF1E1705),
+                                    const Color(0xFF241A06),
+                                    const Color(0xFF161003),
                                   ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
                           border: Border.all(
                             color: const Color(0xFFFFD700),
-                            width: 2,
+                            width: 2.2,
                           ),
                           boxShadow: const [
-                            BoxShadow(color: Color(0x80FFD700), blurRadius: 20),
+                            BoxShadow(color: Color(0x80FFD700), blurRadius: 24, spreadRadius: 2),
                           ],
                         ),
-                        child: const Text('👑', style: TextStyle(fontSize: 42)),
-                      ),
+                        child: const Text('👑', style: TextStyle(fontSize: 44)),
+                      )
+                          .animate(onPlay: (c) => c.repeat(reverse: true))
+                          .shake(duration: 2000.ms, hz: 2)
+                          .shimmer(duration: 3000.ms, color: Colors.white.withOpacity(0.5)),
                     ],
                   ),
                 ),
@@ -194,12 +225,13 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                 // Main Title & Tagline
                 Text(
                   isAlreadyVip
-                      ? 'You Are a VIP Member!'
-                      : 'Unlock AstroSaathi VIP',
+                      ? 'You Are a VIP PRO Member!'
+                      : 'Unlock AstroSaathi VIP PRO',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.outfit(
                     fontSize: 26,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: -0.3,
                     color: AppColors.getTextPrimary(context),
                   ),
                 ),

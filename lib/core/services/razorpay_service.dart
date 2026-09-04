@@ -16,7 +16,7 @@ class RazorpayConfig {
   // │ Test Mode:  rzp_test_XXXXXXXXXXXXXXX                                    │
   // │ Live Mode:  rzp_live_XXXXXXXXXXXXXXX                                    │
   // └─────────────────────────────────────────────────────────────────────────┘
-  static const String keyId = 'rzp_test_1DP5mmOlF5G5ag';
+  static const String keyId = 'rzp_test_TXQHQpAoh1QXUd';
 
   static const String merchantName = 'AstroSaathi Technologies';
   static const String currency = 'INR';

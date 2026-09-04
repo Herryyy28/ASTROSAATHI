@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../firebase_options.dart';
 
 /// Centralized service for Firebase lifecycle, initialization, and auth instance access.
 class FirebaseService {
@@ -15,10 +16,12 @@ class FirebaseService {
     if (_isInitialized) return;
     try {
       if (Firebase.apps.isEmpty) {
-        await Firebase.initializeApp();
+        await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform,
+        );
       }
       _isInitialized = true;
-      debugPrint('Firebase successfully initialized.');
+      debugPrint('Firebase successfully initialized with DefaultFirebaseOptions.');
     } catch (e) {
       _isInitialized = false;
       debugPrint('Firebase initialization warning/error: $e');

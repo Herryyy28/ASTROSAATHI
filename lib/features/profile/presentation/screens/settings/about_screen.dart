@@ -44,16 +44,20 @@ class AboutScreen extends StatelessWidget {
                 height: 100,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: AppColors.goldSubtleGradient,
-                  boxShadow: [
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF2A1F0D), Color(0xFF140E05)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  boxShadow: const [
                     BoxShadow(
-                      color: AppColors.goldGlow,
-                      blurRadius: 30,
-                      spreadRadius: -5,
+                      color: Color(0x80FFD700),
+                      blurRadius: 28,
+                      spreadRadius: -2,
                     ),
                   ],
                   border: Border.all(
-                    color: AppColors.primary.withOpacity(0.5),
+                    color: const Color(0xFFFFD700),
                     width: 2,
                   ),
                 ),
@@ -61,8 +65,16 @@ class AboutScreen extends StatelessWidget {
                   child: Image.asset(
                     'assets/icon/app_icon.png',
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) =>
-                        const Center(child: Text('✦', style: TextStyle(fontSize: 48, color: AppColors.primary))),
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: const Color(0xFF1A1407),
+                      child: const Center(
+                        child: Icon(
+                          Icons.auto_awesome_rounded,
+                          size: 46,
+                          color: Color(0xFFFFD700),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),

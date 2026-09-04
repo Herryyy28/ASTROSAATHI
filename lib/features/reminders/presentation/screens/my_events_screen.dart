@@ -11,6 +11,7 @@ import '../../../../core/theme/design_tokens.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/cosmic_notification.dart';
 import '../../../../core/widgets/responsive_layout.dart';
+import '../../../../core/widgets/animated_cosmic_reminder_modal.dart';
 import '../../../explore/presentation/screens/astro_decision_assistant_screen.dart';
 
 class CosmicEventItem {
@@ -419,12 +420,14 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
                     ),
                   ),
                   onPressed: () {
-                    CosmicNotification.show(
+                    AnimatedCosmicReminderModal.show(
                       context,
-                      title: 'Reminder Updated 🔔',
-                      message:
-                          'Celestial timing notification set for ${item.title}.',
-                      icon: Icons.notifications_active_rounded,
+                      title: item.title,
+                      category: item.category,
+                      astroScore: (item.score / 10.0),
+                      dashaContext: item.dashaContext,
+                      aiRecommendation: item.aiExplanation,
+                      eventTime: item.date,
                     );
                   },
                 ),

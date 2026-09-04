@@ -96,7 +96,10 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: 8,
+                            runSpacing: 4,
                             children: [
                               Text(
                                 'Security Center',
@@ -106,7 +109,6 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                   color: AppColors.getTextPrimary(context),
                                 ),
                               ),
-                              const SizedBox(width: 8),
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
@@ -206,17 +208,27 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                     letterSpacing: 0.8,
                                     color: AppColors.getTextSecondary(context),
                                   ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               if (_sessions.length > 1)
-                                TextButton(
-                                  onPressed: _signOutOtherDevices,
-                                  child: Text(
-                                    'Sign Out Others',
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.redAccent,
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      minimumSize: Size.zero,
+                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                    onPressed: _signOutOtherDevices,
+                                    child: Text(
+                                      'Sign Out Others',
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.redAccent,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -244,12 +256,16 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                         children: [
                                           Row(
                                             children: [
-                                              Text(
-                                                sess.deviceName,
-                                                style: GoogleFonts.outfit(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: AppColors.getTextPrimary(context),
+                                              Flexible(
+                                                child: Text(
+                                                  sess.deviceName,
+                                                  style: GoogleFonts.outfit(
+                                                    fontSize: 13,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: AppColors.getTextPrimary(context),
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
                                                 ),
                                               ),
                                               if (sess.isCurrent) ...[
@@ -278,6 +294,8 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                               fontSize: 10.5,
                                               color: AppColors.getTextMuted(context),
                                             ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ],
                                       ),

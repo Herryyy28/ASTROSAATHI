@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../theme/app_colors.dart';
+import 'zodiac_icon.dart';
 import '../providers/locale_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/astrology_provider.dart';
@@ -371,22 +372,26 @@ class _IPhoneGlassMenuContent extends ConsumerWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: AppColors.surfaceDark.withOpacity(0.6),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.glassBorder, width: 0.6),
+          color: const Color(0x99151D2C),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: color.withOpacity(0.35), width: 0.8),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.08),
+              blurRadius: 10,
+              spreadRadius: -2,
+            ),
+          ],
         ),
         child: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: color.withOpacity(0.3), width: 0.6),
-              ),
-              child: Icon(icon, color: color, size: 20),
+            CosmicIconBadge(
+              icon: icon,
+              size: 18,
+              color: color,
+              isGlowing: true,
             ),
             const SizedBox(width: 10),
             Expanded(

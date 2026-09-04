@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/glass_card.dart';
+import '../../../../core/widgets/animated_cosmic_reminder_modal.dart';
 import '../../../home/presentation/widgets/add_event_modal.dart';
 import '../../providers/reminder_provider.dart';
 
@@ -88,16 +89,18 @@ class AstroRemindersScreen extends ConsumerWidget {
                               const Icon(Icons.notifications_active_rounded, color: AppColors.primary, size: 18),
                               const SizedBox(width: 8),
                               Expanded(
-                                child: Text(
-                                  'DAILY HABIT ENGINE PUSH ALERTS',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1.0,
-                                    color: AppColors.primary,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'DAILY HABIT ENGINE PUSH ALERTS',
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold,
+                                      letterSpacing: 1.0,
+                                      color: AppColors.primary,
+                                    ),
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],
@@ -135,23 +138,78 @@ class AstroRemindersScreen extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 14),
+
+                    // Test Real-Time Animated Reminder Banner
+                    GlassCard(
+                      padding: const EdgeInsets.all(14),
+                      borderColor: const Color(0xFFFFD700).withOpacity(0.5),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFD700).withOpacity(0.18),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.notifications_active_rounded, color: Color(0xFFFFD700), size: 20),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Live Cosmic Reminder Alert',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 13.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.getTextPrimary(context),
+                                  ),
+                                ),
+                                Text(
+                                  'Test the real-time animated popup dialog for scheduled events',
+                                  style: GoogleFonts.inter(fontSize: 10.5, color: AppColors.getTextSecondary(context)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFFFD700),
+                              foregroundColor: const Color(0xFF1B1403),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            ),
+                            onPressed: () => AnimatedCosmicReminderModal.show(context),
+                            child: Text(
+                              'Test Alert',
+                              style: GoogleFonts.outfit(fontSize: 11.5, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
 
                     // User Scheduled Events Header
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Text(
-                            'YOUR SCHEDULED EVENTS (${reminderState.reminders.length})',
-                            style: GoogleFonts.outfit(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1.0,
-                              color: AppColors.getTextSecondary(context),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'SCHEDULED ASTRO EVENTS (${reminderState.reminders.length})',
+                              style: GoogleFonts.outfit(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.0,
+                                color: AppColors.getTextSecondary(context),
+                              ),
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -208,52 +266,77 @@ class AstroRemindersScreen extends ConsumerWidget {
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              reminder.title,
-                                              style: GoogleFonts.outfit(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.getTextPrimary(context),
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                          ),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                            decoration: BoxDecoration(
-                                              color: AppColors.getPrimary(context).withOpacity(0.15),
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                            child: Text(
-                                              '★ ${reminder.astroScore}/10',
-                                              style: TextStyle(
-                                                fontSize: 11,
-                                                fontWeight: FontWeight.bold,
-                                                color: AppColors.getPrimary(context),
+                                  child: GestureDetector(
+                                    onTap: () => AnimatedCosmicReminderModal.show(
+                                      context,
+                                      title: reminder.title,
+                                      category: reminder.category.name,
+                                      astroScore: reminder.astroScore.toDouble(),
+                                      dashaContext: 'Mercury-Jupiter Transit Alignment',
+                                      aiRecommendation: reminder.astroRecommendation,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                reminder.title,
+                                                style: GoogleFonts.outfit(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: AppColors.getTextPrimary(context),
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        reminder.astroRecommendation,
-                                        style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.getPrimary(context).withOpacity(0.15),
+                                                borderRadius: BorderRadius.circular(10),
+                                              ),
+                                              child: Text(
+                                                '★ ${reminder.astroScore}/10',
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: AppColors.getPrimary(context),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          reminder.astroRecommendation,
+                                          style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(width: 8),
+                                const SizedBox(width: 6),
                                 IconButton(
+                                  tooltip: 'Test Alert',
+                                  icon: const Icon(Icons.notifications_active_rounded, size: 18, color: Color(0xFFFFD700)),
+                                  onPressed: () {
+                                    AnimatedCosmicReminderModal.show(
+                                      context,
+                                      title: reminder.title,
+                                      category: reminder.category.name,
+                                      astroScore: reminder.astroScore.toDouble(),
+                                      dashaContext: 'Mercury-Jupiter Transit Alignment',
+                                      aiRecommendation: reminder.astroRecommendation,
+                                    );
+                                  },
+                                ),
+                                IconButton(
+                                  tooltip: 'Delete',
                                   icon: const Icon(Icons.delete_outline_rounded, size: 18, color: Colors.redAccent),
                                   onPressed: () {
                                     notifier.deleteReminder(reminder.id);

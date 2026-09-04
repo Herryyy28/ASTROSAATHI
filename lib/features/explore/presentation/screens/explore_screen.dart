@@ -526,26 +526,14 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                                   tooltip: 'Filter Features',
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                                   color: isLight ? AppColors.surfaceLight : AppColors.surfaceDark,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(7),
-                                    decoration: BoxDecoration(
-                                      color: _filter != ExploreFilter.all
-                                          ? AppColors.primary.withOpacity(0.2)
-                                          : AppColors.getSurfaceElevated(context),
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: _filter != ExploreFilter.all
-                                            ? AppColors.primary
-                                            : AppColors.getBorder(context),
-                                        width: 0.8,
-                                      ),
-                                    ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(6),
                                     child: Icon(
                                       Icons.filter_list_rounded,
                                       color: _filter != ExploreFilter.all
                                           ? AppColors.primary
-                                          : AppColors.getTextPrimary(context),
-                                      size: 16,
+                                          : AppColors.getTextSecondary(context),
+                                      size: 18,
                                     ),
                                   ),
                                   itemBuilder: (ctx) => [
@@ -668,13 +656,13 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         child: Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
+            color: isSelected ? AppColors.primary.withOpacity(0.18) : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
             icon,
             size: 16,
-            color: isSelected ? Colors.black : AppColors.getTextSecondary(context),
+            color: isSelected ? AppColors.primary : AppColors.getTextSecondary(context),
           ),
         ),
       ),
@@ -715,7 +703,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               ),
               mainAxisSpacing: 12,
               crossAxisSpacing: 12,
-              childAspectRatio: 1.32,
+              childAspectRatio: context.responsive<double>(
+                mobile: 1.15,
+                tablet: 1.25,
+                desktop: 1.35,
+              ),
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
@@ -765,22 +757,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                   onTap: item['action'],
                   child: Row(
                     children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          gradient: gradient,
-                          boxShadow: [
-                            BoxShadow(
-                              color: gradient.colors.last.withOpacity(0.3),
-                              blurRadius: 8,
-                              spreadRadius: -2,
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(item['emoji'], style: const TextStyle(fontSize: 20)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                        child: Text(
+                          item['emoji'],
+                          style: const TextStyle(fontSize: 26),
                         ),
                       ),
                       const SizedBox(width: 14),
@@ -860,13 +841,10 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                   // Folder Header Tile
                   ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.15),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.folder_rounded, color: AppColors.primary, size: 20),
+                    leading: const Icon(
+                      Icons.folder_open_rounded,
+                      color: AppColors.primary,
+                      size: 22,
                     ),
                     title: Text(
                       cat,
@@ -1004,25 +982,11 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
       ),
       child: Row(
         children: [
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: AppColors.goldGradient,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primary.withOpacity(0.35),
-                  blurRadius: 14,
-                  spreadRadius: -2,
-                ),
-              ],
-            ),
-            child: const Center(
-              child: Text(
-                '🌞',
-                style: TextStyle(fontSize: 26),
-              ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 6),
+            child: Text(
+              '🌞',
+              style: TextStyle(fontSize: 32),
             ),
           ),
           const SizedBox(width: 16),
@@ -1099,31 +1063,14 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  gradient: gradient,
-                  boxShadow: [
-                    BoxShadow(
-                      color: gradient.colors.last.withOpacity(0.3),
-                      blurRadius: 8,
-                      spreadRadius: -2,
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Text(
-                    emoji,
-                    style: const TextStyle(fontSize: 17),
-                  ),
-                ),
+              Text(
+                emoji,
+                style: const TextStyle(fontSize: 22),
               ),
               if (isVip)
                 AnimatedVipBadge(
@@ -1139,27 +1086,35 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 ),
             ],
           ),
-          const Spacer(),
-          Text(
-            title,
-            style: GoogleFonts.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.titleMedium?.color ?? AppColors.textPrimaryDark,
-              height: 1.15,
+          const SizedBox(height: 6),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.outfit(
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.titleMedium?.color ?? AppColors.textPrimaryDark,
+                    height: 1.15,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: GoogleFonts.inter(
+                    fontSize: 9.0,
+                    color: Theme.of(context).textTheme.bodySmall?.color ?? AppColors.textTertiaryDark,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 2),
-          Text(
-            subtitle,
-            style: GoogleFonts.inter(
-              fontSize: 9.5,
-              color: Theme.of(context).textTheme.bodySmall?.color ?? AppColors.textTertiaryDark,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

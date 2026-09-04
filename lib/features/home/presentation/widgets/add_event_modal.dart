@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/cosmic_notification.dart';
+import '../../../../core/widgets/animated_cosmic_reminder_modal.dart';
 import '../../../reminders/data/models/reminder_model.dart';
 import '../../../reminders/providers/reminder_provider.dart';
 
@@ -378,10 +379,15 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
 
                         if (mounted) {
                           Navigator.pop(context);
-                          CosmicNotification.show(
+                          AnimatedCosmicReminderModal.show(
                             context,
-                            message: '✦ Scheduled "$title" with Astro Score ${score.toStringAsFixed(1)}/10',
-                            icon: Icons.event_available_rounded,
+                            title: title,
+                            category: _selectedCategory.label,
+                            astroScore: score,
+                            dashaContext: '${_selectedCategory.label} Alignment Window',
+                            aiRecommendation: score >= 8.0
+                                ? 'Peak planetary alignment! Transit positions offer maximum success for this event.'
+                                : 'Timing window logged. Maintain focus during event execution.',
                           );
                         }
                       },

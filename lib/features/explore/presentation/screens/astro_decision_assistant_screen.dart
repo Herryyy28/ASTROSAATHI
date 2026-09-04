@@ -10,6 +10,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/design_tokens.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/cosmic_notification.dart';
+import '../../../../core/widgets/animated_cosmic_reminder_modal.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
 
@@ -647,12 +648,16 @@ class _AstroDecisionAssistantScreenState
                     ),
                   ),
                   onPressed: () {
-                    CosmicNotification.show(
+                    AnimatedCosmicReminderModal.show(
                       context,
-                      title: 'Event & Reminder Saved 📅',
-                      message:
-                          '"${res['title']}" has been saved to My Events with a celestial timing notification.',
-                      icon: Icons.event_available_rounded,
+                      title: res['title'],
+                      category: _selectedCategory,
+                      astroScore: (score / 10.0),
+                      dashaContext: res['dasha'],
+                      aiRecommendation: res['transit'],
+                      remediationText: (res['guidance'] as List<String>).isNotEmpty
+                          ? (res['guidance'] as List<String>).first
+                          : '',
                     );
                   },
                 ),
