@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:AstroSaathi/core/theme/app_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -70,7 +71,8 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
       location: 'New Delhi',
       score: 94,
       dashaContext: 'Mars-Jupiter • Pushya Nakshatra',
-      aiExplanation: 'Pushya Nakshatra brings lifelong stability & wealth growth.',
+      aiExplanation:
+          'Pushya Nakshatra brings lifelong stability & wealth growth.',
       status: 'Upcoming',
     ),
     CosmicEventItem(
@@ -92,12 +94,17 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
     final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.getSurface(context),
+      backgroundColor: isLight
+          ? Theme.of(context).scaffoldBackgroundColor
+          : AppColors.getSurface(context),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context)),
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: AppColors.getTextPrimary(context),
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -110,11 +117,16 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add_circle_outline_rounded, color: Color(0xFFFFD700)),
+            icon: const Icon(
+              Icons.add_circle_outline_rounded,
+              color: Color(0xFFFFD700),
+            ),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const AstroDecisionAssistantScreen()),
+                MaterialPageRoute(
+                  builder: (_) => const AstroDecisionAssistantScreen(),
+                ),
               );
             },
           ),
@@ -153,7 +165,11 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
                 color: const Color(0xFFFFD700).withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.calendar_month_rounded, color: Color(0xFFFFD700), size: 24),
+              child: const Icon(
+                Icons.calendar_month_rounded,
+                color: Color(0xFFFFD700),
+                size: 24,
+              ),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -162,11 +178,18 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
                 children: [
                   Text(
                     'Plan New Cosmic Event',
-                    style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                    style: GoogleFonts.outfit(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.getTextPrimary(context),
+                    ),
                   ),
                   Text(
                     'Evaluate interview, exam, travel or property purchase.',
-                    style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: AppColors.getTextSecondary(context),
+                    ),
                   ),
                 ],
               ),
@@ -175,16 +198,29 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFFD700),
                 foregroundColor: const Color(0xFF1B1403),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
               ),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const AstroDecisionAssistantScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const AstroDecisionAssistantScreen(),
+                  ),
                 );
               },
-              child: Text('+ Event', style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold)),
+              child: Text(
+                '+ Event',
+                style: GoogleFonts.outfit(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         ),
@@ -209,40 +245,66 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withOpacity(0.15),
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 0.8),
+                        border: Border.all(
+                          color: AppColors.primary.withOpacity(0.4),
+                          width: 0.8,
+                        ),
                       ),
                       child: Text(
                         item.category,
-                        style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
+                        style: GoogleFonts.outfit(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: isUpcoming ? Colors.green.withOpacity(0.15) : Colors.grey.withOpacity(0.15),
+                        color: isUpcoming
+                            ? Colors.green.withOpacity(0.15)
+                            : Colors.grey.withOpacity(0.15),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         item.status,
-                        style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.bold, color: isUpcoming ? Colors.green : Colors.grey),
+                        style: GoogleFonts.inter(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: isUpcoming ? Colors.green : Colors.grey,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFD700).withOpacity(0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     '★ ${item.score}/100',
-                    style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: const Color(0xFFFFD700)),
+                    style: GoogleFonts.outfit(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFFFFD700),
+                    ),
                   ),
                 ),
               ],
@@ -252,26 +314,44 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
 
             Text(
               item.title,
-              style: GoogleFonts.outfit(fontSize: 17, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+              style: GoogleFonts.outfit(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: AppColors.getTextPrimary(context),
+              ),
             ),
 
             const SizedBox(height: 6),
 
             Row(
               children: [
-                Icon(Icons.calendar_today_rounded, size: 14, color: AppColors.getTextSecondary(context)),
+                Icon(
+                  Icons.calendar_today_rounded,
+                  size: 14,
+                  color: AppColors.getTextSecondary(context),
+                ),
                 const SizedBox(width: 6),
                 Text(
                   '${DateFormat('E, MMM d, yyyy').format(item.date)} at ${item.timeStr}',
-                  style: GoogleFonts.inter(fontSize: 12, color: AppColors.getTextSecondary(context)),
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    color: AppColors.getTextSecondary(context),
+                  ),
                 ),
                 const SizedBox(width: 12),
-                Icon(Icons.location_on_outlined, size: 14, color: AppColors.getTextSecondary(context)),
+                Icon(
+                  Icons.location_on_outlined,
+                  size: 14,
+                  color: AppColors.getTextSecondary(context),
+                ),
                 const SizedBox(width: 4),
                 Expanded(
                   child: Text(
                     item.location,
-                    style: GoogleFonts.inter(fontSize: 12, color: AppColors.getTextSecondary(context)),
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: AppColors.getTextSecondary(context),
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -282,12 +362,20 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
 
             Row(
               children: [
-                const Icon(Icons.auto_awesome_rounded, size: 14, color: Color(0xFFFFD700)),
+                const Icon(
+                  Icons.auto_awesome_rounded,
+                  size: 14,
+                  color: Color(0xFFFFD700),
+                ),
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
                     item.dashaContext,
-                    style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                    style: GoogleFonts.outfit(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.getTextPrimary(context),
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -298,7 +386,11 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
 
             Text(
               item.aiExplanation,
-              style: GoogleFonts.inter(fontSize: 12, color: AppColors.getTextSecondary(context), height: 1.4),
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                color: AppColors.getTextSecondary(context),
+                height: 1.4,
+              ),
             ),
 
             const SizedBox(height: 14),
@@ -309,25 +401,39 @@ class _MyEventsScreenState extends ConsumerState<MyEventsScreen> {
                 TextButton.icon(
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   icon: Icon(
-                    item.isReminderEnabled ? Icons.notifications_active_rounded : Icons.notifications_off_outlined,
+                    item.isReminderEnabled
+                        ? Icons.notifications_active_rounded
+                        : Icons.notifications_off_outlined,
                     size: 16,
-                    color: item.isReminderEnabled ? const Color(0xFFFFD700) : Colors.grey,
+                    color: item.isReminderEnabled
+                        ? const Color(0xFFFFD700)
+                        : Colors.grey,
                   ),
                   label: Text(
                     item.isReminderEnabled ? 'Reminder Set' : 'Enable Reminder',
-                    style: GoogleFonts.inter(fontSize: 12, color: item.isReminderEnabled ? const Color(0xFFFFD700) : Colors.grey),
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      color: item.isReminderEnabled
+                          ? const Color(0xFFFFD700)
+                          : Colors.grey,
+                    ),
                   ),
                   onPressed: () {
                     CosmicNotification.show(
                       context,
                       title: 'Reminder Updated 🔔',
-                      message: 'Celestial timing notification set for ${item.title}.',
+                      message:
+                          'Celestial timing notification set for ${item.title}.',
                       icon: Icons.notifications_active_rounded,
                     );
                   },
                 ),
                 IconButton(
-                  icon: const Icon(Icons.delete_outline_rounded, size: 18, color: Colors.redAccent),
+                  icon: const Icon(
+                    Icons.delete_outline_rounded,
+                    size: 18,
+                    color: Colors.redAccent,
+                  ),
                   onPressed: () {
                     setState(() {
                       _events.removeAt(index);

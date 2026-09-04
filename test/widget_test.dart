@@ -1,8 +1,8 @@
+import 'package:AstroSaathi/core/providers/profile_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:astrosaathi/core/utils/zodiac_sign_utils.dart';
-import 'package:astrosaathi/core/providers/profile_provider.dart';
-import 'package:astrosaathi/features/astrology/services/pdf_report_generator.dart';
-import 'package:astrosaathi/l10n/app_language.dart';
+import 'package:AstroSaathi/core/utils/zodiac_sign_utils.dart';
+import 'package:AstroSaathi/features/astrology/services/pdf_report_generator.dart';
+import 'package:AstroSaathi/l10n/app_language.dart';
 
 void main() {
   group('AstroSaathi Unit & Business Logic Tests', () {
@@ -24,45 +24,56 @@ void main() {
       expect(capitalized, equals('John Doe'));
     });
 
-    test('ProfilesNotifier enforces max 5 family member profiles capacity', () async {
-      final notifier = ProfilesNotifier();
+    test(
+      'ProfilesNotifier enforces max 5 family member profiles capacity',
+      () async {
+        final notifier = ProfilesNotifier();
 
-      // Clear any loaded state for deterministic test
-      for (var i = 1; i <= 5; i++) {
-        final added = await notifier.addProfile(
+        // Clear any loaded state for deterministic test
+        for (var i = 1; i <= 5; i++) {
+          final added = await notifier.addProfile(
+            BirthProfileData(
+              id: 'p-$i',
+              name: 'Member $i',
+              relationship: 'Family',
+              dob: '1990-01-0$i',
+              birthTime: '08:00 AM',
+              birthPlace: 'Delhi',
+              latitude: 28.6,
+              longitude: 77.2,
+              timezone: '5.5',
+            ),
+          );
+          if (i <= 5) {
+            expect(
+              added,
+              isTrue,
+              reason: 'Profile $i should be added successfully',
+            );
+          }
+        }
+
+        // 6th profile attempt must be rejected
+        final overflowAdded = await notifier.addProfile(
           BirthProfileData(
-            id: 'p-$i',
-            name: 'Member $i',
-            relationship: 'Family',
-            dob: '1990-01-0$i',
-            birthTime: '08:00 AM',
-            birthPlace: 'Delhi',
-            latitude: 28.6,
-            longitude: 77.2,
+            id: 'p-6',
+            name: 'Member 6',
+            relationship: 'Friend',
+            dob: '1995-05-05',
+            birthTime: '10:00 AM',
+            birthPlace: 'Mumbai',
+            latitude: 19.0,
+            longitude: 72.8,
             timezone: '5.5',
           ),
         );
-        if (i <= 5) {
-          expect(added, isTrue, reason: 'Profile $i should be added successfully');
-        }
-      }
-
-      // 6th profile attempt must be rejected
-      final overflowAdded = await notifier.addProfile(
-        BirthProfileData(
-          id: 'p-6',
-          name: 'Member 6',
-          relationship: 'Friend',
-          dob: '1995-05-05',
-          birthTime: '10:00 AM',
-          birthPlace: 'Mumbai',
-          latitude: 19.0,
-          longitude: 72.8,
-          timezone: '5.5',
-        ),
-      );
-      expect(overflowAdded, isFalse, reason: '6th profile must be rejected under 5 capacity limit');
-    });
+        expect(
+          overflowAdded,
+          isFalse,
+          reason: '6th profile must be rejected under 5 capacity limit',
+        );
+      },
+    );
 
     test('PdfReportGenerator creates multi-language Kundli reports', () {
       final reportEn = PdfReportGenerator.generateLocalizedReport(

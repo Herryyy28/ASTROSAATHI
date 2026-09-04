@@ -4,16 +4,12 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum PlanTier {
-  free,
-  weeklyVip,
-  monthlyVip,
-  yearlyVip,
-}
+enum PlanTier { free, weeklyVip, monthlyVip, yearlyVip }
 
 extension PlanTierX on PlanTier {
   bool get isProTier => this == PlanTier.yearlyVip;
-  bool get isVipTier => this == PlanTier.weeklyVip || this == PlanTier.monthlyVip;
+  bool get isVipTier =>
+      this == PlanTier.weeklyVip || this == PlanTier.monthlyVip;
 
   String get displayName {
     switch (this) {
@@ -102,12 +98,14 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   static const int freeProfileLimit = 5;
 
   SubscriptionNotifier()
-      : super(const SubscriptionState(
+    : super(
+        const SubscriptionState(
           isPremium: false,
           tier: PlanTier.free,
           aiQueriesToday: 0,
           lastQueryDate: '',
-        )) {
+        ),
+      ) {
     _loadState();
   }
 
@@ -134,7 +132,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
     final today = _todayDateString;
     final int currentQueries = (lastDate == today) ? queries : 0;
-    final purchaseDate = purchaseStr != null ? DateTime.tryParse(purchaseStr) : null;
+    final purchaseDate = purchaseStr != null
+        ? DateTime.tryParse(purchaseStr)
+        : null;
 
     bool finalIsPremium = isPrem;
     if (finalIsPremium && purchaseDate != null && loadedTier != PlanTier.free) {
@@ -168,11 +168,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     await prefs.setString('subscription_tier', tier.name);
     await prefs.setString('subscription_purchase_date', now.toIso8601String());
 
-    state = state.copyWith(
-      isPremium: true,
-      tier: tier,
-      purchaseDate: now,
-    );
+    state = state.copyWith(isPremium: true, tier: tier, purchaseDate: now);
   }
 
   Future<void> cancelSubscription() async {
@@ -180,10 +176,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     await prefs.setBool('is_premium', false);
     await prefs.setString('subscription_tier', PlanTier.free.name);
 
-    state = state.copyWith(
-      isPremium: false,
-      tier: PlanTier.free,
-    );
+    state = state.copyWith(isPremium: false, tier: PlanTier.free);
   }
 
   Future<void> togglePremiumMock() async {
@@ -198,7 +191,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     _checkDateReset();
     if (state.isPremium) return true;
     final today = _todayDateString;
-    final currentQueries = (state.lastQueryDate == today) ? state.aiQueriesToday : 0;
+    final currentQueries = (state.lastQueryDate == today)
+        ? state.aiQueriesToday
+        : 0;
     return currentQueries < freeAiQueryLimit;
   }
 
@@ -206,35 +201,33 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
     _checkDateReset();
     if (state.isPremium) return 999;
     final today = _todayDateString;
-    final currentQueries = (state.lastQueryDate == today) ? state.aiQueriesToday : 0;
+    final currentQueries = (state.lastQueryDate == today)
+        ? state.aiQueriesToday
+        : 0;
     final rem = freeAiQueryLimit - currentQueries;
     return rem < 0 ? 0 : rem;
   }
 
   Future<void> recordAiQuery() async {
     if (state.isPremium) return;
-    
+
     final today = _todayDateString;
-    final currentQueries = (state.lastQueryDate == today) ? state.aiQueriesToday : 0;
+    final currentQueries = (state.lastQueryDate == today)
+        ? state.aiQueriesToday
+        : 0;
     final newCount = currentQueries + 1;
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('ai_queries_today', newCount);
     await prefs.setString('ai_queries_last_date', today);
 
-    state = state.copyWith(
-      aiQueriesToday: newCount,
-      lastQueryDate: today,
-    );
+    state = state.copyWith(aiQueriesToday: newCount, lastQueryDate: today);
   }
 
   void _checkDateReset() {
     final today = _todayDateString;
     if (state.lastQueryDate != today) {
-      state = state.copyWith(
-        aiQueriesToday: 0,
-        lastQueryDate: today,
-      );
+      state = state.copyWith(aiQueriesToday: 0, lastQueryDate: today);
     }
   }
 
@@ -257,7 +250,10 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   }
 
   int get remainingDaysOfSubscription {
-    if (!state.isPremium || state.purchaseDate == null || state.tier == PlanTier.free) return 0;
+    if (!state.isPremium ||
+        state.purchaseDate == null ||
+        state.tier == PlanTier.free)
+      return 0;
     final exp = _calculateExpirationDate(state.tier, state.purchaseDate!);
     if (exp == null) return 0;
     final diffSeconds = exp.difference(DateTime.now()).inSeconds;
@@ -269,8 +265,8 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
 
 final subscriptionProvider =
     StateNotifierProvider<SubscriptionNotifier, SubscriptionState>((ref) {
-  return SubscriptionNotifier();
-});
+      return SubscriptionNotifier();
+    });
 
 final isPremiumProvider = Provider<bool>((ref) {
   return ref.watch(subscriptionProvider).isPremium;
