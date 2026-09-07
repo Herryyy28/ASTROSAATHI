@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
 import '../providers/locale_provider.dart';
 import '../providers/astrology_provider.dart';
-import '../../features/ai/presentation/providers/astro_baba_provider.dart';
+import '../../features/ai/providers/astro_baba_provider.dart';
 import '../../l10n/app_localizations.dart';
 
 class LanguageSelectionModal extends ConsumerWidget {

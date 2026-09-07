@@ -1,6 +1,8 @@
 # AstroSaathi Architecture Guidelines
 
-This document serves as a deep dive into the architecture of AstroSaathi for developers joining the project. 
+This document serves as a deep dive into the architecture of AstroSaathi for developers joining the project.
+For the exact folder-by-folder map and the rules on where a new file belongs, see
+[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md).
 
 ## 1. Monorepo Philosophy
 AstroSaathi is built as a logical monorepo. Both the client (`lib/`) and the server (`api/`) live in the same repository. This ensures that frontend data models and backend DTOs (Data Transfer Objects) stay in sync during active development.
@@ -14,7 +16,8 @@ Every distinct feature of the app gets its own folder inside `lib/features/`. A 
 
 Example: `lib/features/horoscope/`
 - `/data/`: API repositories, DTOs, and local caching logic.
-- `/domain/`: Business logic, entities, and Riverpod StateNotifiers.
+- `/providers/`: Riverpod providers and StateNotifiers owned by the feature.
+- `/services/`: Business logic that is used by this feature only.
 - `/presentation/`: UI components, Screens, and Widgets specific only to this feature.
 
 ### Global vs Feature Widgets

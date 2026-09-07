@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/utils/responsive.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../home/presentation/screens/home_screen.dart';
 import '../../../kundli/presentation/screens/kundli_screen.dart';
 import '../../../explore/presentation/screens/explore_screen.dart';

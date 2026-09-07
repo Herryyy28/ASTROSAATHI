@@ -8,7 +8,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/responsive_layout.dart';
-import '../../../../core/theme/utils/responsive.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../l10n/app_localizations.dart';
 
 // Feature screens

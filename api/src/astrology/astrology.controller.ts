@@ -1,12 +1,12 @@
 import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { AstrologyService } from './astrology.service';
-import { AstrologySyncService } from './astrology-sync.service';
+import { AstrologySyncService } from './services/astrology-sync.service';
 import { GamePlanEngine } from './engines/game-plan.engine';
 import { MuhuratEngine } from './engines/muhurat.engine';
 import { UsersService } from '../users/users.service';
 import { AuthGuard } from '../auth/auth.guard';
 
-import { MatchingService } from './matching.service';
+import { MatchingService } from './services/matching.service';
 
 import { KundliDataValidator } from './validators/kundli-data.validator';
 import { CanonicalKundli, CanonicalPlanet } from './interfaces/canonical-kundli.interface';

@@ -1,7 +1,7 @@
 import { MatchingService } from './matching.service';
-import { MuhuratEngine } from './engines/muhurat.engine';
-import { GamePlanEngine } from './engines/game-plan.engine';
-import { KundliDataValidator } from './validators/kundli-data.validator';
+import { MuhuratEngine } from '../engines/muhurat.engine';
+import { GamePlanEngine } from '../engines/game-plan.engine';
+import { KundliDataValidator } from '../validators/kundli-data.validator';
 
 describe('🪐 Astrology Accuracy Engine Test Suite', () => {
   let matchingService: MatchingService;

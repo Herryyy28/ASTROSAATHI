@@ -9,7 +9,7 @@ import 'zodiac_icon.dart';
 import '../providers/locale_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/astrology_provider.dart';
-import '../../features/ai/presentation/providers/astro_baba_provider.dart';
+import '../../features/ai/providers/astro_baba_provider.dart';
 import '../../features/astrology/services/pdf_report_generator.dart';
 import '../../features/search/presentation/screens/astrology_search_screen.dart';
 import '../../features/support/presentation/screens/trust_center_screen.dart';

@@ -13,7 +13,7 @@ import '../../../../core/engine/models/panchang_data.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/widgets/why_this_bottom_sheet.dart';
 import '../../../../core/widgets/admob_banner_widget.dart';
-import '../../../../core/theme/utils/responsive.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class PanchangScreen extends ConsumerWidget {

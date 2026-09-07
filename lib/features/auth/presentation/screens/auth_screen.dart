@@ -9,7 +9,7 @@ import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/cosmic_notification.dart';
-import '../../../../core/theme/utils/responsive.dart';
+import '../../../../core/utils/responsive.dart';
 import '../../data/auth_repository.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {

@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { AiService } from '../ai/ai.service';
+import { AiService } from '../../ai/ai.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { KnowledgeRashi } from '../database/entities/knowledge_rashi.entity';
+import { KnowledgeRashi } from '../../database/entities/knowledge_rashi.entity';
 
 @Injectable()
 export class RashiBhavishyaService {

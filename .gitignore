@@ -43,3 +43,14 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/build/
+/android/.gradle/
+
+# Node / NestJS backend (see api/.gitignore for the full list)
+node_modules/
+/package-lock.json
+
+# Environment files (never commit real credentials, only .env.example)
+.env
+.env.*
+!.env.example

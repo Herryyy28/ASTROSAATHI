@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AstrologySyncService } from '../astrology/astrology-sync.service';
+import { AstrologySyncService } from '../astrology/services/astrology-sync.service';
 import { GamePlanEngine } from '../astrology/engines/game-plan.engine';
 import { MuhuratEngine } from '../astrology/engines/muhurat.engine';
 import { LocationData } from '../core/location/location.service';

@@ -1,7 +1,7 @@
 import { Injectable, Logger, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AstrologyDataProvider, PanchangResponse, PlanetaryPosition, ProviderMetadata } from './interfaces/astrology-data-provider.interface';
-import { LocationData } from '../core/location/location.service';
+import { AstrologyDataProvider, PanchangResponse, PlanetaryPosition, ProviderMetadata } from '../interfaces/astrology-data-provider.interface';
+import { LocationData } from '../../core/location/location.service';
 
 @Injectable()
 export class AstrologySyncService {

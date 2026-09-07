@@ -1,7 +1,7 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { Logger } from '@nestjs/common';
-import { AstrologySyncService } from '../astrology-sync.service';
+import { AstrologySyncService } from '../services/astrology-sync.service';
 
 @Processor('astrology-sync')
 export class AstrologySyncProcessor extends WorkerHost {

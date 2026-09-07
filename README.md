@@ -16,34 +16,58 @@ The repository is structured as a monorepo containing both the NestJS API and th
 
 ```text
 ASTROSAATHI/
-├── api/                  # NestJS Backend Application
+├── api/                    # NestJS Backend Application
 │   ├── src/
-│   │   ├── ai/           # Generative AI (OpenAI) & RAG logic
-│   │   ├── astrology/    # Core engines, Muhurat, and Panchang logic
-│   │   ├── auth/         # JWT and Firebase Authentication
-│   │   ├── database/     # TypeORM entities and migrations (Postgres/SQLite)
-│   │   ├── notifications/# BullMQ workers and FCM Push Notifications
-│   │   └── users/        # User and Profile management
+│   │   ├── ai/             # Generative AI (OpenAI) & RAG logic
+│   │   ├── astrology/      # Astrology domain module
+│   │   │   ├── dto/        # Canonical request/response models
+│   │   │   ├── engines/    # Deterministic math (muhurat, game plan, rules)
+│   │   │   ├── interfaces/ # Provider and kundli contracts
+│   │   │   ├── processors/ # BullMQ job processors
+│   │   │   ├── providers/  # AstrologyAPI / local / mock data providers
+│   │   │   ├── services/   # Supporting services + their specs
+│   │   │   └── validators/ # Kundli data validation
+│   │   ├── auth/           # JWT and Firebase Authentication
+│   │   ├── core/           # Cross-module services (time, location, monitoring)
+│   │   ├── database/       # TypeORM entities, seeds, blockchain audit
+│   │   ├── notifications/  # BullMQ workers and FCM Push Notifications
+│   │   ├── payments/       # Razorpay subscription flow
+│   │   └── users/          # User and Profile management
+│   ├── db/                 # SQL exports and local database fixtures
+│   ├── .env.example        # Template for api/.env (never commit the real one)
 │   └── package.json
 │
-├── lib/                  # Flutter Frontend Application
-│   ├── core/
-│   │   ├── engine/       # API client and local data processing
-│   │   ├── providers/    # Riverpod state management
-│   │   ├── theme/        # Cosmic Glassmorphism design system
-│   │   └── widgets/      # Shared UI components (GlassCard, etc.)
-│   └── features/
-│       ├── ai/           # "Ask Astro Baba" AI Chat
-│       ├── astrology/    # Birth Chart (Kundli) rendering
-│       ├── horoscope/    # Daily/Weekly forecasts
-│       ├── matching/     # Kundli Matching (Gun Milan)
-│       ├── panchang/     # Vedic Calendar & planetary transits
-│       ├── remedies/     # Personalized astrological suggestions
-│       └── onboarding/   # User registration and birth detail entry
+├── lib/                    # Flutter Frontend Application
+│   ├── core/               # Shared across two or more features
+│   │   ├── config/         # App-wide configuration
+│   │   ├── engine/         # Astrology API client, local engine + models
+│   │   ├── providers/      # Riverpod state management
+│   │   ├── routing/        # go_router configuration
+│   │   ├── services/       # Firebase, notifications, payments, storage
+│   │   ├── theme/          # Cosmic Glassmorphism design system
+│   │   ├── utils/          # Pure helpers (responsive, zodiac)
+│   │   └── widgets/        # Shared UI components (GlassCard, etc.)
+│   ├── features/           # One folder per feature (ai, horoscope, kundli, ...)
+│   │   └── <feature>/
+│   │       ├── data/       # Repositories, models, caching
+│   │       ├── providers/  # Feature-scoped Riverpod providers
+│   │       └── presentation/
+│   │           ├── screens/
+│   │           └── widgets/
+│   ├── l10n/               # Languages and translation tables
+│   └── main.dart           # App entrypoint
 │
-├── pubspec.yaml          # Flutter dependencies
-└── README.md             # This file
+├── test/                   # Flutter tests, mirroring lib/ (core/, features/)
+├── tool/                   # Developer scripts run with `dart run tool/...`
+├── docs/                   # PRD, TRD, architecture and structure guides
+├── assets/                 # Images and icons bundled by pubspec.yaml
+├── android/ ios/ web/ linux/ macos/ windows/   # Platform runners
+├── pubspec.yaml            # Flutter dependencies
+└── README.md               # This file
 ```
+
+For the rules on where a new file belongs, see [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)
+and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## 🛠️ Architecture Overview
 
@@ -80,5 +104,11 @@ flutter pub get
 flutter run -d chrome  # Or select an iOS/Android emulator
 ```
 
+### Running the Tests
+```bash
+flutter test          # Flutter widget and unit tests in test/
+cd api && npm test    # NestJS specs (*.spec.ts) next to the code they cover
+```
+
 ## 🧑‍💻 Contributing
-When creating a new feature, please adhere to the domain-driven folder structure. UI components specific to a feature belong in `lib/features/{feature_name}/presentation/`, while globally shared UI components belong in `lib/core/widgets/`.
+When creating a new feature, please adhere to the domain-driven folder structure. UI components specific to a feature belong in `lib/features/{feature_name}/presentation/`, while globally shared UI components belong in `lib/core/widgets/`. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full checklist.

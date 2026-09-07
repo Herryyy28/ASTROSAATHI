@@ -1,5 +1,5 @@
 import { Injectable, Logger, ServiceUnavailableException } from '@nestjs/common';
-import { CanonicalPanchang, CanonicalMuhurat, CanonicalGamePlan, CanonicalBirthChart } from './dto/canonical-models';
+import { CanonicalPanchang, CanonicalMuhurat, CanonicalGamePlan, CanonicalBirthChart } from '../dto/canonical-models';
 
 @Injectable()
 export class AstrologyDataIntegrityService {

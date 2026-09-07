@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/providers/astrology_provider.dart';
-import '../../../../core/providers/locale_provider.dart';
-import '../../../../core/providers/profile_provider.dart';
-import '../../../../core/engine/models/ai_data.dart';
+import '../../../core/providers/astrology_provider.dart';
+import '../../../core/providers/locale_provider.dart';
+import '../../../core/providers/profile_provider.dart';
+import '../../../core/engine/models/ai_data.dart';
 
 class AstroBabaNotifier extends StateNotifier<List<ChatMessage>> {
   AstroBabaNotifier(this.ref) : super([]) {

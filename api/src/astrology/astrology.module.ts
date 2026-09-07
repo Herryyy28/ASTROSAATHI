@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 // import { BullModule } from '@nestjs/bullmq';
 import { AstrologyService } from './astrology.service';
 import { AstrologyController } from './astrology.controller';
-import { AstrologySyncService } from './astrology-sync.service';
+import { AstrologySyncService } from './services/astrology-sync.service';
 import { AstrologyApiProvider } from './providers/astrology-api.provider';
 import { MockAstrologyProvider } from './providers/mock-astrology.provider';
 import { LocalAstrologyProvider } from './providers/local-astrology.provider';
@@ -10,12 +10,12 @@ import { AstrologySyncProcessor } from './processors/astrology-sync.processor';
 import { AstrologyRuleEngine } from './engines/astrology-rule.engine';
 import { GamePlanEngine } from './engines/game-plan.engine';
 import { MuhuratEngine } from './engines/muhurat.engine';
-import { RashiBhavishyaService } from './rashi-bhavishya.service';
+import { RashiBhavishyaService } from './services/rashi-bhavishya.service';
 import { UsersModule } from '../users/users.module';
 import { CoreModule } from '../core/core.module';
-import { AstrologyDataIntegrityService } from './astrology-data-integrity.service';
+import { AstrologyDataIntegrityService } from './services/astrology-data-integrity.service';
 
-import { MatchingService } from './matching.service';
+import { MatchingService } from './services/matching.service';
 
 import { KnowledgeRashi } from '../database/entities/knowledge_rashi.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
