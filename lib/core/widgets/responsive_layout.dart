@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/utils/responsive.dart';
+import '../utils/responsive.dart';
 
 /// A wrapper widget that constrains the maximum width of the content
 /// on tablets and desktops, while allowing the background to fill the screen.

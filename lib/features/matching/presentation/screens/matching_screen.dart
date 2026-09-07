@@ -11,7 +11,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/providers/subscription_provider.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
 import '../../../../core/widgets/responsive_layout.dart';
-import '../../../../core/theme/utils/responsive.dart';
+import '../../../../core/utils/responsive.dart';
 
 class MatchingScreen extends ConsumerStatefulWidget {
   const MatchingScreen({super.key});

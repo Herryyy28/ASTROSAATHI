@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserProfile } from '../database/entities/profile.entity';
 import { GamePlanEngine } from '../astrology/engines/game-plan.engine';
-import { AstrologySyncService } from '../astrology/astrology-sync.service';
+import { AstrologySyncService } from '../astrology/services/astrology-sync.service';
 
 @Injectable()
 export class CronService {

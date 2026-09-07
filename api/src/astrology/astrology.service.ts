@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AstrologyDataIntegrityService } from './astrology-data-integrity.service';
+import { AstrologyDataIntegrityService } from './services/astrology-data-integrity.service';
 
 @Injectable()
 export class AstrologyService {
