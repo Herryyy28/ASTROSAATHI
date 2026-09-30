@@ -19,8 +19,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
   String _targetCity = 'Dubai, UAE';
 
   // Scenario 1: Timing Shift State
-  String _timeOptionA = '10:15 AM (Abhijit Muhurat)';
-  String _timeOptionB = '02:30 PM (Rahu Kaal Window)';
+  final String _timeOptionA = '10:15 AM (Abhijit Muhurat)';
+  final String _timeOptionB = '02:30 PM (Rahu Kaal Window)';
 
   // Scenario 2: Future Date State
   String _targetMonth = 'October 2026';

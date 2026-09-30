@@ -112,11 +112,17 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
     final calculatedTotal = varna + vashya + tara + yoni + maitri + gana + bhakoot + nadi;
 
     String calculatedGrade = 'Good';
-    if (calculatedTotal >= 31) calculatedGrade = 'Exceptional';
-    else if (calculatedTotal >= 25) calculatedGrade = 'Excellent';
-    else if (calculatedTotal >= 18) calculatedGrade = 'Good';
-    else if (calculatedTotal >= 12) calculatedGrade = 'Average';
-    else calculatedGrade = 'Challenging';
+    if (calculatedTotal >= 31) {
+      calculatedGrade = 'Exceptional';
+    } else if (calculatedTotal >= 25) {
+      calculatedGrade = 'Excellent';
+    } else if (calculatedTotal >= 18) {
+      calculatedGrade = 'Good';
+    } else if (calculatedTotal >= 12) {
+      calculatedGrade = 'Average';
+    } else {
+      calculatedGrade = 'Challenging';
+    }
 
     final lang = ref.read(localeProvider);
     String summary;

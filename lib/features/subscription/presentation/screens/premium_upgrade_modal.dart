@@ -705,23 +705,27 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   }
 
   Future<void> _handleSubscribe() async {
-    final session = ref.read(userSessionProvider);
-    if (!session.isAuthenticated) {
-      _showAuthRequiredSheet(context);
-      return;
-    }
-    final userId = session.userId ?? 'user_${DateTime.now().millisecondsSinceEpoch}';
-    final userEmail = session.email ?? 'user@astrosaathi.com';
+    // Development Mode Bypass: Directly upgrade to premium without Razorpay
+    await ref.read(subscriptionProvider.notifier).upgradeToTier(_selectedTier);
+    if (!mounted) return;
+    
+    Navigator.pop(context); // Close the modal
+    
     double amount = 199.0;
     if (_selectedTier == PlanTier.weeklyVip) amount = 19.0;
     if (_selectedTier == PlanTier.monthlyVip) amount = 49.0;
     if (_selectedTier == PlanTier.yearlyVip) amount = 199.0;
-
-    await _startRazorpayCheckout(
-      amount,
-      _selectedTier.displayName,
-      userId,
-      userEmail,
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => PaymentSuccessScreen(
+          amount: amount,
+          planName: _selectedTier.displayName,
+          transactionId: 'DEV_MODE_${DateTime.now().millisecondsSinceEpoch}',
+          dateStr: DateFormat('MMM dd, yyyy - HH:mm').format(DateTime.now()),
+        ),
+      ),
     );
   }
 

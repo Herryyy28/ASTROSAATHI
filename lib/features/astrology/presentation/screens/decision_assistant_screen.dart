@@ -63,7 +63,7 @@ class _DecisionAssistantScreenState extends ConsumerState<DecisionAssistantScree
         'action': 'Proceed with confidence and document major milestones in writing.',
         'planetFactor': 'Venus-Jupiter Aspect',
         'houseFactor': '5th Intelligence & 9th Fortune Axis',
-        'transitFactor': '${intel.panchangSummary}',
+        'transitFactor': intel.panchangSummary,
       };
     }
   }

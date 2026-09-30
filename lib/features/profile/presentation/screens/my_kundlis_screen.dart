@@ -836,8 +836,9 @@ class _MyKundlisScreenState extends ConsumerState<MyKundlisScreen> {
                                       _nameController.clear();
                                       _dobController.clear();
                                       _timeController.clear();
-                                      if (context.mounted)
+                                      if (context.mounted) {
                                         Navigator.pop(context);
+                                      }
                                     }
                                   } else {
                                     CosmicNotification.show(

@@ -36,8 +36,11 @@ class GunaRadarPainter extends CustomPainter {
         final angle = (j * 2 * pi / count) - (pi / 2);
         final x = center.dx + r * cos(angle);
         final y = center.dy + r * sin(angle);
-        if (j == 0) path.moveTo(x, y);
-        else path.lineTo(x, y);
+        if (j == 0) {
+          path.moveTo(x, y);
+        } else {
+          path.lineTo(x, y);
+        }
       }
       path.close();
       canvas.drawPath(path, gridPaint);
@@ -60,8 +63,11 @@ class GunaRadarPainter extends CustomPainter {
       final scoreX = center.dx + (radius * scoreRatio) * cos(angle);
       final scoreY = center.dy + (radius * scoreRatio) * sin(angle);
 
-      if (i == 0) scorePath.moveTo(scoreX, scoreY);
-      else scorePath.lineTo(scoreX, scoreY);
+      if (i == 0) {
+        scorePath.moveTo(scoreX, scoreY);
+      } else {
+        scorePath.lineTo(scoreX, scoreY);
+      }
 
       // Draw label
       final labelRadius = radius + 22;

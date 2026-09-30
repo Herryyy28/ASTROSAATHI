@@ -36,7 +36,7 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
   EventCategory _selectedCategory = EventCategory.business;
   late DateTime _selectedDate;
   late TimeOfDay _selectedTime;
-  int _leadTimeMinutes = 20;
+  final int _leadTimeMinutes = 20;
 
   @override
   void initState() {
@@ -65,9 +65,13 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
   double get _calculatedScore {
     final hour = _selectedTime.hour;
     double score = 7.8;
-    if (hour >= 10 && hour <= 12) score += 1.4;
-    else if (hour >= 13 && hour <= 15) score -= 1.2;
-    else if (hour >= 16 && hour <= 18) score += 0.8;
+    if (hour >= 10 && hour <= 12) {
+      score += 1.4;
+    } else if (hour >= 13 && hour <= 15) {
+      score -= 1.2;
+    } else if (hour >= 16 && hour <= 18) {
+      score += 0.8;
+    }
     return (score > 10.0) ? 10.0 : ((score < 4.0) ? 4.0 : double.parse(score.toStringAsFixed(1)));
   }
 

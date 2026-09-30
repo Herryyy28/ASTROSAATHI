@@ -17,7 +17,7 @@ import 'dart:ui';
 
 
 class BirthChartCard extends ConsumerStatefulWidget {
-  const BirthChartCard({Key? key}) : super(key: key);
+  const BirthChartCard({super.key});
 
   @override
   ConsumerState<BirthChartCard> createState() => _BirthChartCardState();
@@ -668,26 +668,29 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                           }
                         } else {
                           if (dy < 0.33) {
-                            if (dx < 0.33)
+                            if (dx < 0.33) {
                               house = 2;
-                            else if (dx > 0.66)
+                            } else if (dx > 0.66) {
                               house = 12;
-                            else
+                            } else {
                               house = 1;
+                            }
                           } else if (dy > 0.66) {
-                            if (dx < 0.33)
+                            if (dx < 0.33) {
                               house = 6;
-                            else if (dx > 0.66)
+                            } else if (dx > 0.66) {
                               house = 8;
-                            else
+                            } else {
                               house = 7;
+                            }
                           } else {
-                            if (dx < 0.33)
+                            if (dx < 0.33) {
                               house = 4;
-                            else if (dx > 0.66)
+                            } else if (dx > 0.66) {
                               house = 10;
-                            else
+                            } else {
                               house = 9;
+                            }
                           }
                         }
                         _showHouseDetails(context, house, activePlanets, rawPlanets is List ? rawPlanets : null);

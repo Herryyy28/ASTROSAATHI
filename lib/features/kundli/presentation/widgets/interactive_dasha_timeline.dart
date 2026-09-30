@@ -300,7 +300,7 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
                                 ],
                               ),
                             );
-                          }).toList(),
+                          }),
                         ],
                       ),
                     ),
@@ -308,7 +308,7 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
                 ],
               ),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

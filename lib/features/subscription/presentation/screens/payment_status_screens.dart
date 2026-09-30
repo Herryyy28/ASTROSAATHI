@@ -99,6 +99,7 @@ class PaymentSuccessScreen extends StatelessWidget {
   Widget _buildRow(BuildContext context, String label, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
@@ -107,12 +108,16 @@ class PaymentSuccessScreen extends StatelessWidget {
             color: AppColors.getTextSecondary(context),
           ),
         ),
-        Text(
-          value,
-          style: GoogleFonts.outfit(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColors.getTextPrimary(context),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            value,
+            textAlign: TextAlign.right,
+            style: GoogleFonts.outfit(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.getTextPrimary(context),
+            ),
           ),
         ),
       ],
