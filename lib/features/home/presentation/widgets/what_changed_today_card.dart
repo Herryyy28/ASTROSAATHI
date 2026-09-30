@@ -5,20 +5,39 @@ import '../../../../core/engine/models/game_plan_data.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
 
-class WhatChangedTodayCard extends StatelessWidget {
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/providers/gamification_provider.dart';
+
+class WhatChangedTodayCard extends ConsumerWidget {
   final GamePlanData gamePlan;
 
   const WhatChangedTodayCard({super.key, required this.gamePlan});
 
   @override
-  Widget build(BuildContext context) {
-    const yesterdayScore = 7.4;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gamification = ref.watch(gamificationProvider);
+    final yesterdayScore = gamification.yesterdayScore;
     final todayScore = gamePlan.dayScore;
     final delta = todayScore - yesterdayScore;
     final isPositive = delta >= 0;
 
+    // Persist today's score for subsequent comparison
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(gamificationProvider.notifier).recordTodayScore(todayScore);
+    });
+
+    // Derive highest category dynamically
+    String topCategory = 'Vitality & Clarity';
+    double topScore = 0.0;
+    gamePlan.categories.forEach((cat, score) {
+      if (score > topScore) {
+        topScore = score;
+        topCategory = cat[0].toUpperCase() + cat.substring(1);
+      }
+    });
+
     return GlassCard(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       borderColor: isPositive ? AppColors.success.withOpacity(0.4) : AppColors.warning.withOpacity(0.4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +93,7 @@ class WhatChangedTodayCard extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  '${isPositive ? "▲ +" : "▼ "}${delta.toStringAsFixed(1)} PTS',
+                  '${isPositive ? "▲ +" : "▼ "}${delta.abs().toStringAsFixed(1)} PTS',
                   style: GoogleFonts.outfit(
                     fontSize: 10.5,
                     fontWeight: FontWeight.bold,
@@ -102,7 +121,7 @@ class WhatChangedTodayCard extends StatelessWidget {
                       Text('YESTERDAY', style: GoogleFonts.outfit(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.getTextSecondary(context))),
                       const SizedBox(height: 4),
                       Text(
-                        '7.4',
+                        yesterdayScore.toStringAsFixed(1),
                         style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
                       ),
                     ],
@@ -137,12 +156,27 @@ class WhatChangedTodayCard extends StatelessWidget {
           ),
           const SizedBox(height: 14),
 
-          // Delta Drivers List
-          _buildDriverRow(context, Icons.bedtime_rounded, 'Moon Sign Transit', 'Moon moved into Shatabhisha Nakshatra (Favorable for strategy)'),
+          // Delta Drivers List (Dynamic from gamePlan)
+          _buildDriverRow(
+            context,
+            Icons.star_rounded,
+            'Dominant Energy Surge',
+            '$topCategory alignment is strongest today at ${(topScore * 10).toInt()}% peak cosmic capacity.',
+          ),
           const SizedBox(height: 8),
-          _buildDriverRow(context, Icons.rotate_right_rounded, 'Planetary Aspect', 'Mercury trine 10th House Lord (Boosts executive decisions)'),
+          _buildDriverRow(
+            context,
+            Icons.access_time_filled_rounded,
+            'Optimal Muhurat Window',
+            'Golden Window active between ${gamePlan.bestWindow.start} and ${gamePlan.bestWindow.end}.',
+          ),
           const SizedBox(height: 8),
-          _buildDriverRow(context, Icons.sunny, 'Panchang Shift', 'Sukarma Yoga active today vs Dhriti Yoga yesterday'),
+          _buildDriverRow(
+            context,
+            Icons.check_circle_outline_rounded,
+            'Priority Action Directive',
+            gamePlan.doList.isNotEmpty ? gamePlan.doList.first : 'Maintain balance during mid-day transits.',
+          ),
           const SizedBox(height: 16),
 
           // Explain Changes Button
@@ -160,8 +194,8 @@ class WhatChangedTodayCard extends StatelessWidget {
                 style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
               ),
               onPressed: () {
-                final prompt = 'Explain why my cosmic score changed from 7.4 yesterday to ${todayScore.toStringAsFixed(1)} today. '
-                    'Break down the Moon Nakshatra transition, Mercury transit influence, and Sukarma Yoga shift.';
+                final prompt = 'Explain why my cosmic score changed from ${yesterdayScore.toStringAsFixed(1)} yesterday to ${todayScore.toStringAsFixed(1)} today. '
+                    'How does the peak in $topCategory and my Golden Window (${gamePlan.bestWindow.start} - ${gamePlan.bestWindow.end}) impact my day?';
                 Navigator.push(
                   context,
                   MaterialPageRoute(

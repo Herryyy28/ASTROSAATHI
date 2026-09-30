@@ -1,9 +1,7 @@
-import 'dart:ui';
-import 'package:AstroSaathi/core/theme/app_animations.dart';
+import '../../../../core/theme/app_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';
@@ -12,6 +10,7 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/cosmic_notification.dart';
 import '../../../../core/widgets/animated_cosmic_reminder_modal.dart';
 import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/utils/zodiac_sign_utils.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
 
 class AstroDecisionAssistantScreen extends ConsumerStatefulWidget {
@@ -77,35 +76,85 @@ class _AstroDecisionAssistantScreenState
       _analysisResult = null;
     });
 
-    // Simulate real-time ephemeris & Dasha transit evaluation
-    await Future.delayed(const Duration(milliseconds: 1400));
-
     final profiles = ref.read(profilesListProvider);
     final activeIdx = ref.read(activeProfileIndexProvider);
     final userProfile = profiles.isNotEmpty
         ? profiles[activeIdx.clamp(0, profiles.length - 1)]
         : null;
 
+    final astro = userProfile != null
+        ? ZodiacSignUtils.calculateAstroProfile(
+            name: userProfile.name,
+            dob: userProfile.dob,
+            birthTime: userProfile.birthTime,
+          )
+        : null;
+
     final hour = _selectedTime.hour;
     int score = 84;
-    String verdict = 'Highly Favorable';
-    String dashaContext = 'Jupiter Mahadasha • Mercury Antardasha';
-    String transitContext = 'Moon in 10th House (Career & Honor)';
-    String panchangContext = 'Shukla Ekadashi • Abhijit Muhurat';
-    List<String> guidance = [
-      'The planetary alignment favors communication and intellect during this time slot.',
-      'Rahu Kaal is completely avoided (ends before 10:30 AM).',
-      'Wear Light Yellow or Gold to channel Jupiter\'s auspicious energy.',
-    ];
+    String verdict = 'Favorable Window';
+    
+    final ruler = astro?.rulingPlanet ?? 'Jupiter';
+    final lagna = astro?.lagnaEn ?? 'Aries';
+    final rashi = astro?.rashiEn ?? 'Leo';
+    final nakshatra = astro?.nakshatra ?? 'Pushya';
 
-    if (hour >= 12 && hour <= 14) {
-      score = 92;
+    final String dashaContext = '$ruler Mahadasha • Lagna Lord $ruler';
+    final String transitContext = 'Lagna in $lagna • Moon in $rashi ($nakshatra)';
+    
+    final bool isAbhijit = hour >= 11 && hour <= 13;
+    final bool isRahuKaalWindow = (hour >= 16 && hour <= 18);
+    final String panchangContext = isAbhijit
+        ? 'Midday Peak Solar Window (Abhijit Alignment)'
+        : (isRahuKaalWindow ? 'Late Afternoon Shadow Period' : 'Favorable Choghadiya Phase');
+
+    if (isAbhijit) {
+      score = 94;
       verdict = 'Auspicious Abhijit Window';
-    } else if (hour >= 16.5 && hour <= 18) {
-      score = 62;
-      verdict = 'Moderate - Minor Rahu Impact';
-      guidance[1] =
-          'Proceed with steady focus; recite Om Namah Shivaya before starting.';
+    } else if (isRahuKaalWindow) {
+      score = 64;
+      verdict = 'Caution - Avoid Hasty Commitments';
+    } else {
+      score = 82;
+      verdict = 'Steady Planetary Flow';
+    }
+
+    List<String> guidance;
+    switch (_selectedCategory) {
+      case 'Interview':
+        guidance = [
+          'High Mercurial intellect alignment for interviews and evaluations.',
+          isRahuKaalWindow ? 'Focus on concise responses and calm posture.' : 'Zero major malefic interference during your chosen window.',
+          'Channel $ruler energy; wear subtle gold or white for serenity.',
+        ];
+        break;
+      case 'Property':
+        guidance = [
+          '4th House (Sukha & Bhumi) alignment evaluated for deed or agreement.',
+          'Physical site inspection is most auspicious in morning sunlight.',
+          'Ensure all paperwork is signed during clear planetary hours.',
+        ];
+        break;
+      case 'Travel':
+        guidance = [
+          'Char (Movable) planetary momentum supports smooth transition and transit.',
+          'Recite travel protection prayer before initial departure.',
+          'Verify transit tickets and baggage documents in advance.',
+        ];
+        break;
+      case 'Business':
+        guidance = [
+          '11th House financial gain resonance supports contract signings.',
+          'Negotiations favor win-win partnership agreements.',
+          'Post-lunch window offers maximum alignment with Jupiter.',
+        ];
+        break;
+      default:
+        guidance = [
+          'Favorable cosmic resonance for personal endeavors and planning.',
+          'Maintain balanced focus and mindful communication.',
+          'Auspicious period to proceed with positive intention.',
+        ];
     }
 
     if (mounted) {
@@ -287,10 +336,11 @@ class _AstroDecisionAssistantScreenState
                     selectedColor: const Color(0xFFFFD700),
                     backgroundColor: AppColors.getSurfaceElevated(context),
                     onSelected: (val) {
-                      if (val)
+                      if (val) {
                         setState(
                           () => _selectedCategory = cat['name'] as String,
                         );
+                      }
                     },
                   ),
                 );

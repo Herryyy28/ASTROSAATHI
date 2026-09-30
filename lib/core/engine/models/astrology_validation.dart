@@ -115,12 +115,12 @@ class AstrologyValidator {
   }
 
   /// Validates date string
-  static void validateDate(String dateStr) {
+  static void validateDate(String dateStr, {bool isBirthDate = false}) {
     final parsed = parseDate(dateStr);
     if (parsed.year < 1800 || parsed.year > 2100) {
       throw AstrologyValidationException.fromCode('DATE_OUT_OF_RANGE');
     }
-    if (parsed.isAfter(DateTime.now())) {
+    if (isBirthDate && parsed.isAfter(DateTime.now())) {
       throw AstrologyValidationException.fromCode('FUTURE_DATE');
     }
   }

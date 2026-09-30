@@ -323,48 +323,54 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                             padding: const EdgeInsets.all(12),
                             child: Column(
                               children: [
-                                SwitchListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(
-                                    'Biometric / Passkey Unlock',
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 13.5,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.getTextPrimary(context),
+                                Material(
+                                  color: Colors.transparent,
+                                  child: SwitchListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                      'Biometric / Passkey Unlock',
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 13.5,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.getTextPrimary(context),
+                                      ),
                                     ),
+                                    subtitle: Text(
+                                      'Use Fingerprint / FaceID / Passkey for high-risk actions.',
+                                      style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextMuted(context)),
+                                    ),
+                                    value: _isBiometricEnabled,
+                                    activeColor: AppColors.primary,
+                                    onChanged: (val) async {
+                                      await SecureStorageService.setBiometricsEnabled(val);
+                                      setState(() => _isBiometricEnabled = val);
+                                    },
                                   ),
-                                  subtitle: Text(
-                                    'Use Fingerprint / FaceID / Passkey for high-risk actions.',
-                                    style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextMuted(context)),
-                                  ),
-                                  value: _isBiometricEnabled,
-                                  activeColor: AppColors.primary,
-                                  onChanged: (val) async {
-                                    await SecureStorageService.setBiometricsEnabled(val);
-                                    setState(() => _isBiometricEnabled = val);
-                                  },
                                 ),
                                 const Divider(height: 16),
-                                SwitchListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(
-                                    'Multi-Factor Verification (MFA)',
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 13.5,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppColors.getTextPrimary(context),
+                                Material(
+                                  color: Colors.transparent,
+                                  child: SwitchListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                      'Multi-Factor Verification (MFA)',
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 13.5,
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.getTextPrimary(context),
+                                      ),
                                     ),
+                                    subtitle: Text(
+                                      'Require SMS/Email OTP when signing in on a new device.',
+                                      style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextMuted(context)),
+                                    ),
+                                    value: _isMfaEnabled,
+                                    activeColor: AppColors.primary,
+                                    onChanged: (val) async {
+                                      await SecureStorageService.setMfaEnabled(val);
+                                      setState(() => _isMfaEnabled = val);
+                                    },
                                   ),
-                                  subtitle: Text(
-                                    'Require SMS/Email OTP when signing in on a new device.',
-                                    style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextMuted(context)),
-                                  ),
-                                  value: _isMfaEnabled,
-                                  activeColor: AppColors.primary,
-                                  onChanged: (val) async {
-                                    await SecureStorageService.setMfaEnabled(val);
-                                    setState(() => _isMfaEnabled = val);
-                                  },
                                 ),
                               ],
                             ),

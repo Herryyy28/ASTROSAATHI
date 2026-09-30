@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
-import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/cosmic_notification.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../data/auth_repository.dart';
@@ -20,22 +19,8 @@ class AuthScreen extends ConsumerStatefulWidget {
 }
 
 class _AuthScreenState extends ConsumerState<AuthScreen> {
-  bool _isSignUp = false;
+  final bool _isSignUp = false;
   bool _isLoading = false;
-  bool _obscurePassword = true;
-
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
 
   void _showToast(String msg, {bool isError = true}) {
     CosmicNotification.show(
@@ -43,42 +28,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       message: msg,
       icon: isError ? Icons.error_outline_rounded : Icons.check_circle_rounded,
     );
-  }
-
-  Future<void> _handleSubmit() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() => _isLoading = true);
-    final notifier = ref.read(userSessionProvider.notifier);
-
-    if (_isSignUp) {
-      final success = await notifier.register(
-        _nameController.text.trim(),
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-      );
-      setState(() => _isLoading = false);
-
-      if (success && mounted) {
-        _showToast('Account created successfully! Welcome to AstroSaathi.', isError: false);
-        context.pop();
-      } else if (mounted) {
-        _showToast('Registration failed. Please try again.');
-      }
-    } else {
-      final success = await notifier.login(
-        _emailController.text.trim(),
-        _passwordController.text.trim(),
-      );
-      setState(() => _isLoading = false);
-
-      if (success && mounted) {
-        _showToast('Logged in successfully!', isError: false);
-        context.pop();
-      } else if (mounted) {
-        _showToast('Login failed. Check your email & password.');
-      }
-    }
   }
 
   @override

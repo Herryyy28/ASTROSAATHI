@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/providers/profile_provider.dart';
-import '../../../../core/widgets/explain_chart_modal.dart';
+import '../../../../core/utils/zodiac_sign_utils.dart';
 
 enum RelationshipType {
   couple('Couple', Icons.favorite_rounded, Color(0xFFE5A63C)),
@@ -212,18 +211,72 @@ class _ChartComparisonScreenState extends ConsumerState<ChartComparisonScreen> {
                     ),
                     const SizedBox(height: 20),
 
-                    // Synastry Compatibility Score Banner
-                    _buildCompatibilityScoreBanner(context),
-                    const SizedBox(height: 16),
+                    // Dynamic Synastry Calculation
+                    Builder(
+                      builder: (context) {
+                        final synastry = _computeSynastry();
+                        if (synastry['ready'] == false) {
+                          return GlassCard(
+                            padding: const EdgeInsets.all(20),
+                            child: Center(
+                              child: Text(
+                                synastry['summary'] as String,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.inter(
+                                  color: AppColors.getTextSecondary(context),
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
 
-                    // Category Breakdown Metrics
-                    _buildMetricCard(context, title: 'Communication Harmony', score: 8.8, icon: Icons.forum_rounded, text: 'Strong Mercurial resonance. Excellent intellectual understanding.'),
-                    const SizedBox(height: 10),
-                    _buildMetricCard(context, title: 'Emotional & Mental Depth', score: 8.2, icon: Icons.favorite_border_rounded, text: 'Harmonious Moon sign element trine (Water-Earth alignment).'),
-                    const SizedBox(height: 10),
-                    _buildMetricCard(context, title: 'Shared Values & Long-term Goals', score: 9.0, icon: Icons.flag_rounded, text: 'Jupiter transits favor long-term mutual growth and trust.'),
-                    const SizedBox(height: 10),
-                    _buildMetricCard(context, title: 'Potential Friction & Conflict Areas', score: 6.5, icon: Icons.warning_amber_rounded, text: 'Mars placement suggests occasional hasty decisions; practice patience.'),
+                        return Column(
+                          children: [
+                            // Synastry Compatibility Score Banner
+                            _buildCompatibilityScoreBanner(
+                              context,
+                              overallScore: synastry['overall'] as double,
+                              summary: synastry['summary'] as String,
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Category Breakdown Metrics
+                            _buildMetricCard(
+                              context,
+                              title: 'Communication Harmony',
+                              score: synastry['commScore'] as double,
+                              icon: Icons.forum_rounded,
+                              text: synastry['commText'] as String,
+                            ),
+                            const SizedBox(height: 10),
+                            _buildMetricCard(
+                              context,
+                              title: 'Emotional & Mental Depth',
+                              score: synastry['emotionalScore'] as double,
+                              icon: Icons.favorite_border_rounded,
+                              text: synastry['emotionalText'] as String,
+                            ),
+                            const SizedBox(height: 10),
+                            _buildMetricCard(
+                              context,
+                              title: 'Shared Values & Long-term Goals',
+                              score: synastry['valuesScore'] as double,
+                              icon: Icons.flag_rounded,
+                              text: synastry['valuesText'] as String,
+                            ),
+                            const SizedBox(height: 10),
+                            _buildMetricCard(
+                              context,
+                              title: 'Potential Friction & Conflict Areas',
+                              score: synastry['frictionScore'] as double,
+                              icon: Icons.warning_amber_rounded,
+                              text: synastry['frictionText'] as String,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -232,6 +285,130 @@ class _ChartComparisonScreenState extends ConsumerState<ChartComparisonScreen> {
         ),
       ),
     );
+  }
+
+  Map<String, dynamic> _computeSynastry() {
+    if (_profile1 == null || _profile2 == null) {
+      return {
+        'ready': false,
+        'overall': 0.0,
+        'summary': 'Please select two birth profiles above to calculate personalized synastry.',
+        'commScore': 0.0,
+        'commText': '',
+        'emotionalScore': 0.0,
+        'emotionalText': '',
+        'valuesScore': 0.0,
+        'valuesText': '',
+        'frictionScore': 0.0,
+        'frictionText': '',
+      };
+    }
+
+    final p1 = ZodiacSignUtils.calculateAstroProfile(
+      name: _profile1!.name,
+      dob: _profile1!.dob,
+      birthTime: _profile1!.birthTime,
+    );
+    final p2 = ZodiacSignUtils.calculateAstroProfile(
+      name: _profile2!.name,
+      dob: _profile2!.dob,
+      birthTime: _profile2!.birthTime,
+    );
+
+    String getElement(String rashi) {
+      const fire = ['Aries', 'Leo', 'Sagittarius'];
+      const earth = ['Taurus', 'Virgo', 'Capricorn'];
+      const air = ['Gemini', 'Libra', 'Aquarius'];
+      if (fire.contains(rashi)) return 'Fire';
+      if (earth.contains(rashi)) return 'Earth';
+      if (air.contains(rashi)) return 'Air';
+      return 'Water';
+    }
+
+    final e1 = getElement(p1.rashiEn);
+    final e2 = getElement(p2.rashiEn);
+
+    double elementScore = 7.5;
+    String elementDesc = '$e1 and $e2 elemental alignment.';
+    if (e1 == e2) {
+      elementScore = 8.8;
+      elementDesc = 'Shared $e1 element creates natural resonance and instinctive mutual understanding.';
+    } else if ((e1 == 'Fire' && e2 == 'Air') || (e1 == 'Air' && e2 == 'Fire')) {
+      elementScore = 9.2;
+      elementDesc = 'Fire-Air synergy sparks creative inspiration, enthusiastic dialogue, and mutual motivation.';
+    } else if ((e1 == 'Earth' && e2 == 'Water') || (e1 == 'Water' && e2 == 'Earth')) {
+      elementScore = 9.4;
+      elementDesc = 'Earth-Water combination provides emotional nourishment rooted in practical stability and security.';
+    } else if ((e1 == 'Fire' && e2 == 'Water') || (e1 == 'Water' && e2 == 'Fire')) {
+      elementScore = 6.4;
+      elementDesc = 'Steam dynamic: passionate feelings require conscious tempering and thoughtful communication.';
+    } else {
+      elementScore = 7.0;
+      elementDesc = 'Distinct elemental perspectives ($e1 & $e2) offer fruitful complementary growth.';
+    }
+
+    final diffDeg = (p1.moonLongitude - p2.moonLongitude).abs();
+    final aspectDiff = diffDeg > 180 ? 360 - diffDeg : diffDeg;
+    double commScore = 7.5;
+    String commText = 'Steady Mercurial alignment for daily dialogue.';
+    if (aspectDiff < 30 || (aspectDiff >= 110 && aspectDiff <= 130)) {
+      commScore = 9.1;
+      commText = 'Trine Moon resonance creates intuitive understanding where words flow effortlessly.';
+    } else if (aspectDiff >= 80 && aspectDiff <= 100) {
+      commScore = 6.8;
+      commText = 'Square tension indicates differing viewpoints; patience during debates is recommended.';
+    } else if (aspectDiff >= 170 && aspectDiff <= 190) {
+      commScore = 8.5;
+      commText = 'Opposition aspect generates magnetic intellectual attraction and complete perspective balance.';
+    }
+
+    final emotionalScore = (elementScore * 0.6 + (10.0 - (aspectDiff / 36.0)) * 0.4).clamp(5.0, 9.8);
+    final emotionalText = 'Moon in ${p1.rashiEn} (${p1.nakshatra}) meets Moon in ${p2.rashiEn} (${p2.nakshatra}): $elementDesc';
+
+    final isSameLagna = p1.lagnaEn == p2.lagnaEn;
+    final valuesScore = isSameLagna ? 9.2 : ((p1.rulingPlanet == p2.rulingPlanet) ? 8.9 : 8.0);
+    final valuesText = 'Lagna Lords (${p1.rulingPlanet} & ${p2.rulingPlanet}) foster shared life aspirations.';
+
+    final frictionScore = (10.5 - (elementScore * 0.4 + commScore * 0.4)).clamp(4.5, 8.5);
+    final frictionText = frictionScore > 6.5
+        ? 'Complementary planetary angles minimize major friction; maintain open transparent conversations.'
+        : 'Occasional tempo differences between fire/water temperaments require active patience.';
+
+    double overall = 7.8;
+    switch (_selectedType) {
+      case RelationshipType.couple:
+        overall = (emotionalScore * 0.35 + valuesScore * 0.3 + commScore * 0.25 + (10 - frictionScore) * 0.1);
+        break;
+      case RelationshipType.friendship:
+        overall = (commScore * 0.4 + emotionalScore * 0.3 + valuesScore * 0.3);
+        break;
+      case RelationshipType.business:
+        overall = (valuesScore * 0.4 + commScore * 0.4 + (10 - frictionScore) * 0.2);
+        break;
+      case RelationshipType.parentChild:
+      case RelationshipType.siblings:
+        overall = (emotionalScore * 0.4 + valuesScore * 0.35 + commScore * 0.25);
+        break;
+    }
+    overall = double.parse(overall.clamp(5.0, 9.8).toStringAsFixed(1));
+
+    return {
+      'ready': true,
+      'overall': overall,
+      'summary': overall >= 8.5
+          ? 'Exceptional ${_selectedType.label} synergy! Harmonious cosmic vibrations for enduring cooperation.'
+          : (overall >= 7.5
+              ? 'Positive ${_selectedType.label} alignment with healthy dynamic growth opportunities.'
+              : 'Moderate compatibility with valuable lessons in conscious communication and patience.'),
+      'commScore': double.parse(commScore.toStringAsFixed(1)),
+      'commText': commText,
+      'emotionalScore': double.parse(emotionalScore.toStringAsFixed(1)),
+      'emotionalText': emotionalText,
+      'valuesScore': double.parse(valuesScore.toStringAsFixed(1)),
+      'valuesText': valuesText,
+      'frictionScore': double.parse(frictionScore.toStringAsFixed(1)),
+      'frictionText': frictionText,
+    };
   }
 
   Widget _buildProfileDropdown(
@@ -272,9 +449,11 @@ class _ChartComparisonScreenState extends ConsumerState<ChartComparisonScreen> {
     );
   }
 
-  Widget _buildCompatibilityScoreBanner(BuildContext context) {
-    const overallScore = 8.6;
-
+  Widget _buildCompatibilityScoreBanner(
+    BuildContext context, {
+    required double overallScore,
+    required String summary,
+  }) {
     return GlassCard(
       padding: const EdgeInsets.all(20),
       borderColor: _selectedType.color.withOpacity(0.5),
@@ -324,7 +503,7 @@ class _ChartComparisonScreenState extends ConsumerState<ChartComparisonScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'High Cosmic Alignment! Excellent synergy for mutual support and collaboration.',
+                  summary,
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     color: AppColors.getTextSecondary(context),

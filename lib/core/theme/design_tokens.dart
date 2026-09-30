@@ -97,3 +97,21 @@ class AppTypography {
         color: color,
       );
 }
+
+/// Centralized Icon Sizing Scale for AstroSaathi (Single Source of Truth)
+class AppIconSize {
+  static const double sm = 16.0;
+  static const double md = 20.0;
+  static const double lg = 24.0;
+  static const double xl = 28.0;
+  static const double xxl = 32.0;
+}
+
+/// Centralized Control Height Standards for AstroSaathi (Single Source of Truth)
+class AppControlHeight {
+  static const double button = 48.0;
+  static const double compactButton = 36.0;
+  static const double input = 48.0;
+  static const double searchBar = 44.0;
+  static const double bottomNav = 64.0;
+}

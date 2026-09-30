@@ -11,7 +11,6 @@ class YearAheadScreen extends StatefulWidget {
 
 class _YearAheadScreenState extends State<YearAheadScreen> {
   int _selectedMonthIndex = 0;
-  String _selectedTab = 'Overview';
 
   final List<Map<String, dynamic>> _months = [
     {
@@ -73,6 +72,66 @@ class _YearAheadScreenState extends State<YearAheadScreen> {
       'finance': 'Favorable currency or foreign trade returns.',
       'health': 'High energy; stay mindful during outdoor activities.',
       'dates': ['Jun 04: Mercury 9th House', 'Jun 21: Solstice Alignment'],
+    },
+    {
+      'month': 'JUL 2026',
+      'focus': 'Spiritual Retreat & Solitude',
+      'score': 85,
+      'career': 'Consolidate ongoing projects; avoid major impulsive launches.',
+      'relationship': 'Introspective bonding; peaceful family moments.',
+      'finance': 'Stable conservative investments; hold off high-risk ventures.',
+      'health': 'Yoga and mindfulness practice restore vitality.',
+      'dates': ['Jul 07: Guru Purnima Alignment', 'Jul 19: Mars Trine Jupiter', 'Jul 28: New Moon'],
+    },
+    {
+      'month': 'AUG 2026',
+      'focus': 'Skill Acceleration & Innovation',
+      'score': 89,
+      'career': 'Intellectual breakthroughs and strategic project advancements.',
+      'relationship': 'Shared hobbies and intellectual conversations blossom.',
+      'finance': 'Unexpected returns from previous collaborative endeavors.',
+      'health': 'High vitality; balanced diet supports mental stamina.',
+      'dates': ['Aug 08: Mercury Direct', 'Aug 17: Sun Enters Leo', 'Aug 26: Full Moon'],
+    },
+    {
+      'month': 'SEP 2026',
+      'focus': 'Harvest & Professional Recognition',
+      'score': 94,
+      'career': 'Senior leadership endorses executive responsibilities.',
+      'relationship': 'Deep alignment on family milestones and future planning.',
+      'finance': 'Strong cash flow; favorable window for asset allocation.',
+      'health': 'Robust physical endurance; morning sun meditation advised.',
+      'dates': ['Sep 05: Venus Shift', 'Sep 17: Sun 10th House Trine', 'Sep 23: Autumn Equinox'],
+    },
+    {
+      'month': 'OCT 2026',
+      'focus': 'Celebration & Auspicious Alliances',
+      'score': 92,
+      'career': 'Joint ventures and long-term contracts finalized smoothly.',
+      'relationship': 'Festive family celebrations create heartwarming memories.',
+      'finance': 'Generous prosperity windows and favorable trade returns.',
+      'health': 'Festive moderation; prioritize deep restorative rest.',
+      'dates': ['Oct 11: Navratri Culmination', 'Oct 20: Dussehra Window', 'Oct 31: Diwali Prosperity'],
+    },
+    {
+      'month': 'NOV 2026',
+      'focus': 'Inner Wisdom & Philosophical Growth',
+      'score': 87,
+      'career': 'Mentoring peers and strategic long-term planning take priority.',
+      'relationship': 'Soulful understanding with partner; shared spiritual journeys.',
+      'finance': 'Disciplined wealth preservation and asset protection.',
+      'health': 'Warm nourishing foods and routine evening walks.',
+      'dates': ['Nov 09: Jupiter Trine Sun', 'Nov 18: Mercury Gochar', 'Nov 24: Full Moon'],
+    },
+    {
+      'month': 'DEC 2026',
+      'focus': 'Annual Integration & Future Horizon',
+      'score': 91,
+      'career': 'Year-end performance reviews bring prestigious honors.',
+      'relationship': 'Reunions with loved ones foster enduring closeness.',
+      'finance': 'Strong annual balance sheet and prudent seed investments for 2027.',
+      'health': 'Grounded calm; celebratory joy and grateful perspective.',
+      'dates': ['Dec 12: Mercury Direct', 'Dec 21: Solstice Transition', 'Dec 31: Year-End Transit'],
     },
   ];
 

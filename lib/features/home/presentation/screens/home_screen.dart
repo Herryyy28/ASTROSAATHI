@@ -21,15 +21,22 @@ import '../../../../core/widgets/why_this_bottom_sheet.dart';
 
 import '../../../../core/widgets/admob_banner_widget.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../search/presentation/screens/astrology_search_screen.dart';
 import '../../../search/presentation/widgets/astro_command_center_modal.dart';
 import '../widgets/what_changed_today_card.dart';
+import '../widgets/daily_check_in_widget.dart';
+import '../widgets/daily_routine_widget.dart';
+import '../widgets/upcoming_events_widget.dart';
+import '../../../../core/providers/gamification_provider.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../profile/presentation/widgets/profile_switcher_modal.dart';
 import '../widgets/personal_cosmic_calendar_widget.dart';
 import '../widgets/shareable_cosmic_card_modal.dart';
 import 'main_screen.dart';
 
+
+import '../../../kundli/presentation/screens/kundli_screen.dart';
+import '../../../matching/presentation/screens/matching_screen.dart';
+import '../../../reports/presentation/screens/custom_pdf_report_builder_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -84,11 +91,11 @@ class HomeScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ── Greeting ──────────────────────────────────────
+                // 1. Greeting
                 _buildGreeting().fadeSlideUp(),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
-                // ── Hero Section (Adaptive side-by-side on wide screens) ──
+                // 2. Today's main astrology insight
                 if (isWide) ...[
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,30 +105,50 @@ class HomeScreen extends ConsumerWidget {
                       ),
                       const SizedBox(width: 24),
                       Expanded(
-                        child: _buildEnergyCard(context, plan).fadeSlideUp(delay: 100.ms),
+                        child: _buildEnergyCard(context, plan).fadeSlideUp(delay: 60.ms),
                       ),
                     ],
                   ),
                 ] else ...[
                   const BirthChartCard(),
                   const SizedBox(height: 24),
-                  _buildEnergyCard(context, plan).fadeSlideUp(delay: 100.ms),
+                  _buildEnergyCard(context, plan).fadeSlideUp(delay: 60.ms),
                 ],
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
-                // ── What Changed Today? Daily Comparison Engine ──
-                WhatChangedTodayCard(gamePlan: plan).fadeSlideUp(delay: 110.ms),
+                // 3. Quick Actions
+                _buildQuickActions(context).fadeSlideUp(delay: 80.ms),
+                const SizedBox(height: 16),
+
+                // 4. Daily Check-In
+                const DailyCheckInWidget().fadeSlideUp(delay: 100.ms),
+                const SizedBox(height: 16),
+
+                // 5. Daily Game Plan / Routine
+                const DailyRoutineWidget().fadeSlideUp(delay: 120.ms),
+                const SizedBox(height: 16),
+
+                // 6. Upcoming Events & Best Windows
+                const UpcomingEventsWidget().fadeSlideUp(delay: 140.ms),
+                const SizedBox(height: 16),
+                _buildBestWindow(plan).fadeSlideUp(delay: 160.ms),
+                const SizedBox(height: 16),
+
+                // 7. Astro Baba Prompt
+                _buildAstroBabaPrompt().fadeSlideUp(delay: 180.ms),
                 const SizedBox(height: 24),
 
-                // ── Personal Cosmic Calendar ──────────────────────
-                const PersonalCosmicCalendarWidget().fadeSlideUp(delay: 120.ms),
-                const SizedBox(height: 20),
-
-                // ── AdMob Banner (Shows on normal free account, hides on VIP subscription) ──
+                // 8. Premium / Deeper Reports & Tools
+                WhatChangedTodayCard(gamePlan: plan).fadeSlideUp(delay: 200.ms),
+                const SizedBox(height: 16),
+                const PersonalCosmicCalendarWidget().fadeSlideUp(delay: 220.ms),
+                const SizedBox(height: 16),
+                _buildCategories(context, plan).fadeSlideUp(delay: 240.ms),
+                const SizedBox(height: 16),
                 const AdMobBannerWidget(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
-                // ── Do / Careful / Avoid ──────────────────────────
+                // Do / Careful / Avoid Reference
                 Consumer(
                   builder: (context, ref, _) {
                     final l10n = AppLocalizations.of(context, ref);
@@ -134,7 +161,7 @@ class HomeScreen extends ConsumerWidget {
                           plan.doList,
                           AppColors.success,
                           Icons.check_circle_rounded,
-                          200,
+                          260,
                         ),
                         const SizedBox(height: 16),
                         _buildActionSection(
@@ -152,24 +179,12 @@ class HomeScreen extends ConsumerWidget {
                           plan.avoidList,
                           AppColors.error,
                           Icons.cancel_rounded,
-                          360,
+                          300,
                         ),
                       ],
                     );
                   },
                 ),
-                const SizedBox(height: 28),
-
-                // ── Best Window ───────────────────────────────────
-                _buildBestWindow(plan).fadeSlideUp(delay: 440.ms),
-                const SizedBox(height: 28),
-
-                // ── Categories ────────────────────────────────────
-                _buildCategories(context, plan).fadeSlideUp(delay: 520.ms),
-                const SizedBox(height: 28),
-
-                // ── Ask Astro Baba ────────────────────────────────
-                _buildAstroBabaPrompt().fadeSlideUp(delay: 600.ms),
               ],
             ),
           ),
@@ -178,10 +193,76 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
+  Widget _buildQuickActions(BuildContext context) {
+    final actions = [
+      {
+        'title': 'Kundli',
+        'icon': Icons.auto_awesome_rounded,
+        'color': AppColors.primary,
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const KundliScreen())),
+      },
+      {
+        'title': 'Gun Milan',
+        'icon': Icons.favorite_rounded,
+        'color': AppColors.secondary,
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MatchingScreen())),
+      },
+      {
+        'title': 'Muhurat',
+        'icon': Icons.schedule_rounded,
+        'color': AppColors.infoDark,
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MuhuratScreen())),
+      },
+      {
+        'title': 'PDF Report',
+        'icon': Icons.picture_as_pdf_rounded,
+        'color': AppColors.successDark,
+        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomPdfReportBuilderScreen())),
+      },
+    ];
+
+    return Row(
+      children: actions.map((a) {
+        return Expanded(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            child: InkWell(
+              onTap: a['onTap'] as VoidCallback,
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.getSurface(context),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                ),
+                child: Column(
+                  children: [
+                    Icon(a['icon'] as IconData, color: a['color'] as Color, size: 20),
+                    const SizedBox(height: 6),
+                    Text(
+                      a['title'] as String,
+                      style: GoogleFonts.outfit(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.getTextPrimary(context),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
   Widget _buildGreeting() {
     final hour = DateTime.now().hour;
     String greeting;
-    String emoji;
     return Consumer(
       builder: (context, ref, _) {
         final l10n = AppLocalizations.of(context, ref);
@@ -189,13 +270,10 @@ class HomeScreen extends ConsumerWidget {
 
         if (hour < 12) {
           greeting = l10n.goodMorning;
-          emoji = '☀️';
         } else if (hour < 17) {
           greeting = l10n.goodAfternoon;
-          emoji = '🌤️';
         } else {
           greeting = l10n.goodEvening;
-          emoji = '🌙';
         }
 
         final activeProfile = ref.watch(activeProfileProvider);
@@ -323,6 +401,31 @@ class HomeScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
+                ),
+                const SizedBox(width: 8),
+                Consumer(
+                  builder: (context, ref, _) {
+                    final gameState = ref.watch(gamificationProvider);
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.warning.withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.warning.withOpacity(0.35)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('🔥', style: TextStyle(fontSize: 11)),
+                          const SizedBox(width: 3),
+                          Text(
+                            '${gameState.streakDays}d',
+                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.warning),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 const SizedBox(width: 8),
                 Expanded(

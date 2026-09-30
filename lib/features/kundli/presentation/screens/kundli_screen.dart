@@ -1,11 +1,9 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/widgets/error_state_widget.dart';
@@ -16,6 +14,7 @@ import '../../../../core/providers/profile_provider.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../astrology/presentation/widgets/birth_chart_card.dart';
 import '../widgets/interactive_dasha_timeline.dart';
+import '../../../profile/presentation/widgets/profile_switcher_modal.dart';
 
 /// Provider for selected kundli tab index
 final kundliTabProvider = StateProvider<int>((ref) => 0);
@@ -134,6 +133,33 @@ class KundliScreen extends ConsumerWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+          InkWell(
+            onTap: () => ProfileSwitcherModal.show(context),
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.getSurfaceElevated(context),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.swap_vert_rounded, size: 14, color: AppColors.getPrimary(context)),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Switch',
+                    style: GoogleFonts.outfit(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.getPrimary(context),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -439,7 +465,7 @@ class KundliScreen extends ConsumerWidget {
           return _ProgressiveDisclosureCard(
             title: 'House $houseNum • $sign',
             badge: planets.isNotEmpty ? '${planets.length} Planet${planets.length > 1 ? 's' : ''}' : 'Empty',
-            badgeColor: planets.isNotEmpty ? AppColors.success : AppColors.textTertiaryDark,
+            badgeColor: planets.isNotEmpty ? AppColors.success : AppColors.getTextMuted(context),
             subtitle: 'Lord: $lord${planets.isNotEmpty ? ' • ${planets.join(", ")}' : ''}',
             meaningText: meaning,
             technicalDetails: 'Sign: $sign • Lord: $lord • Planets: ${planets.isNotEmpty ? planets.join(", ") : "None"}',
@@ -466,7 +492,7 @@ class KundliScreen extends ConsumerWidget {
         return _ProgressiveDisclosureCard(
           title: 'House $houseNum • $sign',
           badge: planets.isNotEmpty ? '${planets.length} Planet${planets.length > 1 ? 's' : ''}' : 'Empty',
-          badgeColor: planets.isNotEmpty ? AppColors.success : AppColors.textTertiaryDark,
+          badgeColor: planets.isNotEmpty ? AppColors.success : AppColors.getTextMuted(context),
           subtitle: 'Lord: $lord${planets.isNotEmpty ? ' • ${planets.join(", ")}' : ''}',
           meaningText: meaning,
           technicalDetails: 'Sign: $sign • Lord: $lord • Planets: ${planets.isNotEmpty ? planets.join(", ") : "None"}',
@@ -657,7 +683,7 @@ class KundliScreen extends ConsumerWidget {
                 'Yoga & Dosha analysis will appear here',
                 style: GoogleFonts.outfit(
                   fontSize: 16,
-                  color: AppColors.textSecondaryDark,
+                  color: AppColors.getTextSecondary(context),
                 ),
                 textAlign: TextAlign.center,
               ),

@@ -8,7 +8,6 @@ import '../../../../l10n/app_localizations.dart';
 
 import '../../../../core/providers/locale_provider.dart';
 import '../../../../core/providers/subscription_provider.dart';
-import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
 
 class RemedyHubScreen extends ConsumerStatefulWidget {
   const RemedyHubScreen({super.key});

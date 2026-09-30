@@ -310,7 +310,7 @@ class _HoroscopeTabView extends ConsumerWidget {
           color: AppColors.primary,
           backgroundColor: AppColors.getSurface(context),
           onRefresh: () async {
-            ref.refresh(horoscopeProvider(timeframe));
+            ref.invalidate(horoscopeProvider(timeframe));
           },
           child: SingleChildScrollView(
             padding: const EdgeInsets.fromLTRB(24, 16, 24, 100),

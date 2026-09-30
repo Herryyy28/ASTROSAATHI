@@ -8,7 +8,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../../../core/providers/subscription_provider.dart';
-import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/services/razorpay_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../auth/data/auth_repository.dart';
@@ -707,6 +706,10 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
   Future<void> _handleSubscribe() async {
     final session = ref.read(userSessionProvider);
+    if (!session.isAuthenticated) {
+      _showAuthRequiredSheet(context);
+      return;
+    }
     final userId = session.userId ?? 'user_${DateTime.now().millisecondsSinceEpoch}';
     final userEmail = session.email ?? 'user@astrosaathi.com';
     double amount = 199.0;

@@ -1,6 +1,6 @@
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/services/notification_service.dart';
 import '../data/models/reminder_model.dart';
 
@@ -10,6 +10,10 @@ class ReminderState {
   final bool morningScoreNotification;
   final bool rahuKaalNotification;
   final bool shubhMuhuratNotification;
+  final bool dailyCheckInNotification;
+  final bool dailyRoutineNotification;
+  final bool japaReminderNotification;
+  final bool streakProtectorNotification;
   final String morningScoreTime;
 
   ReminderState({
@@ -18,6 +22,10 @@ class ReminderState {
     this.morningScoreNotification = true,
     this.rahuKaalNotification = true,
     this.shubhMuhuratNotification = true,
+    this.dailyCheckInNotification = true,
+    this.dailyRoutineNotification = true,
+    this.japaReminderNotification = true,
+    this.streakProtectorNotification = true,
     this.morningScoreTime = '07:00 AM',
   });
 
@@ -27,6 +35,10 @@ class ReminderState {
     bool? morningScoreNotification,
     bool? rahuKaalNotification,
     bool? shubhMuhuratNotification,
+    bool? dailyCheckInNotification,
+    bool? dailyRoutineNotification,
+    bool? japaReminderNotification,
+    bool? streakProtectorNotification,
     String? morningScoreTime,
   }) {
     return ReminderState(
@@ -35,6 +47,10 @@ class ReminderState {
       morningScoreNotification: morningScoreNotification ?? this.morningScoreNotification,
       rahuKaalNotification: rahuKaalNotification ?? this.rahuKaalNotification,
       shubhMuhuratNotification: shubhMuhuratNotification ?? this.shubhMuhuratNotification,
+      dailyCheckInNotification: dailyCheckInNotification ?? this.dailyCheckInNotification,
+      dailyRoutineNotification: dailyRoutineNotification ?? this.dailyRoutineNotification,
+      japaReminderNotification: japaReminderNotification ?? this.japaReminderNotification,
+      streakProtectorNotification: streakProtectorNotification ?? this.streakProtectorNotification,
       morningScoreTime: morningScoreTime ?? this.morningScoreTime,
     );
   }
@@ -43,6 +59,32 @@ class ReminderState {
 class ReminderNotifier extends StateNotifier<ReminderState> {
   ReminderNotifier() : super(ReminderState()) {
     _initDefaultSampleReminders();
+    _loadSettingsFromStorage();
+  }
+
+  static const String _keyMorningScore = 'notif_morning_score';
+  static const String _keyRahuKaal = 'notif_rahu_kaal';
+  static const String _keyShubhMuhurat = 'notif_shubh_muhurat';
+  static const String _keyDailyCheckIn = 'notif_daily_checkin';
+  static const String _keyDailyRoutine = 'notif_daily_routine';
+  static const String _keyJapa = 'notif_japa';
+  static const String _keyStreak = 'notif_streak_protector';
+  static const String _keyMorningTime = 'notif_morning_time';
+
+  Future<void> _loadSettingsFromStorage() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      state = state.copyWith(
+        morningScoreNotification: prefs.getBool(_keyMorningScore) ?? state.morningScoreNotification,
+        rahuKaalNotification: prefs.getBool(_keyRahuKaal) ?? state.rahuKaalNotification,
+        shubhMuhuratNotification: prefs.getBool(_keyShubhMuhurat) ?? state.shubhMuhuratNotification,
+        dailyCheckInNotification: prefs.getBool(_keyDailyCheckIn) ?? state.dailyCheckInNotification,
+        dailyRoutineNotification: prefs.getBool(_keyDailyRoutine) ?? state.dailyRoutineNotification,
+        japaReminderNotification: prefs.getBool(_keyJapa) ?? state.japaReminderNotification,
+        streakProtectorNotification: prefs.getBool(_keyStreak) ?? state.streakProtectorNotification,
+        morningScoreTime: prefs.getString(_keyMorningTime) ?? state.morningScoreTime,
+      );
+    } catch (_) {}
   }
 
   void _initDefaultSampleReminders() {
@@ -139,36 +181,62 @@ class ReminderNotifier extends StateNotifier<ReminderState> {
     state = state.copyWith(reminders: updatedList);
   }
 
-  void updateSettings({
+  Future<void> updateSettings({
     bool? morningScore,
     bool? rahuKaal,
     bool? shubhMuhurat,
+    bool? dailyCheckIn,
+    bool? dailyRoutine,
+    bool? japa,
+    bool? streakProtector,
     String? morningTime,
-  }) {
+  }) async {
     state = state.copyWith(
       morningScoreNotification: morningScore ?? state.morningScoreNotification,
       rahuKaalNotification: rahuKaal ?? state.rahuKaalNotification,
       shubhMuhuratNotification: shubhMuhurat ?? state.shubhMuhuratNotification,
+      dailyCheckInNotification: dailyCheckIn ?? state.dailyCheckInNotification,
+      dailyRoutineNotification: dailyRoutine ?? state.dailyRoutineNotification,
+      japaReminderNotification: japa ?? state.japaReminderNotification,
+      streakProtectorNotification: streakProtector ?? state.streakProtectorNotification,
       morningScoreTime: morningTime ?? state.morningScoreTime,
     );
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (morningScore != null) await prefs.setBool(_keyMorningScore, morningScore);
+      if (rahuKaal != null) await prefs.setBool(_keyRahuKaal, rahuKaal);
+      if (shubhMuhurat != null) await prefs.setBool(_keyShubhMuhurat, shubhMuhurat);
+      if (dailyCheckIn != null) await prefs.setBool(_keyDailyCheckIn, dailyCheckIn);
+      if (dailyRoutine != null) await prefs.setBool(_keyDailyRoutine, dailyRoutine);
+      if (japa != null) await prefs.setBool(_keyJapa, japa);
+      if (streakProtector != null) await prefs.setBool(_keyStreak, streakProtector);
+      if (morningTime != null) await prefs.setString(_keyMorningTime, morningTime);
+    } catch (_) {}
   }
 
   double _calculateLocalAstroScore(EventCategory cat, DateTime dt) {
     final hour = dt.hour;
     double score = 7.8;
-    if (hour >= 10 && hour <= 12) score += 1.4;
-    else if (hour >= 13 && hour <= 15) score -= 1.2;
-    else if (hour >= 16 && hour <= 18) score += 0.8;
+    if (hour >= 10 && hour <= 12) {
+      score += 1.4;
+    } else if (hour >= 13 && hour <= 15) {
+      score -= 1.2;
+    } else if (hour >= 16 && hour <= 18) {
+      score += 0.8;
+    }
     return min(10.0, max(4.0, double.parse(score.toStringAsFixed(1))));
   }
 
   String _generateLocalRecommendation(EventCategory cat, double score) {
-    if (score >= 8.5) return '✦ Peak Astrological Alignment (${score}/10). Ideal timing for ${cat.label.toLowerCase()} success.';
-    if (score >= 6.5) return 'Favorable alignment (${score}/10). Good window for ${cat.label.toLowerCase()}.';
-    return '⚠️ Caution Window (${score}/10). Consider shifting time by 30 mins to avoid Rahu Kaal.';
+    if (score >= 8.5) return '✦ Peak Astrological Alignment ($score/10). Ideal timing for ${cat.label.toLowerCase()} success.';
+    if (score >= 6.5) return 'Favorable alignment ($score/10). Good window for ${cat.label.toLowerCase()}.';
+    return '⚠️ Caution Window ($score/10). Consider shifting time by 30 mins to avoid Rahu Kaal.';
   }
 }
 
-final reminderProvider = StateNotifierProvider<ReminderNotifier, ReminderState>((ref) {
+final reminderStateProvider = StateNotifierProvider<ReminderNotifier, ReminderState>((ref) {
   return ReminderNotifier();
 });
+
+final reminderProvider = reminderStateProvider;

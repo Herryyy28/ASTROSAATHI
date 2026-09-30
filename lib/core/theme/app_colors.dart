@@ -21,40 +21,41 @@ class AppColors {
   static const Color errorLight = Color(0xFFC95353);
   static const Color infoLight = Color(0xFF4D78A8);
 
-  // ── Dark Theme Palette Tokens (Fixed Deep Charcoal Navy) ───────────
-  static const Color backgroundDark = Color(0xFF090D16);
-  static const Color surfaceDark = Color(0xFF111827);
-  static const Color surfaceSecondaryDark = Color(0xFF151D2C);
-  static const Color surfaceElevatedDark = Color(0xFF182132);
-  static const Color primaryDarkMode = Color(0xFFE0A13A);
-  static const Color primaryDarkDarkMode = Color(0xFFB87917);
-  static const Color primarySoftDark = Color(0xFF332817);
-  static const Color textPrimaryDark = Color(0xFFF4F6F8);
-  static const Color textSecondaryDark = Color(0xFFAAB3C2);
-  static const Color textMutedDark = Color(0xFF737E91);
-  static const Color borderDark = Color(0xFF273246);
-  static const Color dividerDark = Color(0xFF202A3A);
+  // ── Dark Theme Palette Tokens (AstroSaathi Premium Palette) ───────────
+  static const Color backgroundDark = Color(0xFF17121F);
+  static const Color surfaceDark = Color(0xFF241C2D);
+  static const Color surfaceSecondaryDark = Color(0xFF1D1726);
+  static const Color surfaceElevatedDark = Color(0xFF2C2237);
+  static const Color primaryDarkMode = Color(0xFFD8B56A); // Champagne Gold
+  static const Color primaryDarkDarkMode = Color(0xFFB5934A);
+  static const Color primarySoftDark = Color(0xFF3B2E24);
+  static const Color premiumPlum = Color(0xFF6B3A68); // Premium Plum for interactive elements
+  static const Color textPrimaryDark = Color(0xFFF7F3F8);
+  static const Color textSecondaryDark = Color(0xFFB9AEBE);
+  static const Color textMutedDark = Color(0xFF887D92);
+  static const Color borderDark = Color(0xFF382C45);
+  static const Color dividerDark = Color(0xFF2E2439);
   static const Color successDark = Color(0xFF45A77D);
-  static const Color warningDark = Color(0xFFD6A044);
+  static const Color warningDark = Color(0xFFD8B56A);
   static const Color errorDark = Color(0xFFDE6B6B);
   static const Color infoDark = Color(0xFF70A0D4);
 
   // ── Static Brand & Backward Compatibility Constants ────────────────
-  static const Color primary = Color(0xFFE0A13A);
-  static const Color primaryLight = Color(0xFFE5A63C);
-  static const Color secondary = Color(0xFFD9901A);
-  static const Color secondaryLight = Color(0xFFF5B041);
-  static const Color secondaryBackground = Color(0xFF151D2C);
-  static const Color cardSurface = Color(0xFF111827);
-  static const Color cardHighlight = Color(0xFF182132);
-  static const Color surfaceElevated = Color(0xFF182132);
-  static const Color surfaceHighlightDark = Color(0xFF182132);
-  static const Color glassSurface = Color(0xFF111827);
-  static const Color glassBorder = Color(0xFF273246);
+  static const Color primary = Color(0xFFD8B56A); // Champagne Gold
+  static const Color primaryLight = Color(0xFFE2C482);
+  static const Color secondary = Color(0xFF6B3A68); // Premium Plum
+  static const Color secondaryLight = Color(0xFF844D80);
+  static const Color secondaryBackground = Color(0xFF1D1726);
+  static const Color cardSurface = Color(0xFF241C2D);
+  static const Color cardHighlight = Color(0xFF2C2237);
+  static const Color surfaceElevated = Color(0xFF2C2237);
+  static const Color surfaceHighlightDark = Color(0xFF2C2237);
+  static const Color glassSurface = Color(0xFF241C2D);
+  static const Color glassBorder = Color(0xFF382C45);
   static const Color glassHighlight = Color(0x1AFFFFFF);
 
-  static const Color goldGlow = Color(0x1CE0A13A);
-  static const Color purpleGlow = Color(0x1CE0A13A);
+  static const Color goldGlow = Color(0x1CD8B56A);
+  static const Color purpleGlow = Color(0x1C6B3A68);
 
   static const Color textTertiaryDark = Color(0xFF737E91);
   static const Color textTertiaryLight = Color(0xFF545E6E);

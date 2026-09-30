@@ -135,6 +135,46 @@ class AstroRemindersScreen extends ConsumerWidget {
                             value: reminderState.shubhMuhuratNotification,
                             onChanged: (val) => notifier.updateSettings(shubhMuhurat: val),
                           ),
+                          const Divider(height: 24),
+
+                          // Daily Check-In Alert
+                          _buildSwitchRow(
+                            context,
+                            title: 'Daily Mood & Cosmic Check-In',
+                            subtitle: 'Evening reflection prompt to track emotions & claim +5 Karma XP',
+                            value: reminderState.dailyCheckInNotification,
+                            onChanged: (val) => notifier.updateSettings(dailyCheckIn: val),
+                          ),
+                          const Divider(height: 24),
+
+                          // Daily Spiritual Routine
+                          _buildSwitchRow(
+                            context,
+                            title: 'Spiritual Routine (Surya Arghya & Gayatri)',
+                            subtitle: 'Dawn alerts for Surya Arghya, Gayatri Mantra & evening stillness',
+                            value: reminderState.dailyRoutineNotification,
+                            onChanged: (val) => notifier.updateSettings(dailyRoutine: val),
+                          ),
+                          const Divider(height: 24),
+
+                          // Japa 108 Alert
+                          _buildSwitchRow(
+                            context,
+                            title: '108 Mala Bead Japa Reminder',
+                            subtitle: 'Gentle vibration alert for daily mantra chanting & +15 XP reward',
+                            value: reminderState.japaReminderNotification,
+                            onChanged: (val) => notifier.updateSettings(japa: val),
+                          ),
+                          const Divider(height: 24),
+
+                          // Streak Protector
+                          _buildSwitchRow(
+                            context,
+                            title: 'Cosmic Streak Protector Alert',
+                            subtitle: 'Alert before midnight so you never break your active devotion streak',
+                            value: reminderState.streakProtectorNotification,
+                            onChanged: (val) => notifier.updateSettings(streakProtector: val),
+                          ),
                         ],
                       ),
                     ),

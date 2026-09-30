@@ -1,9 +1,7 @@
-import 'dart:ui';
 import 'package:AstroSaathi/core/theme/app_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/theme/app_colors.dart';

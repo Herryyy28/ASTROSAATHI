@@ -5,6 +5,7 @@ import '../../../ai/presentation/screens/astro_baba_screen.dart';
 import '../../../astrology/presentation/screens/astro_decision_engine_screen.dart';
 import '../../../astrology/presentation/screens/transit_center_screen.dart';
 import '../../../kundli/presentation/screens/kundli_screen.dart';
+import '../screens/astrology_search_screen.dart';
 
 class AstroCommandCenterModal extends StatefulWidget {
   const AstroCommandCenterModal({super.key});
@@ -62,6 +63,12 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
       'action': 'ai',
       'query': 'Why did my cosmic score change today? Explain Moon transit and Panchang shift.',
     },
+    {
+      'icon': Icons.menu_book_rounded,
+      'label': 'Vedic Astrology Knowledge Search',
+      'category': 'Encyclopedia',
+      'action': 'search',
+    },
   ];
 
   @override
@@ -97,6 +104,11 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
         context,
         MaterialPageRoute(builder: (_) => const KundliScreen()),
       );
+    } else if (action == 'search') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const AstrologySearchScreen()),
+      );
     } else {
       Navigator.push(
         context,
@@ -112,7 +124,9 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
     if (text.isEmpty) return;
 
     final lower = text.toLowerCase();
-    if (lower.contains('interview') || lower.contains('business') || lower.contains('timing') || lower.contains('when should')) {
+    if (lower.contains('search') || lower.contains('encyclopedia') || lower.contains('dictionary') || lower.contains('planet') || lower.contains('sign')) {
+      _executeCommand(text, action: 'search');
+    } else if (lower.contains('interview') || lower.contains('business') || lower.contains('timing') || lower.contains('when should')) {
       _executeCommand(text, action: 'decision');
     } else if (lower.contains('transit') || lower.contains('gochar')) {
       _executeCommand(text, action: 'transit');
@@ -235,83 +249,95 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
             ),
             const SizedBox(height: 18),
 
-            // Quick Preset Commands Header
-            Text(
-              'QUICK COMMAND PRESETS',
-              style: GoogleFonts.outfit(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.0,
-                color: AppColors.primary,
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            // Command Chips List
-            Column(
-              children: _quickCommands.map((cmd) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: InkWell(
-                    onTap: () {
-                      _executeCommand(
-                        cmd['query'] ?? cmd['label'],
-                        action: cmd['action'],
-                        categoryFilter: cmd['categoryFilter'],
-                      );
-                    },
-                    borderRadius: BorderRadius.circular(14),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-                      decoration: BoxDecoration(
-                        color: isLight
-                            ? AppColors.getSurfaceSecondary(context)
-                            : Colors.white.withOpacity(0.04),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: AppColors.getGlassBorder(context)),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(cmd['icon'] as IconData, color: AppColors.primary, size: 16),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              cmd['label'] as String,
-                              style: GoogleFonts.inter(
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.getTextPrimary(context),
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.15),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              cmd['category'] as String,
-                              style: GoogleFonts.outfit(
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Icon(Icons.chevron_right_rounded, color: AppColors.getTextMuted(context), size: 16),
-                        ],
+            // Quick Preset Commands Header & Scrollable List
+            Flexible(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'QUICK COMMAND PRESETS',
+                      style: GoogleFonts.outfit(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.0,
+                        color: AppColors.primary,
                       ),
                     ),
-                  ),
-                );
-              }).toList(),
+                    const SizedBox(height: 10),
+                    Column(
+                      children: _quickCommands.map((cmd) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Material(
+                            color: isLight
+                                ? AppColors.getSurfaceSecondary(context)
+                                : Colors.white.withOpacity(0.04),
+                            borderRadius: BorderRadius.circular(14),
+                            child: InkWell(
+                              onTap: () {
+                                _executeCommand(
+                                  cmd['query'] ?? cmd['label'],
+                                  action: cmd['action'],
+                                  categoryFilter: cmd['categoryFilter'],
+                                );
+                              },
+                              borderRadius: BorderRadius.circular(14),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(color: AppColors.getGlassBorder(context)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(cmd['icon'] as IconData, color: AppColors.primary, size: 16),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        cmd['label'] as String,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 12.5,
+                                          fontWeight: FontWeight.w500,
+                                          color: AppColors.getTextPrimary(context),
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primary.withOpacity(0.15),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(
+                                        cmd['category'] as String,
+                                        style: GoogleFonts.outfit(
+                                          fontSize: 9.5,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Icon(Icons.chevron_right_rounded, color: AppColors.getTextMuted(context), size: 16),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(height: 10),
           ],
         ),
       ),

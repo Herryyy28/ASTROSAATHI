@@ -25,6 +25,7 @@ class BirthChartCard extends ConsumerStatefulWidget {
 
 class _BirthChartCardState extends ConsumerState<BirthChartCard> {
   String? selectedLagna;
+  bool isSouthIndianChart = false;
 
   final List<String> lagnaList = [
     'Aries (Mesha)',
@@ -56,11 +57,115 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
     12: '12th House (Vyaya): Moksha (Liberation), foreign residence, subconscious mind, and spiritual devotion.',
   };
 
+  final Map<String, String> planetSignifications = {
+    'sun': 'Sun (Surya): Soul vitality, self-confidence, leadership, and fatherly blessings.',
+    'moon': 'Moon (Chandra): Mind tranquility, emotional balance, motherly care, and public intuition.',
+    'mars': 'Mars (Mangal): Energy, courage, property, ambition, and sibling relations.',
+    'mercury': 'Mercury (Budh): Intellect, business analysis, communication, and sharp learning.',
+    'jupiter': 'Jupiter (Guru): Supreme wisdom, divine grace, higher spirituality, wealth, and children.',
+    'venus': 'Venus (Shukra): Creative harmony, aesthetic elegance, love partnerships, and luxury.',
+    'saturn': 'Saturn (Shani): Discipline, endurance, structure, karmic lessons, and career longevity.',
+    'rahu': 'Rahu (North Node): Ambition, worldly expansion, innovation, and unconventional mastery.',
+    'ketu': 'Ketu (South Node): Moksha, spiritual detachment, occult perception, and subtle wisdom.',
+  };
+
+  void _showPlanetDetails(
+    BuildContext context,
+    String planetName, [
+    Map<String, dynamic>? planetData,
+  ]) {
+    final lower = planetName.toLowerCase();
+    String meaning = 'Vedic planetary energy influencing this house placement.';
+    for (final entry in planetSignifications.entries) {
+      if (lower.contains(entry.key)) {
+        meaning = entry.value;
+        break;
+      }
+    }
+
+    final sign = planetData?['sign'] as String? ?? planetData?['rashi'] as String?;
+    final house = planetData?['house']?.toString();
+    final degree = planetData?['degree'] != null
+        ? '${(planetData!['degree'] as num).toStringAsFixed(1)}°'
+        : null;
+    final nakshatra = planetData?['nakshatra'] as String?;
+    final isRetrograde = planetData?['retrograde'] as bool? ?? false;
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: AppColors.getSurfaceElevated(context),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            const Icon(Icons.auto_awesome_rounded, color: AppColors.primary, size: 20),
+            const SizedBox(width: 8),
+            Text(
+              planetName,
+              style: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (sign != null || house != null || degree != null) ...[
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  if (house != null)
+                    _InfoChip(label: 'House', value: '${house}th', icon: Icons.home_rounded),
+                  if (sign != null)
+                    _InfoChip(label: 'Sign', value: sign, icon: Icons.brightness_auto_rounded),
+                  if (degree != null)
+                    _InfoChip(label: 'Degree', value: '$degree${isRetrograde ? " ℞" : ""}', icon: Icons.straighten_rounded),
+                ],
+              ),
+              const SizedBox(height: 12),
+            ],
+            Text(
+              'What this means',
+              style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              meaning,
+              style: GoogleFonts.inter(fontSize: 13, height: 1.4, color: AppColors.getTextSecondary(context)),
+            ),
+            if (nakshatra != null && nakshatra.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: AppColors.getSurfaceSecondary(context),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  'Nakshatra: $nakshatra',
+                  style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextMuted(context), fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close', style: TextStyle(color: AppColors.primary)),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showHouseDetails(
     BuildContext context,
     int house,
-    Map<int, List<String>> activePlanets,
-  ) {
+    Map<int, List<String>> activePlanets, [
+    List<dynamic>? rawPlanetsList,
+  ]) {
     final planets = activePlanets[house] ?? [];
     final description = houseMeanings[house] ?? 'House Details';
 
@@ -132,7 +237,8 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                       Wrap(
                         spacing: 8,
                         children: planets.map((p) {
-                          return Chip(
+                          return ActionChip(
+                            avatar: const Icon(Icons.info_outline_rounded, size: 14, color: AppColors.primary),
                             backgroundColor: AppColors.primary.withOpacity(0.15),
                             side: BorderSide(
                               color: AppColors.primary.withOpacity(0.4),
@@ -144,6 +250,21 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            onPressed: () {
+                              Map<String, dynamic>? matchingPlanet;
+                              if (rawPlanetsList != null) {
+                                for (final item in rawPlanetsList) {
+                                  if (item is Map) {
+                                    final pName = (item['name'] ?? item['code'] ?? '').toString().toLowerCase();
+                                    if (pName.contains(p.toLowerCase()) || p.toLowerCase().contains(pName)) {
+                                      matchingPlanet = Map<String, dynamic>.from(item);
+                                      break;
+                                    }
+                                  }
+                                }
+                              }
+                              _showPlanetDetails(context, p, matchingPlanet);
+                            },
                           );
                         }).toList(),
                       ),
@@ -454,27 +575,68 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Tooltip(
-                        message: 'Interactive Kundli Chart. Tap any house cell for details.',
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: AppColors.primary.withOpacity(0.2)),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(Icons.touch_app_rounded, color: AppColors.primary, size: 14),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Tap House',
-                                style: GoogleFonts.inter(color: AppColors.primary, fontSize: 10, fontWeight: FontWeight.bold, height: 1.2),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isSouthIndianChart = !isSouthIndianChart;
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(color: AppColors.primary.withOpacity(0.4)),
                               ),
-                            ],
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    isSouthIndianChart ? Icons.grid_view_rounded : Icons.diamond_outlined,
+                                    color: AppColors.primary,
+                                    size: 13,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    isSouthIndianChart ? 'South Indian' : 'North Indian',
+                                    style: GoogleFonts.inter(
+                                      color: AppColors.primary,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 6),
+                          Tooltip(
+                            message: 'Interactive Kundli Chart. Tap any house cell for details.',
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withOpacity(0.08),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.touch_app_rounded, color: AppColors.primary, size: 12),
+                                  const SizedBox(width: 3),
+                                  Text(
+                                    'Tap House',
+                                    style: GoogleFonts.inter(color: AppColors.primary, fontSize: 9.5, fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -491,34 +653,53 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                         final dy = local.dy / size.height;
 
                         int house = 1;
-                        if (dy < 0.33) {
-                          if (dx < 0.33)
-                            house = 2;
-                          else if (dx > 0.66)
-                            house = 12;
-                          else
-                            house = 1;
-                        } else if (dy > 0.66) {
-                          if (dx < 0.33)
-                            house = 6;
-                          else if (dx > 0.66)
-                            house = 8;
-                          else
-                            house = 7;
+                        if (isSouthIndianChart) {
+                          final col = (dx * 4).floor().clamp(0, 3);
+                          final row = (dy * 4).floor().clamp(0, 3);
+                          const southGrid = [
+                            [12, 1, 2, 3],
+                            [11, -1, -1, 4],
+                            [10, -1, -1, 5],
+                            [9, 8, 7, 6],
+                          ];
+                          final sign = southGrid[row][col];
+                          if (sign > 0) {
+                            house = ((sign - lagnaIndex + 12) % 12) + 1;
+                          }
                         } else {
-                          if (dx < 0.33)
-                            house = 4;
-                          else if (dx > 0.66)
-                            house = 10;
-                          else
-                            house = 9;
+                          if (dy < 0.33) {
+                            if (dx < 0.33)
+                              house = 2;
+                            else if (dx > 0.66)
+                              house = 12;
+                            else
+                              house = 1;
+                          } else if (dy > 0.66) {
+                            if (dx < 0.33)
+                              house = 6;
+                            else if (dx > 0.66)
+                              house = 8;
+                            else
+                              house = 7;
+                          } else {
+                            if (dx < 0.33)
+                              house = 4;
+                            else if (dx > 0.66)
+                              house = 10;
+                            else
+                              house = 9;
+                          }
                         }
-                        _showHouseDetails(context, house, activePlanets);
+                        _showHouseDetails(context, house, activePlanets, rawPlanets is List ? rawPlanets : null);
                       },
                       child: CustomPaint(
                         painter: VedicChartPainter(
                           housePlanets: activePlanets,
                           context: context,
+                          style: isSouthIndianChart
+                              ? VedicChartStyle.southIndian
+                              : VedicChartStyle.northIndian,
+                          lagnaSignIndex: lagnaIndex,
                         ),
                       ),
                     ),

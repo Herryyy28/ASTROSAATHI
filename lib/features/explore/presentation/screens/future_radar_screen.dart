@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class FutureRadarScreen extends StatelessWidget {
@@ -9,10 +10,12 @@ class FutureRadarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isLight = AppColors.isLight(context);
     final primaryTextColor = AppColors.getTextPrimary(context);
+    final now = DateTime.now();
+    final f = DateFormat('MMM d');
 
     final events = [
       {
-        'day': 'Day +4',
+        'day': '${f.format(now.add(const Duration(days: 4)))} (+4d)',
         'title': 'Jupiter Trine Natal Sun',
         'category': 'Transit',
         'rating': 'Favorable',
@@ -20,7 +23,7 @@ class FutureRadarScreen extends StatelessWidget {
         'color': isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF),
       },
       {
-        'day': 'Day +14',
+        'day': '${f.format(now.add(const Duration(days: 14)))} (+14d)',
         'title': 'Mercury Antardasha Shift',
         'category': 'Dasha',
         'rating': 'High Impact',
@@ -28,7 +31,7 @@ class FutureRadarScreen extends StatelessWidget {
         'color': isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700),
       },
       {
-        'day': 'Day +28',
+        'day': '${f.format(now.add(const Duration(days: 28)))} (+28d)',
         'title': 'Solar Eclipse in 10th House',
         'category': 'Eclipse',
         'rating': 'Caution',
@@ -36,7 +39,7 @@ class FutureRadarScreen extends StatelessWidget {
         'color': isLight ? const Color(0xFFC62828) : const Color(0xFFFF1744),
       },
       {
-        'day': 'Day +45',
+        'day': '${f.format(now.add(const Duration(days: 45)))} (+45d)',
         'title': 'Venus Trine Natal Moon',
         'category': 'Relationship',
         'rating': 'Favorable',
@@ -44,7 +47,7 @@ class FutureRadarScreen extends StatelessWidget {
         'color': isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF),
       },
       {
-        'day': 'Day +65',
+        'day': '${f.format(now.add(const Duration(days: 65)))} (+65d)',
         'title': 'Mars Transit 10th House',
         'category': 'Career',
         'rating': 'High Impact',
@@ -52,7 +55,7 @@ class FutureRadarScreen extends StatelessWidget {
         'color': isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700),
       },
       {
-        'day': 'Day +82',
+        'day': '${f.format(now.add(const Duration(days: 82)))} (+82d)',
         'title': 'Saturn Direct Gochar',
         'category': 'Transit',
         'rating': 'Favorable',

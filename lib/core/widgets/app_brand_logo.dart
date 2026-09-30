@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../theme/app_colors.dart';
 
 /// ─────────────────────────────────────────────────────────────────────────────
 /// Executive Professional Dynamic Brand Logo Widget for AstroSaathi
@@ -58,7 +57,7 @@ class AppBrandLogo extends StatelessWidget {
               width: iconSize,
               height: iconSize,
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Center(
+              errorBuilder: (_, _, _) => Center(
                 child: Icon(
                   Icons.auto_awesome_rounded,
                   size: iconSize * 0.52,

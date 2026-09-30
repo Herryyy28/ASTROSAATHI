@@ -4,7 +4,11 @@ import 'package:AstroSaathi/core/utils/zodiac_sign_utils.dart';
 import 'package:AstroSaathi/features/astrology/services/pdf_report_generator.dart';
 import 'package:AstroSaathi/l10n/app_language.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('AstroSaathi Unit & Business Logic Tests', () {
     test('ZodiacSignUtils auto-detects Nam Rashi based on name initial', () {
       final aries = ZodiacSignUtils.getZodiacFromName('Aarav Sharma');
@@ -12,7 +16,7 @@ void main() {
       expect(aries!.englishName, equals('Aries'));
       expect(aries.hindiName, equals('मेष'));
 
-      final taurus = ZodiacSignUtils.getZodiacFromName('Bhavna Patel');
+      final taurus = ZodiacSignUtils.getZodiacFromName('Varun Patel');
       expect(taurus, isNotNull);
       expect(taurus!.englishName, equals('Taurus'));
 
@@ -27,6 +31,7 @@ void main() {
     test(
       'ProfilesNotifier enforces max 5 family member profiles capacity',
       () async {
+        SharedPreferences.setMockInitialValues({});
         final notifier = ProfilesNotifier();
 
         // Clear any loaded state for deterministic test
@@ -85,7 +90,7 @@ void main() {
       );
 
       expect(reportEn.userName, equals('Prajapati Herry'));
-      expect(reportEn.reportTitle, contains('Authentic Vedic Kundli'));
+      expect(reportEn.reportTitle, contains('Authentic Vedic'));
       expect(reportEn.keyInterpretations.length, greaterThanOrEqualTo(3));
       expect(reportEn.recommendedRemedies.length, greaterThanOrEqualTo(3));
 

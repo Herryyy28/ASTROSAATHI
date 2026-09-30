@@ -9,9 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/providers/locale_provider.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/providers/subscription_provider.dart';
-import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
+import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/utils/zodiac_sign_utils.dart';
 import '../../../../core/widgets/responsive_layout.dart';
-import '../../../../core/theme/utils/responsive.dart';
 
 class MatchingScreen extends ConsumerStatefulWidget {
   const MatchingScreen({super.key});
@@ -37,6 +37,28 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
   String grade = 'Excellent';
   String summaryText = 'Aries and Leo achieve an authentic Ashtakoota compatibility score of 30.5 out of 36 Gunas (Excellent match).';
 
+  static const Map<String, double> maxScores = {
+    'Varna': 1.0,
+    'Vashya': 2.0,
+    'Tara': 3.0,
+    'Yoni': 4.0,
+    'Maitri': 5.0,
+    'Gana': 6.0,
+    'Bhakoot': 7.0,
+    'Nadi': 8.0,
+  };
+
+  Map<String, double> rawScores = {
+    'Varna': 1.0,
+    'Vashya': 2.0,
+    'Tara': 3.0,
+    'Yoni': 3.0,
+    'Maitri': 4.0,
+    'Gana': 3.5,
+    'Bhakoot': 7.0,
+    'Nadi': 8.0,
+  };
+
   Map<String, double> normalizedScores = {
     'Varna': 1.0,
     'Vashya': 1.0,
@@ -47,6 +69,20 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
     'Bhakoot': 0.85,
     'Nadi': 0.9,
   };
+
+  @override
+  void initState() {
+    super.initState();
+    final active = ref.read(activeProfileProvider);
+    if (active.name.isNotEmpty) {
+      _p1NameController.text = active.name;
+      final z = ZodiacSignUtils.getZodiacFromName(active.name);
+      if (z != null) {
+        _p1Sign = z.englishName;
+      }
+    }
+    _calculateMatch();
+  }
 
   @override
   void dispose() {
@@ -85,22 +121,32 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
     final lang = ref.read(localeProvider);
     String summary;
     if (lang == AppLanguage.hindi) {
-      summary = '${_p1NameController.text} ($_p1Sign) और ${_p2NameController.text} ($_p2Sign) का अष्टकूट गुण मिलान 36 में से $calculatedTotal गुण है ($calculatedGrade)। ';
-      if (bhakoot == 0) summary += 'भकूट दोष देखा गया — वित्तीय उपाय की सलाह दी जाती है। ';
-      if (nadi == 0) summary += 'नाड़ी दोष उपस्थित — महामृत्युंजय जाप का सुझाव है। ';
+      summary = '${_p1NameController.text} ($_p1Sign) और ${_p2NameController.text} ($_p2Sign) का राशि-आधारित गुण पूर्वावलोकन 36 में से $calculatedTotal गुण है ($calculatedGrade)। ';
+      if (bhakoot == 0) summary += 'भकूट संबंध देखा गया — वित्तीय समझदारी की सलाह दी जाती है। ';
+      if (nadi == 0) summary += 'नाड़ी संबंध उपस्थित — महामृत्युंजय जाप का सुझाव है। ';
     } else if (lang == AppLanguage.gujarati) {
-      summary = '${_p1NameController.text} ($_p1Sign) અને ${_p2NameController.text} ($_p2Sign) નો અષ્ટકૂટ ગુણ મિલન 36 માંથી $calculatedTotal ગુણ છે ($calculatedGrade). ';
-      if (bhakoot == 0) summary += 'ભકૂટ દોષ જણાયેલ છે — નાણાકીય ઉપાયની સલાહ આપવામાં આવે છે. ';
-      if (nadi == 0) summary += 'નાડી દોષ ઉપસ્થિત — મહામૃત્યુંજય જાપનું સૂચન છે. ';
+      summary = '${_p1NameController.text} ($_p1Sign) અને ${_p2NameController.text} ($_p2Sign) નો રાશિ-આધારિત ગુણ પૂર્વાવલોકન 36 માંથી $calculatedTotal ગુણ છે ($calculatedGrade). ';
+      if (bhakoot == 0) summary += 'ભકૂટ સંબંધ જણાયેલ છે — નાણાકીય ઉપાયની સલાહ આપવામાં આવે છે. ';
+      if (nadi == 0) summary += 'નાડી સંબંધ ઉપસ્થિત — મહામૃત્યુંજય જાપનું સૂચન છે. ';
     } else {
-      summary = '${_p1NameController.text} ($_p1Sign) & ${_p2NameController.text} ($_p2Sign) achieve an authentic Ashtakoota score of $calculatedTotal / 36 ($calculatedGrade Match). ';
-      if (bhakoot == 0) summary += 'Bhakoot Dosh observed — financial remedies recommended. ';
-      if (nadi == 0) summary += 'Nadi Dosh present — Mahamrityunjaya Japa suggested. ';
+      summary = '${_p1NameController.text} ($_p1Sign) & ${_p2NameController.text} ($_p2Sign) achieve a Zodiac Alignment Preview score of $calculatedTotal / 36 ($calculatedGrade Match). ';
+      if (bhakoot == 0) summary += 'Bhakoot relationship observed — financial mindfulness recommended. ';
+      if (nadi == 0) summary += 'Nadi dynamic present — Mahamrityunjaya Japa suggested. ';
     }
 
     setState(() {
       totalScore = calculatedTotal;
       grade = calculatedGrade;
+      rawScores = {
+        'Varna': varna,
+        'Vashya': vashya,
+        'Tara': tara,
+        'Yoni': yoni,
+        'Maitri': maitri,
+        'Gana': gana,
+        'Bhakoot': bhakoot,
+        'Nadi': nadi,
+      };
       normalizedScores = {
         'Varna': varna / 1.0,
         'Vashya': vashya / 2.0,
@@ -172,7 +218,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                               const SizedBox(width: 4),
                               Expanded(
                                 child: Text(
-                                  'AI Calculated Ashtakoota Score (Out of 36)',
+                                  'Zodiac Alignment Preview Score (Out of 36)',
                                   style: const TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
@@ -379,7 +425,94 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 24),
+
+                // Ashtakoota 8-Koota Detailed Breakdown Card
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? AppColors.surfaceLight
+                        : AppColors.surfaceHighlightDark.withOpacity(0.4),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: AppColors.getGlassBorder(context)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Ashtakoota 8-Koota Breakdown',
+                            style: GoogleFonts.outfit(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.getTextPrimary(context),
+                            ),
+                          ),
+                          Text(
+                            '${totalScore.toStringAsFixed(1)} / 36',
+                            style: GoogleFonts.outfit(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      ...rawScores.entries.map((e) {
+                        final max = maxScores[e.key] ?? 1.0;
+                        final ratio = (e.value / max).clamp(0.0, 1.0);
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    e.key,
+                                    style: TextStyle(
+                                      fontSize: 12.5,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.getTextPrimary(context),
+                                    ),
+                                  ),
+                                  Text(
+                                    '${e.value.toStringAsFixed(1)} / ${max.toStringAsFixed(0)} pts',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: ratio >= 0.7
+                                          ? AppColors.success
+                                          : (ratio >= 0.4 ? AppColors.primary : AppColors.warning),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: LinearProgressIndicator(
+                                  value: ratio,
+                                  minHeight: 5,
+                                  backgroundColor: AppColors.getSurfaceSecondary(context),
+                                  color: ratio >= 0.7
+                                      ? AppColors.success
+                                      : (ratio >= 0.4 ? AppColors.primary : AppColors.warning),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
 
                 // Radar Chart Container
                 Consumer(
@@ -447,12 +580,4 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
       ),
     );
   }
-}
-
-class Math {
-  static double floor(double val) => val.floorToDouble();
-}
-
-class NumberUtilities {
-  static double round(double val) => double.parse(val.toStringAsFixed(1));
 }

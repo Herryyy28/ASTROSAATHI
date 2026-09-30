@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'app_language.dart';
 import '../core/providers/locale_provider.dart';
 import 'translations/en_translations.dart';
 import 'translations/hi_translations.dart';
@@ -36,7 +35,6 @@ class AppLocalizations {
         translationMap = guTranslations;
         break;
       case AppLanguage.english:
-      default:
         translationMap = enTranslations;
         break;
     }

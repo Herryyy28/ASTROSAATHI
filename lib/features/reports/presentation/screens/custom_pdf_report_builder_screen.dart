@@ -146,7 +146,7 @@ class _CustomPdfReportBuilderScreenState extends ConsumerState<CustomPdfReportBu
                                 controlAffinity: ListTileControlAffinity.leading,
                               ),
                             );
-                          }).toList(),
+                          }),
                         ],
                       ),
                     ),
@@ -175,6 +175,16 @@ class _CustomPdfReportBuilderScreenState extends ConsumerState<CustomPdfReportBu
                         onPressed: _isGenerating
                             ? null
                             : () async {
+                                if (!_selectedSections.values.any((selected) => selected)) {
+                                  CosmicNotification.show(
+                                    context,
+                                    title: 'No Sections Selected ✦',
+                                    message: 'Please select at least one section to include in the custom report.',
+                                    icon: Icons.checklist_rounded,
+                                  );
+                                  return;
+                                }
+
                                 setState(() => _isGenerating = true);
                                 try {
                                   await PdfReportGenerator.downloadAndPrintPdf(
@@ -183,22 +193,23 @@ class _CustomPdfReportBuilderScreenState extends ConsumerState<CustomPdfReportBu
                                     birthTime: activeProfile.birthTime,
                                     birthPlace: activeProfile.birthPlace,
                                     language: AppLanguage.english,
+                                    selectedSections: _selectedSections,
                                   );
-                                  if (mounted) {
-                                    CosmicNotification.show(
-                                      context,
-                                      message: 'Custom VIP PDF Report generated & saved to Downloads!',
-                                      icon: Icons.picture_as_pdf_rounded,
-                                    );
-                                  }
+                                  if (!context.mounted) return;
+                                  CosmicNotification.show(
+                                    context,
+                                    title: 'Report Generated 📄',
+                                    message: 'Custom VIP PDF Report generated & ready to print/save!',
+                                    icon: Icons.picture_as_pdf_rounded,
+                                  );
                                 } catch (e) {
-                                  if (mounted) {
-                                    CosmicNotification.show(
-                                      context,
-                                      message: 'VIP PDF Report generated successfully!',
-                                      icon: Icons.check_circle_rounded,
-                                    );
-                                  }
+                                  if (!context.mounted) return;
+                                  CosmicNotification.show(
+                                    context,
+                                    title: 'PDF Generation Error',
+                                    message: 'Could not generate report: ${e.toString().replaceAll('Exception: ', '')}',
+                                    icon: Icons.error_outline_rounded,
+                                  );
                                 } finally {
                                   if (mounted) setState(() => _isGenerating = false);
                                 }

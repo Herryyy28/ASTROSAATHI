@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -94,7 +91,7 @@ class SubscriptionState {
 }
 
 class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
-  static const int freeAiQueryLimit = 1;
+  static const int freeAiQueryLimit = 3;
   static const int freeProfileLimit = 5;
 
   SubscriptionNotifier()
@@ -137,15 +134,6 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
         : null;
 
     bool finalIsPremium = isPrem;
-    if (finalIsPremium && purchaseDate != null && loadedTier != PlanTier.free) {
-      final exp = _calculateExpirationDate(loadedTier, purchaseDate);
-      if (exp != null && DateTime.now().isAfter(exp)) {
-        finalIsPremium = false;
-        loadedTier = PlanTier.free;
-        await prefs.setBool('is_premium', false);
-        await prefs.setString('subscription_tier', PlanTier.free.name);
-      }
-    }
 
     state = SubscriptionState(
       isPremium: finalIsPremium,
@@ -252,8 +240,9 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   int get remainingDaysOfSubscription {
     if (!state.isPremium ||
         state.purchaseDate == null ||
-        state.tier == PlanTier.free)
+        state.tier == PlanTier.free) {
       return 0;
+    }
     final exp = _calculateExpirationDate(state.tier, state.purchaseDate!);
     if (exp == null) return 0;
     final diffSeconds = exp.difference(DateTime.now()).inSeconds;

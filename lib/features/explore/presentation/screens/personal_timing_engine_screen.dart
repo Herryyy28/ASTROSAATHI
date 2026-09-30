@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class PersonalTimingEngineScreen extends StatefulWidget {
@@ -20,35 +21,168 @@ class _PersonalTimingEngineScreenState extends State<PersonalTimingEngineScreen>
     'Property & Asset Purchase',
   ];
 
-  final List<Map<String, dynamic>> _dateComparisons = [
-    {
-      'date': '10 Sep 2026',
-      'rating': 'Strong',
-      'score': 94,
-      'window': '10:15 AM - 12:30 PM (Abhijit Muhurat)',
-      'support': 'Sun in 10th House supported by Moon-Jupiter Trine.',
-      'notice': 'Zero malefic Rahu Kaal overlap during window.',
-      'color': const Color(0xFF00796B),
-    },
-    {
-      'date': '12 Sep 2026',
-      'rating': 'Moderate',
-      'score': 72,
-      'window': '02:00 PM - 04:15 PM',
-      'support': 'Mercury alignment favors negotiation.',
-      'notice': 'Minor Saturn aspect requires careful documentation.',
-      'color': const Color(0xFFB87308),
-    },
-    {
-      'date': '15 Sep 2026',
-      'rating': 'Strongest',
-      'score': 98,
-      'window': '09:30 AM - 11:45 AM (Amrit Siddhi Yoga)',
-      'support': 'Peak Pushya Nakshatra alignment fostering long-term wealth.',
-      'notice': 'Highest success probability window in September.',
-      'color': const Color(0xFF00796B),
-    },
-  ];
+  List<Map<String, dynamic>> _getDateComparisons(String activity) {
+    final now = DateTime.now();
+    final f = DateFormat('d MMM yyyy');
+
+    switch (activity) {
+      case 'Business Registration':
+        return [
+          {
+            'date': f.format(now.add(const Duration(days: 3))),
+            'rating': 'Strongest',
+            'score': 96,
+            'window': '10:45 AM - 01:15 PM (Sarvartha Siddhi Yoga)',
+            'support': 'Jupiter in 11th House (Labha) fosters financial liquidity and rapid partnership growth.',
+            'notice': 'Zero malefic Rahu Kaal overlap during registration window.',
+            'color': const Color(0xFF00796B),
+          },
+          {
+            'date': f.format(now.add(const Duration(days: 7))),
+            'rating': 'Strong',
+            'score': 89,
+            'window': '09:15 AM - 11:30 AM (Shubh Choghadiya)',
+            'support': 'Mercury conjunct Sun elevates commercial acumen and public brand trust.',
+            'notice': 'Ensure company paperwork is reviewed before afternoon Rahu transit.',
+            'color': const Color(0xFF00796B),
+          },
+          {
+            'date': f.format(now.add(const Duration(days: 11))),
+            'rating': 'Moderate',
+            'score': 74,
+            'window': '02:30 PM - 04:45 PM',
+            'support': 'Steady Venusian grace supports aesthetic and service ventures.',
+            'notice': 'Saturn aspect demands thorough legal verification.',
+            'color': const Color(0xFFB87308),
+          },
+        ];
+
+      case 'Travel & Relocation':
+        return [
+          {
+            'date': f.format(now.add(const Duration(days: 2))),
+            'rating': 'Strongest',
+            'score': 95,
+            'window': '06:30 AM - 08:45 AM (Amrit Muhurat)',
+            'support': 'Auspicious Moon transit in Char (Movable) Nakshatra ensures seamless journey and safety.',
+            'notice': 'Clear directional path with zero Dishashool interference.',
+            'color': const Color(0xFF00796B),
+          },
+          {
+            'date': f.format(now.add(const Duration(days: 6))),
+            'rating': 'Strong',
+            'score': 85,
+            'window': '11:30 AM - 01:45 PM (Abhijit Window)',
+            'support': 'Favorable planetary wind supports smooth customs, bookings, and luggage transit.',
+            'notice': 'Begin travel before 04:30 PM to avoid evening planetary tension.',
+            'color': const Color(0xFF00796B),
+          },
+          {
+            'date': f.format(now.add(const Duration(days: 9))),
+            'rating': 'Caution',
+            'score': 68,
+            'window': '03:15 PM - 05:00 PM',
+            'support': 'Destination arrival aligned with supportive Venus hour.',
+            'notice': 'Rahu transit overlap; chant travel safety mantra before departure.',
+            'color': const Color(0xFFB87308),
+          },
+        ];
+
+      case 'Important Meeting / Contract':
+        return [
+          {
+            'date': f.format(now.add(const Duration(days: 1))),
+            'rating': 'Strongest',
+            'score': 97,
+            'window': '11:15 AM - 01:20 PM (Abhijit Muhurat)',
+            'support': 'High Mercurial resonance for persuasive communication, terms agreement, and signature.',
+            'notice': 'Optimal planetary alignment for mutual commercial benefit.',
+            'color': const Color(0xFF00796B),
+          },
+          {
+            'date': f.format(now.add(const Duration(days: 5))),
+            'rating': 'Strong',
+            'score': 88,
+            'window': '02:00 PM - 04:15 PM (Labha Choghadiya)',
+            'support': 'Sun in 10th House bolsters leadership presence and authority.',
+            'notice': 'Keep negotiations calm and data-driven.',
+            'color': const Color(0xFF00796B),
+          },
+          {
+            'date': f.format(now.add(const Duration(days: 10))),
+            'rating': 'Moderate',
+            'score': 76,
+            'window': '10:00 AM - 12:15 PM',
+            'support': 'Harmonious Venus aspect aids diplomatic compromise.',
+            'notice': 'Avoid rushed commitments during final hour.',
+            'color': const Color(0xFFB87308),
+          },
+        ];
+
+      case 'Property & Asset Purchase':
+        return [
+          {
+            'date': f.format(now.add(const Duration(days: 4))),
+            'rating': 'Strongest',
+            'score': 98,
+            'window': '09:00 AM - 11:30 AM (Pushya Nakshatra Yoga)',
+            'support': '4th House (Sukha & Land) energized by Jupiter; ideal for deed signing and registry.',
+            'notice': 'Promotes long-term capital preservation and family tranquility.',
+            'color': const Color(0xFF00796B),
+          },
+          {
+            'date': f.format(now.add(const Duration(days: 8))),
+            'rating': 'Strong',
+            'score': 91,
+            'window': '11:45 AM - 01:50 PM (Amrit Siddhi Muhurat)',
+            'support': 'Fixed sign Taurus/Scorpio ascendant brings permanence and physical stability.',
+            'notice': 'Conduct physical inspection during morning sunlight.',
+            'color': const Color(0xFF00796B),
+          },
+          {
+            'date': f.format(now.add(const Duration(days: 14))),
+            'rating': 'Moderate',
+            'score': 75,
+            'window': '01:30 PM - 03:45 PM',
+            'support': 'Mars alignment energizes land value appreciation.',
+            'notice': 'Verify land titles and encumbrance certificates thoroughly.',
+            'color': const Color(0xFFB87308),
+          },
+        ];
+
+      case 'Interview & Job Launch':
+      default:
+        return [
+          {
+            'date': f.format(now.add(const Duration(days: 2))),
+            'rating': 'Strongest',
+            'score': 95,
+            'window': '10:15 AM - 12:30 PM (Abhijit Muhurat)',
+            'support': 'Sun in 10th House supported by Moon-Jupiter Trine.',
+            'notice': 'Zero malefic Rahu Kaal overlap during window.',
+            'color': const Color(0xFF00796B),
+          },
+          {
+            'date': f.format(now.add(const Duration(days: 5))),
+            'rating': 'Strong',
+            'score': 86,
+            'window': '02:00 PM - 04:15 PM',
+            'support': 'Mercury alignment favors confidence in negotiation and technical Q&A.',
+            'notice': 'Maintain poised posture; recite Budh mantra before entry.',
+            'color': const Color(0xFF00796B),
+          },
+          {
+            'date': f.format(now.add(const Duration(days: 8))),
+            'rating': 'Moderate',
+            'score': 72,
+            'window': '11:00 AM - 01:15 PM',
+            'support': 'Jupiter aspect supports executive presentation.',
+            'notice': 'Minor Saturn aspect requires careful documentation.',
+            'color': const Color(0xFFB87308),
+          },
+        ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +273,7 @@ class _PersonalTimingEngineScreenState extends State<PersonalTimingEngineScreen>
             const SizedBox(height: 12),
 
             // Date Comparison Cards
-            ..._dateComparisons.map((item) {
+            ..._getDateComparisons(_selectedActivity).map((item) {
               final Color col = isLight ? (item['color'] as Color) : (item['rating'] == 'Moderate' ? const Color(0xFFFFD700) : const Color(0xFF00E5FF));
               return Container(
                 margin: const EdgeInsets.only(bottom: 14),

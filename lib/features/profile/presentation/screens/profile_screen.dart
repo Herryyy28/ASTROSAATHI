@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_animations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/widgets/language_selection_modal.dart';
@@ -21,11 +19,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../subscription/presentation/screens/premium_upgrade_modal.dart';
 import '../../../../core/widgets/cosmic_notification.dart';
 import '../widgets/add_family_member_modal.dart';
-import 'settings/notifications_screen.dart';
 import 'settings/saved_insights_screen.dart';
-import 'settings/data_privacy_screen.dart';
 import 'settings/about_screen.dart';
-import '../widgets/profile_switcher_modal.dart';
 import '../../../reminders/presentation/screens/astro_reminders_screen.dart';
 import '../../../security/presentation/screens/security_center_screen.dart';
 import '../../../security/presentation/screens/privacy_dashboard_screen.dart';

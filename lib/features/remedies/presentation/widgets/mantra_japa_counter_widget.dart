@@ -1,9 +1,11 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/providers/gamification_provider.dart';
 
-class MantraJapaCounterWidget extends StatefulWidget {
+class MantraJapaCounterWidget extends ConsumerStatefulWidget {
   final String mantraTitle;
   final String mantraText;
 
@@ -14,23 +16,53 @@ class MantraJapaCounterWidget extends StatefulWidget {
   });
 
   @override
-  State<MantraJapaCounterWidget> createState() => _MantraJapaCounterWidgetState();
+  ConsumerState<MantraJapaCounterWidget> createState() => _MantraJapaCounterWidgetState();
 }
 
-class _MantraJapaCounterWidgetState extends State<MantraJapaCounterWidget> {
+class _MantraJapaCounterWidgetState extends ConsumerState<MantraJapaCounterWidget> {
   int count = 0;
   final int totalBeads = 108;
-  bool isPlayingAudio = false;
+  bool _hapticGuidanceEnabled = true;
 
   void _incrementCounter() {
-    HapticFeedback.mediumImpact();
+    if (_hapticGuidanceEnabled) {
+      HapticFeedback.lightImpact();
+    }
     setState(() {
       if (count < totalBeads) {
         count++;
+        if (count == totalBeads) {
+          _onCompleteJapaCycle();
+        }
       } else {
-        count = 0; // reset loop
+        count = 1; // start new loop
       }
     });
+  }
+
+  void _onCompleteJapaCycle() {
+    HapticFeedback.heavyImpact();
+    ref.read(gamificationProvider.notifier).completeTask('japa108', 15);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Row(
+          children: [
+            Text('📿', style: TextStyle(fontSize: 20)),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Sacred 108 Japa Cycle Completed! +15 Karma XP Earned ✨',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: AppColors.primary,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        duration: const Duration(seconds: 4),
+      ),
+    );
   }
 
   @override
@@ -38,7 +70,7 @@ class _MantraJapaCounterWidgetState extends State<MantraJapaCounterWidget> {
     final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4),
         borderRadius: BorderRadius.circular(32),
@@ -80,16 +112,22 @@ class _MantraJapaCounterWidgetState extends State<MantraJapaCounterWidget> {
                   ],
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    isPlayingAudio = !isPlayingAudio;
-                  });
-                },
-                icon: Icon(
-                  isPlayingAudio ? Icons.pause_circle_filled_rounded : Icons.play_circle_fill_rounded,
-                  color: AppColors.primary,
-                  size: 32,
+              Tooltip(
+                message: _hapticGuidanceEnabled ? 'Tactile Mala Rhythm Active' : 'Haptic Vibration Muted',
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _hapticGuidanceEnabled = !_hapticGuidanceEnabled;
+                    });
+                    if (_hapticGuidanceEnabled) {
+                      HapticFeedback.selectionClick();
+                    }
+                  },
+                  icon: Icon(
+                    _hapticGuidanceEnabled ? Icons.vibration_rounded : Icons.smartphone_rounded,
+                    color: _hapticGuidanceEnabled ? AppColors.primary : AppColors.getTextSecondary(context),
+                    size: 26,
+                  ),
                 ),
               ),
             ],

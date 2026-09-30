@@ -1,11 +1,9 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_decorations.dart';
 import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/theme/utils/responsive.dart';
@@ -18,7 +16,6 @@ import '../../../horoscope/presentation/screens/horoscope_screen.dart';
 import '../../../remedies/presentation/screens/remedy_hub_screen.dart';
 import '../../../matching/presentation/screens/matching_screen.dart';
 import '../../../astrology/presentation/screens/numerology_screen.dart';
-import '../../../astrology/presentation/screens/transits_screen.dart';
 
 import '../../../home/presentation/screens/main_screen.dart';
 import '../../../kundli/presentation/screens/kundli_screen.dart';
@@ -31,7 +28,6 @@ import '../../../workspace/presentation/screens/astro_workspace_screen.dart';
 import '../../../family/presentation/screens/family_astrology_dashboard_screen.dart';
 import '../../../astrology/presentation/screens/returns_center_screen.dart';
 import '../../../astrology/presentation/screens/saturn_return_screen.dart';
-import '../../../astrology/presentation/screens/sky_now_ephemeris_screen.dart';
 import '../../../astrology/presentation/screens/chart_patterns_screen.dart';
 import '../../../divination/presentation/screens/human_design_screen.dart';
 import '../../../astrology/presentation/screens/astro_research_screen.dart';
@@ -747,7 +743,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               final item = features[index];
-              final LinearGradient gradient = item['gradient'];
 
               return Container(
                 margin: const EdgeInsets.only(bottom: 10),
@@ -884,7 +879,6 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                       padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
                       child: Column(
                         children: items.map((item) {
-                          final LinearGradient gradient = item['gradient'];
                           return Container(
                             margin: const EdgeInsets.only(top: 8),
                             decoration: BoxDecoration(

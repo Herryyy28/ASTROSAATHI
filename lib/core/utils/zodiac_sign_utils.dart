@@ -1,6 +1,7 @@
 class ZodiacInfo {
   final String englishName;
   final String hindiName;
+  final String gujaratiName;
   final String symbol;
   final String element;
   final String rulingPlanet;
@@ -8,6 +9,7 @@ class ZodiacInfo {
   const ZodiacInfo({
     required this.englishName,
     required this.hindiName,
+    this.gujaratiName = '',
     required this.symbol,
     required this.element,
     required this.rulingPlanet,
@@ -42,15 +44,17 @@ class ZodiacSignUtils {
       return const ZodiacInfo(
         englishName: 'Sagittarius',
         hindiName: 'धनु',
+        gujaratiName: 'ધન',
         symbol: '🏹',
         element: 'Fire',
         rulingPlanet: 'Jupiter',
       );
     }
-    if (['CH', 'JH'].contains(firstTwo)) {
+    if (['CH', 'JH', 'DI', 'DE'].contains(firstTwo)) {
       return const ZodiacInfo(
         englishName: 'Pisces',
         hindiName: 'मीन',
+        gujaratiName: 'મીન',
         symbol: '🐟',
         element: 'Water',
         rulingPlanet: 'Jupiter',
@@ -60,6 +64,7 @@ class ZodiacSignUtils {
       return const ZodiacInfo(
         englishName: 'Aquarius',
         hindiName: 'कुंभ',
+        gujaratiName: 'કુંભ',
         symbol: '🏺',
         element: 'Air',
         rulingPlanet: 'Saturn',
@@ -76,6 +81,7 @@ class ZodiacSignUtils {
         return const ZodiacInfo(
           englishName: 'Aries',
           hindiName: 'मेष',
+          gujaratiName: 'મેષ',
           symbol: '♈',
           element: 'Fire',
           rulingPlanet: 'Mars',
@@ -88,6 +94,7 @@ class ZodiacSignUtils {
         return const ZodiacInfo(
           englishName: 'Taurus',
           hindiName: 'वृषभ',
+          gujaratiName: 'વૃષભ',
           symbol: '♉',
           element: 'Earth',
           rulingPlanet: 'Venus',
@@ -99,6 +106,7 @@ class ZodiacSignUtils {
         return const ZodiacInfo(
           englishName: 'Gemini',
           hindiName: 'मिथुन',
+          gujaratiName: 'મિથુન',
           symbol: '♊',
           element: 'Air',
           rulingPlanet: 'Mercury',
@@ -109,6 +117,7 @@ class ZodiacSignUtils {
         return const ZodiacInfo(
           englishName: 'Cancer',
           hindiName: 'कर्क',
+          gujaratiName: 'કર્ક',
           symbol: '♋',
           element: 'Water',
           rulingPlanet: 'Moon',
@@ -119,6 +128,7 @@ class ZodiacSignUtils {
         return const ZodiacInfo(
           englishName: 'Leo',
           hindiName: 'सिंह',
+          gujaratiName: 'સિંહ',
           symbol: '♌',
           element: 'Fire',
           rulingPlanet: 'Sun',
@@ -130,6 +140,7 @@ class ZodiacSignUtils {
         return const ZodiacInfo(
           englishName: 'Virgo',
           hindiName: 'कन्या',
+          gujaratiName: 'કન્યા',
           symbol: '♍',
           element: 'Earth',
           rulingPlanet: 'Mercury',
@@ -139,6 +150,7 @@ class ZodiacSignUtils {
         return const ZodiacInfo(
           englishName: 'Libra',
           hindiName: 'तुला',
+          gujaratiName: 'તુલા',
           symbol: '♎',
           element: 'Air',
           rulingPlanet: 'Venus',
@@ -149,17 +161,18 @@ class ZodiacSignUtils {
         return const ZodiacInfo(
           englishName: 'Scorpio',
           hindiName: 'वृश्चिक',
+          gujaratiName: 'વૃશ્ચિક',
           symbol: '♏',
           element: 'Water',
           rulingPlanet: 'Mars',
         );
-
 
       case 'J':
       case 'X':
         return const ZodiacInfo(
           englishName: 'Capricorn',
           hindiName: 'मकर',
+          gujaratiName: 'મકર',
           symbol: '♑',
           element: 'Earth',
           rulingPlanet: 'Saturn',
@@ -170,6 +183,7 @@ class ZodiacSignUtils {
         return const ZodiacInfo(
           englishName: 'Aquarius',
           hindiName: 'कुंभ',
+          gujaratiName: 'કુંભ',
           symbol: '♒',
           element: 'Air',
           rulingPlanet: 'Saturn',
@@ -179,6 +193,7 @@ class ZodiacSignUtils {
         return const ZodiacInfo(
           englishName: 'Pisces',
           hindiName: 'मीन',
+          gujaratiName: 'મીન',
           symbol: '♓',
           element: 'Water',
           rulingPlanet: 'Jupiter',

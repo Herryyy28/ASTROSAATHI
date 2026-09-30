@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
 
@@ -48,6 +47,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
   String _selectedGender = 'Male';
   String _selectedAmPm = 'AM';
   String _selectedCity = 'New Delhi, India';
+  bool _isUnknownTime = false;
 
   final List<String> _popularCities = [
     'New Delhi, India',
@@ -907,8 +907,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4, left: 4),
+            child: Text(
+              'Birth date • Used for your birth chart planetary positions.',
+              style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+            ),
+          ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
 
           // Time of Birth + AM/PM Segment Toggle
           Row(
@@ -1011,8 +1018,75 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               ),
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 4, left: 4),
+            child: Text(
+              'Birth time • Used for Ascendant and house calculations.',
+              style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+            ),
+          ),
 
-          const SizedBox(height: 16),
+          // Exact Time Unknown Checkbox
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isUnknownTime = !_isUnknownTime;
+                if (_isUnknownTime) {
+                  _timeController.text = '12:00';
+                  _selectedAmPm = 'PM';
+                }
+              });
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 4),
+              child: Row(
+                children: [
+                  Icon(
+                    _isUnknownTime ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
+                    color: _isUnknownTime ? AppColors.getPrimary(context) : AppColors.getTextSecondary(context),
+                    size: 18,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Exact birth time unknown (generate Surya / Solar Kundli)',
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: _isUnknownTime ? AppColors.getPrimary(context) : AppColors.getTextSecondary(context),
+                        fontWeight: _isUnknownTime ? FontWeight.w600 : FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_isUnknownTime)
+            Padding(
+              padding: const EdgeInsets.only(top: 4, bottom: 6),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                decoration: BoxDecoration(
+                  color: AppColors.getPrimary(context).withOpacity(0.08),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.2)),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.wb_sunny_rounded, color: AppColors.getPrimary(context), size: 15),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Surya Kundli defaults to 12:00 PM with the Sun as Lagna to calculate planetary sign placements accurately without Ascendant ambiguity.',
+                        style: GoogleFonts.inter(fontSize: 10.5, color: AppColors.getTextSecondary(context), height: 1.3),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+          const SizedBox(height: 14),
 
           // City Location Dropdown / Selection
           Container(
@@ -1097,6 +1171,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               ),
             ),
           ],
+          Padding(
+            padding: const EdgeInsets.only(top: 4, left: 4),
+            child: Text(
+              'Birth place • Used for accurate location and timezone calculations.',
+              style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+            ),
+          ),
 
           const SizedBox(height: 8),
 
@@ -1170,7 +1251,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       ),
                       child: Stack(
                         children: List.generate(8, (i) {
-                          final angle = (i * 45) * 3.14159 / 180;
                           return Align(
                             alignment: Alignment(
                               0.85 * (i % 2 == 0 ? 1 : -1),
@@ -1348,7 +1428,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       ),
                     ).fadeSlideUp(delay: 100.ms),
 
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 8),
 
                     Text(
                       subtitle,
