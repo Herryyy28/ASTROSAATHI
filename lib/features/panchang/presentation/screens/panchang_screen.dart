@@ -67,18 +67,27 @@ class PanchangScreen extends ConsumerWidget {
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(hPad, 24, hPad, 100),
+            padding: EdgeInsets.fromLTRB(
+              hPad,
+              context.responsive(mobile: 16, tablet: 24, desktop: 24),
+              hPad,
+              100,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ── Header with Navigation Arrows ──────────────────
                 Row(
                   children: [
-                    if (Navigator.canPop(context))
+                    if (Navigator.canPop(context)) ...[
                       IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 22),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 20),
                         onPressed: () => Navigator.pop(context),
                       ),
+                      const SizedBox(width: 8),
+                    ],
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +213,7 @@ class PanchangScreen extends ConsumerWidget {
 
                 // ── Sunrise / Sunset ──────────────────────────────
                 _buildSunMoonTimings(context, panchang).fadeSlideUp(delay: 100.ms),
-                const SizedBox(height: 28),
+                const SizedBox(height: 20),
 
                 // ── Five Elements Section ─────────────────────────
                 Row(

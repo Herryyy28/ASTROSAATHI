@@ -178,7 +178,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(24, 16, 24, 24 + bottomInset),
+            padding: EdgeInsets.fromLTRB(20, 16, 20, 24 + bottomInset),
             child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -196,7 +196,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
                 Text(
                   'Add Family Member',
@@ -216,7 +216,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
                 // Name
                 TextField(
@@ -229,7 +229,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                     context: context,
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
 
                 // Relationship
                 Container(
@@ -258,7 +258,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
 
                 // Date of Birth Field
                 TextField(
@@ -309,7 +309,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                     context: context,
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
 
                 // Time of Birth with AM/PM Dropdown
                 Row(
@@ -400,7 +400,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
 
                 // City Location Dropdown / Input
                 Container(
@@ -457,7 +457,7 @@ class _AddFamilyMemberModalState extends ConsumerState<AddFamilyMemberModal> {
                   ),
                 ),
                 if (_selectedCity == 'Custom Location') ...[
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
                   TextField(
                     controller: _placeController,
                     style: TextStyle(

@@ -13,6 +13,9 @@ class AppSpacing {
   static const double xxxl = 32.0;
   static const double xl3 = 40.0;
   static const double giant = 48.0;
+  static const double xl4 = 56.0;
+  static const double xl5 = 64.0;
+  static const double xl6 = 80.0;
 
   static const EdgeInsets cardPadding = EdgeInsets.all(16.0);
   static const EdgeInsets screenPadding = EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0);
@@ -22,17 +25,18 @@ class AppSpacing {
 
 /// Centralized Border Radius Scale for AstroSaathi (Single Source of Truth)
 class AppRadius {
+  static const double xs = 8.0;
   static const double chip = 10.0;
   static const double button = 12.0;
   static const double input = 12.0;
-  static const double card = 14.0;
-  static const double modal = 16.0;
+  static const double card = 16.0;
+  static const double featureCard = 20.0;
+  static const double modal = 24.0;
   static const double full = 999.0;
 
-  static const double xs = 8.0;
   static const double sm = 10.0;
   static const double md = 12.0;
-  static const double lg = 14.0;
+  static const double lg = 16.0;
   static const double xl = 16.0;
   static const double xl2 = 20.0;
   static const double xl3 = 24.0;
@@ -42,6 +46,7 @@ class AppRadius {
   static BorderRadius get borderButton => BorderRadius.circular(button);
   static BorderRadius get borderInput => BorderRadius.circular(input);
   static BorderRadius get borderCard => BorderRadius.circular(card);
+  static BorderRadius get borderFeatureCard => BorderRadius.circular(featureCard);
   static BorderRadius get borderModal => BorderRadius.circular(modal);
   static BorderRadius get borderFull => BorderRadius.circular(full);
   static BorderRadius get borderXL2 => BorderRadius.circular(xl2);

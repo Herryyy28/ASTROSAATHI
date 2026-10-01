@@ -79,7 +79,7 @@ class DailyRoutineWidget extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
 
           // Progress Bar
           Row(

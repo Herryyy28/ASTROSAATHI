@@ -58,7 +58,7 @@ class WhatChangedTodayCard extends ConsumerWidget {
                   size: 18,
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,7 +154,7 @@ class WhatChangedTodayCard extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
 
           // Delta Drivers List (Dynamic from gamePlan)
           _buildDriverRow(

@@ -75,12 +75,12 @@ class AstroRemindersScreen extends ConsumerWidget {
               // Content Body
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
                   physics: const BouncingScrollPhysics(),
                   children: [
                     // Daily Habit Alerts Settings Card
                     GlassCard(
-                      padding: const EdgeInsets.all(18),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -178,11 +178,11 @@ class AstroRemindersScreen extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 16),
 
                     // Test Real-Time Animated Reminder Banner
                     GlassCard(
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(16),
                       borderColor: const Color(0xFFFFD700).withOpacity(0.5),
                       child: Row(
                         children: [

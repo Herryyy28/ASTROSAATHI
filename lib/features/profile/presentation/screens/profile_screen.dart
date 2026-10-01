@@ -24,6 +24,7 @@ import 'settings/about_screen.dart';
 import '../../../reminders/presentation/screens/astro_reminders_screen.dart';
 import '../../../security/presentation/screens/security_center_screen.dart';
 import '../../../security/presentation/screens/privacy_dashboard_screen.dart';
+import '../../../auth/data/auth_repository.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -56,22 +57,22 @@ class ProfileScreen extends ConsumerWidget {
               slivers: [
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(24, 24, 24, 100),
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 100),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // ── Profile Header ────────────────────────
                         _buildProfileHeader(context, activeProfile, subState)
                             .animate().fadeIn(duration: 400.ms),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 20),
 
                         // ── Primary Kundli Card ───────────────────
                         if (primary.isNotEmpty) ...[
                           _buildSectionTitle(l10n.myProfile),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 8),
                           _buildPrimaryKundliCard(context, primary.first, l10n, activeProfile, ref)
                               .animate().fadeIn(delay: 100.ms),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 20),
                         ],
 
                         // ── Family Kundlis ────────────────────────
@@ -94,24 +95,24 @@ class ProfileScreen extends ConsumerWidget {
                               ),
                           ],
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                         if (family.isEmpty)
                           _buildEmptyFamilyCard(l10n, context, ref)
                               .animate().fadeIn(delay: 200.ms)
                         else
                           ...family.asMap().entries.map((entry) {
                             return Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.only(bottom: 8),
                               child: _buildFamilyMemberCard(context, entry.value, activeProfile, ref)
                                   .animate()
                                   .fadeIn(delay: Duration(milliseconds: 200 + entry.key * 80)),
                             );
                           }),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 20),
 
                         // ── Settings Section ──────────────────────
                         _buildSectionTitle(l10n.navSettings),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
 
                         // Language
                         _buildSettingsTile(
@@ -221,6 +222,17 @@ class ProfileScreen extends ConsumerWidget {
                             onTap: () => _showDeleteAccountDialog(context, ref),
                           ).animate().fadeIn(delay: 600.ms),
                         ],
+
+                        // Sign Out Option
+                        const SizedBox(height: 8),
+                        _buildSettingsTile(
+                          context,
+                          icon: Icons.logout_rounded,
+                          iconColor: AppColors.getError(context),
+                          title: l10n.logout,
+                          subtitle: 'Sign out of your account on this device',
+                          onTap: () => _showSignOutDialog(context, ref),
+                        ).animate().fadeIn(delay: 620.ms),
 
                         // VIP Upgrade
                         if (!subState.isPremium) ...[
@@ -632,7 +644,7 @@ class ProfileScreen extends ConsumerWidget {
   }) {
     return GlassCard(
       borderRadius: 16,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       onTap: onTap,
       child: Row(
         children: [
@@ -645,7 +657,7 @@ class ProfileScreen extends ConsumerWidget {
             ),
             child: Icon(icon, color: iconColor, size: 20),
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -818,6 +830,71 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
+  void _showSignOutDialog(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context, ref);
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: isLight ? Colors.white : AppColors.surfaceDark,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Icon(Icons.logout_rounded, color: AppColors.getError(context), size: 24),
+            const SizedBox(width: 10),
+            Text(
+              l10n.logout,
+              style: GoogleFonts.outfit(
+                fontWeight: FontWeight.bold,
+                color: AppColors.getTextPrimary(context),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          'Are you sure you want to sign out? You will need to log back in to access synced records.',
+          style: GoogleFonts.inter(
+            fontSize: 14,
+            color: AppColors.getTextSecondary(context),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              l10n.cancel,
+              style: TextStyle(color: AppColors.getTextSecondary(context)),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.getError(context),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () async {
+              Navigator.pop(ctx);
+              await ref.read(userSessionProvider.notifier).logout();
+              if (context.mounted) {
+                CosmicNotification.show(
+                  context,
+                  message: 'Successfully signed out.',
+                  icon: Icons.check_circle_outline_rounded,
+                );
+                context.go('/onboarding');
+              }
+            },
+            child: Text(
+              l10n.logout,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showThemeSelectionModal(BuildContext context, WidgetRef ref) {
     final currentThemeMode = ref.read(themeModeProvider);
     final isLight = Theme.of(context).brightness == Brightness.light;
@@ -892,30 +969,35 @@ class ProfileScreen extends ConsumerWidget {
                       width: isSelected ? 1.5 : 0.5,
                     ),
                   ),
-                  child: ListTile(
-                    leading: Icon(
-                      mode.icon,
-                      color: isSelected
-                          ? AppColors.primary
-                          : AppColors.getDynamicTextSecondary(context),
-                    ),
-                    title: Text(
-                      mode.label,
-                      style: GoogleFonts.outfit(
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                        color: AppColors.getDynamicTextPrimary(context),
+                  child: Material(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(16),
+                    clipBehavior: Clip.antiAlias,
+                    child: ListTile(
+                      leading: Icon(
+                        mode.icon,
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.getDynamicTextSecondary(context),
                       ),
+                      title: Text(
+                        mode.label,
+                        style: GoogleFonts.outfit(
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                          color: AppColors.getDynamicTextPrimary(context),
+                        ),
+                      ),
+                      trailing: isSelected
+                          ? const Icon(
+                              Icons.check_circle_rounded,
+                              color: AppColors.primary,
+                            )
+                          : null,
+                      onTap: () {
+                        ref.read(themeModeProvider.notifier).setThemeMode(mode);
+                        Navigator.pop(context);
+                      },
                     ),
-                    trailing: isSelected
-                        ? const Icon(
-                            Icons.check_circle_rounded,
-                            color: AppColors.primary,
-                          )
-                        : null,
-                    onTap: () {
-                      ref.read(themeModeProvider.notifier).setThemeMode(mode);
-                      Navigator.pop(context);
-                    },
                   ),
                 );
               }),

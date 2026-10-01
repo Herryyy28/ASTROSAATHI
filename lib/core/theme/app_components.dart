@@ -388,3 +388,180 @@ class AstroTextField extends StatelessWidget {
     );
   }
 }
+
+/// Standardized Status / Semantic Badge
+class AstroBadge extends StatelessWidget {
+  final String label;
+  final Color? color;
+  final IconData? icon;
+  final bool isOutline;
+
+  const AstroBadge({
+    super.key,
+    required this.label,
+    this.color,
+    this.icon,
+    this.isOutline = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final badgeColor = color ?? AppColors.getPrimary(context);
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: isOutline ? Colors.transparent : badgeColor.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(AppRadius.xs),
+        border: Border.all(
+          color: isOutline ? badgeColor : badgeColor.withValues(alpha: 0.35),
+          width: 0.8,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 12, color: badgeColor),
+            const SizedBox(width: 4),
+          ],
+          Text(
+            label,
+            style: AppTypography.caption(color: badgeColor).copyWith(
+              fontWeight: FontWeight.w700,
+              fontSize: 11,
+              letterSpacing: 0.2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Standardized Stat Card (e.g. Scores, Metrics, Streaks)
+class AstroStatCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final String? subtitle;
+  final IconData? icon;
+  final Color? accentColor;
+  final VoidCallback? onTap;
+
+  const AstroStatCard({
+    super.key,
+    required this.title,
+    required this.value,
+    this.subtitle,
+    this.icon,
+    this.accentColor,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = accentColor ?? AppColors.getPrimary(context);
+
+    return AstroCard(
+      onTap: onTap,
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title.toUpperCase(),
+                style: AppTypography.caption(color: AppColors.getTextSecondary(context)),
+              ),
+              if (icon != null)
+                Icon(icon, size: 16, color: color),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            value,
+            style: AppTypography.headline(color: color),
+          ),
+          if (subtitle != null) ...[
+            const SizedBox(height: 2),
+            Text(
+              subtitle!,
+              style: AppTypography.caption(color: AppColors.getTextMuted(context)),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Standardized Information Callout Card
+class AstroInfoCard extends StatelessWidget {
+  final String title;
+  final String description;
+  final IconData icon;
+  final Color? iconColor;
+  final Widget? trailing;
+  final VoidCallback? onTap;
+
+  const AstroInfoCard({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.icon,
+    this.iconColor,
+    this.trailing,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final activeIconColor = iconColor ?? AppColors.getPrimary(context);
+
+    return AstroCard(
+      onTap: onTap,
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: activeIconColor.withValues(alpha: 0.12),
+              border: Border.all(
+                color: activeIconColor.withValues(alpha: 0.25),
+                width: 0.8,
+              ),
+            ),
+            child: Icon(icon, size: 18, color: activeIconColor),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTypography.label(color: AppColors.getTextPrimary(context)),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  description,
+                  style: AppTypography.caption(color: AppColors.getTextSecondary(context)),
+                ),
+              ],
+            ),
+          ),
+          if (trailing != null) ...[
+            const SizedBox(width: AppSpacing.sm),
+            trailing!,
+          ],
+        ],
+      ),
+    );
+  }
+}
+

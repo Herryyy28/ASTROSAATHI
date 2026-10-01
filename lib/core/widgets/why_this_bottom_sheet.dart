@@ -55,7 +55,7 @@ class WhyThisBottomSheet extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
           decoration: BoxDecoration(
             color: isLight
                 ? AppColors.surfaceLight.withOpacity(0.96)
@@ -83,7 +83,7 @@ class WhyThisBottomSheet extends StatelessWidget {
                             ),
                             child: const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 20),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 12),
                           Expanded(
                             child: Text(
                               'Why this prediction?',

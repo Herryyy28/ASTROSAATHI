@@ -41,7 +41,7 @@ class MuhuratScreen extends ConsumerWidget {
             child: Padding(
               padding: EdgeInsets.fromLTRB(
                 context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
-                24,
+                context.responsive<double>(mobile: 16, tablet: 24, desktop: 24),
                 context.responsive<double>(mobile: 20, tablet: 32, desktop: 40),
                 0,
               ),
@@ -51,11 +51,15 @@ class MuhuratScreen extends ConsumerWidget {
                   // ── Header with Back Arrow ────────────────────────
                   Row(
                     children: [
-                      if (Navigator.canPop(context))
+                      if (Navigator.canPop(context)) ...[
                         IconButton(
-                          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 22),
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 20),
                           onPressed: () => Navigator.pop(context),
                         ),
+                        const SizedBox(width: 8),
+                      ],
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +91,7 @@ class MuhuratScreen extends ConsumerWidget {
                   // ── Category Selector ─────────────────────────────
                   _buildCategorySelector(context, ref, selectedCategory).fadeSlideUp(delay: 100.ms),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 20),
 
                   // ── Result ────────────────────────────────────────
                   Expanded(

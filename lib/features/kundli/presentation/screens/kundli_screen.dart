@@ -88,7 +88,7 @@ class KundliScreen extends ConsumerWidget {
     AppLocalizations l10n,
   ) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 20, 24, 8),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
       child: Row(
         children: [
           Container(
@@ -110,7 +110,7 @@ class KundliScreen extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(width: 14),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +176,7 @@ class KundliScreen extends ConsumerWidget {
     final isLight = Theme.of(context).brightness == Brightness.light;
     return Container(
       height: 44,
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -264,7 +264,7 @@ class KundliScreen extends ConsumerWidget {
               children: [
                 // Birth Chart Visual
                 const BirthChartCard(),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
                 // Ascendant Summary Card
                 _buildAscendantCard(context, chartData).animate().fadeIn(delay: 100.ms),
@@ -584,7 +584,7 @@ class KundliScreen extends ConsumerWidget {
                           ),
                         ),
                       ],
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
                       // Progress Bar
                       ClipRRect(
@@ -611,7 +611,7 @@ class KundliScreen extends ConsumerWidget {
 
                       // Meaning
                       Container(
-                        padding: const EdgeInsets.all(14),
+                        padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           color: AppColors.secondary.withOpacity(0.08),
                           borderRadius: BorderRadius.circular(14),
@@ -627,7 +627,7 @@ class KundliScreen extends ConsumerWidget {
                               color: AppColors.secondary,
                               size: 16,
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Text(
                                 meaning,
@@ -644,7 +644,7 @@ class KundliScreen extends ConsumerWidget {
                     ],
                   ),
                 ).animate().fadeIn(duration: 400.ms),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
                 // Interactive Dasha Tree
                 const InteractiveDashaTimeline(),

@@ -154,7 +154,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                             child: Text('✦', style: TextStyle(fontSize: 14, color: Colors.black)),
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 12),
                         Text(
                           'AstroSaathi',
                           style: TextStyle(
@@ -254,7 +254,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final shadowOpacity = isLight ? 0.10 : 0.40;
 
     return Container(
-      margin: const EdgeInsets.fromLTRB(14, 0, 14, 12),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       decoration: BoxDecoration(
         color: navBgColor,
         borderRadius: BorderRadius.circular(28),

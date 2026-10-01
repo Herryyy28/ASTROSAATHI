@@ -135,6 +135,17 @@ class AppLocalizations {
   String get transit => translate('transit');
   String get explanation => translate('explanation');
   String get createKundli => translate('create_kundli');
+  String get noPlanetInHouse => translate('no_planet_in_house');
+  String get unableToLoadChart => translate('unable_to_load_chart');
+  String get combust => translate('combust');
+  String get retrograde => translate('retrograde');
+  String get direct => translate('direct');
+  String get exalted => translate('exalted');
+  String get debilitated => translate('debilitated');
+  String get degree => translate('degree');
+  String get lord => translate('lord');
+  String get houseSignifications => translate('house_significations');
+  String houseNumber(int number) => translateWithArgs('house_number', {'number': '$number'});
 
   // ── Panchang & Muhurat ──────────────────────────────────────────
   String get panchangTitle => translate('panchang_title');

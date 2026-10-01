@@ -139,7 +139,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                 color: AppColors.getTextSecondary(context),
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
             ...prompts.map((p) => Material(
                   color: Colors.transparent,
                   child: ListTile(
@@ -271,7 +271,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
     final profileName = activeProfile?.name ?? '';
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -302,7 +302,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                 ),
               ],
               CosmicOrbWidget(isSpeaking: isLoading, size: 40),
-              const SizedBox(width: 10),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -365,7 +365,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                   ),
                 ),
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: 8),
               IconButton(
                 icon: Icon(Icons.delete_outline_rounded,
                     size: 20,

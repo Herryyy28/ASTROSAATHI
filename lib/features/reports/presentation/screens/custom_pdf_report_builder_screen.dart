@@ -45,10 +45,12 @@ class _CustomPdfReportBuilderScreenState extends ConsumerState<CustomPdfReportBu
             children: [
               // Header App Bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
                 child: Row(
                   children: [
                     IconButton(
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                       icon: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
@@ -114,11 +116,11 @@ class _CustomPdfReportBuilderScreenState extends ConsumerState<CustomPdfReportBu
               // Main Section Selection
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
                   physics: const BouncingScrollPhysics(),
                   children: [
                     GlassCard(
-                      padding: const EdgeInsets.all(18),
+                      padding: const EdgeInsets.all(16),
                       borderColor: AppColors.primary.withOpacity(0.4),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +129,7 @@ class _CustomPdfReportBuilderScreenState extends ConsumerState<CustomPdfReportBu
                             'SELECT REPORT SECTIONS TO INCLUDE',
                             style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
                           ),
-                          const SizedBox(height: 14),
+                          const SizedBox(height: 12),
 
                           ..._selectedSections.keys.map((section) {
                             final isChecked = _selectedSections[section]!;

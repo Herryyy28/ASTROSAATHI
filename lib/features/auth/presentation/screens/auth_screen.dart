@@ -44,10 +44,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
             child: Column(
               children: [
-                const SizedBox(height: 20),
                 
                 // Back Button & Header
                 Row(
@@ -73,7 +72,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 24),
 
                 // Logo Icon
                 Container(
@@ -97,7 +96,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   ),
                 ).fadeSlideUp(delay: 100.ms),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 24),
 
                 // Glass Card with 1-Tap Sign-In Options
                 GlassCard(
@@ -175,7 +174,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   ),
                 ).fadeSlideUp(delay: 200.ms),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 24),
 
                 // Currently Authenticated status if any
                 if (session.isAuthenticated) ...[

@@ -178,20 +178,24 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
           child: ResponsiveLayout(
             child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 48),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header with Back Arrow
                 Row(
                   children: [
-                    if (Navigator.canPop(context))
+                    if (Navigator.canPop(context)) ...[
                       IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 22),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 20),
                         onPressed: () => Navigator.pop(context),
                       ),
+                      const SizedBox(width: 8),
+                    ],
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: AppColors.purpleGradient,
@@ -217,7 +221,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                             l10n.gunaScore,
                             style: TextStyle(fontSize: 12, color: AppColors.getTextSecondary(context)),
                           ),
-                          const SizedBox(height: 3),
+                          const SizedBox(height: 4),
                           Row(
                             children: [
                               const Icon(Icons.auto_awesome, color: AppColors.primary, size: 10),
@@ -240,7 +244,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
                 // Partners Input Glass Card
                 Container(
@@ -336,7 +340,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 16),
 
                 // Compatibility Score Banner
                 Container(
@@ -408,7 +412,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                     ],
                   ),
                 ).animate().fade().slideY(begin: 0.1),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
 
                 // Real Bhavishyavani Text Card
                 Container(
@@ -431,7 +435,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
                 // Ashtakoota 8-Koota Detailed Breakdown Card
                 Container(
@@ -467,12 +471,12 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 12),
                       ...rawScores.entries.map((e) {
                         final max = maxScores[e.key] ?? 1.0;
                         final ratio = (e.value / max).clamp(0.0, 1.0);
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

@@ -18,22 +18,26 @@ class PaymentSuccessScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = AppColors.getPrimary(context);
+    const textColor = Color(0xFF0D131F);
+
     return Scaffold(
       backgroundColor: AppColors.getSurface(context),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 60),
+              const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.green.withOpacity(0.12),
+                  color: AppColors.success.withValues(alpha: 0.12),
                 ),
-                child: const Icon(Icons.check_circle_rounded, color: Colors.green, size: 72),
+                child: const Icon(Icons.check_circle_rounded, color: AppColors.success, size: 72),
               ),
               const SizedBox(height: 24),
               Text(
@@ -53,7 +57,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                   color: AppColors.getTextPrimary(context),
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -64,21 +68,21 @@ class PaymentSuccessScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     _buildRow(context, 'Product', planName),
-                    const Divider(height: 32, color: Colors.white10),
+                    Divider(height: 24, color: AppColors.getDivider(context)),
                     _buildRow(context, 'Transaction ID', transactionId),
-                    const Divider(height: 32, color: Colors.white10),
+                    Divider(height: 24, color: AppColors.getDivider(context)),
                     _buildRow(context, 'Date', dateStr),
                   ],
                 ),
               ),
-              const Spacer(),
+              const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
-                height: 56,
+                height: 52,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFD700),
-                    foregroundColor: const Color(0xFF1B1403),
+                    backgroundColor: primaryColor,
+                    foregroundColor: textColor,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                   onPressed: () => Navigator.pop(context),
@@ -88,7 +92,7 @@ class PaymentSuccessScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
             ],
           ),
         ),
@@ -137,22 +141,26 @@ class PaymentFailedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = AppColors.getPrimary(context);
+    const textColor = Color(0xFF0D131F);
+
     return Scaffold(
       backgroundColor: AppColors.getSurface(context),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 20),
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.red.withOpacity(0.12),
+                  color: AppColors.error.withValues(alpha: 0.12),
                 ),
-                child: const Icon(Icons.error_outline_rounded, color: Colors.red, size: 72),
+                child: const Icon(Icons.error_outline_rounded, color: AppColors.error, size: 72),
               ),
               const SizedBox(height: 24),
               Text(
@@ -172,14 +180,14 @@ class PaymentFailedScreen extends StatelessWidget {
                   color: AppColors.getTextSecondary(context),
                 ),
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
-                height: 56,
+                height: 52,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFD700),
-                    foregroundColor: const Color(0xFF1B1403),
+                    backgroundColor: primaryColor,
+                    foregroundColor: textColor,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                   onPressed: onRetry,
@@ -227,7 +235,7 @@ class PaymentProcessingOverlay extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const CircularProgressIndicator(color: Color(0xFFFFD700)),
+              CircularProgressIndicator(color: AppColors.getPrimary(context)),
               const SizedBox(height: 24),
               Text(
                 'Processing payment',

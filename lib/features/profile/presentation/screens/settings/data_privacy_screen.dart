@@ -40,7 +40,7 @@ class DataPrivacyScreen extends ConsumerWidget {
           gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: ListView(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
             const Icon(
               Icons.shield_rounded,
@@ -67,7 +67,7 @@ class DataPrivacyScreen extends ConsumerWidget {
                 height: 1.45,
               ),
             ),
-            const SizedBox(height: 28),
+            const SizedBox(height: 20),
             GlassCard(
               borderRadius: 16,
               padding: const EdgeInsets.all(20),
@@ -97,7 +97,7 @@ class DataPrivacyScreen extends ConsumerWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 28),
+            const SizedBox(height: 20),
 
             // Export Data Button
             OutlinedButton.icon(
@@ -114,7 +114,7 @@ class DataPrivacyScreen extends ConsumerWidget {
                 style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold),
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
 
             // Delete Account & Data Button
             TextButton.icon(

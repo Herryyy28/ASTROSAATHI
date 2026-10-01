@@ -191,58 +191,63 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
               child: Column(
                 children: [
                   // Parent Mahadasha Header Tile
-                  ListTile(
-                    onTap: () {
-                      setState(() {
-                        _expandedIndex = isExpanded ? null : idx;
-                      });
-                    },
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: item.isActive ? AppColors.getPrimary(context) : AppColors.getSurfaceElevated(context),
-                      ),
-                      child: Icon(
-                        Icons.auto_awesome,
-                        size: 16,
-                        color: item.isActive ? Colors.black : AppColors.getTextSecondary(context),
-                      ),
-                    ),
-                    title: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            item.planet,
-                            style: GoogleFonts.outfit(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.getTextPrimary(context),
-                            ),
-                          ),
+                  Material(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(16),
+                    clipBehavior: Clip.antiAlias,
+                    child: ListTile(
+                      onTap: () {
+                        setState(() {
+                          _expandedIndex = isExpanded ? null : idx;
+                        });
+                      },
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      leading: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: item.isActive ? AppColors.getPrimary(context) : AppColors.getSurfaceElevated(context),
                         ),
-                        if (item.isActive)
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: AppColors.getPrimary(context),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Text(
-                              'ACTIVE NOW',
-                              style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.black),
+                        child: Icon(
+                          Icons.auto_awesome,
+                          size: 16,
+                          color: item.isActive ? Colors.black : AppColors.getTextSecondary(context),
+                        ),
+                      ),
+                      title: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              item.planet,
+                              style: GoogleFonts.outfit(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.getTextPrimary(context),
+                              ),
                             ),
                           ),
-                      ],
-                    ),
-                    subtitle: Text(
-                      item.durationText,
-                      style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
-                    ),
-                    trailing: Icon(
-                      isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                      color: AppColors.getTextSecondary(context),
+                          if (item.isActive)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: AppColors.getPrimary(context),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Text(
+                                'ACTIVE NOW',
+                                style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.black),
+                              ),
+                            ),
+                        ],
+                      ),
+                      subtitle: Text(
+                        item.durationText,
+                        style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+                      ),
+                      trailing: Icon(
+                        isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                        color: AppColors.getTextSecondary(context),
+                      ),
                     ),
                   ),
 
@@ -290,11 +295,15 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
                                       ),
                                     ),
                                   ),
-                                  Text(
-                                    sub.durationText,
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      color: AppColors.getTextSecondary(context),
+                                  Flexible(
+                                    child: Text(
+                                      sub.durationText,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: AppColors.getTextSecondary(context),
+                                      ),
+                                      textAlign: TextAlign.end,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],

@@ -62,12 +62,12 @@ class _VipBadgeButtonState extends ConsumerState<VipBadgeButton> {
                   ),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: isPremium ? const Color(0xFFFFD700) : AppColors.primary.withOpacity(0.6),
+              color: isPremium ? AppColors.getPrimary(context) : AppColors.getPrimary(context).withValues(alpha: 0.6),
               width: isPremium ? 1.6 : 1.0,
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFFFD700).withOpacity(isPremium ? 0.35 : 0.15),
+                color: AppColors.getPrimary(context).withValues(alpha: isPremium ? 0.30 : 0.12),
                 blurRadius: isPremium ? 10 : 6,
                 offset: const Offset(0, 2),
               ),
@@ -81,7 +81,7 @@ class _VipBadgeButtonState extends ConsumerState<VipBadgeButton> {
                 padding: const EdgeInsets.all(3),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isPremium ? Colors.black.withOpacity(0.12) : const Color(0xFFFFD700).withOpacity(0.18),
+                  color: isPremium ? Colors.black.withValues(alpha: 0.12) : AppColors.getPrimary(context).withValues(alpha: 0.18),
                 ),
                 child: const Text(
                   '👑',
@@ -97,7 +97,7 @@ class _VipBadgeButtonState extends ConsumerState<VipBadgeButton> {
                   fontSize: widget.compact ? 10.5 : 12,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.6,
-                  color: isPremium ? const Color(0xFF1B1403) : (isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700)),
+                  color: isPremium ? const Color(0xFF1B1403) : (isLight ? const Color(0xFFB87308) : AppColors.getPrimary(context)),
                 ),
               ),
             ],

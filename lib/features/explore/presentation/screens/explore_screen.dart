@@ -591,7 +591,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
 
                         Text(
                           l10n.exploreTitle,
@@ -628,7 +628,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                 if (_viewMode == ExploreViewMode.list) ..._buildListViewSlivers(context, filteredFeatures),
                 if (_viewMode == ExploreViewMode.folder) ..._buildFolderViewSlivers(context, filteredFeatures),
 
-                const SliverPadding(padding: EdgeInsets.only(bottom: 120)),
+                const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
               ],
             ),
           ),
@@ -886,9 +886,13 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                               borderRadius: BorderRadius.circular(14),
                               border: Border.all(color: AppColors.getBorder(context), width: 0.6),
                             ),
-                            child: ListTile(
-                              dense: true,
-                              onTap: item['action'],
+                            child: Material(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(14),
+                              clipBehavior: Clip.antiAlias,
+                              child: ListTile(
+                                dense: true,
+                                onTap: item['action'],
                               leading: Text(item['emoji'], style: const TextStyle(fontSize: 18)),
                               title: Row(
                                 children: [
@@ -929,8 +933,9 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                               ),
                               trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: AppColors.primary),
                             ),
-                          );
-                        }).toList(),
+                          ),
+                        );
+                      }).toList(),
                       ),
                     ),
                 ],

@@ -100,7 +100,7 @@ class AboutScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 48),
+            const SizedBox(height: 24),
             GlassCard(
               borderRadius: 16,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

@@ -80,7 +80,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
               color: AppColors.getTextSecondary(context),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
 
           // Profiles List
           ConstrainedBox(
@@ -90,7 +90,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
             child: ListView.separated(
               shrinkWrap: true,
               itemCount: profiles.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 10),
+              separatorBuilder: (_, __) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final profile = profiles[index];
                 final isActive = activeProfile.id == profile.id;
@@ -100,7 +100,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
                   borderRadius: 16,
                   borderColor: isActive ? AppColors.primary : AppColors.getGlassBorder(context),
                   glowColor: isActive ? AppColors.goldGlow : null,
-                  padding: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(12),
                   onTap: () {
                     ref.read(activeProfileIndexProvider.notifier).state = index;
                     Navigator.pop(context);
@@ -131,7 +131,7 @@ class ProfileSwitcherModal extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 14),
+                      const SizedBox(width: 12),
 
                       // Info
                       Expanded(

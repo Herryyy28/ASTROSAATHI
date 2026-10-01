@@ -219,7 +219,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
 
                 // Main Title & Tagline
                 Text(
@@ -1507,7 +1507,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               TextField(
                 controller: _cardNumber,
                 keyboardType: TextInputType.number,
@@ -1606,7 +1606,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
             ],
           ),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 16),
 
         // Terms & Policy Checkbox
         Container(

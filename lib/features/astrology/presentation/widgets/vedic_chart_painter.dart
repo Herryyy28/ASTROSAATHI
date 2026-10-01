@@ -3,17 +3,220 @@ import '../../../../core/theme/app_colors.dart';
 
 enum VedicChartStyle { northIndian, southIndian }
 
+/// Static geometry hit-testing utilities for Vedic Chart
+class VedicChartGeometry {
+  /// Ray-casting point-in-polygon algorithm
+  static bool isPointInPolygon(Offset p, List<Offset> polygon) {
+    if (polygon.length < 3) return false;
+    bool isInside = false;
+    int j = polygon.length - 1;
+    for (int i = 0; i < polygon.length; i++) {
+      if ((polygon[i].dy > p.dy) != (polygon[j].dy > p.dy) &&
+          (p.dx <
+              (polygon[j].dx - polygon[i].dx) *
+                      (p.dy - polygon[i].dy) /
+                      (polygon[j].dy - polygon[i].dy) +
+                  polygon[i].dx)) {
+        isInside = !isInside;
+      }
+      j = i;
+    }
+    return isInside;
+  }
+
+  /// North Indian 12 House Polygons
+  static List<Offset> getNorthIndianHousePolygon(int house, Size size) {
+    final w = size.width;
+    final h = size.height;
+    switch (house) {
+      case 1:
+        return [Offset(w / 2, 0), Offset(3 * w / 4, h / 4), Offset(w / 2, h / 2), Offset(w / 4, h / 4)];
+      case 2:
+        return [Offset(0, 0), Offset(w / 2, 0), Offset(w / 4, h / 4)];
+      case 3:
+        return [Offset(0, 0), Offset(w / 4, h / 4), Offset(0, h / 2)];
+      case 4:
+        return [Offset(0, h / 2), Offset(w / 4, h / 4), Offset(w / 2, h / 2), Offset(w / 4, 3 * h / 4)];
+      case 5:
+        return [Offset(0, h / 2), Offset(w / 4, 3 * h / 4), Offset(0, h)];
+      case 6:
+        return [Offset(0, h), Offset(w / 4, 3 * h / 4), Offset(w / 2, h)];
+      case 7:
+        return [Offset(w / 2, h / 2), Offset(3 * w / 4, 3 * h / 4), Offset(w / 2, h), Offset(w / 4, 3 * h / 4)];
+      case 8:
+        return [Offset(w / 2, h), Offset(3 * w / 4, 3 * h / 4), Offset(w, h)];
+      case 9:
+        return [Offset(w, h / 2), Offset(3 * w / 4, 3 * h / 4), Offset(w, h)];
+      case 10:
+        return [Offset(w / 2, h / 2), Offset(3 * w / 4, h / 4), Offset(w, h / 2), Offset(3 * w / 4, 3 * h / 4)];
+      case 11:
+        return [Offset(w, 0), Offset(3 * w / 4, h / 4), Offset(w, h / 2)];
+      case 12:
+        return [Offset(w / 2, 0), Offset(3 * w / 4, h / 4), Offset(w, 0)];
+      default:
+        return [];
+    }
+  }
+
+  /// Center positions for the 12 North Indian Houses
+  static Offset getNorthIndianHouseCenter(int house, Size size) {
+    final w = size.width;
+    final h = size.height;
+    final Map<int, Offset> centers = {
+      1: Offset(w / 2, h / 4),
+      2: Offset(w / 4, h / 8),
+      3: Offset(w / 8, h / 4),
+      4: Offset(w / 4, h / 2),
+      5: Offset(w / 8, 3 * h / 4),
+      6: Offset(w / 4, 7 * h / 8),
+      7: Offset(w / 2, 3 * h / 4),
+      8: Offset(3 * w / 4, 7 * h / 8),
+      9: Offset(7 * w / 8, 3 * h / 4),
+      10: Offset(3 * w / 4, h / 2),
+      11: Offset(7 * w / 8, h / 4),
+      12: Offset(3 * w / 4, h / 8),
+    };
+    return centers[house] ?? Offset(w / 2, h / 2);
+  }
+
+  /// South Indian 4x4 Perimeter Grid Mapping
+  static const List<List<int>> southIndianGrid = [
+    [12, 1, 2, 3],
+    [11, -1, -1, 4],
+    [10, -1, -1, 5],
+    [9, 8, 7, 6],
+  ];
+
+  static int getSouthIndianSignAt(Offset p, Size size) {
+    final colW = size.width / 4;
+    final rowH = size.height / 4;
+    final col = (p.dx / colW).floor().clamp(0, 3);
+    final row = (p.dy / rowH).floor().clamp(0, 3);
+    return southIndianGrid[row][col];
+  }
+
+  static Offset getSouthIndianCellCenter(int sign, Size size) {
+    final colW = size.width / 4;
+    final rowH = size.height / 4;
+    for (int r = 0; r < 4; r++) {
+      for (int c = 0; c < 4; c++) {
+        if (southIndianGrid[r][c] == sign) {
+          return Offset(c * colW + colW / 2, r * rowH + rowH / 2);
+        }
+      }
+    }
+    return Offset(size.width / 2, size.height / 2);
+  }
+
+  /// Hit test house at local touch position
+  static int hitTestHouse({
+    required Offset localPosition,
+    required Size size,
+    required VedicChartStyle style,
+    required int lagnaSignIndex,
+  }) {
+    if (localPosition.dx < 0 || localPosition.dx > size.width ||
+        localPosition.dy < 0 || localPosition.dy > size.height) {
+      return 0;
+    }
+
+    if (style == VedicChartStyle.southIndian) {
+      final sign = getSouthIndianSignAt(localPosition, size);
+      if (sign <= 0) return 0;
+      int house = ((sign - lagnaSignIndex + 12) % 12) + 1;
+      return house;
+    } else {
+      for (int h = 1; h <= 12; h++) {
+        final poly = getNorthIndianHousePolygon(h, size);
+        if (isPointInPolygon(localPosition, poly)) {
+          return h;
+        }
+      }
+      return 0;
+    }
+  }
+
+  /// Hit test planet at local touch position
+  static String? hitTestPlanet({
+    required Offset localPosition,
+    required Size size,
+    required VedicChartStyle style,
+    required int lagnaSignIndex,
+    required Map<int, List<String>> housePlanets,
+    double touchRadius = 26.0,
+  }) {
+    final Map<String, Offset> planetPositions = getPlanetPositions(
+      size: size,
+      style: style,
+      lagnaSignIndex: lagnaSignIndex,
+      housePlanets: housePlanets,
+    );
+
+    String? closestPlanet;
+    double minDistance = touchRadius;
+
+    planetPositions.forEach((planet, center) {
+      final dist = (localPosition - center).distance;
+      if (dist < minDistance) {
+        minDistance = dist;
+        closestPlanet = planet;
+      }
+    });
+
+    return closestPlanet;
+  }
+
+  /// Calculate offsets of each planet rendered on the chart
+  static Map<String, Offset> getPlanetPositions({
+    required Size size,
+    required VedicChartStyle style,
+    required int lagnaSignIndex,
+    required Map<int, List<String>> housePlanets,
+  }) {
+    final Map<String, Offset> positions = {};
+
+    housePlanets.forEach((house, planets) {
+      if (planets.isEmpty) return;
+
+      Offset baseCenter;
+      if (style == VedicChartStyle.southIndian) {
+        final sign = ((house - 1 + lagnaSignIndex - 1) % 12) + 1;
+        baseCenter = getSouthIndianCellCenter(sign, size);
+      } else {
+        baseCenter = getNorthIndianHouseCenter(house, size);
+      }
+
+      if (planets.length == 1) {
+        positions[planets[0]] = baseCenter;
+      } else {
+        final double spacing = 16.0;
+        final int count = planets.length;
+        final double startX = baseCenter.dx - ((count - 1) * spacing) / 2;
+        for (int i = 0; i < count; i++) {
+          positions[planets[i]] = Offset(startX + i * spacing, baseCenter.dy);
+        }
+      }
+    });
+
+    return positions;
+  }
+}
+
 class VedicChartPainter extends CustomPainter {
   final Map<int, List<String>> housePlanets;
   final BuildContext context;
   final VedicChartStyle style;
   final int lagnaSignIndex;
+  final int? selectedHouse;
+  final String? selectedPlanet;
 
   VedicChartPainter({
     required this.housePlanets,
     required this.context,
     this.style = VedicChartStyle.northIndian,
     this.lagnaSignIndex = 1,
+    this.selectedHouse,
+    this.selectedPlanet,
   });
 
   @override
@@ -44,10 +247,47 @@ class VedicChartPainter extends CustomPainter {
       ..strokeWidth = 3.0
       ..style = PaintingStyle.stroke;
 
-    // Draw the outer square
+    // Outer box
     final Rect outerRect = Rect.fromLTWH(0, 0, width, height);
     final RRect outerRRect = RRect.fromRectAndRadius(outerRect, const Radius.circular(14));
-    
+
+    // ── Selected House Highlight ─────────────────────────────
+    if (selectedHouse != null && selectedHouse! >= 1 && selectedHouse! <= 12) {
+      final highlightFill = Paint()
+        ..color = lineColor.withOpacity(0.18)
+        ..style = PaintingStyle.fill;
+      final highlightStroke = Paint()
+        ..color = lineColor
+        ..strokeWidth = 2.5
+        ..style = PaintingStyle.stroke;
+
+      if (style == VedicChartStyle.southIndian) {
+        final sign = ((selectedHouse! - 1 + lagnaSignIndex - 1) % 12) + 1;
+        final colW = width / 4;
+        final rowH = height / 4;
+        for (int r = 0; r < 4; r++) {
+          for (int c = 0; c < 4; c++) {
+            if (VedicChartGeometry.southIndianGrid[r][c] == sign) {
+              final cellRect = Rect.fromLTWH(c * colW, r * rowH, colW, rowH);
+              canvas.drawRect(cellRect, highlightFill);
+              canvas.drawRect(cellRect, highlightStroke);
+            }
+          }
+        }
+      } else {
+        final polygon = VedicChartGeometry.getNorthIndianHousePolygon(selectedHouse!, size);
+        if (polygon.isNotEmpty) {
+          final path = Path()..moveTo(polygon[0].dx, polygon[0].dy);
+          for (int i = 1; i < polygon.length; i++) {
+            path.lineTo(polygon[i].dx, polygon[i].dy);
+          }
+          path.close();
+          canvas.drawPath(path, highlightFill);
+          canvas.drawPath(path, highlightStroke);
+        }
+      }
+    }
+
     // Draw outer rounded box border
     canvas.drawRRect(outerRRect, glowPaint);
     canvas.drawRRect(outerRRect, paint);
@@ -98,20 +338,10 @@ class VedicChartPainter extends CustomPainter {
         Offset(width / 2 - textPainter.width / 2, height / 2 - textPainter.height / 2),
       );
 
-      // Map 12 perimeter cells: {sign: (col, row)}
-      final Map<int, List<int>> southIndianGrid = {
-        12: [0, 0], // Pisces
-        1: [1, 0],  // Aries
-        2: [2, 0],  // Taurus
-        3: [3, 0],  // Gemini
-        4: [3, 1],  // Cancer
-        5: [3, 2],  // Leo
-        6: [3, 3],  // Virgo
-        7: [2, 3],  // Libra
-        8: [1, 3],  // Scorpio
-        9: [0, 3],  // Sagittarius
-        10: [0, 2], // Capricorn
-        11: [0, 1], // Aquarius
+      final Map<int, List<int>> southIndianGridMap = {
+        12: [0, 0], 1: [1, 0], 2: [2, 0], 3: [3, 0],
+        4: [3, 1], 5: [3, 2], 6: [3, 3], 7: [2, 3],
+        8: [1, 3], 9: [0, 3], 10: [0, 2], 11: [0, 1],
       };
 
       final signLabels = {
@@ -120,7 +350,7 @@ class VedicChartPainter extends CustomPainter {
         9: 'Dhan (Sg)', 10: 'Maka (Cp)', 11: 'Kumb (Aq)', 12: 'Meen (Pi)',
       };
 
-      southIndianGrid.forEach((sign, pos) {
+      southIndianGridMap.forEach((sign, pos) {
         final col = pos[0];
         final row = pos[1];
         final cellLeft = col * colW;
@@ -168,14 +398,14 @@ class VedicChartPainter extends CustomPainter {
       canvas.save();
       canvas.clipRRect(outerRRect);
 
-      // Draw the diagonals
+      // Draw diagonals
       canvas.drawLine(const Offset(0, 0), Offset(width, height), glowPaint);
       canvas.drawLine(const Offset(0, 0), Offset(width, height), paint);
 
       canvas.drawLine(Offset(width, 0), Offset(0, height), glowPaint);
       canvas.drawLine(Offset(width, 0), Offset(0, height), paint);
 
-      // Draw the inner diamond
+      // Draw inner diamond
       final Path diamondPath = Path()
         ..moveTo(width / 2, 0)
         ..lineTo(width, height / 2)
@@ -188,10 +418,34 @@ class VedicChartPainter extends CustomPainter {
 
       canvas.restore();
 
-      void drawPlanets(int house, Offset center) {
-        final planets = housePlanets[house] ?? [];
-        if (planets.isEmpty) return;
+      // Draw Sign Numbers inside North Indian Houses
+      for (int h = 1; h <= 12; h++) {
+        final signNumber = ((lagnaSignIndex - 1 + h - 1) % 12) + 1;
+        final center = VedicChartGeometry.getNorthIndianHouseCenter(h, size);
+        final isLagnaHouse = h == 1;
 
+        // Position sign number slightly offset from center
+        textPainter.text = TextSpan(
+          text: '$signNumber',
+          style: TextStyle(
+            color: isLagnaHouse ? lineColor : lineColor.withOpacity(0.4),
+            fontSize: isLagnaHouse ? 10.0 : 8.5,
+            fontWeight: isLagnaHouse ? FontWeight.bold : FontWeight.w600,
+          ),
+        );
+        textPainter.layout();
+        textPainter.paint(
+          canvas,
+          Offset(center.dx - textPainter.width / 2, center.dy - textPainter.height / 2 - 12),
+        );
+      }
+
+      // Draw Planets inside North Indian Houses
+      for (int h = 1; h <= 12; h++) {
+        final planets = housePlanets[h] ?? [];
+        if (planets.isEmpty) continue;
+
+        final center = VedicChartGeometry.getNorthIndianHouseCenter(h, size);
         final text = planets.join(', ');
         textPainter.text = TextSpan(
           text: text,
@@ -205,33 +459,42 @@ class VedicChartPainter extends CustomPainter {
         textPainter.layout(maxWidth: width / 3.8);
         textPainter.paint(
           canvas,
-          Offset(center.dx - textPainter.width / 2, center.dy - textPainter.height / 2),
+          Offset(center.dx - textPainter.width / 2, center.dy - textPainter.height / 2 + 2),
         );
       }
+    }
 
-      // Coordinates for the 12 houses (Vedic layout)
-      final Map<int, Offset> houseCenters = {
-        1: Offset(width / 2, height / 4),
-        2: Offset(width / 4, height / 8),
-        3: Offset(width / 8, height / 4),
-        4: Offset(width / 4, height / 2),
-        5: Offset(width / 8, height * 0.75),
-        6: Offset(width / 4, height * 0.875),
-        7: Offset(width / 2, height * 0.75),
-        8: Offset(width * 0.75, height * 0.875),
-        9: Offset(width * 0.875, height * 0.75),
-        10: Offset(width * 0.75, height / 2),
-        11: Offset(width * 0.875, height / 4),
-        12: Offset(width * 0.75, height / 8),
-      };
+    // ── Selected Planet Highlight Ring ─────────────────────────────
+    if (selectedPlanet != null && selectedPlanet!.isNotEmpty) {
+      final planetPositions = VedicChartGeometry.getPlanetPositions(
+        size: size,
+        style: style,
+        lagnaSignIndex: lagnaSignIndex,
+        housePlanets: housePlanets,
+      );
 
-      houseCenters.forEach((house, center) {
-        drawPlanets(house, center);
-      });
+      final center = planetPositions[selectedPlanet];
+      if (center != null) {
+        final ringPaint = Paint()
+          ..color = lineColor
+          ..strokeWidth = 2.0
+          ..style = PaintingStyle.stroke;
+        final ringGlow = Paint()
+          ..color = lineColor.withOpacity(0.3)
+          ..style = PaintingStyle.fill;
+
+        canvas.drawCircle(center, 15.0, ringGlow);
+        canvas.drawCircle(center, 15.0, ringPaint);
+      }
     }
   }
 
   @override
   bool shouldRepaint(covariant VedicChartPainter oldDelegate) =>
-      oldDelegate.housePlanets != housePlanets || oldDelegate.context != context;
+      oldDelegate.housePlanets != housePlanets ||
+      oldDelegate.context != context ||
+      oldDelegate.style != style ||
+      oldDelegate.lagnaSignIndex != lagnaSignIndex ||
+      oldDelegate.selectedHouse != selectedHouse ||
+      oldDelegate.selectedPlanet != selectedPlanet;
 }

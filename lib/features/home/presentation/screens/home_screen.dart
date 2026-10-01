@@ -66,7 +66,7 @@ class HomeScreen extends ConsumerWidget {
                 message: error.toString().replaceFirst('Exception: ', ''),
                 onRetry: () => ref.invalidate(dailyGamePlanProvider),
               ),
-              data: (plan) => _buildGamePlanUI(context, plan),
+              data: (plan) => _buildGamePlanUI(context, ref, plan),
             ),
           ),
         ),
@@ -74,7 +74,7 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildGamePlanUI(BuildContext context, GamePlanData plan) {
+  Widget _buildGamePlanUI(BuildContext context, WidgetRef ref, GamePlanData plan) {
     final hPad = context.responsive<double>(
       mobile: 20,
       tablet: 32,
@@ -87,7 +87,12 @@ class HomeScreen extends ConsumerWidget {
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(hPad, 24, hPad, 100),
+            padding: EdgeInsets.fromLTRB(
+              hPad,
+              context.responsive(mobile: 16, tablet: 24, desktop: 24),
+              hPad,
+              100,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -111,13 +116,13 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ] else ...[
                   const BirthChartCard(),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   _buildEnergyCard(context, plan).fadeSlideUp(delay: 60.ms),
                 ],
                 const SizedBox(height: 16),
 
                 // 3. Quick Actions
-                _buildQuickActions(context).fadeSlideUp(delay: 80.ms),
+                _buildQuickActions(context, ref).fadeSlideUp(delay: 80.ms),
                 const SizedBox(height: 16),
 
                 // 4. Daily Check-In
@@ -136,7 +141,7 @@ class HomeScreen extends ConsumerWidget {
 
                 // 7. Astro Baba Prompt
                 _buildAstroBabaPrompt().fadeSlideUp(delay: 180.ms),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
                 // 8. Premium / Deeper Reports & Tools
                 WhatChangedTodayCard(gamePlan: plan).fadeSlideUp(delay: 200.ms),
@@ -193,13 +198,13 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildQuickActions(BuildContext context) {
+  Widget _buildQuickActions(BuildContext context, WidgetRef ref) {
     final actions = [
       {
         'title': 'Kundli',
         'icon': Icons.auto_awesome_rounded,
         'color': AppColors.primary,
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const KundliScreen())),
+        'onTap': () => ref.read(mainNavIndexProvider.notifier).state = 1,
       },
       {
         'title': 'Gun Milan',
@@ -222,12 +227,12 @@ class HomeScreen extends ConsumerWidget {
     ];
 
     return Row(
-      children: actions.map((a) {
-        return Expanded(
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4),
+      children: [
+        for (int i = 0; i < actions.length; i++) ...[
+          if (i > 0) const SizedBox(width: 8),
+          Expanded(
             child: InkWell(
-              onTap: a['onTap'] as VoidCallback,
+              onTap: actions[i]['onTap'] as VoidCallback,
               borderRadius: BorderRadius.circular(16),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -238,10 +243,10 @@ class HomeScreen extends ConsumerWidget {
                 ),
                 child: Column(
                   children: [
-                    Icon(a['icon'] as IconData, color: a['color'] as Color, size: 20),
+                    Icon(actions[i]['icon'] as IconData, color: actions[i]['color'] as Color, size: 20),
                     const SizedBox(height: 6),
                     Text(
-                      a['title'] as String,
+                      actions[i]['title'] as String,
                       style: GoogleFonts.outfit(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -255,8 +260,8 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ),
-        );
-      }).toList(),
+        ],
+      ],
     );
   }
 
@@ -320,6 +325,8 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ),
                 IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
                   icon: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
@@ -340,7 +347,10 @@ class HomeScreen extends ConsumerWidget {
                     }
                   },
                 ),
+                const SizedBox(width: 8),
                 IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
                   icon: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
@@ -487,7 +497,7 @@ class HomeScreen extends ConsumerWidget {
               Text('TODAY\'S ENERGY', style: AppDecorations.sectionHeader()),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
           // Dynamic Animated Score display (60 FPS)
           TweenAnimationBuilder<double>(
@@ -551,7 +561,7 @@ class HomeScreen extends ConsumerWidget {
               );
             },
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           // AI Generated Tag Badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -698,7 +708,7 @@ class HomeScreen extends ConsumerWidget {
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           ...items.asMap().entries.map(
             (entry) => Padding(
               padding: const EdgeInsets.only(bottom: 8),

@@ -189,7 +189,7 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                   ),
                   child: const Icon(Icons.bolt_rounded, color: Colors.black, size: 18),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +218,7 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                 ),
               ],
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
 
             // Command Input Box
             TextField(
@@ -247,7 +247,7 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 16),
 
             // Quick Preset Commands Header & Scrollable List
             Flexible(
@@ -266,7 +266,7 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                         color: AppColors.primary,
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     Column(
                       children: _quickCommands.map((cmd) {
                         return Padding(
@@ -294,7 +294,7 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                                 child: Row(
                                   children: [
                                     Icon(cmd['icon'] as IconData, color: AppColors.primary, size: 16),
-                                    const SizedBox(width: 10),
+                                    const SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
                                         cmd['label'] as String,
@@ -333,7 +333,7 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                         );
                       }).toList(),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                   ],
                 ),
               ),
