@@ -32,8 +32,8 @@ final astroIntelligenceProvider = Provider<AstroIntelligenceSummary>((ref) {
 
   return AstroIntelligenceSummary(
     activeProfileName: profileName,
-    sunSign: 'Leo ♌',
-    moonSign: 'Aquarius ♒',
+    sunSign: 'Leo â™Œ',
+    moonSign: 'Aquarius â™’',
     nakshatra: 'Shatabhisha Nakshatra (Pada 2)',
     currentDasha: 'Mahadasha: Jupiter • Antardasha: Venus',
     todayTransitHighlight: 'Moon transiting 7th House favors partnerships & key decisions.',
@@ -42,3 +42,4 @@ final astroIntelligenceProvider = Provider<AstroIntelligenceSummary>((ref) {
     cosmicAlignmentScore: 8.8,
   );
 });
+

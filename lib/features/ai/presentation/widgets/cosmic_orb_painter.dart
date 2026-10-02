@@ -1,4 +1,4 @@
-import 'dart:math';
+﻿import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -73,13 +73,13 @@ class _OrbPainter extends CustomPainter {
 
     // Outer aura glow
     final auraPaint = Paint()
-      ..color = AppColors.secondary.withOpacity(0.2)
+      ..color = AppColors.secondary.withValues(alpha: 0.2)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, currentRadius * 1.35, auraPaint);
 
     // Mid gold glow
     final goldGlow = Paint()
-      ..color = AppColors.primary.withOpacity(0.25)
+      ..color = AppColors.primary.withValues(alpha: 0.25)
       ..style = PaintingStyle.fill;
     canvas.drawCircle(center, currentRadius * 1.15, goldGlow);
 
@@ -98,7 +98,7 @@ class _OrbPainter extends CustomPainter {
 
     // Swirling cosmic ring
     final ringPaint = Paint()
-      ..color = AppColors.primary.withOpacity(0.7)
+      ..color = AppColors.primary.withValues(alpha: 0.7)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
 
@@ -115,3 +115,4 @@ class _OrbPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _OrbPainter oldDelegate) => true;
 }
+

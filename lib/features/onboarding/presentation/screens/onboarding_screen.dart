@@ -43,6 +43,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     text: '07:30',
   );
   final TextEditingController _placeController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _otpController = TextEditingController();
+
+  bool _isOtpSent = false;
+  bool _isOtpVerified = false;
 
   String _selectedGender = 'Male';
   String _selectedAmPm = 'AM';
@@ -333,10 +338,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.getPrimary(context).withOpacity(0.15),
+                            color: AppColors.getPrimary(context).withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: AppColors.getPrimary(context).withOpacity(0.3),
+                              color: AppColors.getPrimary(context).withValues(alpha: 0.3),
                             ),
                           ),
                           child: Text(
@@ -350,6 +355,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                         )
                       else
                         const SizedBox(width: 40),
+                      if (_currentIndex == 0)
+                        TextButton(
+                          onPressed: () {
+                            _pageController.nextPage(
+                              duration: const Duration(milliseconds: 400),
+                              curve: Curves.easeOutCubic,
+                            );
+                          },
+                          child: Text(
+                            'Skip',
+                            style: GoogleFonts.outfit(
+                              color: AppColors.getPrimary(context),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -394,11 +416,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               gradient: isActive ? AppColors.goldGradient : null,
               color: isActive
                   ? null
-                  : (isLight ? AppColors.borderLight : Colors.white.withOpacity(0.12)),
+                  : (isLight ? AppColors.borderLight : Colors.white.withValues(alpha: 0.12)),
               boxShadow: isCurrent
                   ? [
                       BoxShadow(
-                        color: AppColors.primary.withOpacity(0.6),
+                        color: AppColors.primary.withValues(alpha: 0.6),
                         blurRadius: 10,
                         spreadRadius: 1,
                       ),
@@ -446,12 +468,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                             shape: BoxShape.circle,
                             gradient: AppColors.goldSubtleGradient,
                             border: Border.all(
-                              color: AppColors.primary.withOpacity(0.6),
+                              color: AppColors.primary.withValues(alpha: 0.6),
                               width: 2,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primary.withOpacity(0.35),
+                                color: AppColors.primary.withValues(alpha: 0.35),
                                 blurRadius: 40,
                                 spreadRadius: 2,
                               ),
@@ -520,7 +542,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
 
                     const SizedBox(height: 28),
 
-                    // Language Selection Box
+                    // Mobile OTP Verification Box
                     GlassCard(
                       borderRadius: 20,
                       padding: const EdgeInsets.all(18),
@@ -531,13 +553,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                           Row(
                             children: [
                               Icon(
-                                Icons.language_rounded,
+                                Icons.security_rounded,
                                 color: AppColors.getPrimary(context),
                                 size: 18,
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                'Select Preferred Language',
+                                'Mobile Verification',
                                 style: GoogleFonts.outfit(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -547,90 +569,44 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                             ],
                           ),
                           const SizedBox(height: 14),
-                          Consumer(
-                            builder: (context, ref, _) {
-                              final currentLang = ref.watch(localeProvider);
-                              final languages = [
-                                AppLanguage.english,
-                                AppLanguage.hindi,
-                                AppLanguage.gujarati,
-                              ];
-
-                              return Column(
-                                children: languages.map((lang) {
-                                  final isSelected = currentLang == lang;
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 8),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        ref
-                                            .read(localeProvider.notifier)
-                                            .setLanguage(lang);
-                                      },
-                                      child: AnimatedContainer(
-                                        duration: const Duration(milliseconds: 200),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 12,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: isSelected
-                                              ? AppColors.getPrimary(context).withOpacity(0.18)
-                                              : (isLight
-                                                  ? AppColors.surfaceSecondaryLight
-                                                  : Colors.white.withOpacity(0.04)),
-                                          borderRadius: BorderRadius.circular(14),
-                                          border: Border.all(
-                                            color: isSelected
-                                                ? AppColors.getPrimary(context)
-                                                : AppColors.getGlassBorder(context),
-                                            width: isSelected ? 1.5 : 0.8,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              lang.flagEmoji,
-                                              style: const TextStyle(fontSize: 22),
-                                            ),
-                                            const SizedBox(width: 14),
-                                            Expanded(
-                                              child: Text(
-                                                '${lang.nativeName} (${lang.englishName})',
-                                                style: GoogleFonts.outfit(
-                                                  fontSize: 15,
-                                                  fontWeight: isSelected
-                                                      ? FontWeight.bold
-                                                      : FontWeight.w500,
-                                                  color: isSelected
-                                                      ? AppColors.getPrimary(context)
-                                                      : AppColors.getTextPrimary(context),
-                                                ),
-                                              ),
-                                            ),
-                                            if (isSelected)
-                                              Icon(
-                                                Icons.check_circle_rounded,
-                                                color: AppColors.getPrimary(context),
-                                                size: 20,
-                                              )
-                                            else
-                                              Icon(
-                                                Icons.circle_outlined,
-                                                color: isLight
-                                                    ? AppColors.textMutedLight
-                                                    : Colors.white.withOpacity(0.3),
-                                                size: 18,
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              );
-                            },
-                          ),
+                          
+                          if (!_isOtpSent) ...[
+                            TextField(
+                              controller: _phoneController,
+                              keyboardType: TextInputType.phone,
+                              style: TextStyle(color: AppColors.getTextPrimary(context)),
+                              decoration: AppDecorations.premiumInput(
+                                hintText: 'Enter Mobile Number',
+                                prefixIcon: Icons.phone_android_rounded,
+                                context: context,
+                              ),
+                            ),
+                          ] else if (!_isOtpVerified) ...[
+                            TextField(
+                              controller: _otpController,
+                              keyboardType: TextInputType.number,
+                              style: TextStyle(color: AppColors.getTextPrimary(context)),
+                              decoration: AppDecorations.premiumInput(
+                                hintText: 'Enter 4-digit OTP',
+                                prefixIcon: Icons.lock_outline_rounded,
+                                context: context,
+                              ),
+                            ),
+                          ] else ...[
+                            Row(
+                              children: [
+                                const Icon(Icons.check_circle_rounded, color: Colors.green),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Mobile Verified Successfully',
+                                  style: GoogleFonts.inter(
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ],
                       ),
                     ).fadeSlideUp(delay: 350.ms),
@@ -664,9 +640,29 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     const SizedBox(height: 16),
 
                     GradientButton(
-                      text: 'Begin Your Cosmic Journey',
-                      icon: Icons.auto_awesome,
-                      onPressed: _nextPage,
+                      text: _isOtpVerified
+                          ? 'Begin Your Cosmic Journey'
+                          : (_isOtpSent ? 'Verify OTP' : 'Send OTP'),
+                      icon: _isOtpVerified ? Icons.auto_awesome : Icons.arrow_forward_rounded,
+                      onPressed: () {
+                        if (_isOtpVerified) {
+                          _nextPage();
+                        } else if (_isOtpSent) {
+                          if (_otpController.text.length >= 4) {
+                            setState(() => _isOtpVerified = true);
+                            CosmicNotification.show(context, message: 'OTP Verified Successfully!', icon: Icons.check_circle_rounded);
+                          } else {
+                            CosmicNotification.show(context, message: 'Invalid OTP. Please enter 4 digits.', icon: Icons.error_outline_rounded);
+                          }
+                        } else {
+                          if (_phoneController.text.length >= 10) {
+                            setState(() => _isOtpSent = true);
+                            CosmicNotification.show(context, message: 'OTP Sent successfully to ${_phoneController.text}', icon: Icons.mark_email_read_rounded);
+                          } else {
+                            CosmicNotification.show(context, message: 'Enter a valid 10-digit mobile number', icon: Icons.error_outline_rounded);
+                          }
+                        }
+                      },
                     ).fadeSlideUp(delay: 550.ms),
 
                     const SizedBox(height: 16),
@@ -734,10 +730,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? AppColors.getPrimary(context).withOpacity(0.2)
+                                ? AppColors.getPrimary(context).withValues(alpha: 0.2)
                                 : (isLight
                                     ? AppColors.surfaceSecondaryLight
-                                    : Colors.white.withOpacity(0.05)),
+                                    : Colors.white.withValues(alpha: 0.05)),
                             borderRadius: BorderRadius.circular(14),
                             border: Border.all(
                               color: isSelected
@@ -774,8 +770,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             GlassCard(
               borderRadius: 18,
               padding: const EdgeInsets.all(16),
-              borderColor: AppColors.getPrimary(context).withOpacity(0.5),
-              glowColor: AppColors.getPrimary(context).withOpacity(0.2),
+              borderColor: AppColors.getPrimary(context).withValues(alpha: 0.5),
+              glowColor: AppColors.getPrimary(context).withValues(alpha: 0.2),
               child: Row(
                 children: [
                   Container(
@@ -783,8 +779,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                     height: 52,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: AppColors.getPrimary(context).withOpacity(0.15),
-                      border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.4)),
+                      color: AppColors.getPrimary(context).withValues(alpha: 0.15),
+                      border: Border.all(color: AppColors.getPrimary(context).withValues(alpha: 0.4)),
                     ),
                     child: Center(
                       child: Text(
@@ -981,7 +977,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                   decoration: BoxDecoration(
                     color: isLight
                         ? AppColors.surfaceSecondaryLight
-                        : Colors.white.withOpacity(0.06),
+                        : Colors.white.withValues(alpha: 0.06),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: AppColors.getGlassBorder(context)),
                   ),
@@ -1067,9 +1063,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                 decoration: BoxDecoration(
-                  color: AppColors.getPrimary(context).withOpacity(0.08),
+                  color: AppColors.getPrimary(context).withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.2)),
+                  border: Border.all(color: AppColors.getPrimary(context).withValues(alpha: 0.2)),
                 ),
                 child: Row(
                   children: [
@@ -1095,7 +1091,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             decoration: BoxDecoration(
               color: isLight
                   ? AppColors.surfaceSecondaryLight
-                  : Colors.white.withOpacity(0.06),
+                  : Colors.white.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.getGlassBorder(context)),
             ),
@@ -1245,7 +1241,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: AppColors.primary.withOpacity(0.35),
+                          color: AppColors.primary.withValues(alpha: 0.35),
                           width: 2,
                         ),
                       ),
@@ -1257,10 +1253,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                               0.85 * (i % 4 < 2 ? 1 : -1),
                             ),
                             child: Text(
-                              ['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏'][i],
+                              ['â™ˆ', 'â™‰', 'â™Š', 'â™‹', 'â™Œ', 'â™', 'â™Ž', 'â™'][i],
                               style: TextStyle(
                                 fontSize: 16,
-                                color: AppColors.primary.withOpacity(0.6),
+                                color: AppColors.primary.withValues(alpha: 0.6),
                               ),
                             ),
                           );
@@ -1280,7 +1276,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primary.withOpacity(0.4),
+                          color: AppColors.primary.withValues(alpha: 0.4),
                           blurRadius: 30,
                           spreadRadius: 2,
                         ),
@@ -1344,7 +1340,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
             height: 26,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.green.withOpacity(0.2),
+              color: Colors.green.withValues(alpha: 0.2),
               border: Border.all(color: Colors.green.shade400),
             ),
             child: const Icon(
@@ -1396,10 +1392,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                           decoration: BoxDecoration(
-                            color: AppColors.getPrimary(context).withOpacity(0.12),
+                            color: AppColors.getPrimary(context).withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: AppColors.getPrimary(context).withOpacity(0.35),
+                              color: AppColors.getPrimary(context).withValues(alpha: 0.35),
                               width: 0.8,
                             ),
                           ),
@@ -1454,3 +1450,4 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
     );
   }
 }
+

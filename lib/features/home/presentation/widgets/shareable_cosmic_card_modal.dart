@@ -21,7 +21,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.85),
+      barrierColor: Colors.black.withValues(alpha: 0.85),
       builder: (context) => ShareableCosmicCardModal(gamePlan: gamePlan),
     );
   }
@@ -41,7 +41,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
           ),
           decoration: BoxDecoration(
             color: isLight
-                ? AppColors.surfaceLight.withOpacity(0.96)
+                ? AppColors.surfaceLight.withValues(alpha: 0.96)
                 : const Color(0xF2090D16),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
             border: Border.all(color: AppColors.getGlassBorder(context), width: 1.0),
@@ -91,7 +91,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: isLight ? AppColors.surfaceLight : const Color(0xFF090D16),
                     borderRadius: BorderRadius.circular(28),
-                    border: Border.all(color: const Color(0xFFFFD700).withOpacity(0.4), width: 1.5),
+                    border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.4), width: 1.5),
                     boxShadow: [
                       BoxShadow(
                         color: const Color(0x40E0A13A),
@@ -203,7 +203,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: Text(
-                            '“${gamePlan.transitFactor ?? "Gajakesari Yoga active • High financial & strategic clarity today."}”',
+                            'â€œ${gamePlan.transitFactor ?? "Gajakesari Yoga active • High financial & strategic clarity today."}â€',
                             textAlign: TextAlign.center,
                             style: GoogleFonts.outfit(
                               fontSize: 13,
@@ -220,9 +220,9 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.06),
+                          color: Colors.white.withValues(alpha: 0.06),
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: Colors.white.withOpacity(0.1)),
+                          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                         ),
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
@@ -272,7 +272,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFFE1306C).withOpacity(0.4),
+                                color: const Color(0xFFE1306C).withValues(alpha: 0.4),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -328,7 +328,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFF25D366).withOpacity(0.4),
+                                color: const Color(0xFF25D366).withValues(alpha: 0.4),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -423,9 +423,9 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 10),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.18),
+                            color: AppColors.primary.withValues(alpha: 0.18),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.primary.withOpacity(0.5), width: 1),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.5), width: 1),
                           ),
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
@@ -454,3 +454,4 @@ class ShareableCosmicCardModal extends ConsumerWidget {
     );
   }
 }
+

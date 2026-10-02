@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/glass_card.dart';
@@ -97,15 +97,15 @@ class ChartPatternsScreen extends StatelessWidget {
                     // Section 1: Detected Aspect Patterns
                     GlassCard(
                       padding: const EdgeInsets.all(16),
-                      borderColor: Colors.greenAccent.withOpacity(0.4),
+                      borderColor: Colors.greenAccent.withValues(alpha: 0.4),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('DETECTED PATTERN: GRAND AIR TRINE', style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.greenAccent)),
                           const SizedBox(height: 8),
-                          Text('Sun (Libra) ↔ Moon (Aquarius) ↔ Mars (Gemini)', style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context))),
+                          Text('Sun (Libra) â†” Moon (Aquarius) â†” Mars (Gemini)', style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context))),
                           const SizedBox(height: 4),
-                          Text('Harmonious 120° tri-angle bringing effortless intellectual communication, strategic diplomacy, and social influence.', style: GoogleFonts.inter(fontSize: 11.5, color: AppColors.getTextSecondary(context), height: 1.35)),
+                          Text('Harmonious 120Â° tri-angle bringing effortless intellectual communication, strategic diplomacy, and social influence.', style: GoogleFonts.inter(fontSize: 11.5, color: AppColors.getTextSecondary(context), height: 1.35)),
                         ],
                       ),
                     ),
@@ -166,3 +166,4 @@ class ChartPatternsScreen extends StatelessWidget {
     );
   }
 }
+

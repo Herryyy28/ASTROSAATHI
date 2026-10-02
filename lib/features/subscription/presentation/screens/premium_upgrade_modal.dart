@@ -25,7 +25,7 @@ class PremiumUpgradeModal extends ConsumerStatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.75),
+      barrierColor: Colors.black.withValues(alpha: 0.75),
       builder: (context) => const PremiumUpgradeModal(),
     );
   }
@@ -73,11 +73,11 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           ),
           decoration: BoxDecoration(
             color: isLight
-                ? AppColors.surfaceLight.withOpacity(0.96)
+                ? AppColors.surfaceLight.withValues(alpha: 0.96)
                 : const Color(0xF20F141C),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(36)),
             border: Border.all(
-              color: const Color(0xFFFFD700).withOpacity(0.4),
+              color: const Color(0xFFFFD700).withValues(alpha: 0.4),
               width: 1.2,
             ),
             boxShadow: const [
@@ -148,7 +148,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFFFFD700).withOpacity(0.35),
+                            color: const Color(0xFFFFD700).withValues(alpha: 0.35),
                             width: 1.2,
                           ),
                         ),
@@ -169,8 +169,8 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                           shape: BoxShape.circle,
                           gradient: RadialGradient(
                             colors: [
-                              const Color(0xFFFFD700).withOpacity(0.45),
-                              const Color(0xFFD4AF37).withOpacity(0.15),
+                              const Color(0xFFFFD700).withValues(alpha: 0.45),
+                              const Color(0xFFD4AF37).withValues(alpha: 0.15),
                               Colors.transparent,
                             ],
                           ),
@@ -215,7 +215,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                       )
                           .animate(onPlay: (c) => c.repeat(reverse: true))
                           .shake(duration: 2000.ms, hz: 2)
-                          .shimmer(duration: 3000.ms, color: Colors.white.withOpacity(0.5)),
+                          .shimmer(duration: 3000.ms, color: Colors.white.withValues(alpha: 0.5)),
                     ],
                   ),
                 ),
@@ -254,7 +254,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                   decoration: BoxDecoration(
                     color: isLight
                         ? AppColors.getSurfaceSecondary(context)
-                        : Colors.white.withOpacity(0.04),
+                        : Colors.white.withValues(alpha: 0.04),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: AppColors.getGlassBorder(context),
@@ -383,7 +383,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: (subState.tier.isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700)).withOpacity(0.1),
+                              color: (subState.tier.isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700)).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(18),
                               border: Border.all(
                                 color: subState.tier.isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700),
@@ -583,7 +583,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           color: isSelected
               ? (isLight
                     ? const Color(0xFFFFF7E6)
-                    : const Color(0xFF2E2410).withOpacity(0.9))
+                    : const Color(0xFF2E2410).withValues(alpha: 0.9))
               : AppColors.getSurfaceSecondary(context),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -595,7 +595,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: (isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700)).withOpacity(0.25),
+                    color: (isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700)).withValues(alpha: 0.25),
                     blurRadius: 16,
                     spreadRadius: -2,
                   ),
@@ -734,7 +734,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.85),
+      barrierColor: Colors.black.withValues(alpha: 0.85),
       builder: (ctx) {
         final isLight = Theme.of(ctx).brightness == Brightness.light;
 
@@ -744,7 +744,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
             filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
             child: Container(
               color: isLight
-                  ? AppColors.surfaceLight.withOpacity(0.96)
+                  ? AppColors.surfaceLight.withValues(alpha: 0.96)
                   : const Color(0xF20B0F19),
               padding: const EdgeInsets.all(24),
               child: Column(
@@ -759,7 +759,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text('🔐', style: TextStyle(fontSize: 44)),
+                  const Text('ðŸ”', style: TextStyle(fontSize: 44)),
                   const SizedBox(height: 12),
                   Text(
                     'Account Login Required',
@@ -1309,7 +1309,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
             maxHeight: MediaQuery.of(context).size.height * 0.88,
           ),
           color: isLight
-              ? AppColors.surfaceLight.withOpacity(0.96)
+              ? AppColors.surfaceLight.withValues(alpha: 0.96)
               : const Color(0xF2090D16),
           padding: EdgeInsets.fromLTRB(
             20,
@@ -1355,7 +1355,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
           decoration: BoxDecoration(
             color: isLight ? const Color(0xFFEBF3FF) : const Color(0xFF0C192E),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFF0066FF).withOpacity(0.4)),
+            border: Border.all(color: const Color(0xFF0066FF).withValues(alpha: 0.4)),
           ),
           child: Row(
             children: [
@@ -1705,7 +1705,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
           decoration: BoxDecoration(
             color: isSelected
-                ? const Color(0xFF0066FF).withOpacity(0.12)
+                ? const Color(0xFF0066FF).withValues(alpha: 0.12)
                 : AppColors.getSurfaceSecondary(context),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
@@ -1840,7 +1840,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.green.withOpacity(0.12),
+              color: Colors.green.withValues(alpha: 0.12),
               border: Border.all(color: Colors.green, width: 2),
             ),
             child: const Icon(
@@ -1896,3 +1896,4 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
     );
   }
 }
+

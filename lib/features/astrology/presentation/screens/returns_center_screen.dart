@@ -108,7 +108,7 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                         avatar: const Icon(Icons.wb_sunny_rounded, size: 16, color: Colors.amberAccent),
                         label: Text('Solar Return (Yearly)', style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold)),
                         selectedColor: AppColors.primary,
-                        backgroundColor: Colors.white.withOpacity(0.06),
+                        backgroundColor: Colors.white.withValues(alpha: 0.06),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -120,7 +120,7 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                         avatar: const Icon(Icons.nightlight_round, size: 16, color: Colors.cyanAccent),
                         label: Text('Lunar Return (Monthly)', style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold)),
                         selectedColor: AppColors.primary,
-                        backgroundColor: Colors.white.withOpacity(0.06),
+                        backgroundColor: Colors.white.withValues(alpha: 0.06),
                       ),
                     ),
                   ],
@@ -136,7 +136,7 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                     if (_selectedTab == 0) ...[
                       GlassCard(
                         padding: const EdgeInsets.all(18),
-                        borderColor: Colors.amber.withOpacity(0.4),
+                        borderColor: Colors.amber.withValues(alpha: 0.4),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -158,7 +158,7 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                   decoration: BoxDecoration(
-                                    color: Colors.amberAccent.withOpacity(0.15),
+                                    color: Colors.amberAccent.withValues(alpha: 0.15),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
@@ -182,7 +182,7 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                     ] else ...[
                       GlassCard(
                         padding: const EdgeInsets.all(18),
-                        borderColor: Colors.cyanAccent.withOpacity(0.4),
+                        borderColor: Colors.cyanAccent.withValues(alpha: 0.4),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -204,7 +204,7 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                   decoration: BoxDecoration(
-                                    color: Colors.cyanAccent.withOpacity(0.15),
+                                    color: Colors.cyanAccent.withValues(alpha: 0.15),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
@@ -236,3 +236,4 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
     );
   }
 }
+

@@ -281,7 +281,7 @@ class _PersonalTimingEngineScreenState extends State<PersonalTimingEngineScreen>
                 decoration: BoxDecoration(
                   color: AppColors.getSurface(context),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: col.withOpacity(0.4), width: 1.2),
+                  border: Border.all(color: col.withValues(alpha: 0.4), width: 1.2),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,7 +300,7 @@ class _PersonalTimingEngineScreenState extends State<PersonalTimingEngineScreen>
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: col.withOpacity(0.15),
+                            color: col.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
@@ -315,9 +315,9 @@ class _PersonalTimingEngineScreenState extends State<PersonalTimingEngineScreen>
                       ],
                     ),
                     Divider(color: AppColors.getDivider(context), height: 20),
-                    _buildRow('⏰ Favorable Window:', item['window'], context),
+                    _buildRow('â° Favorable Window:', item['window'], context),
                     const SizedBox(height: 6),
-                    _buildRow('🪐 Planetary Support:', item['support'], context),
+                    _buildRow('ðŸª Planetary Support:', item['support'], context),
                     const SizedBox(height: 6),
                     _buildRow('💡 Key Notice:', item['notice'], context),
                   ],
@@ -359,3 +359,4 @@ class _PersonalTimingEngineScreenState extends State<PersonalTimingEngineScreen>
     );
   }
 }
+

@@ -147,6 +147,7 @@ class PdfReportGenerator {
         );
 
       case AppLanguage.english:
+      default:
         return AstrologicalReportData(
           userName: cleanName,
           dob: dob.isEmpty ? 'Not Specified' : dob,

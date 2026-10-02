@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -17,13 +17,13 @@ class ShowMeCalculationModal extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       builder: (_) => ShowMeCalculationModal(
         title: title,
         mathDetails: mathDetails ?? {
-          'Ayanamsa System': 'Lahiri True Chitra (24° 12\' 34")',
-          'Sidereal Ascendant': 'Libra 14° 22\' 18" (Swati Nakshatra P2)',
-          'Moon Longitude': 'Aquarius 08° 45\' (Shatabhisha Nakshatra P1)',
+          'Ayanamsa System': 'Lahiri True Chitra (24Â° 12\' 34")',
+          'Sidereal Ascendant': 'Libra 14Â° 22\' 18" (Swati Nakshatra P2)',
+          'Moon Longitude': 'Aquarius 08Â° 45\' (Shatabhisha Nakshatra P1)',
           'Active Mahadasha': 'Jupiter (Rahu Antardasha)',
           'Transit Ashtakavarga Points': '32 Points in 10th House (Strong)',
           'Panchang Tithi Suitability': 'Shukla Navami (+1.2 pts)',
@@ -40,7 +40,7 @@ class ShowMeCalculationModal extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isLight
-            ? AppColors.surfaceLight.withOpacity(0.96)
+            ? AppColors.surfaceLight.withValues(alpha: 0.96)
             : const Color(0xFF161922),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         border: Border.all(color: AppColors.getGlassBorder(context), width: 0.8),
@@ -59,7 +59,7 @@ class ShowMeCalculationModal extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.18),
+                        color: AppColors.primary.withValues(alpha: 0.18),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.calculate_rounded, color: AppColors.primary, size: 18),
@@ -105,7 +105,7 @@ class ShowMeCalculationModal extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isLight
                     ? AppColors.getSurfaceSecondary(context)
-                    : Colors.white.withOpacity(0.04),
+                    : Colors.white.withValues(alpha: 0.04),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: AppColors.getGlassBorder(context)),
               ),
@@ -148,3 +148,4 @@ class ShowMeCalculationModal extends StatelessWidget {
     );
   }
 }
+

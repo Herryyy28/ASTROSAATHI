@@ -1,4 +1,4 @@
-import 'dart:ui';
+﻿import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
@@ -34,7 +34,7 @@ class WhyThisBottomSheet extends StatelessWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       builder: (context) => WhyThisBottomSheet(
         title: title,
         planetFactor: planetFactor,
@@ -58,8 +58,8 @@ class WhyThisBottomSheet extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
           decoration: BoxDecoration(
             color: isLight
-                ? AppColors.surfaceLight.withOpacity(0.96)
-                : AppColors.surfaceDark.withOpacity(0.95),
+                ? AppColors.surfaceLight.withValues(alpha: 0.96)
+                : AppColors.surfaceDark.withValues(alpha: 0.95),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
             border: Border.all(color: AppColors.getGlassBorder(context), width: 0.8),
           ),
@@ -78,7 +78,7 @@ class WhyThisBottomSheet extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: AppColors.primary.withOpacity(0.15),
+                              color: AppColors.primary.withValues(alpha: 0.15),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 20),
@@ -121,7 +121,7 @@ class WhyThisBottomSheet extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: isLight
                         ? AppColors.getSurfaceSecondary(context)
-                        : AppColors.surfaceHighlightDark.withOpacity(0.5),
+                        : AppColors.surfaceHighlightDark.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: AppColors.getGlassBorder(context)),
                   ),
@@ -185,7 +185,7 @@ class WhyThisBottomSheet extends StatelessWidget {
                         ? AppColors.getSurfaceElevated(context)
                         : AppColors.surfaceDark,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.getGlassBorder(context).withOpacity(0.5)),
+                    border: Border.all(color: AppColors.getGlassBorder(context).withValues(alpha: 0.5)),
                   ),
                   child: Row(
                     children: [
@@ -247,3 +247,4 @@ class WhyThisBottomSheet extends StatelessWidget {
     );
   }
 }
+

@@ -22,7 +22,7 @@ class _DailyCheckInWidgetState extends ConsumerState<DailyCheckInWidget> {
   final List<Map<String, String>> moods = [
     {'emoji': '😊', 'label': 'Great'},
     {'emoji': '🙂', 'label': 'Good'},
-    {'emoji': '😐', 'label': 'Okay'},
+    {'emoji': 'ðŸ˜', 'label': 'Okay'},
     {'emoji': '😔', 'label': 'Low'},
     {'emoji': '😤', 'label': 'Stressed'},
   ];
@@ -96,7 +96,7 @@ class _DailyCheckInWidgetState extends ConsumerState<DailyCheckInWidget> {
         color: isLight ? AppColors.surfaceLight : null,
         gradient: isLight ? null : AppColors.goldSubtleGradient,
         borderRadius: BorderRadius.circular(28),
-        border: Border.all(color: AppColors.primary.withOpacity(isLight ? 0.3 : 0.4)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: isLight ? 0.3 : 0.4)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,9 +119,9 @@ class _DailyCheckInWidgetState extends ConsumerState<DailyCheckInWidget> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.18),
+                    color: AppColors.primary.withValues(alpha: 0.18),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.5)),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -129,7 +129,7 @@ class _DailyCheckInWidgetState extends ConsumerState<DailyCheckInWidget> {
                       const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 14),
                       const SizedBox(width: 4),
                       Text(
-                        'Completed ✓',
+                        'Completed âœ“',
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -144,7 +144,7 @@ class _DailyCheckInWidgetState extends ConsumerState<DailyCheckInWidget> {
           const SizedBox(height: 4),
           Text(
             isCheckedIn
-                ? "Today's check-in completed ✓"
+                ? "Today's check-in completed âœ“"
                 : 'How is your energy feeling today?',
             style: TextStyle(
               fontSize: 12,
@@ -159,31 +159,38 @@ class _DailyCheckInWidgetState extends ConsumerState<DailyCheckInWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: moods.map((m) {
               final isSelected = currentMood == m['label'];
-              return GestureDetector(
-                onTap: () => _onMoodSelected(m['label']!),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: isSelected ? AppColors.primary : AppColors.getSurface(context),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: isSelected ? AppColors.primary : AppColors.getBorder(context),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(m['emoji']!, style: const TextStyle(fontSize: 20)),
-                      const SizedBox(height: 4),
-                      Text(
-                        m['label']!,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: isSelected ? Colors.black : AppColors.getTextSecondary(context),
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: GestureDetector(
+                    onTap: () => _onMoodSelected(m['label']!),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppColors.primary : AppColors.getSurface(context),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: isSelected ? AppColors.primary : AppColors.getBorder(context),
                         ),
                       ),
-                    ],
+                      child: Column(
+                        children: [
+                          Text(m['emoji']!, style: const TextStyle(fontSize: 20)),
+                          const SizedBox(height: 4),
+                          Text(
+                            m['label']!,
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected ? Colors.black : AppColors.getTextSecondary(context),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               );
@@ -195,7 +202,7 @@ class _DailyCheckInWidgetState extends ConsumerState<DailyCheckInWidget> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: isLight ? AppColors.getSurfaceSecondary(context) : AppColors.surfaceDark.withOpacity(0.8),
+              color: isLight ? AppColors.getSurfaceSecondary(context) : AppColors.surfaceDark.withValues(alpha: 0.8),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppColors.getBorder(context)),
             ),
@@ -213,3 +220,4 @@ class _DailyCheckInWidgetState extends ConsumerState<DailyCheckInWidget> {
     );
   }
 }
+

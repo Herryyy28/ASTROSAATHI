@@ -290,7 +290,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
     return {
       'city': cityName.isNotEmpty ? cityName : 'Location',
       'country': countryName,
-      'flag': '🌍',
+      'flag': 'ðŸŒ',
       'line': line,
       'score': score,
       'verdict': verdict,
@@ -321,7 +321,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                 color: isLight ? AppColors.surfaceLight : AppColors.surfaceDark,
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
                 border: Border.all(
-                  color: isLight ? Colors.black.withOpacity(0.08) : AppColors.glassBorder,
+                  color: isLight ? Colors.black.withValues(alpha: 0.08) : AppColors.glassBorder,
                 ),
               ),
               child: SafeArea(
@@ -489,7 +489,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                             margin: const EdgeInsets.only(bottom: 6),
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? AppColors.primary.withOpacity(0.15)
+                                  ? AppColors.primary.withValues(alpha: 0.15)
                                   : AppColors.getSurfaceElevated(context),
                               borderRadius: BorderRadius.circular(14),
                               border: Border.all(
@@ -601,9 +601,9 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: AppColors.secondary.withOpacity(0.2),
+                                  color: AppColors.secondary.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: AppColors.secondary.withOpacity(0.5)),
+                                  border: Border.all(color: AppColors.secondary.withValues(alpha: 0.5)),
                                 ),
                                 child: Text(
                                   'LABS',
@@ -694,7 +694,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       selectedColor: AppColors.primary,
       backgroundColor: isLight
           ? AppColors.getSurfaceSecondary(context)
-          : Colors.white.withOpacity(0.06),
+          : Colors.white.withValues(alpha: 0.06),
       side: BorderSide(
         color: isSelected
             ? AppColors.primary
@@ -747,7 +747,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                             ),
                             child: Row(
                               children: [
-                                Text(originLoc['flag'] ?? '🌍', style: const TextStyle(fontSize: 16)),
+                                Text(originLoc['flag'] ?? 'ðŸŒ', style: const TextStyle(fontSize: 16)),
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: Column(
@@ -819,7 +819,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                             ),
                             child: Row(
                               children: [
-                                Text(targetLoc['flag'] ?? '🌍', style: const TextStyle(fontSize: 16)),
+                                Text(targetLoc['flag'] ?? 'ðŸŒ', style: const TextStyle(fontSize: 16)),
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: Column(
@@ -866,7 +866,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
         // Comparison Results Card
         GlassCard(
           padding: const EdgeInsets.all(18),
-          borderColor: AppColors.primary.withOpacity(0.4),
+          borderColor: AppColors.primary.withValues(alpha: 0.4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -890,9 +890,9 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: greenColor.withOpacity(isLight ? 0.12 : 0.18),
+                      color: greenColor.withValues(alpha: isLight ? 0.12 : 0.18),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: greenColor.withOpacity(0.5)),
+                      border: Border.all(color: greenColor.withValues(alpha: 0.5)),
                     ),
                     child: Text(
                       isSameLocation
@@ -917,7 +917,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                   color: AppColors.getSurfaceElevated(context),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: AppColors.primary.withOpacity(0.3),
+                    color: AppColors.primary.withValues(alpha: 0.3),
                     width: 0.8,
                   ),
                 ),
@@ -926,7 +926,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                   children: [
                     Row(
                       children: [
-                        Text(originLoc['flag'] ?? '🌍', style: const TextStyle(fontSize: 16)),
+                        Text(originLoc['flag'] ?? 'ðŸŒ', style: const TextStyle(fontSize: 16)),
                         const SizedBox(width: 4),
                         Text(
                           originLoc['city']!,
@@ -944,7 +944,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                             color: AppColors.getPrimary(context),
                           ),
                         ),
-                        Text(targetLoc['flag'] ?? '🌍', style: const TextStyle(fontSize: 16)),
+                        Text(targetLoc['flag'] ?? 'ðŸŒ', style: const TextStyle(fontSize: 16)),
                         const SizedBox(width: 4),
                         Text(
                           targetLoc['city']!,
@@ -1083,10 +1083,10 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       decoration: BoxDecoration(
         color: isLight
             ? AppColors.surfaceElevatedLight
-            : Colors.white.withOpacity(0.04),
+            : Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isLight ? Colors.black.withOpacity(0.06) : AppColors.glassBorder,
+          color: isLight ? Colors.black.withValues(alpha: 0.06) : AppColors.glassBorder,
           width: 0.6,
         ),
       ),
@@ -1096,7 +1096,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
           Container(
             padding: const EdgeInsets.all(7),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.15),
+              color: iconColor.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, size: 16, color: iconColor),
@@ -1187,9 +1187,9 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: color.withOpacity(isLight ? 0.06 : 0.08),
+        color: color.withValues(alpha: isLight ? 0.06 : 0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.35), width: 0.8),
+        border: Border.all(color: color.withValues(alpha: 0.35), width: 0.8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1200,7 +1200,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
+                  color: color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -1373,3 +1373,4 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
     );
   }
 }
+

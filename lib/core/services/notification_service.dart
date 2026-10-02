@@ -35,7 +35,7 @@ class NotificationService {
 
     _scheduledTimers[id] = scheduledDate;
     debugPrint(
-      '⏰ [Scheduled Notification #$id] "$title" set for ${scheduledDate.toIso8601String()}',
+      'â° [Scheduled Notification #$id] "$title" set for ${scheduledDate.toIso8601String()}',
     );
   }
 
@@ -48,3 +48,4 @@ class NotificationService {
     return _scheduledTimers.containsKey(id);
   }
 }
+

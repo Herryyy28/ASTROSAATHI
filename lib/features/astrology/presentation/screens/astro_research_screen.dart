@@ -96,15 +96,15 @@ class AstroResearchScreen extends StatelessWidget {
                   children: [
                     GlassCard(
                       padding: const EdgeInsets.all(18),
-                      borderColor: AppColors.primary.withOpacity(0.4),
+                      borderColor: AppColors.primary.withValues(alpha: 0.4),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('RAW EPHEMERIS COORDINATES (ARC-SECONDS)', style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary)),
                           const SizedBox(height: 10),
-                          _buildCoordTile(context, 'Sun ☀️', '194° 22\' 18.42"', 'Declination: -05° 42\' 11"'),
-                          _buildCoordTile(context, 'Moon 🌙', '308° 45\' 02.19"', 'Declination: -12° 18\' 45"'),
-                          _buildCoordTile(context, 'Ascendant ⬆️', '194° 12\' 34.00"', 'Sidereal Time: 14h 22m 18s'),
+                          _buildCoordTile(context, 'Sun â˜€ï¸', '194Â° 22\' 18.42"', 'Declination: -05Â° 42\' 11"'),
+                          _buildCoordTile(context, 'Moon 🌙', '308Â° 45\' 02.19"', 'Declination: -12Â° 18\' 45"'),
+                          _buildCoordTile(context, 'Ascendant â¬†ï¸', '194Â° 12\' 34.00"', 'Sidereal Time: 14h 22m 18s'),
                         ],
                       ),
                     ),
@@ -149,3 +149,4 @@ class AstroResearchScreen extends StatelessWidget {
     );
   }
 }
+

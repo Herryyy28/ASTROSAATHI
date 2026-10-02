@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 
 enum EventCategory {
   business('Business', Icons.business_center_rounded, Color(0xFFD9901A)),
@@ -109,3 +109,4 @@ class UserReminder {
     );
   }
 }
+

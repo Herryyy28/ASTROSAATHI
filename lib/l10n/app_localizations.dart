@@ -35,6 +35,7 @@ class AppLocalizations {
         translationMap = guTranslations;
         break;
       case AppLanguage.english:
+      default:
         translationMap = enTranslations;
         break;
     }

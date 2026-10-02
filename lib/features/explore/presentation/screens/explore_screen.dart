@@ -448,10 +448,10 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                     decoration: BoxDecoration(
-                                      color: AppColors.primary.withOpacity(0.12),
+                                      color: AppColors.primary.withValues(alpha: 0.12),
                                       borderRadius: BorderRadius.circular(20),
                                       border: Border.all(
-                                        color: AppColors.primary.withOpacity(0.3),
+                                        color: AppColors.primary.withValues(alpha: 0.3),
                                         width: 0.8,
                                       ),
                                     ),
@@ -652,7 +652,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         child: Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary.withOpacity(0.18) : Colors.transparent,
+            color: isSelected ? AppColors.primary.withValues(alpha: 0.18) : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -830,7 +830,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
             child: GlassCard(
               borderRadius: 18,
               padding: EdgeInsets.zero,
-              borderColor: AppColors.primary.withOpacity(0.3),
+              borderColor: AppColors.primary.withValues(alpha: 0.3),
               child: Column(
                 children: [
                   // Folder Header Tile
@@ -974,7 +974,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     return GlassCard(
       borderRadius: 22,
       padding: const EdgeInsets.all(18),
-      borderColor: AppColors.primary.withOpacity(0.35),
+      borderColor: AppColors.primary.withValues(alpha: 0.35),
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const PanchangScreen()),
@@ -998,7 +998,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.2),
+                        color: AppColors.primary.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
@@ -1058,7 +1058,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
     return GlassCard(
       onTap: onTap,
       borderRadius: 18,
-      borderColor: isVip ? AppColors.primary.withOpacity(0.5) : gradient.colors.last.withOpacity(0.25),
+      borderColor: isVip ? AppColors.primary.withValues(alpha: 0.5) : gradient.colors.last.withValues(alpha: 0.25),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1079,7 +1079,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
               else
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.35) ??
+                  color: Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.35) ??
                       Colors.white30,
                   size: 11,
                 ),
@@ -1149,13 +1149,13 @@ class AnimatedVipBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: (isProfessional ? const Color(0xFF00E5FF) : const Color(0xFFE0A13A)).withOpacity(0.4),
+            color: (isProfessional ? const Color(0xFF00E5FF) : const Color(0xFFE0A13A)).withValues(alpha: 0.4),
             blurRadius: 6,
             spreadRadius: 0,
           ),
         ],
         border: Border.all(
-          color: Colors.white.withOpacity(0.7),
+          color: Colors.white.withValues(alpha: 0.7),
           width: 0.8,
         ),
       ),
@@ -1181,7 +1181,7 @@ class AnimatedVipBadge extends StatelessWidget {
       ),
     )
     .animate(onPlay: (controller) => controller.repeat(reverse: true))
-    .shimmer(duration: 2000.ms, color: Colors.white.withOpacity(0.6))
+    .shimmer(duration: 2000.ms, color: Colors.white.withValues(alpha: 0.6))
     .scale(
       begin: const Offset(0.97, 0.97),
       end: const Offset(1.03, 1.03),

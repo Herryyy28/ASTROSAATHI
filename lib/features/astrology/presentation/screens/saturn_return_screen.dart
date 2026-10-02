@@ -96,7 +96,7 @@ class SaturnReturnScreen extends StatelessWidget {
                   children: [
                     GlassCard(
                       padding: const EdgeInsets.all(18),
-                      borderColor: Colors.purpleAccent.withOpacity(0.4),
+                      borderColor: Colors.purpleAccent.withValues(alpha: 0.4),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -135,3 +135,4 @@ class SaturnReturnScreen extends StatelessWidget {
     );
   }
 }
+

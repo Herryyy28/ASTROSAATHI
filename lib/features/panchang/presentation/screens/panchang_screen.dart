@@ -119,7 +119,7 @@ class PanchangScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: isLight
                         ? AppColors.surfaceSecondaryLight
-                        : AppColors.surfaceHighlightDark.withOpacity(0.5),
+                        : AppColors.surfaceHighlightDark.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Row(
@@ -338,7 +338,7 @@ class PanchangScreen extends ConsumerWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: AppColors.secondary.withOpacity(0.1),
+                  color: AppColors.secondary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
@@ -436,7 +436,7 @@ class PanchangScreen extends ConsumerWidget {
                 height: 44,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.error.withOpacity(0.12),
+                  color: AppColors.error.withValues(alpha: 0.12),
                 ),
                 child: const Icon(Icons.warning_amber_rounded, color: AppColors.error, size: 22),
               ),

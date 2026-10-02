@@ -6,9 +6,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../../home/presentation/screens/home_screen.dart';
-import '../../../kundli/presentation/screens/kundli_screen.dart';
-import '../../../explore/presentation/screens/explore_screen.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
+import '../../../consult/presentation/screens/chat_with_astrologers_screen.dart';
+import '../../../matching/presentation/screens/matching_screen.dart';
 import '../../../profile/presentation/screens/profile_screen.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -25,33 +25,31 @@ class MainScreen extends ConsumerStatefulWidget {
 class _MainScreenState extends ConsumerState<MainScreen> {
   final List<Widget> _screens = const [
     HomeScreen(),
-    KundliScreen(),
-    ExploreScreen(),
     AstroBabaScreen(),
+    ChatWithAstrologersScreen(),
+    MatchingScreen(),
     ProfileScreen(),
   ];
 
   static const List<_NavItem> _navItems = [
     _NavItem(icon: Icons.home_outlined, activeIcon: Icons.home_rounded, label: 'Home'),
-    _NavItem(icon: Icons.auto_awesome_outlined, activeIcon: Icons.auto_awesome, label: 'Kundli'),
-    _NavItem(icon: Icons.explore_outlined, activeIcon: Icons.explore_rounded, label: 'Explore'),
-    _NavItem(icon: Icons.psychology_outlined, activeIcon: Icons.psychology_rounded, label: 'Astro AI'),
-    _NavItem(icon: Icons.person_outline_rounded, activeIcon: Icons.person_rounded, label: 'Profile'),
+    _NavItem(icon: Icons.auto_awesome_outlined, activeIcon: Icons.auto_awesome, label: 'AI Astro'),
+    _NavItem(icon: Icons.support_agent_outlined, activeIcon: Icons.support_agent_rounded, label: 'Consult'),
+    _NavItem(icon: Icons.favorite_outline_rounded, activeIcon: Icons.favorite_rounded, label: 'Matching'),
   ];
 
   String _getNavLabel(BuildContext context, int index) {
-    final l10n = AppLocalizations.of(context, ref);
     switch (index) {
       case 0:
-        return l10n.navHome;
+        return 'Home';
       case 1:
-        return l10n.navKundli;
+        return 'AI Astro';
       case 2:
-        return l10n.navExplore;
+        return 'Consult';
       case 3:
-        return l10n.navAstroAi;
+        return 'Matching';
       case 4:
-        return l10n.navProfile;
+        return 'Profile';
       default:
         return _navItems[index].label;
     }
@@ -121,7 +119,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget _buildSideRail(BuildContext context, bool isDesktop, double width, int currentIndex) {
     final isLight = Theme.of(context).brightness == Brightness.light;
     final railBgColor = isLight
-        ? AppColors.surfaceLight.withOpacity(0.94)
+        ? AppColors.surfaceLight.withValues(alpha: 0.94)
         : const Color(0x1A0F1219);
     final railBorderColor = isLight ? AppColors.borderLight : AppColors.glassBorder;
 
@@ -209,10 +207,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           vertical: 12,
         ),
         decoration: BoxDecoration(
-          color: isActive ? activeColor.withOpacity(0.12) : Colors.transparent,
+          color: isActive ? activeColor.withValues(alpha: 0.12) : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
           border: isActive
-              ? Border.all(color: activeColor.withOpacity(0.30), width: 0.8)
+              ? Border.all(color: activeColor.withValues(alpha: 0.30), width: 0.8)
               : null,
         ),
         child: Row(
@@ -248,8 +246,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget _buildBottomNav(BuildContext context, int currentIndex) {
     final isLight = Theme.of(context).brightness == Brightness.light;
     final navBgColor = isLight
-        ? AppColors.surfaceLight.withOpacity(0.96)
-        : AppColors.surfaceDark.withOpacity(0.96);
+        ? AppColors.surfaceLight.withValues(alpha: 0.96)
+        : AppColors.surfaceDark.withValues(alpha: 0.96);
     final navBorderColor = isLight ? AppColors.borderLight : AppColors.glassBorder;
     final shadowOpacity = isLight ? 0.10 : 0.40;
 
@@ -264,7 +262,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(shadowOpacity),
+            color: Colors.black.withValues(alpha: shadowOpacity),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -323,12 +321,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               height: 28,
               decoration: BoxDecoration(
                 color: isActive
-                    ? activeColor.withOpacity(0.15)
+                    ? activeColor.withValues(alpha: 0.15)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(16),
                 border: isActive
                     ? Border.all(
-                        color: activeColor.withOpacity(0.40),
+                        color: activeColor.withValues(alpha: 0.40),
                         width: 1.0,
                       )
                     : null,
@@ -379,3 +377,4 @@ class _NavItem {
     required this.label,
   });
 }
+

@@ -240,7 +240,7 @@ class HoroscopeScreen extends ConsumerWidget {
           child: Row(
             children: [
               Text(
-                AppColors.zodiacEmojis[sign] ?? '⭐',
+                AppColors.zodiacEmojis[sign] ?? 'â­',
                 style: const TextStyle(fontSize: 18),
               ),
               const SizedBox(width: 10),
@@ -266,7 +266,7 @@ class HoroscopeScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              AppColors.zodiacEmojis[currentSign] ?? '⭐',
+              AppColors.zodiacEmojis[currentSign] ?? 'â­',
               style: const TextStyle(fontSize: 18),
             ),
             const SizedBox(width: 6),
@@ -322,7 +322,7 @@ class _HoroscopeTabView extends ConsumerWidget {
                 Row(
                   children: [
                     Text(
-                      AppColors.zodiacEmojis[sign] ?? '⭐',
+                      AppColors.zodiacEmojis[sign] ?? 'â­',
                       style: const TextStyle(fontSize: 36),
                     ),
                     const SizedBox(width: 12),
@@ -432,7 +432,7 @@ class _HoroscopeTabView extends ConsumerWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: accentColor.withOpacity(0.12),
+                  color: accentColor.withValues(alpha: 0.12),
                 ),
                 child: Icon(icon, color: accentColor, size: 13),
               ),
@@ -471,3 +471,4 @@ class _HoroscopeTabView extends ConsumerWidget {
     );
   }
 }
+

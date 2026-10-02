@@ -63,7 +63,7 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
     await showDialog(
       context: context,
       barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.80),
+      barrierColor: Colors.black.withValues(alpha: 0.80),
       builder: (ctx) => BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
         child: AnimatedCosmicReminderModal(
@@ -89,9 +89,9 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
         : (isLight ? const Color(0xFFC58A1A) : Colors.orangeAccent);
 
     final primaryTextColor = isLight ? AppColors.textPrimaryLight : Colors.white;
-    final secondaryTextColor = isLight ? AppColors.textSecondaryLight : Colors.white.withOpacity(0.90);
+    final secondaryTextColor = isLight ? AppColors.textSecondaryLight : Colors.white.withValues(alpha: 0.90);
     final remedyTextColor = isLight ? AppColors.successLight : const Color(0xFF4ADE80);
-    final cardBorderColor = isLight ? scoreColor.withOpacity(0.5) : scoreColor.withOpacity(0.65);
+    final cardBorderColor = isLight ? scoreColor.withValues(alpha: 0.5) : scoreColor.withValues(alpha: 0.65);
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -113,12 +113,12 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
             border: Border.all(color: cardBorderColor, width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: scoreColor.withOpacity(isLight ? 0.18 : 0.35),
+                color: scoreColor.withValues(alpha: isLight ? 0.18 : 0.35),
                 blurRadius: 32,
                 spreadRadius: -4,
               ),
               BoxShadow(
-                color: Colors.black.withOpacity(isLight ? 0.12 : 0.85),
+                color: Colors.black.withValues(alpha: isLight ? 0.12 : 0.85),
                 blurRadius: 24,
                 offset: const Offset(0, 12),
               ),
@@ -137,8 +137,8 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
                     height: 76,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: scoreColor.withOpacity(isLight ? 0.12 : 0.15),
-                      border: Border.all(color: scoreColor.withOpacity(0.5), width: 1.5),
+                      color: scoreColor.withValues(alpha: isLight ? 0.12 : 0.15),
+                      border: Border.all(color: scoreColor.withValues(alpha: 0.5), width: 1.5),
                     ),
                   )
                       .animate(onPlay: (c) => c.repeat())
@@ -154,13 +154,13 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
                       gradient: LinearGradient(
                         colors: isLight
                             ? [const Color(0xFFFFF0D3), const Color(0xFFF1F2F4)]
-                            : [scoreColor.withOpacity(0.4), const Color(0xFF182132)],
+                            : [scoreColor.withValues(alpha: 0.4), const Color(0xFF182132)],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: scoreColor.withOpacity(isLight ? 0.3 : 0.6),
+                          color: scoreColor.withValues(alpha: isLight ? 0.3 : 0.6),
                           blurRadius: 22,
                           spreadRadius: 2,
                         ),
@@ -185,9 +185,9 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: scoreColor.withOpacity(isLight ? 0.15 : 0.2),
+                  color: scoreColor.withValues(alpha: isLight ? 0.15 : 0.2),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: scoreColor.withOpacity(0.6), width: 0.8),
+                  border: Border.all(color: scoreColor.withValues(alpha: 0.6), width: 0.8),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -244,7 +244,7 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: isLight ? Colors.black.withOpacity(0.05) : Colors.white.withOpacity(0.1),
+                      color: isLight ? Colors.black.withValues(alpha: 0.05) : Colors.white.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: isLight ? AppColors.borderLight : Colors.white24, width: 0.6),
                     ),
@@ -260,9 +260,9 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: isLight ? const Color(0xFFFFF0D3) : scoreColor.withOpacity(0.25),
+                      color: isLight ? const Color(0xFFFFF0D3) : scoreColor.withValues(alpha: 0.25),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: scoreColor.withOpacity(0.6), width: 0.8),
+                      border: Border.all(color: scoreColor.withValues(alpha: 0.6), width: 0.8),
                     ),
                     child: Text(
                       '★ $astroScore / 10 Score',
@@ -281,9 +281,9 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: isLight ? const Color(0xFFF8F9FA) : Colors.black.withOpacity(0.45),
+                  color: isLight ? const Color(0xFFF8F9FA) : Colors.black.withValues(alpha: 0.45),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: isLight ? AppColors.borderLight : Colors.white.withOpacity(0.12)),
+                  border: Border.all(color: isLight ? AppColors.borderLight : Colors.white.withValues(alpha: 0.12)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -346,7 +346,7 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
                     flex: 2,
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: isLight ? AppColors.borderLight : Colors.white.withOpacity(0.35)),
+                        side: BorderSide(color: isLight ? AppColors.borderLight : Colors.white.withValues(alpha: 0.35)),
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
@@ -357,7 +357,7 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
                         Navigator.pop(context);
                         CosmicNotification.show(
                           context,
-                          title: 'Snoozed ⏰',
+                          title: 'Snoozed â°',
                           message: 'Reminder snoozed for 15 minutes.',
                           icon: Icons.snooze_rounded,
                         );
@@ -418,4 +418,5 @@ class AnimatedCosmicReminderModal extends StatelessWidget {
     );
   }
 }
+
 

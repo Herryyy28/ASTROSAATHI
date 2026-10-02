@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
@@ -15,7 +15,7 @@ class AstroCommandCenterModal extends StatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.85),
+      barrierColor: Colors.black.withValues(alpha: 0.85),
       builder: (context) => const AstroCommandCenterModal(),
     );
   }
@@ -148,14 +148,14 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: isLight
-              ? AppColors.surfaceLight.withOpacity(0.96)
+              ? AppColors.surfaceLight.withValues(alpha: 0.96)
               : const Color(0xFF0D121F),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
           border: Border.all(color: AppColors.getGlassBorder(context), width: 1.2),
           boxShadow: [
             BoxShadow(
               color: isLight
-                  ? Colors.black.withOpacity(0.1)
+                  ? Colors.black.withValues(alpha: 0.1)
                   : const Color(0x60000000),
               blurRadius: 30,
               spreadRadius: 10,
@@ -274,7 +274,7 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                           child: Material(
                             color: isLight
                                 ? AppColors.getSurfaceSecondary(context)
-                                : Colors.white.withOpacity(0.04),
+                                : Colors.white.withValues(alpha: 0.04),
                             borderRadius: BorderRadius.circular(14),
                             child: InkWell(
                               onTap: () {
@@ -311,7 +311,7 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                       decoration: BoxDecoration(
-                                        color: AppColors.primary.withOpacity(0.15),
+                                        color: AppColors.primary.withValues(alpha: 0.15),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Text(
@@ -344,3 +344,4 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
     );
   }
 }
+

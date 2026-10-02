@@ -46,9 +46,9 @@ class EmptyStateWidget extends StatelessWidget {
                 height: 68,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: primaryColor.withOpacity(0.1),
+                  color: primaryColor.withValues(alpha: 0.1),
                   border: Border.all(
-                    color: primaryColor.withOpacity(0.25),
+                    color: primaryColor.withValues(alpha: 0.25),
                     width: 1.5,
                   ),
                 ),
@@ -120,3 +120,4 @@ class EmptyStateWidget extends StatelessWidget {
     );
   }
 }
+

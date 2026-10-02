@@ -11,7 +11,7 @@ class UpcomingEventsWidget extends StatelessWidget {
     final isLight = Theme.of(context).brightness == Brightness.light;
     final events = [
       {'days': 2, 'title': '🌙 Moon enters Mrigashira Nakshatra', 'type': 'Favorable'},
-      {'days': 6, 'title': '🪐 Saturn Retrograde Shadow Phase begins', 'type': 'Caution'},
+      {'days': 6, 'title': 'ðŸª Saturn Retrograde Shadow Phase begins', 'type': 'Caution'},
       {'days': 12, 'title': '💼 Jupiter Trine 10th House (Peak Career)', 'type': 'Favorable'},
       {'days': 20, 'title': '📿 Recommended Gemstone Fasting Period', 'type': 'Remedy'},
     ];
@@ -19,7 +19,7 @@ class UpcomingEventsWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4),
+        color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: AppColors.getBorder(context)),
       ),
@@ -99,3 +99,4 @@ class UpcomingEventsWidget extends StatelessWidget {
     );
   }
 }
+

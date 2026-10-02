@@ -21,7 +21,7 @@ class ShimmerLoader extends StatelessWidget {
     final surfaceColor = AppColors.getSurface(context);
     final elevatedColor = AppColors.getSurfaceElevated(context);
     final borderColor = AppColors.getBorder(context);
-    final shimmerColor = AppColors.getBorder(context).withOpacity(0.8);
+    final shimmerColor = AppColors.getBorder(context).withValues(alpha: 0.8);
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -125,3 +125,4 @@ class FullScreenShimmerLoader extends StatelessWidget {
     );
   }
 }
+

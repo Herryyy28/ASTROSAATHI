@@ -29,7 +29,13 @@ class LanguageSelectionModal extends ConsumerWidget {
     final languages = [
       AppLanguage.english,
       AppLanguage.hindi,
+      AppLanguage.tamil,
+      AppLanguage.kannada,
+      AppLanguage.malayalam,
       AppLanguage.gujarati,
+      AppLanguage.marathi,
+      AppLanguage.bengali,
+      AppLanguage.telugu,
     ];
 
     return BackdropFilter(
@@ -37,7 +43,7 @@ class LanguageSelectionModal extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: AppColors.getSurface(context).withOpacity(0.96),
+          color: AppColors.getSurface(context).withValues(alpha: 0.96),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
           border: Border(top: BorderSide(color: AppColors.getGlassBorder(context), width: 1)),
         ),
@@ -69,7 +75,7 @@ class LanguageSelectionModal extends ConsumerWidget {
                       shape: BoxShape.circle,
                       gradient: AppColors.goldGradient,
                     ),
-                    child: const Text('🌍', style: TextStyle(fontSize: 18)),
+                    child: const Text('ðŸŒ', style: TextStyle(fontSize: 18)),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -120,7 +126,7 @@ class LanguageSelectionModal extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? AppColors.getPrimary(context).withOpacity(0.14)
+                            ? AppColors.getPrimary(context).withValues(alpha: 0.14)
                             : AppColors.getSurfaceSecondary(context),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
@@ -188,3 +194,4 @@ class LanguageSelectionModal extends ConsumerWidget {
     );
   }
 }
+

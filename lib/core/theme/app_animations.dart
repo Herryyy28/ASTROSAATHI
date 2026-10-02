@@ -71,3 +71,4 @@ extension AstroAnimations on Widget {
     );
   }
 }
+

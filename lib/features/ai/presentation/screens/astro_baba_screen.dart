@@ -344,13 +344,13 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                       const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                   decoration: BoxDecoration(
                     color: isPremium
-                        ? AppColors.primary.withOpacity(0.18)
-                        : AppColors.primary.withOpacity(0.12),
+                        ? AppColors.primary.withValues(alpha: 0.18)
+                        : AppColors.primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: isPremium
                           ? AppColors.primary
-                          : AppColors.primary.withOpacity(0.4),
+                          : AppColors.primary.withValues(alpha: 0.4),
                     ),
                   ),
                   child: Text(
@@ -423,10 +423,10 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.secondary.withOpacity(0.1),
+                color: AppColors.secondary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppColors.secondary.withOpacity(0.25),
+                  color: AppColors.secondary.withValues(alpha: 0.25),
                   width: 0.8,
                 ),
               ),
@@ -502,9 +502,9 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                           color: isUser
-                              ? AppColors.primary.withOpacity(0.15)
+                              ? AppColors.primary.withValues(alpha: 0.15)
                               : message.isError
-                                  ? AppColors.error.withOpacity(0.10)
+                                  ? AppColors.error.withValues(alpha: 0.10)
                                   : AppColors.getGlassSurface(context),
                           borderRadius:
                               BorderRadius.circular(18).copyWith(
@@ -517,9 +517,9 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                           ),
                           border: Border.all(
                             color: isUser
-                                ? AppColors.primary.withOpacity(0.3)
+                                ? AppColors.primary.withValues(alpha: 0.3)
                                 : message.isError
-                                    ? AppColors.error.withOpacity(0.3)
+                                    ? AppColors.error.withValues(alpha: 0.3)
                                     : AppColors.getGlassBorder(context),
                             width: 0.5,
                           ),
@@ -567,11 +567,11 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: AppColors.error.withOpacity(0.12),
+                                    color: AppColors.error.withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(10),
                                     border: Border.all(
                                         color:
-                                            AppColors.error.withOpacity(0.4),
+                                            AppColors.error.withValues(alpha: 0.4),
                                         width: 0.8),
                                   ),
                                   child: Row(
@@ -661,11 +661,11 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                                     horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
                                   color:
-                                      AppColors.primary.withOpacity(0.12),
+                                      AppColors.primary.withValues(alpha: 0.12),
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color:
-                                        AppColors.primary.withOpacity(0.3),
+                                        AppColors.primary.withValues(alpha: 0.3),
                                     width: 0.5,
                                   ),
                                 ),
@@ -795,11 +795,11 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                     horizontal: 14, vertical: 8),
                 decoration: BoxDecoration(
                   color:
-                      AppColors.getPrimary(context).withOpacity(0.12),
+                      AppColors.getPrimary(context).withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(AppRadius.pill),
                   border: Border.all(
                     color:
-                        AppColors.getPrimary(context).withOpacity(0.35),
+                        AppColors.getPrimary(context).withValues(alpha: 0.35),
                     width: 0.8,
                   ),
                 ),
@@ -827,7 +827,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
         child: Container(
           padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
           decoration: BoxDecoration(
-            color: AppColors.getSurface(context).withOpacity(0.92),
+            color: AppColors.getSurface(context).withValues(alpha: 0.92),
             border: Border(
               top: BorderSide(
                   color: AppColors.getBorder(context), width: 0.8),
@@ -908,7 +908,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                       borderRadius: BorderRadius.circular(24),
                       borderSide: BorderSide(
                         color: AppColors.getBorder(context)
-                            .withOpacity(0.4),
+                            .withValues(alpha: 0.4),
                         width: 0.8,
                       ),
                     ),
@@ -965,7 +965,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
       decoration: BoxDecoration(
-        color: AppColors.getSurface(context).withOpacity(0.92),
+        color: AppColors.getSurface(context).withValues(alpha: 0.92),
         border: Border(
           top: BorderSide(color: AppColors.getBorder(context), width: 0.8),
         ),
@@ -976,12 +976,12 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
           color: primarySoft,
           borderRadius: BorderRadius.circular(AppRadius.xl2),
           border: Border.all(
-            color: primaryColor.withOpacity(0.45),
+            color: primaryColor.withValues(alpha: 0.45),
             width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: primaryColor.withOpacity(0.10),
+              color: primaryColor.withValues(alpha: 0.10),
               blurRadius: 16,
               spreadRadius: -2,
             ),
@@ -996,7 +996,7 @@ class _AstroBabaScreenState extends ConsumerState<AstroBabaScreen> {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: primaryColor.withOpacity(0.15),
+                    color: primaryColor.withValues(alpha: 0.15),
                   ),
                   child: const Text('👑',
                       style: TextStyle(fontSize: 16)),

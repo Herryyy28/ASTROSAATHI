@@ -35,7 +35,7 @@ class ExplainChartModal extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.75),
+      barrierColor: Colors.black.withValues(alpha: 0.75),
       builder: (context) => ExplainChartModal(
         term: term,
         title: title,
@@ -60,7 +60,7 @@ class ExplainChartModal extends StatelessWidget {
             maxHeight: MediaQuery.of(context).size.height * 0.85,
           ),
           decoration: BoxDecoration(
-            color: isLight ? AppColors.surfaceLight.withOpacity(0.96) : const Color(0xF20F141C),
+            color: isLight ? AppColors.surfaceLight.withValues(alpha: 0.96) : const Color(0xF20F141C),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
             border: Border.all(color: AppColors.getGlassBorder(context), width: 1.0),
           ),
@@ -91,9 +91,9 @@ class ExplainChartModal extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.getPrimary(context).withOpacity(0.15),
+                        color: AppColors.getPrimary(context).withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.4)),
+                        border: Border.all(color: AppColors.getPrimary(context).withValues(alpha: 0.4)),
                       ),
                       child: Row(
                         children: [
@@ -142,7 +142,7 @@ class ExplainChartModal extends StatelessWidget {
                 // 💡 Beginner Simple Explanation Card
                 GlassCard(
                   padding: const EdgeInsets.all(16),
-                  borderColor: AppColors.getPrimary(context).withOpacity(0.3),
+                  borderColor: AppColors.getPrimary(context).withValues(alpha: 0.3),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -214,9 +214,9 @@ class ExplainChartModal extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: AppColors.success.withOpacity(0.12),
+                    color: AppColors.success.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.success.withOpacity(0.3)),
+                    border: Border.all(color: AppColors.success.withValues(alpha: 0.3)),
                   ),
                   child: Row(
                     children: [
@@ -241,9 +241,9 @@ class ExplainChartModal extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: AppColors.warning.withOpacity(0.12),
+                      color: AppColors.warning.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+                      border: Border.all(color: AppColors.warning.withValues(alpha: 0.3)),
                     ),
                     child: Row(
                       children: [
@@ -293,3 +293,4 @@ class ExplainChartModal extends StatelessWidget {
     );
   }
 }
+

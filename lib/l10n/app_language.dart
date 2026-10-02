@@ -4,7 +4,13 @@ import 'package:flutter/material.dart';
 enum AppLanguage {
   english,
   hindi,
+  tamil,
+  kannada,
+  malayalam,
   gujarati,
+  marathi,
+  bengali,
+  telugu,
 }
 
 extension AppLanguageExtension on AppLanguage {
@@ -15,8 +21,20 @@ extension AppLanguageExtension on AppLanguage {
         return 'en';
       case AppLanguage.hindi:
         return 'hi';
+      case AppLanguage.tamil:
+        return 'ta';
+      case AppLanguage.kannada:
+        return 'kn';
+      case AppLanguage.malayalam:
+        return 'ml';
       case AppLanguage.gujarati:
         return 'gu';
+      case AppLanguage.marathi:
+        return 'mr';
+      case AppLanguage.bengali:
+        return 'bn';
+      case AppLanguage.telugu:
+        return 'te';
     }
   }
 
@@ -30,8 +48,20 @@ extension AppLanguageExtension on AppLanguage {
         return 'English';
       case AppLanguage.hindi:
         return 'Hindi';
+      case AppLanguage.tamil:
+        return 'Tamil';
+      case AppLanguage.kannada:
+        return 'Kannada';
+      case AppLanguage.malayalam:
+        return 'Malayalam';
       case AppLanguage.gujarati:
         return 'Gujarati';
+      case AppLanguage.marathi:
+        return 'Marathi';
+      case AppLanguage.bengali:
+        return 'Bengali';
+      case AppLanguage.telugu:
+        return 'Telugu';
     }
   }
 
@@ -42,8 +72,20 @@ extension AppLanguageExtension on AppLanguage {
         return 'English';
       case AppLanguage.hindi:
         return 'हिन्दी';
+      case AppLanguage.tamil:
+        return 'தமிழ்';
+      case AppLanguage.kannada:
+        return 'ಕನ್ನಡ';
+      case AppLanguage.malayalam:
+        return 'മലയാളം';
       case AppLanguage.gujarati:
         return 'ગુજરાતી';
+      case AppLanguage.marathi:
+        return 'मराठी';
+      case AppLanguage.bengali:
+        return 'বাংলা';
+      case AppLanguage.telugu:
+        return 'తెలుగు';
     }
   }
 
@@ -53,8 +95,13 @@ extension AppLanguageExtension on AppLanguage {
       case AppLanguage.english:
         return '🇬🇧';
       case AppLanguage.hindi:
-        return '🇮🇳';
+      case AppLanguage.tamil:
+      case AppLanguage.kannada:
+      case AppLanguage.malayalam:
       case AppLanguage.gujarati:
+      case AppLanguage.marathi:
+      case AppLanguage.bengali:
+      case AppLanguage.telugu:
         return '🇮🇳';
     }
   }
@@ -67,8 +114,20 @@ extension AppLanguageExtension on AppLanguage {
     switch (code.toLowerCase().trim()) {
       case 'hi':
         return AppLanguage.hindi;
+      case 'ta':
+        return AppLanguage.tamil;
+      case 'kn':
+        return AppLanguage.kannada;
+      case 'ml':
+        return AppLanguage.malayalam;
       case 'gu':
         return AppLanguage.gujarati;
+      case 'mr':
+        return AppLanguage.marathi;
+      case 'bn':
+        return AppLanguage.bengali;
+      case 'te':
+        return AppLanguage.telugu;
       case 'en':
       default:
         return AppLanguage.english;

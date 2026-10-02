@@ -138,7 +138,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
     final sign = planetData?['sign'] as String? ?? planetData?['rashi'] as String?;
     final house = houseNumber ?? (planetData?['house'] as num?)?.toInt();
     final degree = planetData?['degree'] != null
-        ? '${(planetData!['degree'] as num).toStringAsFixed(1)}°'
+        ? '${(planetData!['degree'] as num).toStringAsFixed(1)}Â°'
         : null;
     final nakshatra = planetData?['nakshatra'] as String?;
     final pada = planetData?['pada']?.toString();
@@ -159,7 +159,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
         final isLight = AppColors.isLight(ctx);
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.getSurface(ctx).withOpacity(0.96),
+            color: AppColors.getSurface(ctx).withValues(alpha: 0.96),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
             border: Border(
               top: BorderSide(color: AppColors.getGlassBorder(ctx), width: 1.0),
@@ -184,7 +184,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                     width: 38,
                     height: 4.5,
                     decoration: BoxDecoration(
-                      color: AppColors.getTextMuted(ctx).withOpacity(0.3),
+                      color: AppColors.getTextMuted(ctx).withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -202,8 +202,8 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: AppColors.primary.withOpacity(0.15),
-                              border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                              color: AppColors.primary.withValues(alpha: 0.15),
+                              border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                             ),
                             child: const Icon(
                               Icons.auto_awesome_rounded,
@@ -280,9 +280,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.warning.withOpacity(0.15),
+                          color: AppColors.warning.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.warning.withOpacity(0.4)),
+                          border: Border.all(color: AppColors.warning.withValues(alpha: 0.4)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -304,9 +304,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.error.withOpacity(0.15),
+                          color: AppColors.error.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.error.withOpacity(0.4)),
+                          border: Border.all(color: AppColors.error.withValues(alpha: 0.4)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -328,9 +328,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.15),
+                          color: AppColors.primary.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                         ),
                         child: Text(
                           dignity,
@@ -361,9 +361,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.08),
+                      color: AppColors.primary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.25)),
+                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
                     ),
                     child: Text(
                       lordship,
@@ -453,7 +453,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
         final isLight = AppColors.isLight(ctx);
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.getSurface(ctx).withOpacity(0.96),
+            color: AppColors.getSurface(ctx).withValues(alpha: 0.96),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
             border: Border(
               top: BorderSide(color: AppColors.getGlassBorder(ctx), width: 1.0),
@@ -478,7 +478,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                     width: 38,
                     height: 4.5,
                     decoration: BoxDecoration(
-                      color: AppColors.getTextMuted(ctx).withOpacity(0.3),
+                      color: AppColors.getTextMuted(ctx).withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -569,9 +569,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                     children: planets.map((p) {
                       return ActionChip(
                         avatar: const Icon(Icons.info_outline_rounded, size: 14, color: AppColors.primary),
-                        backgroundColor: AppColors.primary.withOpacity(0.15),
+                        backgroundColor: AppColors.primary.withValues(alpha: 0.15),
                         side: BorderSide(
-                          color: AppColors.primary.withOpacity(0.4),
+                          color: AppColors.primary.withValues(alpha: 0.4),
                         ),
                         label: Text(
                           p,
@@ -605,9 +605,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.06),
+                      color: AppColors.primary.withValues(alpha: 0.06),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
                     ),
                     child: Row(
                       children: [
@@ -964,9 +964,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.12),
+                            color: AppColors.primary.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -996,9 +996,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.08),
+                            color: AppColors.primary.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -1105,7 +1105,7 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                   .animate(onPlay: (c) => c.repeat(reverse: true))
                   .shimmer(
                     duration: 3000.ms,
-                    color: AppColors.primaryLight.withOpacity(0.15),
+                    color: AppColors.primaryLight.withValues(alpha: 0.15),
                   ),
               const SizedBox(height: 16),
               const DashaTimelineWidget(),
@@ -1142,9 +1142,9 @@ class _InfoChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.12),
+        color: AppColors.primary.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withOpacity(0.35), width: 1.0),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.35), width: 1.0),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1177,3 +1177,4 @@ class _InfoChip extends StatelessWidget {
     );
   }
 }
+

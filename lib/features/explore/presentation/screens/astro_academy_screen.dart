@@ -63,7 +63,7 @@ class _AstroAcademyScreenState extends State<AstroAcademyScreen> {
       category: 'Vedic Depth',
       icon: Icons.star_border_rounded,
       simpleExplanation: 'Vedic astrology divides the zodiac into 27 Star Constellations (Nakshatras). They reveal deep personality nuances, innate talents, and life themes.',
-      technicalDetail: 'Each Nakshatra spans 13°20\' and is divided into 4 Padas (quarters). Your birth Nakshatra determines your starting Mahadasha.',
+      technicalDetail: 'Each Nakshatra spans 13Â°20\' and is divided into 4 Padas (quarters). Your birth Nakshatra determines your starting Mahadasha.',
       keyTakeaway: 'Nakshatras explain why two people of the same Moon sign behave differently.',
     ),
     AcademyTopic(
@@ -226,7 +226,7 @@ class _AstroAcademyScreenState extends State<AstroAcademyScreen> {
                             Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: AppColors.getPrimary(context).withOpacity(0.15),
+                                color: AppColors.getPrimary(context).withValues(alpha: 0.15),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(topic.icon, color: AppColors.getPrimary(context), size: 20),
@@ -278,3 +278,4 @@ class _AstroAcademyScreenState extends State<AstroAcademyScreen> {
     );
   }
 }
+

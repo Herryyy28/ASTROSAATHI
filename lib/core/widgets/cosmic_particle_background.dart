@@ -121,11 +121,11 @@ class _ParticlePainter extends CustomPainter {
       final double finalOpacity = (particle.opacity * pulseOpacity).clamp(0.1, 0.85);
 
       final auraPaint = Paint()
-        ..color = particle.color.withOpacity(finalOpacity * 0.25)
+        ..color = particle.color.withValues(alpha: finalOpacity * 0.25)
         ..style = PaintingStyle.fill;
 
       final corePaint = Paint()
-        ..color = particle.color.withOpacity(finalOpacity)
+        ..color = particle.color.withValues(alpha: finalOpacity)
         ..style = PaintingStyle.fill;
 
       final centerOffset = Offset(posX, posY);
@@ -138,3 +138,4 @@ class _ParticlePainter extends CustomPainter {
   bool shouldRepaint(covariant _ParticlePainter oldDelegate) =>
       oldDelegate.progress != progress;
 }
+

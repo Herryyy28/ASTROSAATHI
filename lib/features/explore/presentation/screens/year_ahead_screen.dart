@@ -171,7 +171,7 @@ class _YearAheadScreenState extends State<YearAheadScreen> {
                       : [const Color(0xFF2B220B), const Color(0xFF161205)],
                 ),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: accentGold.withOpacity(0.5)),
+                border: Border.all(color: accentGold.withValues(alpha: 0.5)),
               ),
               child: Row(
                 children: [
@@ -179,7 +179,7 @@ class _YearAheadScreenState extends State<YearAheadScreen> {
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: accentGold.withOpacity(0.2),
+                      color: accentGold.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: Center(
@@ -284,7 +284,7 @@ class _YearAheadScreenState extends State<YearAheadScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: accentGold.withOpacity(0.15),
+                          color: accentGold.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -385,3 +385,4 @@ class _YearAheadScreenState extends State<YearAheadScreen> {
     );
   }
 }
+

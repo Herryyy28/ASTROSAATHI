@@ -326,9 +326,9 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.15),
+                    color: AppColors.primary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                   ),
                   child: Text(
                     item['category']!.toUpperCase(),
@@ -356,7 +356,7 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
               style: GoogleFonts.inter(
                 fontSize: 13.5,
                 height: 1.5,
-                color: AppColors.getTextPrimary(context).withOpacity(0.9),
+                color: AppColors.getTextPrimary(context).withValues(alpha: 0.9),
               ),
             ),
             if (item['ruler'] != null || item['gemstone'] != null || item['mantra'] != null) ...[
@@ -532,7 +532,7 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                               color: AppColors.getSurface(context),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: isFeature ? AppColors.primary.withOpacity(0.5) : AppColors.getBorder(context),
+                                color: isFeature ? AppColors.primary.withValues(alpha: 0.5) : AppColors.getBorder(context),
                                 width: 0.8,
                               ),
                             ),
@@ -560,10 +560,10 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                                           Container(
                                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                             decoration: BoxDecoration(
-                                              color: (isFeature ? AppColors.primary : Colors.grey).withOpacity(0.14),
+                                              color: (isFeature ? AppColors.primary : Colors.grey).withValues(alpha: 0.14),
                                               borderRadius: BorderRadius.circular(8),
                                               border: Border.all(
-                                                color: (isFeature ? AppColors.primary : Colors.grey).withOpacity(0.3),
+                                                color: (isFeature ? AppColors.primary : Colors.grey).withValues(alpha: 0.3),
                                               ),
                                             ),
                                             child: Text(
@@ -608,3 +608,4 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     );
   }
 }
+

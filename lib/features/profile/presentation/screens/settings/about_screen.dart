@@ -169,7 +169,7 @@ class AboutScreen extends StatelessWidget {
             const SizedBox(height: 32),
             Center(
               child: Text(
-                'Made with ❤️ & 🌌',
+                'Made with â¤ï¸ & 🌌',
                 style: GoogleFonts.inter(
                   fontSize: 12,
                   color: AppColors.getTextMuted(context),
@@ -208,3 +208,4 @@ class AboutScreen extends StatelessWidget {
     );
   }
 }
+

@@ -1,4 +1,4 @@
-import 'dart:math';
+﻿import 'dart:math';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -23,7 +23,7 @@ class GunaRadarPainter extends CustomPainter {
       ..strokeWidth = 1.0;
 
     final axisPaint = Paint()
-      ..color = AppColors.glassBorder.withOpacity(0.5)
+      ..color = AppColors.glassBorder.withValues(alpha: 0.5)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
 
@@ -92,7 +92,7 @@ class GunaRadarPainter extends CustomPainter {
 
     // Fill score area with glow gradient
     final fillPaint = Paint()
-      ..color = AppColors.primary.withOpacity(0.25)
+      ..color = AppColors.primary.withValues(alpha: 0.25)
       ..style = PaintingStyle.fill;
 
     final borderPaint = Paint()
@@ -107,3 +107,4 @@ class GunaRadarPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant GunaRadarPainter oldDelegate) => true;
 }
+

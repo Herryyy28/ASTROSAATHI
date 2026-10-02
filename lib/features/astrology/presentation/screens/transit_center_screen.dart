@@ -77,7 +77,7 @@ class TransitCenterScreen extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    // 🪐 Sade Sati Tracker Banner Card
+                    // ðŸª Sade Sati Tracker Banner Card
                     _buildSadeSatiCard(context, 'Aquarius (Kumbha)'),
                     const SizedBox(height: 20),
 
@@ -97,7 +97,7 @@ class TransitCenterScreen extends ConsumerWidget {
                     _buildTransitItem(
                       context,
                       planet: 'Jupiter (Guru)',
-                      symbol: '♃',
+                      symbol: 'â™ƒ',
                       transitSign: 'Taurus (Vrishabha)',
                       houseImpact: '11th House of Wealth & Network Gains',
                       status: 'Highly Benefic',
@@ -110,7 +110,7 @@ class TransitCenterScreen extends ConsumerWidget {
                     _buildTransitItem(
                       context,
                       planet: 'Saturn (Shani)',
-                      symbol: '♄',
+                      symbol: 'â™„',
                       transitSign: 'Aquarius (Kumbha)',
                       houseImpact: '10th House of Career & Karma Axis',
                       status: 'Disciplined Growth',
@@ -123,7 +123,7 @@ class TransitCenterScreen extends ConsumerWidget {
                     _buildTransitItem(
                       context,
                       planet: 'Rahu (North Node)',
-                      symbol: '☊',
+                      symbol: 'â˜Š',
                       transitSign: 'Pisces (Meena)',
                       houseImpact: '9th House of Higher Learning & Travel',
                       status: 'Transformative',
@@ -136,7 +136,7 @@ class TransitCenterScreen extends ConsumerWidget {
                     _buildTransitItem(
                       context,
                       planet: 'Ketu (South Node)',
-                      symbol: '☋',
+                      symbol: 'â˜‹',
                       transitSign: 'Virgo (Kanya)',
                       houseImpact: '3rd House of Courage & Skill Creation',
                       status: 'Introspective',
@@ -167,7 +167,7 @@ class TransitCenterScreen extends ConsumerWidget {
 
     return GlassCard(
       padding: const EdgeInsets.all(18),
-      borderColor: isSadeSatiActive ? AppColors.warning.withOpacity(0.5) : AppColors.success.withOpacity(0.5),
+      borderColor: isSadeSatiActive ? AppColors.warning.withValues(alpha: 0.5) : AppColors.success.withValues(alpha: 0.5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -180,7 +180,7 @@ class TransitCenterScreen extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: (isSadeSatiActive ? AppColors.warning : AppColors.success).withOpacity(0.18),
+                        color: (isSadeSatiActive ? AppColors.warning : AppColors.success).withValues(alpha: 0.18),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -294,7 +294,7 @@ class TransitCenterScreen extends ConsumerWidget {
                       height: 36,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: statusColor.withOpacity(0.18),
+                        color: statusColor.withValues(alpha: 0.18),
                       ),
                       child: Center(
                         child: Text(
@@ -337,9 +337,9 @@ class TransitCenterScreen extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: statusColor.withOpacity(0.15),
+                  color: statusColor.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: statusColor.withOpacity(0.4)),
+                  border: Border.all(color: statusColor.withValues(alpha: 0.4)),
                 ),
                 child: Text(
                   status,
@@ -400,3 +400,4 @@ class TransitCenterScreen extends ConsumerWidget {
     );
   }
 }
+

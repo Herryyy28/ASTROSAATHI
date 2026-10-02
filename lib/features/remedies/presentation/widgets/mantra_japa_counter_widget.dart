@@ -72,7 +72,7 @@ class _MantraJapaCounterWidgetState extends ConsumerState<MantraJapaCounterWidge
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4),
+        color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(32),
         border: Border.all(color: AppColors.getGlassBorder(context)),
       ),
@@ -83,7 +83,7 @@ class _MantraJapaCounterWidgetState extends ConsumerState<MantraJapaCounterWidge
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.15),
+                  color: AppColors.primary.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.auto_awesome_rounded, color: AppColors.primary, size: 20),
@@ -256,3 +256,4 @@ class _BeadPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _BeadPainter oldDelegate) => true;
 }
+

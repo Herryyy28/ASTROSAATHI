@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -183,7 +183,7 @@ class _ChartComparisonScreenState extends ConsumerState<ChartComparisonScreen> {
                               margin: const EdgeInsets.only(right: 8),
                               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                               decoration: BoxDecoration(
-                                color: isSel ? type.color.withOpacity(0.2) : AppColors.getSurfaceSecondary(context),
+                                color: isSel ? type.color.withValues(alpha: 0.2) : AppColors.getSurfaceSecondary(context),
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
                                   color: isSel ? type.color : AppColors.getGlassBorder(context),
@@ -456,7 +456,7 @@ class _ChartComparisonScreenState extends ConsumerState<ChartComparisonScreen> {
   }) {
     return GlassCard(
       padding: const EdgeInsets.all(20),
-      borderColor: _selectedType.color.withOpacity(0.5),
+      borderColor: _selectedType.color.withValues(alpha: 0.5),
       child: Row(
         children: [
           Container(
@@ -587,3 +587,4 @@ class _ChartComparisonScreenState extends ConsumerState<ChartComparisonScreen> {
     );
   }
 }
+

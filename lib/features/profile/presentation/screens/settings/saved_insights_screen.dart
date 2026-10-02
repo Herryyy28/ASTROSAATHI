@@ -41,3 +41,4 @@ class SavedInsightsScreen extends StatelessWidget {
     );
   }
 }
+

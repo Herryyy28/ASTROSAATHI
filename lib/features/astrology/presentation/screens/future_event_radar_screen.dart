@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/glass_card.dart';
@@ -172,7 +172,7 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                         selectedColor: AppColors.primary,
                         backgroundColor: isLight
                             ? AppColors.getSurfaceSecondary(context)
-                            : Colors.white.withOpacity(0.06),
+                            : Colors.white.withValues(alpha: 0.06),
                         side: BorderSide(
                           color: isSelected
                               ? AppColors.primary
@@ -201,7 +201,7 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                       padding: const EdgeInsets.only(bottom: 12),
                       child: GlassCard(
                         padding: const EdgeInsets.all(16),
-                        borderColor: displayAccentColor.withOpacity(0.4),
+                        borderColor: displayAccentColor.withValues(alpha: 0.4),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -210,7 +210,7 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: displayAccentColor.withOpacity(0.18),
+                                    color: displayAccentColor.withValues(alpha: 0.18),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(item['icon'] as IconData, size: 16, color: displayAccentColor),
@@ -255,7 +255,7 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                   child: OutlinedButton.icon(
                                     style: OutlinedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(vertical: 8),
-                                      side: BorderSide(color: displayAccentColor.withOpacity(0.6)),
+                                      side: BorderSide(color: displayAccentColor.withValues(alpha: 0.6)),
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                     ),
                                     icon: Icon(Icons.event_note_rounded, size: 14, color: displayAccentColor),
@@ -272,7 +272,7 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: isLight
                                           ? AppColors.getSurfaceSecondary(context)
-                                          : displayAccentColor.withOpacity(0.2),
+                                          : displayAccentColor.withValues(alpha: 0.2),
                                       foregroundColor: isLight
                                           ? AppColors.getTextPrimary(context)
                                           : Colors.white,
@@ -280,7 +280,7 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                       padding: const EdgeInsets.symmetric(vertical: 8),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
-                                        side: BorderSide(color: displayAccentColor.withOpacity(0.6)),
+                                        side: BorderSide(color: displayAccentColor.withValues(alpha: 0.6)),
                                       ),
                                     ),
                                     icon: Icon(Icons.smart_toy_rounded, size: 14, color: displayAccentColor),
@@ -320,3 +320,4 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
     );
   }
 }
+

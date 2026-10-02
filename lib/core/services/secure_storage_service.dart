@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSessionData {
@@ -222,3 +222,4 @@ class SecureStorageService {
     await prefs.setString(_logsKey, jsonEncode(updated.map((l) => l.toJson()).toList()));
   }
 }
+

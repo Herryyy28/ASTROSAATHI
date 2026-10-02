@@ -243,7 +243,7 @@ class VedicChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final glowPaint = Paint()
-      ..color = lineColor.withOpacity(0.18)
+      ..color = lineColor.withValues(alpha: 0.18)
       ..strokeWidth = 3.0
       ..style = PaintingStyle.stroke;
 
@@ -254,7 +254,7 @@ class VedicChartPainter extends CustomPainter {
     // ── Selected House Highlight ─────────────────────────────
     if (selectedHouse != null && selectedHouse! >= 1 && selectedHouse! <= 12) {
       final highlightFill = Paint()
-        ..color = lineColor.withOpacity(0.18)
+        ..color = lineColor.withValues(alpha: 0.18)
         ..style = PaintingStyle.fill;
       final highlightStroke = Paint()
         ..color = lineColor
@@ -325,7 +325,7 @@ class VedicChartPainter extends CustomPainter {
       textPainter.text = TextSpan(
         text: 'SOUTH INDIAN\nKUNDLI',
         style: TextStyle(
-          color: lineColor.withOpacity(0.4),
+          color: lineColor.withValues(alpha: 0.4),
           fontSize: 10.0,
           fontWeight: FontWeight.bold,
           letterSpacing: 1.2,
@@ -364,7 +364,7 @@ class VedicChartPainter extends CustomPainter {
         textPainter.text = TextSpan(
           text: headerText,
           style: TextStyle(
-            color: isLagna ? lineColor : lineColor.withOpacity(0.65),
+            color: isLagna ? lineColor : lineColor.withValues(alpha: 0.65),
             fontSize: isLagna ? 8.5 : 7.5,
             fontWeight: isLagna ? FontWeight.bold : FontWeight.w500,
           ),
@@ -428,7 +428,7 @@ class VedicChartPainter extends CustomPainter {
         textPainter.text = TextSpan(
           text: '$signNumber',
           style: TextStyle(
-            color: isLagnaHouse ? lineColor : lineColor.withOpacity(0.4),
+            color: isLagnaHouse ? lineColor : lineColor.withValues(alpha: 0.4),
             fontSize: isLagnaHouse ? 10.0 : 8.5,
             fontWeight: isLagnaHouse ? FontWeight.bold : FontWeight.w600,
           ),
@@ -480,7 +480,7 @@ class VedicChartPainter extends CustomPainter {
           ..strokeWidth = 2.0
           ..style = PaintingStyle.stroke;
         final ringGlow = Paint()
-          ..color = lineColor.withOpacity(0.3)
+          ..color = lineColor.withValues(alpha: 0.3)
           ..style = PaintingStyle.fill;
 
         canvas.drawCircle(center, 15.0, ringGlow);
@@ -498,3 +498,4 @@ class VedicChartPainter extends CustomPainter {
       oldDelegate.selectedHouse != selectedHouse ||
       oldDelegate.selectedPlanet != selectedPlanet;
 }
+

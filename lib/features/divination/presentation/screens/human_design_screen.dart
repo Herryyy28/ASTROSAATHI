@@ -197,9 +197,9 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: Colors.amberAccent.withOpacity(0.2),
+                                  color: Colors.amberAccent.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: Colors.amberAccent.withOpacity(0.5)),
+                                  border: Border.all(color: Colors.amberAccent.withValues(alpha: 0.5)),
                                 ),
                                 child: Text(
                                   'EDUCATIONAL',
@@ -231,9 +231,9 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.08),
+                  color: AppColors.primary.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.primary.withOpacity(0.25)),
+                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
                 ),
                 child: Row(
                   children: [
@@ -300,7 +300,7 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                     // Main Archetype Card
                     GlassCard(
                       padding: const EdgeInsets.all(18),
-                      borderColor: currentAccent.withOpacity(0.4),
+                      borderColor: currentAccent.withValues(alpha: 0.4),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -319,7 +319,7 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: currentAccent.withOpacity(0.15),
+                                  color: currentAccent.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
@@ -355,7 +355,7 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                             style: GoogleFonts.inter(
                               fontSize: 12,
                               height: 1.45,
-                              color: AppColors.getTextPrimary(context).withOpacity(0.9),
+                              color: AppColors.getTextPrimary(context).withValues(alpha: 0.9),
                             ),
                           ),
                           Divider(color: AppColors.getDivider(context), height: 24),
@@ -391,7 +391,7 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                           color: AppColors.getSurfaceSecondary(context),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: isDefined ? currentAccent.withOpacity(0.4) : AppColors.getBorder(context),
+                            color: isDefined ? currentAccent.withValues(alpha: 0.4) : AppColors.getBorder(context),
                           ),
                         ),
                         child: Row(
@@ -420,7 +420,7 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                                       Container(
                                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                                         decoration: BoxDecoration(
-                                          color: (isDefined ? currentAccent : Colors.grey).withOpacity(0.12),
+                                          color: (isDefined ? currentAccent : Colors.grey).withValues(alpha: 0.12),
                                           borderRadius: BorderRadius.circular(6),
                                         ),
                                         child: Text(
@@ -492,3 +492,4 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
     );
   }
 }
+

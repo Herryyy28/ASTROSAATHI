@@ -139,9 +139,9 @@ class _AstrocartographyScreenState extends State<AstrocartographyScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.08),
+                color: AppColors.primary.withValues(alpha: 0.08),
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.primary.withOpacity(0.25)),
+                border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
               ),
               child: Row(
                 children: [
@@ -312,7 +312,7 @@ class _AstrocartographyScreenState extends State<AstrocartographyScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.getSurface(context),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: col.withOpacity(0.35)),
+                  border: Border.all(color: col.withValues(alpha: 0.35)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,7 +331,7 @@ class _AstrocartographyScreenState extends State<AstrocartographyScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
-                            color: col.withOpacity(0.15),
+                            color: col.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -430,3 +430,4 @@ class _AstrocartographyScreenState extends State<AstrocartographyScreen> {
     );
   }
 }
+

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -43,8 +43,8 @@ class ErrorStateWidget extends ConsumerWidget {
                 height: 96,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: errorColor.withOpacity(0.08),
-                  border: Border.all(color: errorColor.withOpacity(0.25), width: 1.5),
+                  color: errorColor.withValues(alpha: 0.08),
+                  border: Border.all(color: errorColor.withValues(alpha: 0.25), width: 1.5),
                 ),
                 child: Center(
                   child: Icon(
@@ -94,3 +94,4 @@ class ErrorStateWidget extends ConsumerWidget {
     );
   }
 }
+

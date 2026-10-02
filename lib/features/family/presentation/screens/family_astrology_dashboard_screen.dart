@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -13,7 +13,7 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
   const FamilyAstrologyDashboardScreen({super.key});
 
   String _getZodiacSign(String dobStr) {
-    if (dobStr.isEmpty) return 'Taurus ♉';
+    if (dobStr.isEmpty) return 'Taurus â™‰';
     try {
       DateTime? dt;
       if (dobStr.contains('-')) {
@@ -38,21 +38,21 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
       if (dt != null) {
         final day = dt.day;
         final month = dt.month;
-        if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return 'Aries ♈';
-        if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return 'Taurus ♉';
-        if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return 'Gemini ♊';
-        if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return 'Cancer ♋';
-        if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return 'Leo ♌';
-        if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return 'Virgo ♍';
-        if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return 'Libra ♎';
-        if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return 'Scorpio ♏';
-        if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return 'Sagittarius ♐';
-        if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return 'Capricorn ♑';
-        if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return 'Aquarius ♒';
-        if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return 'Pisces ♓';
+        if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return 'Aries â™ˆ';
+        if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return 'Taurus â™‰';
+        if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return 'Gemini â™Š';
+        if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return 'Cancer â™‹';
+        if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return 'Leo â™Œ';
+        if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return 'Virgo â™';
+        if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return 'Libra â™Ž';
+        if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return 'Scorpio â™';
+        if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return 'Sagittarius â™';
+        if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return 'Capricorn â™‘';
+        if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return 'Aquarius â™’';
+        if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return 'Pisces â™“';
       }
     } catch (_) {}
-    return 'Taurus ♉';
+    return 'Taurus â™‰';
   }
 
   Map<String, dynamic> _getProfileSynergy(BirthProfileData profile) {
@@ -182,7 +182,7 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                     // Section 1: Overview Banner
                     GlassCard(
                       padding: const EdgeInsets.all(16),
-                      borderColor: AppColors.primary.withOpacity(0.4),
+                      borderColor: AppColors.primary.withValues(alpha: 0.4),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -205,9 +205,9 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: Colors.greenAccent.withOpacity(0.15),
+                                  color: Colors.greenAccent.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.greenAccent.withOpacity(0.5)),
+                                  border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.5)),
                                 ),
                                 child: Text(
                                   'HIGH SYNERGY ($avgSynergy/10)',
@@ -271,7 +271,7 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(vertical: 24),
                         child: GlassCard(
                           padding: const EdgeInsets.all(24),
-                          borderColor: AppColors.primary.withOpacity(0.25),
+                          borderColor: AppColors.primary.withValues(alpha: 0.25),
                           child: Column(
                             children: [
                               const Icon(Icons.group_add_rounded, color: AppColors.primary, size: 40),
@@ -333,12 +333,12 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                           padding: const EdgeInsets.only(bottom: 10),
                           child: GlassCard(
                             padding: const EdgeInsets.all(14),
-                            borderColor: color.withOpacity(0.3),
+                            borderColor: color.withValues(alpha: 0.3),
                             child: Row(
                               children: [
                                 CircleAvatar(
                                   radius: 20,
-                                  backgroundColor: color.withOpacity(0.18),
+                                  backgroundColor: color.withValues(alpha: 0.18),
                                   child: Icon(
                                     profile.isPrimary ? Icons.star_rounded : Icons.person_rounded,
                                     color: color,
@@ -444,7 +444,7 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                         padding: const EdgeInsets.only(top: 6, bottom: 24),
                         child: OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: AppColors.primary.withOpacity(0.4)),
+                            side: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                             padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
@@ -470,3 +470,4 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
     );
   }
 }
+

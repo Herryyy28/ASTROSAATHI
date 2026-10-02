@@ -38,7 +38,7 @@ class WhatChangedTodayCard extends ConsumerWidget {
 
     return GlassCard(
       padding: const EdgeInsets.all(16),
-      borderColor: isPositive ? AppColors.success.withOpacity(0.4) : AppColors.warning.withOpacity(0.4),
+      borderColor: isPositive ? AppColors.success.withValues(alpha: 0.4) : AppColors.warning.withValues(alpha: 0.4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -49,7 +49,7 @@ class WhatChangedTodayCard extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: (isPositive ? AppColors.success : AppColors.warning).withOpacity(0.18),
+                  color: (isPositive ? AppColors.success : AppColors.warning).withValues(alpha: 0.18),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -86,14 +86,14 @@ class WhatChangedTodayCard extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: (isPositive ? Colors.greenAccent : Colors.orangeAccent).withOpacity(0.15),
+                  color: (isPositive ? Colors.greenAccent : Colors.orangeAccent).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: (isPositive ? Colors.greenAccent : Colors.orangeAccent).withOpacity(0.5),
+                    color: (isPositive ? Colors.greenAccent : Colors.orangeAccent).withValues(alpha: 0.5),
                   ),
                 ),
                 child: Text(
-                  '${isPositive ? "▲ +" : "▼ "}${delta.abs().toStringAsFixed(1)} PTS',
+                  '${isPositive ? "▲ +" : "â–¼ "}${delta.abs().toStringAsFixed(1)} PTS',
                   style: GoogleFonts.outfit(
                     fontSize: 10.5,
                     fontWeight: FontWeight.bold,
@@ -136,9 +136,9 @@ class WhatChangedTodayCard extends ConsumerWidget {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.12),
+                    color: AppColors.primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                   ),
                   child: Column(
                     children: [
@@ -185,7 +185,7 @@ class WhatChangedTodayCard extends ConsumerWidget {
             child: OutlinedButton.icon(
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                side: BorderSide(color: AppColors.primary.withOpacity(0.5)),
+                side: BorderSide(color: AppColors.primary.withValues(alpha: 0.5)),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               icon: const Icon(Icons.smart_toy_rounded, size: 16, color: AppColors.primary),
@@ -231,3 +231,4 @@ class WhatChangedTodayCard extends ConsumerWidget {
     );
   }
 }
+

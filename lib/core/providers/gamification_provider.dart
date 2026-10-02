@@ -128,7 +128,7 @@ class GamificationNotifier extends StateNotifier<GamificationState> {
       id: 'streak_7',
       title: 'Astro Master',
       description: 'Maintained a 7-day celestial discipline streak',
-      icon: '⭐',
+      icon: 'â­',
     ),
     CosmicBadge(
       id: 'karma_100',
@@ -298,3 +298,4 @@ class GamificationNotifier extends StateNotifier<GamificationState> {
 final gamificationProvider = StateNotifierProvider<GamificationNotifier, GamificationState>((ref) {
   return GamificationNotifier();
 });
+

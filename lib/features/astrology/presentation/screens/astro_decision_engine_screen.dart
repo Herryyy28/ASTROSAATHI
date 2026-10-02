@@ -147,7 +147,7 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                               margin: const EdgeInsets.only(right: 8),
                               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
                               decoration: BoxDecoration(
-                                color: isSel ? cat.color.withOpacity(0.18) : AppColors.getSurfaceSecondary(context),
+                                color: isSel ? cat.color.withValues(alpha: 0.18) : AppColors.getSurfaceSecondary(context),
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
                                   color: isSel ? cat.color : AppColors.getGlassBorder(context),
@@ -284,7 +284,7 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
   Widget _buildVerdictBanner(BuildContext context) {
     return GlassCard(
       padding: const EdgeInsets.all(20),
-      borderColor: _selectedCategory.color.withOpacity(0.5),
+      borderColor: _selectedCategory.color.withValues(alpha: 0.5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -297,7 +297,7 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: _selectedCategory.color.withOpacity(0.2),
+                        color: _selectedCategory.color.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(_selectedCategory.icon, size: 18, color: _selectedCategory.color),
@@ -323,9 +323,9 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.greenAccent.withOpacity(0.15),
+                  color: Colors.greenAccent.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.greenAccent.withOpacity(0.5)),
+                  border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.5)),
                 ),
                 child: Text(
                   'HIGHLY FAVORABLE (8.6/10)',
@@ -364,7 +364,7 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
   Widget _buildBestWindowCard(BuildContext context) {
     return GlassCard(
       padding: const EdgeInsets.all(18),
-      borderColor: const Color(0xFFFFD700).withOpacity(0.4),
+      borderColor: const Color(0xFFFFD700).withValues(alpha: 0.4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -394,9 +394,9 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFD700).withOpacity(0.1),
+                    color: const Color(0xFFFFD700).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: const Color(0xFFFFD700).withOpacity(0.3)),
+                    border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.3)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -515,7 +515,7 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
             child: OutlinedButton.icon(
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                side: BorderSide(color: AppColors.primary.withOpacity(0.5)),
+                side: BorderSide(color: AppColors.primary.withValues(alpha: 0.5)),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               icon: const Icon(Icons.calculate_rounded, size: 16, color: AppColors.primary),
@@ -575,3 +575,4 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
     );
   }
 }
+

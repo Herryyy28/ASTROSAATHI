@@ -179,7 +179,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF4A90E2).withOpacity(0.3),
+                    color: const Color(0xFF4A90E2).withValues(alpha: 0.3),
                     blurRadius: 12,
                   ),
                 ],
@@ -226,7 +226,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppColors.getPrimary(context).withOpacity(0.12),
+              color: AppColors.getPrimary(context).withValues(alpha: 0.12),
               shape: BoxShape.circle,
             ),
             child: Icon(Icons.person_rounded, color: AppColors.getPrimary(context), size: 20),
@@ -270,7 +270,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
     return GlassCard(
       padding: const EdgeInsets.all(20),
       borderRadius: 20,
-      glowColor: AppColors.getPrimary(context).withOpacity(0.15),
+      glowColor: AppColors.getPrimary(context).withValues(alpha: 0.15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -282,7 +282,7 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: AppColors.goldSubtleGradient,
-                  border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.3)),
+                  border: Border.all(color: AppColors.getPrimary(context).withValues(alpha: 0.3)),
                 ),
                 child: Center(
                   child: Text(
@@ -350,3 +350,4 @@ class _NumerologyScreenState extends ConsumerState<NumerologyScreen> {
     ).animate().fadeIn(delay: Duration(milliseconds: delay)).slideY(begin: 0.1);
   }
 }
+

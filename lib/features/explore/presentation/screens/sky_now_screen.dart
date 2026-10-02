@@ -153,8 +153,8 @@ class _SkyNowScreenState extends State<SkyNowScreen> {
 
   Widget _buildStatusBadge(String title, String subtitle, Color color) {
     final isLight = AppColors.isLight(context);
-    final badgeBg = isLight ? AppColors.getSurfaceElevated(context) : color.withOpacity(0.1);
-    final badgeBorder = isLight ? AppColors.getBorder(context) : color.withOpacity(0.3);
+    final badgeBg = isLight ? AppColors.getSurfaceElevated(context) : color.withValues(alpha: 0.1);
+    final badgeBorder = isLight ? AppColors.getBorder(context) : color.withValues(alpha: 0.3);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -191,7 +191,7 @@ class _SkyNowScreenState extends State<SkyNowScreen> {
       decoration: BoxDecoration(
         color: AppColors.getSurfaceElevated(context),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: goldAccent.withOpacity(0.5)),
+        border: Border.all(color: goldAccent.withValues(alpha: 0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,9 +210,9 @@ class _SkyNowScreenState extends State<SkyNowScreen> {
           ),
           Divider(color: AppColors.getDivider(context), height: 20),
           _buildInspectorRow('Ephemeris Source', 'Swiss Ephemeris v2.10 (High Precision)'),
-          _buildInspectorRow('Ayanamsa System', 'Lahiri (Chitra Paksha) @ 23° 51\' 14"'),
+          _buildInspectorRow('Ayanamsa System', 'Lahiri (Chitra Paksha) @ 23Â° 51\' 14"'),
           _buildInspectorRow('Julian Day (UT)', '2460557.042361'),
-          _buildInspectorRow('Observer Coordinates', '28.6139° N, 77.2090° E (New Delhi)'),
+          _buildInspectorRow('Observer Coordinates', '28.6139Â° N, 77.2090Â° E (New Delhi)'),
           _buildInspectorRow('House System', 'Placidus (Sidereal Equator)'),
           _buildInspectorRow('Engine Guarantee', '100% Deterministic Mathematical Math (No AI hallucination)'),
         ],
@@ -249,7 +249,7 @@ class _SkyNowScreenState extends State<SkyNowScreen> {
       decoration: BoxDecoration(
         color: AppColors.getSurface(context),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: cardColor.withOpacity(0.3)),
+        border: Border.all(color: cardColor.withValues(alpha: 0.3)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,4 +277,5 @@ class _SkyNowScreenState extends State<SkyNowScreen> {
     );
   }
 }
+
 

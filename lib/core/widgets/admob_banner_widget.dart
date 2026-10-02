@@ -114,9 +114,9 @@ class _AdMobBannerWidgetState extends ConsumerState<AdMobBannerWidget> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.15),
+                color: AppColors.primary.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
               ),
               child: const Text(
                 'AD',
@@ -158,7 +158,7 @@ class _AdMobBannerWidgetState extends ConsumerState<AdMobBannerWidget> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFD700).withOpacity(0.2),
+                color: const Color(0xFFFFD700).withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Text(
@@ -176,3 +176,4 @@ class _AdMobBannerWidgetState extends ConsumerState<AdMobBannerWidget> {
     );
   }
 }
+

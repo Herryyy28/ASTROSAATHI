@@ -191,7 +191,7 @@ class MuhuratScreen extends ConsumerWidget {
                 height: 56,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(0.12),
+                  color: AppColors.primary.withValues(alpha: 0.12),
                 ),
                 child: const Icon(Icons.access_time_filled_rounded, color: AppColors.primary, size: 28),
               ),
@@ -254,7 +254,7 @@ class MuhuratScreen extends ConsumerWidget {
                   height: 40,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.error.withOpacity(0.12),
+                    color: AppColors.error.withValues(alpha: 0.12),
                   ),
                   child: const Icon(Icons.block_rounded, color: AppColors.error, size: 20),
                 ),
@@ -302,7 +302,7 @@ class MuhuratScreen extends ConsumerWidget {
             height: 40,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: color.withOpacity(0.12),
+              color: color.withValues(alpha: 0.12),
             ),
             child: Icon(icon, color: color, size: 20),
           ),

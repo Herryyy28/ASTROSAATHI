@@ -50,7 +50,7 @@ class LocationPermissionDialog extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.15),
+                      color: AppColors.primary.withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -89,7 +89,7 @@ class LocationPermissionDialog extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.backgroundDark.withOpacity(0.6),
+                  color: AppColors.backgroundDark.withValues(alpha: 0.6),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: AppColors.glassBorder, width: 0.5),
                 ),
@@ -166,3 +166,4 @@ class LocationPermissionDialog extends StatelessWidget {
     );
   }
 }
+

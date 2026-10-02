@@ -121,7 +121,7 @@ class _CustomPdfReportBuilderScreenState extends ConsumerState<CustomPdfReportBu
                   children: [
                     GlassCard(
                       padding: const EdgeInsets.all(16),
-                      borderColor: AppColors.primary.withOpacity(0.4),
+                      borderColor: AppColors.primary.withValues(alpha: 0.4),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -229,3 +229,4 @@ class _CustomPdfReportBuilderScreenState extends ConsumerState<CustomPdfReportBu
     );
   }
 }
+

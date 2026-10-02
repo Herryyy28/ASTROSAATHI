@@ -1,4 +1,4 @@
-import 'dart:io';
+﻿import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 class AppConfig {
@@ -10,3 +10,4 @@ class AppConfig {
 
   static String get apiBaseUrl => '$baseUrl/api/v1';
 }
+

@@ -79,3 +79,4 @@ class MonitoringService {
   static List<String> getRecentErrorLogs() => List.unmodifiable(_errorLogs);
   static List<PerformanceMetric> getPerformanceMetrics() => List.unmodifiable(_performanceLogs);
 }
+

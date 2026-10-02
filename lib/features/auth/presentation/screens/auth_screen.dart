@@ -79,8 +79,8 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.primary.withOpacity(0.15),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                    color: AppColors.primary.withValues(alpha: 0.15),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                   ),
                   child: const Icon(Icons.stars_rounded, size: 48, color: AppColors.primary),
                 ).fadeSlideUp(),
@@ -206,3 +206,4 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     );
   }
 }
+

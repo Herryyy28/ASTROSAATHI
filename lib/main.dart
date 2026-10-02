@@ -76,7 +76,13 @@ class AstroSaathiApp extends ConsumerWidget {
       supportedLocales: const [
         Locale('en'),
         Locale('hi'),
+        Locale('ta'),
+        Locale('kn'),
+        Locale('ml'),
         Locale('gu'),
+        Locale('mr'),
+        Locale('bn'),
+        Locale('te'),
       ],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -91,7 +97,7 @@ class AstroSaathiApp extends ConsumerWidget {
         // max 1.15 = caps "Very Large" / "Huge" to prevent pixel overflow
         final clampedTextScaler = mediaQueryData.textScaler.clamp(
           minScaleFactor: 0.80,
-          maxScaleFactor: 1.15,
+          maxScaleFactor: 1.0,
         );
         return MediaQuery(
           data: mediaQueryData.copyWith(
@@ -103,3 +109,4 @@ class AstroSaathiApp extends ConsumerWidget {
     );
   }
 }
+

@@ -112,9 +112,9 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: Colors.greenAccent.withOpacity(0.2),
+                                  color: Colors.greenAccent.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: Colors.greenAccent.withOpacity(0.5)),
+                                  border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.5)),
                                 ),
                                 child: Text(
                                   'PROTECTED',
@@ -152,7 +152,7 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                           // 1. Security Score Banner
                           GlassCard(
                             padding: const EdgeInsets.all(16),
-                            borderColor: Colors.greenAccent.withOpacity(0.4),
+                            borderColor: Colors.greenAccent.withValues(alpha: 0.4),
                             child: Row(
                               children: [
                                 Container(
@@ -160,7 +160,7 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                   height: 48,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.greenAccent.withOpacity(0.15),
+                                    color: Colors.greenAccent.withValues(alpha: 0.15),
                                     border: Border.all(color: Colors.greenAccent, width: 1.5),
                                   ),
                                   child: const Center(
@@ -241,7 +241,7 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                               padding: const EdgeInsets.only(bottom: 8),
                               child: GlassCard(
                                 padding: const EdgeInsets.all(12),
-                                borderColor: sess.isCurrent ? AppColors.primary.withOpacity(0.5) : AppColors.getBorder(context),
+                                borderColor: sess.isCurrent ? AppColors.primary.withValues(alpha: 0.5) : AppColors.getBorder(context),
                                 child: Row(
                                   children: [
                                     Icon(
@@ -273,7 +273,7 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                                 Container(
                                                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                                                   decoration: BoxDecoration(
-                                                    color: AppColors.primary.withOpacity(0.2),
+                                                    color: AppColors.primary.withValues(alpha: 0.2),
                                                     borderRadius: BorderRadius.circular(4),
                                                   ),
                                                   child: Text(
@@ -446,3 +446,4 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
     );
   }
 }
+

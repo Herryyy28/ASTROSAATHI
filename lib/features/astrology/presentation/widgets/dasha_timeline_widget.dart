@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class DashaTimelineWidget extends StatelessWidget {
@@ -29,7 +29,7 @@ class DashaTimelineWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.15),
+                  color: AppColors.primary.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.timeline_rounded, color: AppColors.primary, size: 18),
@@ -49,9 +49,9 @@ class DashaTimelineWidget extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.2),
+                    color: AppColors.primary.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                   ),
                   child: const Text(
                     'Active: Guru - Shani',
@@ -84,14 +84,14 @@ class DashaTimelineWidget extends StatelessWidget {
                   width: 160,
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: isActive ? planetColor.withOpacity(0.12) : AppColors.getSurfaceSecondary(context),
+                    color: isActive ? planetColor.withValues(alpha: 0.12) : AppColors.getSurfaceSecondary(context),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: isActive ? planetColor.withOpacity(0.6) : AppColors.getGlassBorder(context),
+                      color: isActive ? planetColor.withValues(alpha: 0.6) : AppColors.getGlassBorder(context),
                       width: isActive ? 1.5 : 1.0,
                     ),
                     boxShadow: isActive
-                        ? [BoxShadow(color: planetColor.withOpacity(0.15), blurRadius: 8)]
+                        ? [BoxShadow(color: planetColor.withValues(alpha: 0.15), blurRadius: 8)]
                         : null,
                   ),
                   child: Column(
@@ -150,3 +150,4 @@ class DashaTimelineWidget extends StatelessWidget {
     );
   }
 }
+

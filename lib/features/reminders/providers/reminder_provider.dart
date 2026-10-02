@@ -231,7 +231,7 @@ class ReminderNotifier extends StateNotifier<ReminderState> {
   String _generateLocalRecommendation(EventCategory cat, double score) {
     if (score >= 8.5) return '✦ Peak Astrological Alignment ($score/10). Ideal timing for ${cat.label.toLowerCase()} success.';
     if (score >= 6.5) return 'Favorable alignment ($score/10). Good window for ${cat.label.toLowerCase()}.';
-    return '⚠️ Caution Window ($score/10). Consider shifting time by 30 mins to avoid Rahu Kaal.';
+    return 'âš ï¸ Caution Window ($score/10). Consider shifting time by 30 mins to avoid Rahu Kaal.';
   }
 }
 
@@ -240,3 +240,4 @@ final reminderStateProvider = StateNotifierProvider<ReminderNotifier, ReminderSt
 });
 
 final reminderProvider = reminderStateProvider;
+

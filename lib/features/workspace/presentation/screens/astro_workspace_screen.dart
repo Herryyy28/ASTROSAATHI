@@ -96,9 +96,9 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                       icon: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.18),
+                          color: AppColors.primary.withValues(alpha: 0.18),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.primary.withOpacity(0.5)),
+                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
                         ),
                         child: const Icon(Icons.bolt_rounded, color: AppColors.primary, size: 18),
                       ),
@@ -120,7 +120,7 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                         Expanded(
                           child: GlassCard(
                             padding: const EdgeInsets.all(16),
-                            borderColor: AppColors.primary.withOpacity(0.4),
+                            borderColor: AppColors.primary.withValues(alpha: 0.4),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -140,7 +140,7 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                         Expanded(
                           child: GlassCard(
                             padding: const EdgeInsets.all(16),
-                            borderColor: AppColors.secondary.withOpacity(0.4),
+                            borderColor: AppColors.secondary.withValues(alpha: 0.4),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -217,12 +217,12 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                     // Section 4: Astro Baba AI Command
                     GlassCard(
                       padding: const EdgeInsets.all(16),
-                      borderColor: AppColors.primary.withOpacity(0.5),
+                      borderColor: AppColors.primary.withValues(alpha: 0.5),
                       child: Row(
                         children: [
                           CircleAvatar(
                             radius: 20,
-                            backgroundColor: AppColors.primary.withOpacity(0.2),
+                            backgroundColor: AppColors.primary.withValues(alpha: 0.2),
                             child: const Icon(Icons.smart_toy_rounded, color: AppColors.primary, size: 20),
                           ),
                           const SizedBox(width: 12),
@@ -339,3 +339,4 @@ class AstroWorkspaceScreen extends ConsumerWidget {
     );
   }
 }
+

@@ -53,9 +53,9 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
     final now = DateTime.now();
     List<String> dayNames;
     if (lang == AppLanguage.hindi) {
-      dayNames = ['सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि', 'रवि'];
+      dayNames = ['à¤¸à¥‹à¤®', 'à¤®à¤‚à¤—à¤²', 'à¤¬à¥à¤§', 'à¤—à¥à¤°à¥', 'à¤¶à¥à¤•à¥à¤°', 'à¤¶à¤¨à¤¿', 'à¤°à¤µà¤¿'];
     } else if (lang == AppLanguage.gujarati) {
-      dayNames = ['સોમ', 'મંગળ', 'બુધ', 'ગુરુ', 'શુક્ર', 'શનિ', 'રવિ'];
+      dayNames = ['àª¸à«‹àª®', 'àª®àª‚àª—àª³', 'àª¬à«àª§', 'àª—à«àª°à«', 'àª¶à«àª•à«àª°', 'àª¶àª¨àª¿', 'àª°àªµàª¿'];
     } else {
       dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     }
@@ -72,98 +72,98 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'संतुलित',
+              energyLevel: 'à¤¸à¤‚à¤¤à¥à¤²à¤¿à¤¤',
               badgeColor: AppColors.secondary,
-              nakshatra: 'पुष्य नक्षत्र',
-              yoga: 'सिद्ध योग',
-              transitHighlight: 'चंद्रमा का कर्क राशि में प्रवेश • भावनात्मक स्पष्टता',
+              nakshatra: 'à¤ªà¥à¤·à¥à¤¯ à¤¨à¤•à¥à¤·à¤¤à¥à¤°',
+              yoga: 'à¤¸à¤¿à¤¦à¥à¤§ à¤¯à¥‹à¤—',
+              transitHighlight: 'à¤šà¤‚à¤¦à¥à¤°à¤®à¤¾ à¤•à¤¾ à¤•à¤°à¥à¤• à¤°à¤¾à¤¶à¤¿ à¤®à¥‡à¤‚ à¤ªà¥à¤°à¤µà¥‡à¤¶ • à¤­à¤¾à¤µà¤¨à¤¾à¤¤à¥à¤®à¤• à¤¸à¥à¤ªà¤·à¥à¤Ÿà¤¤à¤¾',
               rahuKaal: '07:30 AM - 09:00 AM',
               bestWindow: '10:15 AM - 12:30 PM',
-              recommendation: 'टीम बैठकों और दीर्घकालिक योजनाओं के लिए आदर्श दिन।',
+              recommendation: 'à¤Ÿà¥€à¤® à¤¬à¥ˆà¤ à¤•à¥‹à¤‚ à¤”à¤° à¤¦à¥€à¤°à¥à¤˜à¤•à¤¾à¤²à¤¿à¤• à¤¯à¥‹à¤œà¤¨à¤¾à¤“à¤‚ à¤•à¥‡ à¤²à¤¿à¤ à¤†à¤¦à¤°à¥à¤¶ à¤¦à¤¿à¤¨à¥¤',
             );
           case 1:
             return CosmicCalendarDay(
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'शुभ',
+              energyLevel: 'à¤¶à¥à¤­',
               badgeColor: AppColors.success,
-              nakshatra: 'अश्लेषा नक्षत्र',
-              yoga: 'अमृत सिद्धि योग',
-              transitHighlight: 'बुध का 10वें भाव में संचरण • वाक् चातुर्य',
+              nakshatra: 'à¤…à¤¶à¥à¤²à¥‡à¤·à¤¾ à¤¨à¤•à¥à¤·à¤¤à¥à¤°',
+              yoga: 'à¤…à¤®à¥ƒà¤¤ à¤¸à¤¿à¤¦à¥à¤§à¤¿ à¤¯à¥‹à¤—',
+              transitHighlight: 'à¤¬à¥à¤§ à¤•à¤¾ 10à¤µà¥‡à¤‚ à¤­à¤¾à¤µ à¤®à¥‡à¤‚ à¤¸à¤‚à¤šà¤°à¤£ • à¤µà¤¾à¤•à¥ à¤šà¤¾à¤¤à¥à¤°à¥à¤¯',
               rahuKaal: '03:00 PM - 04:30 PM',
               bestWindow: '09:00 AM - 11:15 AM',
-              recommendation: 'अनुबंध पर हस्ताक्षर, क्लाइंट मीटिंग और बातचीत निष्पादित करें।',
+              recommendation: 'à¤…à¤¨à¥à¤¬à¤‚à¤§ à¤ªà¤° à¤¹à¤¸à¥à¤¤à¤¾à¤•à¥à¤·à¤°, à¤•à¥à¤²à¤¾à¤‡à¤‚à¤Ÿ à¤®à¥€à¤Ÿà¤¿à¤‚à¤— à¤”à¤° à¤¬à¤¾à¤¤à¤šà¥€à¤¤ à¤¨à¤¿à¤·à¥à¤ªà¤¾à¤¦à¤¿à¤¤ à¤•à¤°à¥‡à¤‚à¥¤',
             );
           case 2:
             return CosmicCalendarDay(
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'सावधानी',
+              energyLevel: 'à¤¸à¤¾à¤µà¤§à¤¾à¤¨à¥€',
               badgeColor: AppColors.error,
-              nakshatra: 'मघा नक्षत्र',
-              yoga: 'व्यतीपात योग',
-              transitHighlight: 'मंगल-राहु दृष्टि • उग्र ऊर्जा',
+              nakshatra: 'à¤®à¤˜à¤¾ à¤¨à¤•à¥à¤·à¤¤à¥à¤°',
+              yoga: 'à¤µà¥à¤¯à¤¤à¥€à¤ªà¤¾à¤¤ à¤¯à¥‹à¤—',
+              transitHighlight: 'à¤®à¤‚à¤—à¤²-à¤°à¤¾à¤¹à¥ à¤¦à¥ƒà¤·à¥à¤Ÿà¤¿ • à¤‰à¤—à¥à¤° à¤Šà¤°à¥à¤œà¤¾',
               rahuKaal: '12:00 PM - 01:30 PM',
               bestWindow: '04:00 PM - 05:30 PM',
-              recommendation: 'बड़े वित्तीय निर्णयों या विवादों से बचें।',
+              recommendation: 'à¤¬à¤¡à¤¼à¥‡ à¤µà¤¿à¤¤à¥à¤¤à¥€à¤¯ à¤¨à¤¿à¤°à¥à¤£à¤¯à¥‹à¤‚ à¤¯à¤¾ à¤µà¤¿à¤µà¤¾à¤¦à¥‹à¤‚ à¤¸à¥‡ à¤¬à¤šà¥‡à¤‚à¥¤',
             );
           case 3:
             return CosmicCalendarDay(
               date: date,
-              dayName: 'आज',
+              dayName: 'à¤†à¤œ',
               dayNumber: dayNum,
-              energyLevel: 'उच्चतम ऊर्जा ✦',
+              energyLevel: 'à¤‰à¤šà¥à¤šà¤¤à¤® à¤Šà¤°à¥à¤œà¤¾ ✦',
               badgeColor: AppColors.primary,
-              nakshatra: 'पूर्वा फाल्गुनी नक्षत्र',
-              yoga: 'गजकेसरी योग सक्रिय',
-              transitHighlight: 'गुरु-चंद्र दृष्टि • वित्तीय वृद्धि योग',
+              nakshatra: 'à¤ªà¥‚à¤°à¥à¤µà¤¾ à¤«à¤¾à¤²à¥à¤—à¥à¤¨à¥€ à¤¨à¤•à¥à¤·à¤¤à¥à¤°',
+              yoga: 'à¤—à¤œà¤•à¥‡à¤¸à¤°à¥€ à¤¯à¥‹à¤— à¤¸à¤•à¥à¤°à¤¿à¤¯',
+              transitHighlight: 'à¤—à¥à¤°à¥-à¤šà¤‚à¤¦à¥à¤° à¤¦à¥ƒà¤·à¥à¤Ÿà¤¿ • à¤µà¤¿à¤¤à¥à¤¤à¥€à¤¯ à¤µà¥ƒà¤¦à¥à¤§à¤¿ à¤¯à¥‹à¤—',
               rahuKaal: '01:30 PM - 03:00 PM',
               bestWindow: '08:45 AM - 11:30 AM',
-              recommendation: 'नये कार्य प्रारंभ करें, संपत्ति खरीदें या पदोन्नति की बात करें।',
+              recommendation: 'à¤¨à¤¯à¥‡ à¤•à¤¾à¤°à¥à¤¯ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤°à¥‡à¤‚, à¤¸à¤‚à¤ªà¤¤à¥à¤¤à¤¿ à¤–à¤°à¥€à¤¦à¥‡à¤‚ à¤¯à¤¾ à¤ªà¤¦à¥‹à¤¨à¥à¤¨à¤¤à¤¿ à¤•à¥€ à¤¬à¤¾à¤¤ à¤•à¤°à¥‡à¤‚à¥¤',
             );
           case 4:
             return CosmicCalendarDay(
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'शुभ',
+              energyLevel: 'à¤¶à¥à¤­',
               badgeColor: AppColors.success,
-              nakshatra: 'उत्तरा फाल्गुनी',
-              yoga: 'शुभ योग',
-              transitHighlight: 'शुक्र का 11वें भाव में युति • संबंधों में प्रगाढ़ता',
+              nakshatra: 'à¤‰à¤¤à¥à¤¤à¤°à¤¾ à¤«à¤¾à¤²à¥à¤—à¥à¤¨à¥€',
+              yoga: 'à¤¶à¥à¤­ à¤¯à¥‹à¤—',
+              transitHighlight: 'à¤¶à¥à¤•à¥à¤° à¤•à¤¾ 11à¤µà¥‡à¤‚ à¤­à¤¾à¤µ à¤®à¥‡à¤‚ à¤¯à¥à¤¤à¤¿ • à¤¸à¤‚à¤¬à¤‚à¤§à¥‹à¤‚ à¤®à¥‡à¤‚ à¤ªà¥à¤°à¤—à¤¾à¤¢à¤¼à¤¤à¤¾',
               rahuKaal: '10:30 AM - 12:00 PM',
               bestWindow: '02:00 PM - 04:30 PM',
-              recommendation: 'पारिवारिक एवं सामाजिक कार्यों के लिए उत्तम समय।',
+              recommendation: 'à¤ªà¤¾à¤°à¤¿à¤µà¤¾à¤°à¤¿à¤• à¤à¤µà¤‚ à¤¸à¤¾à¤®à¤¾à¤œà¤¿à¤• à¤•à¤¾à¤°à¥à¤¯à¥‹à¤‚ à¤•à¥‡ à¤²à¤¿à¤ à¤‰à¤¤à¥à¤¤à¤® à¤¸à¤®à¤¯à¥¤',
             );
           case 5:
             return CosmicCalendarDay(
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'शांतिदायक',
+              energyLevel: 'à¤¶à¤¾à¤‚à¤¤à¤¿à¤¦à¤¾à¤¯à¤•',
               badgeColor: AppColors.secondary,
-              nakshatra: 'हस्त नक्षत्र',
-              yoga: 'ब्रह्म योग',
-              transitHighlight: 'सूर्य-शनि दृष्टि • अनुशासन एवं प्रतिष्ठा',
+              nakshatra: 'à¤¹à¤¸à¥à¤¤ à¤¨à¤•à¥à¤·à¤¤à¥à¤°',
+              yoga: 'à¤¬à¥à¤°à¤¹à¥à¤® à¤¯à¥‹à¤—',
+              transitHighlight: 'à¤¸à¥‚à¤°à¥à¤¯-à¤¶à¤¨à¤¿ à¤¦à¥ƒà¤·à¥à¤Ÿà¤¿ • à¤…à¤¨à¥à¤¶à¤¾à¤¸à¤¨ à¤à¤µà¤‚ à¤ªà¥à¤°à¤¤à¤¿à¤·à¥à¤ à¤¾',
               rahuKaal: '09:00 AM - 10:30 AM',
               bestWindow: '06:30 AM - 08:30 AM',
-              recommendation: 'आध्यात्मिक साधना एवं ध्यान के लिए अत्यंत उपयुक्त।',
+              recommendation: 'à¤†à¤§à¥à¤¯à¤¾à¤¤à¥à¤®à¤¿à¤• à¤¸à¤¾à¤§à¤¨à¤¾ à¤à¤µà¤‚ à¤§à¥à¤¯à¤¾à¤¨ à¤•à¥‡ à¤²à¤¿à¤ à¤…à¤¤à¥à¤¯à¤‚à¤¤ à¤‰à¤ªà¤¯à¥à¤•à¥à¤¤à¥¤',
             );
           default:
             return CosmicCalendarDay(
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'अनुकूल',
+              energyLevel: 'à¤…à¤¨à¥à¤•à¥‚à¤²',
               badgeColor: AppColors.primary,
-              nakshatra: 'चित्रा नक्षत्र',
-              yoga: 'इन्द्र योग',
-              transitHighlight: 'चंद्रमा का कन्या राशि में गोचर',
+              nakshatra: 'à¤šà¤¿à¤¤à¥à¤°à¤¾ à¤¨à¤•à¥à¤·à¤¤à¥à¤°',
+              yoga: 'à¤‡à¤¨à¥à¤¦à¥à¤° à¤¯à¥‹à¤—',
+              transitHighlight: 'à¤šà¤‚à¤¦à¥à¤°à¤®à¤¾ à¤•à¤¾ à¤•à¤¨à¥à¤¯à¤¾ à¤°à¤¾à¤¶à¤¿ à¤®à¥‡à¤‚ à¤—à¥‹à¤šà¤°',
               rahuKaal: '04:30 PM - 06:00 PM',
               bestWindow: '11:00 AM - 01:00 PM',
-              recommendation: 'सप्ताह के कार्यों की समीक्षा करें एवं नए लक्ष्य निर्धारित करें।',
+              recommendation: 'à¤¸à¤ªà¥à¤¤à¤¾à¤¹ à¤•à¥‡ à¤•à¤¾à¤°à¥à¤¯à¥‹à¤‚ à¤•à¥€ à¤¸à¤®à¥€à¤•à¥à¤·à¤¾ à¤•à¤°à¥‡à¤‚ à¤à¤µà¤‚ à¤¨à¤ à¤²à¤•à¥à¤·à¥à¤¯ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤¿à¤¤ à¤•à¤°à¥‡à¤‚à¥¤',
             );
         }
       } else if (lang == AppLanguage.gujarati) {
@@ -173,98 +173,98 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'સંતુલિત',
+              energyLevel: 'àª¸àª‚àª¤à«àª²àª¿àª¤',
               badgeColor: AppColors.secondary,
-              nakshatra: 'પુષ્ય નક્ષત્ર',
-              yoga: 'સિદ્ધ યોગ',
-              transitHighlight: 'ચંદ્રમાનું કર્ક રાશિમાં પ્રવેશ • ભાવનાત્મક સ્પષ્ટતા',
+              nakshatra: 'àªªà«àª·à«àª¯ àª¨àª•à«àª·àª¤à«àª°',
+              yoga: 'àª¸àª¿àª¦à«àª§ àª¯à«‹àª—',
+              transitHighlight: 'àªšàª‚àª¦à«àª°àª®àª¾àª¨à«àª‚ àª•àª°à«àª• àª°àª¾àª¶àª¿àª®àª¾àª‚ àªªà«àª°àªµà«‡àª¶ • àª­àª¾àªµàª¨àª¾àª¤à«àª®àª• àª¸à«àªªàª·à«àªŸàª¤àª¾',
               rahuKaal: '07:30 AM - 09:00 AM',
               bestWindow: '10:15 AM - 12:30 PM',
-              recommendation: 'ટીમ મીટિંગ્સ અને લાંબા ગાળાના આયોજન માટે ઉત્તમ દિવસ.',
+              recommendation: 'àªŸà«€àª® àª®à«€àªŸàª¿àª‚àª—à«àª¸ àª…àª¨à«‡ àª²àª¾àª‚àª¬àª¾ àª—àª¾àª³àª¾àª¨àª¾ àª†àª¯à«‹àªœàª¨ àª®àª¾àªŸà«‡ àª‰àª¤à«àª¤àª® àª¦àª¿àªµàª¸.',
             );
           case 1:
             return CosmicCalendarDay(
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'શુભ',
+              energyLevel: 'àª¶à«àª­',
               badgeColor: AppColors.success,
-              nakshatra: 'અશ્લેષા નક્ષત્ર',
-              yoga: 'અમૃત સિદ્ધિ યોગ',
-              transitHighlight: 'બુધનું 10મા સ્થાનમાં પરિભ્રમણ • વાણી લાભ',
+              nakshatra: 'àª…àª¶à«àª²à«‡àª·àª¾ àª¨àª•à«àª·àª¤à«àª°',
+              yoga: 'àª…àª®à«ƒàª¤ àª¸àª¿àª¦à«àª§àª¿ àª¯à«‹àª—',
+              transitHighlight: 'àª¬à«àª§àª¨à«àª‚ 10àª®àª¾ àª¸à«àª¥àª¾àª¨àª®àª¾àª‚ àªªàª°àª¿àª­à«àª°àª®àª£ • àªµàª¾àª£à«€ àª²àª¾àª­',
               rahuKaal: '03:00 PM - 04:30 PM',
               bestWindow: '09:00 AM - 11:15 AM',
-              recommendation: 'મહત્વના કરાર અને મીટિંગ્સ પૂર્ણ કરો.',
+              recommendation: 'àª®àª¹àª¤à«àªµàª¨àª¾ àª•àª°àª¾àª° àª…àª¨à«‡ àª®à«€àªŸàª¿àª‚àª—à«àª¸ àªªà«‚àª°à«àª£ àª•àª°à«‹.',
             );
           case 2:
             return CosmicCalendarDay(
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'સાવધાની',
+              energyLevel: 'àª¸àª¾àªµàª§àª¾àª¨à«€',
               badgeColor: AppColors.error,
-              nakshatra: 'મઘા નક્ષત્ર',
-              yoga: 'વ્યતીપાત યોગ',
-              transitHighlight: 'મંગળ-રાહુ દ્રષ્ટિ • ઉગ્ર ઊર્જા',
+              nakshatra: 'àª®àª˜àª¾ àª¨àª•à«àª·àª¤à«àª°',
+              yoga: 'àªµà«àª¯àª¤à«€àªªàª¾àª¤ àª¯à«‹àª—',
+              transitHighlight: 'àª®àª‚àª—àª³-àª°àª¾àª¹à« àª¦à«àª°àª·à«àªŸàª¿ • àª‰àª—à«àª° àªŠàª°à«àªœàª¾',
               rahuKaal: '12:00 PM - 01:30 PM',
               bestWindow: '04:00 PM - 05:30 PM',
-              recommendation: 'મોટા નાણાકીય નિર્ણયો અને દલીલો ટાળો.',
+              recommendation: 'àª®à«‹àªŸàª¾ àª¨àª¾àª£àª¾àª•à«€àª¯ àª¨àª¿àª°à«àª£àª¯à«‹ àª…àª¨à«‡ àª¦àª²à«€àª²à«‹ àªŸàª¾àª³à«‹.',
             );
           case 3:
             return CosmicCalendarDay(
               date: date,
-              dayName: 'આજે',
+              dayName: 'àª†àªœà«‡',
               dayNumber: dayNum,
-              energyLevel: 'ઉચ્ચતમ ઊર્જા ✦',
+              energyLevel: 'àª‰àªšà«àªšàª¤àª® àªŠàª°à«àªœàª¾ ✦',
               badgeColor: AppColors.primary,
-              nakshatra: 'પૂર્વા ફાલ્ગુની નક્ષત્ર',
-              yoga: 'ગજકેસરી યોગ સક્રિય',
-              transitHighlight: 'ગુરુ-ચંદ્ર યોગ • નાણાકીય વૃદ્ધિ',
+              nakshatra: 'àªªà«‚àª°à«àªµàª¾ àª«àª¾àª²à«àª—à«àª¨à«€ àª¨àª•à«àª·àª¤à«àª°',
+              yoga: 'àª—àªœàª•à«‡àª¸àª°à«€ àª¯à«‹àª— àª¸àª•à«àª°àª¿àª¯',
+              transitHighlight: 'àª—à«àª°à«-àªšàª‚àª¦à«àª° àª¯à«‹àª— • àª¨àª¾àª£àª¾àª•à«€àª¯ àªµà«ƒàª¦à«àª§àª¿',
               rahuKaal: '01:30 PM - 03:00 PM',
               bestWindow: '08:45 AM - 11:30 AM',
-              recommendation: 'નવા કાર્યોનો પ્રારંભ કરો અથવા પ્રમોશન અંગે ચર્ચા કરો.',
+              recommendation: 'àª¨àªµàª¾ àª•àª¾àª°à«àª¯à«‹àª¨à«‹ àªªà«àª°àª¾àª°àª‚àª­ àª•àª°à«‹ àª…àª¥àªµàª¾ àªªà«àª°àª®à«‹àª¶àª¨ àª…àª‚àª—à«‡ àªšàª°à«àªšàª¾ àª•àª°à«‹.',
             );
           case 4:
             return CosmicCalendarDay(
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'શુભ',
+              energyLevel: 'àª¶à«àª­',
               badgeColor: AppColors.success,
-              nakshatra: 'ઉત્તરા ફાલ્ગુની',
-              yoga: 'શુભ યોગ',
-              transitHighlight: 'શુક્રની યુતિ • સંબંધોમાં મધુરતા',
+              nakshatra: 'àª‰àª¤à«àª¤àª°àª¾ àª«àª¾àª²à«àª—à«àª¨à«€',
+              yoga: 'àª¶à«àª­ àª¯à«‹àª—',
+              transitHighlight: 'àª¶à«àª•à«àª°àª¨à«€ àª¯à«àª¤àª¿ • àª¸àª‚àª¬àª‚àª§à«‹àª®àª¾àª‚ àª®àª§à«àª°àª¤àª¾',
               rahuKaal: '10:30 AM - 12:00 PM',
               bestWindow: '02:00 PM - 04:30 PM',
-              recommendation: 'કૌટુંબિક અને સામાજિક પ્રસંગો માટે ઉત્તમ.',
+              recommendation: 'àª•à«ŒàªŸà«àª‚àª¬àª¿àª• àª…àª¨à«‡ àª¸àª¾àª®àª¾àªœàª¿àª• àªªà«àª°àª¸àª‚àª—à«‹ àª®àª¾àªŸà«‡ àª‰àª¤à«àª¤àª®.',
             );
           case 5:
             return CosmicCalendarDay(
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'શાંતિદાયક',
+              energyLevel: 'àª¶àª¾àª‚àª¤àª¿àª¦àª¾àª¯àª•',
               badgeColor: AppColors.secondary,
-              nakshatra: 'હસ્ત નક્ષત્ર',
-              yoga: 'બ્રહ્મ યોગ',
-              transitHighlight: 'સૂર્ય-શનિ દ્રષ્ટિ • અનુશાસન',
+              nakshatra: 'àª¹àª¸à«àª¤ àª¨àª•à«àª·àª¤à«àª°',
+              yoga: 'àª¬à«àª°àª¹à«àª® àª¯à«‹àª—',
+              transitHighlight: 'àª¸à«‚àª°à«àª¯-àª¶àª¨àª¿ àª¦à«àª°àª·à«àªŸàª¿ • àª…àª¨à«àª¶àª¾àª¸àª¨',
               rahuKaal: '09:00 AM - 10:30 AM',
               bestWindow: '06:30 AM - 08:30 AM',
-              recommendation: 'આધ્યાત્મિક સાધના અને ધ્યાન માટે અનુકૂળ.',
+              recommendation: 'àª†àª§à«àª¯àª¾àª¤à«àª®àª¿àª• àª¸àª¾àª§àª¨àª¾ àª…àª¨à«‡ àª§à«àª¯àª¾àª¨ àª®àª¾àªŸà«‡ àª…àª¨à«àª•à«‚àª³.',
             );
           default:
             return CosmicCalendarDay(
               date: date,
               dayName: dayName,
               dayNumber: dayNum,
-              energyLevel: 'અનુકૂળ',
+              energyLevel: 'àª…àª¨à«àª•à«‚àª³',
               badgeColor: AppColors.primary,
-              nakshatra: 'ચિત્રા નક્ષત્ર',
-              yoga: 'ઇન્દ્ર યોગ',
-              transitHighlight: 'ચંદ્રમાનું કન્યા રાશિમાં ગોચર',
+              nakshatra: 'àªšàª¿àª¤à«àª°àª¾ àª¨àª•à«àª·àª¤à«àª°',
+              yoga: 'àª‡àª¨à«àª¦à«àª° àª¯à«‹àª—',
+              transitHighlight: 'àªšàª‚àª¦à«àª°àª®àª¾àª¨à«àª‚ àª•àª¨à«àª¯àª¾ àª°àª¾àª¶àª¿àª®àª¾àª‚ àª—à«‹àªšàª°',
               rahuKaal: '04:30 PM - 06:00 PM',
               bestWindow: '11:00 AM - 01:00 PM',
-              recommendation: 'અઠવાડિયાના કાર્યોની સમીક્ષા કરો અને નવા લક્ષ્યો નક્કી કરો.',
+              recommendation: 'àª…àª àªµàª¾àª¡àª¿àª¯àª¾àª¨àª¾ àª•àª¾àª°à«àª¯à«‹àª¨à«€ àª¸àª®à«€àª•à«àª·àª¾ àª•àª°à«‹ àª…àª¨à«‡ àª¨àªµàª¾ àª²àª•à«àª·à«àª¯à«‹ àª¨àª•à«àª•à«€ àª•àª°à«‹.',
             );
         }
       } else {
@@ -450,9 +450,9 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: selectedDay.badgeColor.withOpacity(0.18),
+                  color: selectedDay.badgeColor.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: selectedDay.badgeColor.withOpacity(0.5)),
+                  border: Border.all(color: selectedDay.badgeColor.withValues(alpha: 0.5)),
                 ),
                 child: Text(
                   selectedDay.energyLevel,
@@ -495,7 +495,7 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                       boxShadow: isSelected
                           ? [
                               BoxShadow(
-                                color: AppColors.primary.withOpacity(0.3),
+                                color: AppColors.primary.withValues(alpha: 0.3),
                                 blurRadius: 10,
                                 offset: const Offset(0, 4),
                               ),
@@ -547,7 +547,7 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
               key: ValueKey(_selectedIndex),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.getGlassSurface(context).withOpacity(0.9),
+                color: AppColors.getGlassSurface(context).withValues(alpha: 0.9),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: AppColors.getGlassBorder(context), width: 0.5),
               ),
@@ -594,9 +594,9 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: AppColors.success.withOpacity(0.12),
+                            color: AppColors.success.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.success.withOpacity(0.3)),
+                            border: Border.all(color: AppColors.success.withValues(alpha: 0.3)),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -618,14 +618,14 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color: AppColors.error.withOpacity(0.12),
+                            color: AppColors.error.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.error.withOpacity(0.3)),
+                            border: Border.all(color: AppColors.error.withValues(alpha: 0.3)),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('⚠️ Rahu Kaal', style: TextStyle(fontSize: 10, color: AppColors.error, fontWeight: FontWeight.bold)),
+                              const Text('âš ï¸ Rahu Kaal', style: TextStyle(fontSize: 10, color: AppColors.error, fontWeight: FontWeight.bold)),
                               const SizedBox(height: 2),
                               Text(
                                 selectedDay.rahuKaal,
@@ -703,9 +703,9 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: AppColors.getPrimary(context).withOpacity(0.12),
+                                    color: AppColors.getPrimary(context).withValues(alpha: 0.12),
                                     borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.3)),
+                                    border: Border.all(color: AppColors.getPrimary(context).withValues(alpha: 0.3)),
                                   ),
                                   child: Row(
                                     children: [
@@ -754,7 +754,7 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                                     Container(
                                       padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        color: r.category.color.withOpacity(0.18),
+                                        color: r.category.color.withValues(alpha: 0.18),
                                         shape: BoxShape.circle,
                                       ),
                                       child: Icon(r.category.icon, size: 14, color: r.category.color),
@@ -781,7 +781,7 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
                                               Container(
                                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                                 decoration: BoxDecoration(
-                                                  color: AppColors.getPrimary(context).withOpacity(0.15),
+                                                  color: AppColors.getPrimary(context).withValues(alpha: 0.15),
                                                   borderRadius: BorderRadius.circular(8),
                                                 ),
                                                 child: Text(
@@ -868,3 +868,4 @@ class _PersonalCosmicCalendarWidgetState extends ConsumerState<PersonalCosmicCal
     );
   }
 }
+

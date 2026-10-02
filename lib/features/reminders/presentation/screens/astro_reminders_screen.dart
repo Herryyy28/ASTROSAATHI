@@ -183,13 +183,13 @@ class AstroRemindersScreen extends ConsumerWidget {
                     // Test Real-Time Animated Reminder Banner
                     GlassCard(
                       padding: const EdgeInsets.all(16),
-                      borderColor: const Color(0xFFFFD700).withOpacity(0.5),
+                      borderColor: const Color(0xFFFFD700).withValues(alpha: 0.5),
                       child: Row(
                         children: [
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFFFD700).withOpacity(0.18),
+                              color: const Color(0xFFFFD700).withValues(alpha: 0.18),
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(Icons.notifications_active_rounded, color: Color(0xFFFFD700), size: 20),
@@ -299,7 +299,7 @@ class AstroRemindersScreen extends ConsumerWidget {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: reminder.category.color.withOpacity(0.18),
+                                    color: reminder.category.color.withValues(alpha: 0.18),
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(reminder.category.icon, size: 18, color: reminder.category.color),
@@ -335,7 +335,7 @@ class AstroRemindersScreen extends ConsumerWidget {
                                             Container(
                                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                               decoration: BoxDecoration(
-                                                color: AppColors.getPrimary(context).withOpacity(0.15),
+                                                color: AppColors.getPrimary(context).withValues(alpha: 0.15),
                                                 borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: Text(
@@ -440,3 +440,4 @@ class AstroRemindersScreen extends ConsumerWidget {
 }
 
 final reminderStateProvider = reminderProvider;
+

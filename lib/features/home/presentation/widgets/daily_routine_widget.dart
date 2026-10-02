@@ -26,7 +26,7 @@ class DailyRoutineWidget extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4),
+        color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: AppColors.getBorder(context)),
       ),
@@ -62,9 +62,9 @@ class DailyRoutineWidget extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: AppColors.warning.withOpacity(0.18),
+                  color: AppColors.warning.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.warning.withOpacity(0.4)),
+                  border: Border.all(color: AppColors.warning.withValues(alpha: 0.4)),
                 ),
                 child: Row(
                   children: [
@@ -118,7 +118,7 @@ class DailyRoutineWidget extends ConsumerWidget {
                     SnackBar(
                       content: Row(
                         children: [
-                          const Text('⭐', style: TextStyle(fontSize: 16)),
+                          const Text('â­', style: TextStyle(fontSize: 16)),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
@@ -169,7 +169,7 @@ class DailyRoutineWidget extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: isDone ? AppColors.primary.withOpacity(0.15) : AppColors.getSurfaceSecondary(context),
+                        color: isDone ? AppColors.primary.withValues(alpha: 0.15) : AppColors.getSurfaceSecondary(context),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -191,3 +191,4 @@ class DailyRoutineWidget extends ConsumerWidget {
     );
   }
 }
+

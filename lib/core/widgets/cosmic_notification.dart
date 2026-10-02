@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -187,21 +187,21 @@ class _TopAnimatedCosmicToastState extends State<_TopAnimatedCosmicToast>
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
                       color: isLight
-                          ? Colors.white.withOpacity(0.85)
+                          ? Colors.white.withValues(alpha: 0.85)
                           : const Color(0xCC121824),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: widget.accentColor.withOpacity(0.5),
+                        color: widget.accentColor.withValues(alpha: 0.5),
                         width: 1.2,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: widget.accentColor.withOpacity(0.22),
+                          color: widget.accentColor.withValues(alpha: 0.22),
                           blurRadius: 20,
                           spreadRadius: -2,
                         ),
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.25),
+                          color: Colors.black.withValues(alpha: 0.25),
                           blurRadius: 12,
                           offset: const Offset(0, 6),
                         ),
@@ -216,11 +216,11 @@ class _TopAnimatedCosmicToastState extends State<_TopAnimatedCosmicToast>
                             shape: BoxShape.circle,
                             gradient: LinearGradient(
                               colors: [
-                                widget.accentColor.withOpacity(0.3),
-                                widget.accentColor.withOpacity(0.1),
+                                widget.accentColor.withValues(alpha: 0.3),
+                                widget.accentColor.withValues(alpha: 0.1),
                               ],
                             ),
-                            border: Border.all(color: widget.accentColor.withOpacity(0.5)),
+                            border: Border.all(color: widget.accentColor.withValues(alpha: 0.5)),
                           ),
                           child: Icon(widget.icon, color: widget.accentColor, size: 20),
                         ),
@@ -270,3 +270,4 @@ class _TopAnimatedCosmicToastState extends State<_TopAnimatedCosmicToast>
     );
   }
 }
+

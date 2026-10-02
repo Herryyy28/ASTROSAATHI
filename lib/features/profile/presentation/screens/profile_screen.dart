@@ -372,7 +372,7 @@ class ProfileScreen extends ConsumerWidget {
               shape: BoxShape.circle,
               gradient: AppColors.goldSubtleGradient,
               border: Border.all(
-                color: AppColors.primary.withOpacity(0.4),
+                color: AppColors.primary.withValues(alpha: 0.4),
               ),
             ),
             child: Center(
@@ -409,9 +409,9 @@ class ProfileScreen extends ConsumerWidget {
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: AppColors.primary.withOpacity(0.15),
+                        color: AppColors.primary.withValues(alpha: 0.15),
                         border: Border.all(
-                          color: AppColors.primary.withOpacity(0.3),
+                          color: AppColors.primary.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Text(
@@ -429,8 +429,8 @@ class ProfileScreen extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
-                          color: AppColors.success.withOpacity(0.2),
-                          border: Border.all(color: AppColors.success.withOpacity(0.4)),
+                          color: AppColors.success.withValues(alpha: 0.2),
+                          border: Border.all(color: AppColors.success.withValues(alpha: 0.4)),
                         ),
                         child: Text(
                           'Active',
@@ -552,8 +552,8 @@ class ProfileScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: AppColors.success.withOpacity(0.2),
-                border: Border.all(color: AppColors.success.withOpacity(0.4)),
+                color: AppColors.success.withValues(alpha: 0.2),
+                border: Border.all(color: AppColors.success.withValues(alpha: 0.4)),
               ),
               child: Text(
                 'Active',
@@ -593,7 +593,7 @@ class ProfileScreen extends ConsumerWidget {
             height: 44,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.primary.withOpacity(0.12),
+              color: AppColors.primary.withValues(alpha: 0.12),
             ),
             child: const Icon(
               Icons.group_add_rounded,
@@ -653,7 +653,7 @@ class ProfileScreen extends ConsumerWidget {
             height: 40,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: iconColor.withOpacity(0.12),
+              color: iconColor.withValues(alpha: 0.12),
             ),
             child: Icon(icon, color: iconColor, size: 20),
           ),
@@ -693,7 +693,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget _buildUpgradeBanner(BuildContext context) {
     return GlassCard(
       borderRadius: 20,
-      borderColor: AppColors.primary.withOpacity(0.5),
+      borderColor: AppColors.primary.withValues(alpha: 0.5),
       glowColor: AppColors.goldGlow,
       padding: const EdgeInsets.all(20),
       onTap: () => PremiumUpgradeModal.show(context),
@@ -911,7 +911,7 @@ class ProfileScreen extends ConsumerWidget {
             borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
             border: Border(
               top: BorderSide(
-                color: isLight ? Colors.black.withOpacity(0.08) : AppColors.glassBorder,
+                color: isLight ? Colors.black.withValues(alpha: 0.08) : AppColors.glassBorder,
                 width: 0.8,
               ),
             ),
@@ -957,15 +957,15 @@ class ProfileScreen extends ConsumerWidget {
                   margin: const EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.primary.withOpacity(0.15)
+                        ? AppColors.primary.withValues(alpha: 0.15)
                         : (isLight
                             ? const Color(0xFFF1F5F9)
-                            : AppColors.surfaceHighlightDark.withOpacity(0.4)),
+                            : AppColors.surfaceHighlightDark.withValues(alpha: 0.4)),
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
                       color: isSelected
                           ? AppColors.primary
-                          : (isLight ? Colors.black.withOpacity(0.08) : AppColors.glassBorder),
+                          : (isLight ? Colors.black.withValues(alpha: 0.08) : AppColors.glassBorder),
                       width: isSelected ? 1.5 : 0.5,
                     ),
                   ),

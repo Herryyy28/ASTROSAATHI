@@ -13,18 +13,18 @@ import '../theme/app_colors.dart';
 /// Precise Astrological Symbols & Palettes
 class ZodiacSymbols {
   static const Map<String, String> glyphs = {
-    'Aries': '♈',
-    'Taurus': '♉',
-    'Gemini': '♊',
-    'Cancer': '♋',
-    'Leo': '♌',
-    'Virgo': '♍',
-    'Libra': '♎',
-    'Scorpio': '♏',
-    'Sagittarius': '♐',
-    'Capricorn': '♑',
-    'Aquarius': '♒',
-    'Pisces': '♓',
+    'Aries': 'â™ˆ',
+    'Taurus': 'â™‰',
+    'Gemini': 'â™Š',
+    'Cancer': 'â™‹',
+    'Leo': 'â™Œ',
+    'Virgo': 'â™',
+    'Libra': 'â™Ž',
+    'Scorpio': 'â™',
+    'Sagittarius': 'â™',
+    'Capricorn': 'â™‘',
+    'Aquarius': 'â™’',
+    'Pisces': 'â™“',
   };
 
   static const Map<String, Color> signAccentColors = {
@@ -72,7 +72,7 @@ class _ZodiacIconState extends State<ZodiacIcon> {
     final isLight = Theme.of(context).brightness == Brightness.light;
 
     final bgColor = widget.isSelected
-        ? accentColor.withOpacity(isLight ? 0.15 : 0.25)
+        ? accentColor.withValues(alpha: isLight ? 0.15 : 0.25)
         : (isLight ? AppColors.surfaceElevatedLight : const Color(0xFF161E2E));
 
     final borderColor = widget.isSelected
@@ -101,7 +101,7 @@ class _ZodiacIconState extends State<ZodiacIcon> {
             boxShadow: widget.isSelected
                 ? [
                     BoxShadow(
-                      color: accentColor.withOpacity(0.3),
+                      color: accentColor.withValues(alpha: 0.3),
                       blurRadius: 10,
                       offset: const Offset(0, 3),
                     ),
@@ -162,10 +162,10 @@ class _CosmicIconBadgeState extends State<CosmicIconBadge> {
         width: widget.size + 18,
         height: widget.size + 18,
         decoration: BoxDecoration(
-          color: accent.withOpacity(isLight ? 0.12 : 0.18),
+          color: accent.withValues(alpha: isLight ? 0.12 : 0.18),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: accent.withOpacity(isLight ? 0.35 : 0.45),
+            color: accent.withValues(alpha: isLight ? 0.35 : 0.45),
             width: 1.0,
           ),
         ),
@@ -197,3 +197,4 @@ class _CosmicIconBadgeState extends State<CosmicIconBadge> {
     );
   }
 }
+

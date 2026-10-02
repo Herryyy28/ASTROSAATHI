@@ -111,8 +111,9 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
+              Expanded(
+                child: Row(
+                  children: [
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
@@ -138,7 +139,7 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          'Vimshottari Dasha Tree (Mahadasha → Antardasha)',
+                          'Vimshottari Dasha Tree (Mahadasha â†’ Antardasha)',
                           style: GoogleFonts.inter(
                             fontSize: 10.5,
                             color: AppColors.getTextSecondary(context),
@@ -151,7 +152,8 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
                   ),
                 ],
               ),
-              IconButton(
+            ),
+            IconButton(
                 icon: const Icon(Icons.help_outline_rounded, size: 18, color: AppColors.primary),
                 onPressed: () {
                   ExplainChartModal.show(
@@ -178,7 +180,7 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
               margin: const EdgeInsets.only(bottom: 12),
               decoration: BoxDecoration(
                 color: item.isActive
-                    ? AppColors.getPrimary(context).withOpacity(0.12)
+                    ? AppColors.getPrimary(context).withValues(alpha: 0.12)
                     : AppColors.getSurfaceSecondary(context),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
@@ -323,3 +325,4 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
     );
   }
 }
+

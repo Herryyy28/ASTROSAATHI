@@ -33,20 +33,20 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
 
   final List<Map<String, String>> _matrixItems = [
     {
-      'pair': 'Person A Sun ↔ Person B Moon',
-      'aspect': 'Trine (120°)',
+      'pair': 'Person A Sun â†” Person B Moon',
+      'aspect': 'Trine (120Â°)',
       'score': '95% Soul Harmony',
       'desc': 'Deep emotional nurturing. Person A provides clarity and purpose, Person B provides safety and emotional security.',
     },
     {
-      'pair': 'Person A Venus ↔ Person B Mars',
-      'aspect': 'Conjunction (0°)',
+      'pair': 'Person A Venus â†” Person B Mars',
+      'aspect': 'Conjunction (0Â°)',
       'score': '92% Attraction',
       'desc': 'Intense romantic magnetism and mutual passion. High physical alignment and shared artistic preferences.',
     },
     {
-      'pair': 'Person A Saturn ↔ Person B Venus',
-      'aspect': 'Trine (120°)',
+      'pair': 'Person A Saturn â†” Person B Venus',
+      'aspect': 'Trine (120Â°)',
       'score': '88% Commitment',
       'desc': 'Long-term structural stability. High loyalty and mutual financial responsibility over time.',
     },
@@ -83,7 +83,7 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
               decoration: BoxDecoration(
                 color: AppColors.getSurfaceElevated(context),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: accentGold.withOpacity(0.5)),
+                border: Border.all(color: accentGold.withValues(alpha: 0.5)),
               ),
               child: Row(
                 children: [
@@ -91,7 +91,7 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
                     width: 52,
                     height: 52,
                     decoration: BoxDecoration(
-                      color: accentGold.withOpacity(0.2),
+                      color: accentGold.withValues(alpha: 0.2),
                       shape: BoxShape.circle,
                     ),
                     child: Center(
@@ -120,7 +120,7 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          'Person A (Aries Sun) ↔ Person B (Leo Sun)',
+                          'Person A (Aries Sun) â†” Person B (Leo Sun)',
                           style: GoogleFonts.outfit(
                             fontSize: 12,
                             color: AppColors.getTextSecondary(context),
@@ -183,7 +183,7 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
-                            color: accentGold.withOpacity(0.15),
+                            color: accentGold.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -225,3 +225,4 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
     );
   }
 }
+

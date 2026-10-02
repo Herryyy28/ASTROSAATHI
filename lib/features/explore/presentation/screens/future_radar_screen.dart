@@ -141,7 +141,7 @@ class FutureRadarScreen extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: itemCol.withOpacity(0.15),
+                              color: itemCol.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -171,7 +171,7 @@ class FutureRadarScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: AppColors.getSurface(context),
                             borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: itemCol.withOpacity(0.3)),
+                            border: Border.all(color: itemCol.withValues(alpha: 0.3)),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,7 +192,7 @@ class FutureRadarScreen extends StatelessWidget {
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                     decoration: BoxDecoration(
-                                      color: itemCol.withOpacity(0.12),
+                                      color: itemCol.withValues(alpha: 0.12),
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: Text(
@@ -230,3 +230,4 @@ class FutureRadarScreen extends StatelessWidget {
     );
   }
 }
+

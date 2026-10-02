@@ -193,12 +193,12 @@ class KundliScreen extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
               decoration: BoxDecoration(
                 color: isActive
-                    ? AppColors.primary.withOpacity(0.15)
+                    ? AppColors.primary.withValues(alpha: 0.15)
                     : (isLight ? AppColors.surfaceSecondaryLight : AppColors.glassSurface),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
                   color: isActive
-                      ? AppColors.primary.withOpacity(0.5)
+                      ? AppColors.primary.withValues(alpha: 0.5)
                       : AppColors.getGlassBorder(context),
                   width: isActive ? 1 : 0.5,
                 ),
@@ -311,7 +311,7 @@ class KundliScreen extends ConsumerWidget {
               shape: BoxShape.circle,
               gradient: AppColors.goldSubtleGradient,
               border: Border.all(
-                color: AppColors.primary.withOpacity(0.4),
+                color: AppColors.primary.withValues(alpha: 0.4),
               ),
             ),
             child: Center(
@@ -613,10 +613,10 @@ class KundliScreen extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: AppColors.secondary.withOpacity(0.08),
+                          color: AppColors.secondary.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(
-                            color: AppColors.secondary.withOpacity(0.2),
+                            color: AppColors.secondary.withValues(alpha: 0.2),
                           ),
                         ),
                         child: Row(
@@ -711,7 +711,7 @@ class KundliScreen extends ConsumerWidget {
             borderRadius: 18,
             padding: const EdgeInsets.all(16),
             borderColor: present
-                ? (isYoga ? AppColors.success.withOpacity(0.4) : AppColors.warning.withOpacity(0.4))
+                ? (isYoga ? AppColors.success.withValues(alpha: 0.4) : AppColors.warning.withValues(alpha: 0.4))
                 : AppColors.getGlassBorder(context),
             child: Row(
               children: [
@@ -721,7 +721,7 @@ class KundliScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: present
-                        ? (isYoga ? AppColors.success.withOpacity(0.15) : AppColors.warning.withOpacity(0.15))
+                        ? (isYoga ? AppColors.success.withValues(alpha: 0.15) : AppColors.warning.withValues(alpha: 0.15))
                         : AppColors.getSurfaceSecondary(context),
                   ),
                   child: Icon(
@@ -766,7 +766,7 @@ class KundliScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: present
-                        ? (isYoga ? AppColors.success.withOpacity(0.15) : AppColors.warning.withOpacity(0.15))
+                        ? (isYoga ? AppColors.success.withValues(alpha: 0.15) : AppColors.warning.withValues(alpha: 0.15))
                         : AppColors.getSurfaceSecondary(context),
                   ),
                   child: Text(
@@ -964,7 +964,7 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: widget.badgeColor.withOpacity(0.15),
+                              color: widget.badgeColor.withValues(alpha: 0.15),
                             ),
                             child: Text(
                               widget.badge,
@@ -996,10 +996,10 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.06),
+                color: AppColors.primary.withValues(alpha: 0.06),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: AppColors.primary.withOpacity(0.15),
+                  color: AppColors.primary.withValues(alpha: 0.15),
                 ),
               ),
               child: Row(

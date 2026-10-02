@@ -126,7 +126,7 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: AppColors.error.withOpacity(0.15),
+                color: AppColors.error.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
@@ -253,8 +253,8 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.primary.withOpacity(0.15),
-                        border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                        color: AppColors.primary.withValues(alpha: 0.15),
+                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                       ),
                       child: const Icon(Icons.shield_outlined, color: AppColors.primary, size: 20),
                     ),
@@ -289,9 +289,9 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.05),
+                  color: Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withOpacity(0.1)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                 ),
                 child: TabBar(
                   controller: _tabController,
@@ -301,7 +301,7 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primary.withOpacity(0.4),
+                        color: AppColors.primary.withValues(alpha: 0.4),
                         blurRadius: 10,
                       ),
                     ],
@@ -357,15 +357,15 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
         GlassCard(
           borderRadius: 20,
           padding: const EdgeInsets.all(18),
-          borderColor: AppColors.primary.withOpacity(0.4),
-          glowColor: AppColors.primary.withOpacity(0.15),
+          borderColor: AppColors.primary.withValues(alpha: 0.4),
+          glowColor: AppColors.primary.withValues(alpha: 0.15),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(0.2),
+                  color: AppColors.primary.withValues(alpha: 0.2),
                 ),
                 child: const Icon(Icons.auto_awesome, color: AppColors.primary, size: 28),
               ),
@@ -451,7 +451,7 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
         GlassCard(
           borderRadius: 20,
           padding: const EdgeInsets.all(18),
-          borderColor: Colors.white.withOpacity(0.15),
+          borderColor: Colors.white.withValues(alpha: 0.15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -549,8 +549,8 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
         GlassCard(
           borderRadius: 22,
           padding: const EdgeInsets.all(20),
-          borderColor: AppColors.error.withOpacity(0.5),
-          glowColor: AppColors.error.withOpacity(0.15),
+          borderColor: AppColors.error.withValues(alpha: 0.5),
+          glowColor: AppColors.error.withValues(alpha: 0.15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -559,7 +559,7 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: AppColors.error.withOpacity(0.15),
+                      color: AppColors.error.withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -619,7 +619,7 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
         GlassCard(
           borderRadius: 22,
           padding: const EdgeInsets.all(20),
-          borderColor: Colors.white.withOpacity(0.12),
+          borderColor: Colors.white.withValues(alpha: 0.12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -693,8 +693,8 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
                 borderRadius: 16,
                 padding: EdgeInsets.zero,
                 borderColor: isExpanded
-                    ? AppColors.primary.withOpacity(0.5)
-                    : Colors.white.withOpacity(0.1),
+                    ? AppColors.primary.withValues(alpha: 0.5)
+                    : Colors.white.withValues(alpha: 0.1),
                 onTap: () {
                   setState(() {
                     _expandedFaqIndex = isExpanded ? null : index;
@@ -780,9 +780,9 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
               label: Text(cat),
               selected: isSelected,
               selectedColor: AppColors.primary,
-              backgroundColor: Colors.white.withOpacity(0.06),
+              backgroundColor: Colors.white.withValues(alpha: 0.06),
               side: BorderSide(
-                color: isSelected ? AppColors.primary : Colors.white.withOpacity(0.12),
+                color: isSelected ? AppColors.primary : Colors.white.withValues(alpha: 0.12),
               ),
               labelStyle: GoogleFonts.outfit(
                 color: isSelected ? Colors.black : Colors.white,
@@ -822,14 +822,14 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
         GlassCard(
           borderRadius: 18,
           padding: const EdgeInsets.all(18),
-          borderColor: AppColors.primary.withOpacity(0.3),
+          borderColor: AppColors.primary.withValues(alpha: 0.3),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(0.15),
+                  color: AppColors.primary.withValues(alpha: 0.15),
                 ),
                 child: const Icon(
                   Icons.headset_mic_rounded,
@@ -897,7 +897,7 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.primary.withOpacity(0.12),
+                color: AppColors.primary.withValues(alpha: 0.12),
               ),
               child: Icon(icon, color: AppColors.primary, size: 22),
             ),
@@ -950,7 +950,7 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: isPositive ? Colors.green.withOpacity(0.15) : AppColors.primary.withOpacity(0.15),
+              color: isPositive ? Colors.green.withValues(alpha: 0.15) : AppColors.primary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: isPositive ? Colors.green.shade400 : AppColors.primary,
@@ -977,9 +977,9 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.04),
+        color: Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Row(
         children: [
@@ -1014,3 +1014,4 @@ class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
     );
   }
 }
+

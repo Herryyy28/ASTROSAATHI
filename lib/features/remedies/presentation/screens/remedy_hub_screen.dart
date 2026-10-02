@@ -343,9 +343,9 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                   decoration: BoxDecoration(
                     gradient: AppColors.getCardGradient(context),
                     borderRadius: BorderRadius.circular(28),
-                    border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                     boxShadow: [
-                      BoxShadow(color: AppColors.primary.withOpacity(0.1), blurRadius: 16),
+                      BoxShadow(color: AppColors.primary.withValues(alpha: 0.1), blurRadius: 16),
                     ],
                   ),
                   child: Row(
@@ -355,7 +355,7 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                         height: 64,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: AppColors.primary.withOpacity(0.2),
+                          color: AppColors.primary.withValues(alpha: 0.2),
                           border: Border.all(color: AppColors.primary, width: 2),
                         ),
                         child: Center(
@@ -404,7 +404,7 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withOpacity(0.4),
+                    color: isLight ? AppColors.surfaceLight : AppColors.surfaceHighlightDark.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(color: AppColors.getGlassBorder(context)),
                   ),

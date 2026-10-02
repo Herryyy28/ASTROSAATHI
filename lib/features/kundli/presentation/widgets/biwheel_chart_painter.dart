@@ -1,4 +1,4 @@
-import 'dart:math' as math;
+﻿import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -61,7 +61,7 @@ class BiWheelChartWidget extends StatelessWidget {
         border: Border.all(color: AppColors.getBorder(context), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isLight ? 0.04 : 0.3),
+            color: Colors.black.withValues(alpha: isLight ? 0.04 : 0.3),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
@@ -79,7 +79,7 @@ class BiWheelChartWidget extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
-                  color: isLight ? AppColors.surfaceLight : Colors.white.withOpacity(0.08),
+                  color: isLight ? AppColors.surfaceLight : Colors.white.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: AppColors.getBorder(context)),
                 ),
@@ -158,11 +158,11 @@ class BiWheelChartWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildLegendItem('Trine (120°)', isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF), context),
+        _buildLegendItem('Trine (120Â°)', isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF), context),
         const SizedBox(width: 12),
-        _buildLegendItem('Square (90°)', isLight ? const Color(0xFFC62828) : const Color(0xFFFF1744), context),
+        _buildLegendItem('Square (90Â°)', isLight ? const Color(0xFFC62828) : const Color(0xFFFF1744), context),
         const SizedBox(width: 12),
-        _buildLegendItem('Opp (180°)', isLight ? const Color(0xFFB87308) : const Color(0xFFFFC107), context),
+        _buildLegendItem('Opp (180Â°)', isLight ? const Color(0xFFB87308) : const Color(0xFFFFC107), context),
       ],
     );
   }
@@ -267,7 +267,7 @@ class BiWheelChartPainter extends CustomPainter {
             : aspect.color;
 
         final aspectPaint = Paint()
-          ..color = lineCol.withOpacity(0.85)
+          ..color = lineCol.withValues(alpha: 0.85)
           ..strokeWidth = 1.5
           ..style = PaintingStyle.stroke;
         canvas.drawLine(pos1, pos2, aspectPaint);
@@ -286,4 +286,5 @@ class BiWheelChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant BiWheelChartPainter oldDelegate) => true;
 }
+
 

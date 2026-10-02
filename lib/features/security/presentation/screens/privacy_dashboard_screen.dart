@@ -70,7 +70,7 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.4),
+                  color: Colors.black.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -177,7 +177,7 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
                           // 1. Storage Breakdown Card
                           GlassCard(
                             padding: const EdgeInsets.all(16),
-                            borderColor: AppColors.primary.withOpacity(0.4),
+                            borderColor: AppColors.primary.withValues(alpha: 0.4),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -331,3 +331,4 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
     );
   }
 }
+

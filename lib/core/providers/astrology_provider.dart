@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../engine/astrology_engine.dart';
 import '../engine/api_astrology_engine.dart';
 import '../engine/models/game_plan_data.dart';
@@ -70,3 +70,4 @@ final birthChartProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   final profileIdentifier = profile.name.isNotEmpty ? profile.name : profile.id;
   return await engine.getBirthChart(date, time, location, languageCode: lang.code, profileId: profileIdentifier);
 });
+

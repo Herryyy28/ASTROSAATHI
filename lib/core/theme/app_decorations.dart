@@ -9,15 +9,15 @@ class AppDecorations {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        Colors.white.withOpacity(0.12),
-        Colors.white.withOpacity(0.04),
+        Colors.white.withValues(alpha: 0.12),
+        Colors.white.withValues(alpha: 0.04),
       ],
     ),
     borderRadius: BorderRadius.circular(24),
-    border: Border.all(color: Colors.white.withOpacity(0.18), width: 0.8),
+    border: Border.all(color: Colors.white.withValues(alpha: 0.18), width: 0.8),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.2),
+        color: Colors.black.withValues(alpha: 0.2),
         blurRadius: 16,
         offset: const Offset(0, 6),
       ),
@@ -33,18 +33,18 @@ class AppDecorations {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        Colors.white.withOpacity(0.12),
-        Colors.white.withOpacity(0.04),
+        Colors.white.withValues(alpha: 0.12),
+        Colors.white.withValues(alpha: 0.04),
       ],
     ),
     borderRadius: BorderRadius.circular(radius),
     border: Border.all(
-      color: borderColor ?? Colors.white.withOpacity(0.18),
+      color: borderColor ?? Colors.white.withValues(alpha: 0.18),
       width: borderWidth,
     ),
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withOpacity(0.2),
+        color: Colors.black.withValues(alpha: 0.2),
         blurRadius: 16,
         offset: const Offset(0, 6),
       ),
@@ -60,12 +60,12 @@ class AppDecorations {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        AppColors.surfaceDark.withOpacity(0.9),
-        AppColors.surfaceHighlightDark.withOpacity(0.7),
+        AppColors.surfaceDark.withValues(alpha: 0.9),
+        AppColors.surfaceHighlightDark.withValues(alpha: 0.7),
       ],
     ),
     borderRadius: BorderRadius.circular(radius),
-    border: Border.all(color: glowColor.withOpacity(0.4), width: 0.8),
+    border: Border.all(color: glowColor.withValues(alpha: 0.4), width: 0.8),
     boxShadow: [
       BoxShadow(color: glowColor, blurRadius: 24, spreadRadius: -4),
     ],
@@ -75,14 +75,14 @@ class AppDecorations {
   static BoxDecoration get gradientCard => BoxDecoration(
     gradient: AppColors.cardGradient,
     borderRadius: BorderRadius.circular(24),
-    border: Border.all(color: Colors.white.withOpacity(0.18), width: 0.8),
+    border: Border.all(color: Colors.white.withValues(alpha: 0.18), width: 0.8),
   );
 
   // ── Premium Energy Card ───────────────────────────────────────────
   static BoxDecoration get energyCard => BoxDecoration(
     gradient: AppColors.premiumGradient,
     borderRadius: BorderRadius.circular(28),
-    border: Border.all(color: Colors.white.withOpacity(0.2), width: 1.0),
+    border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 1.0),
     boxShadow: AppColors.goldGlowShadow,
   );
 
@@ -97,14 +97,14 @@ class AppDecorations {
       color: isLight ? Colors.white : AppColors.surfaceDark,
       borderRadius: BorderRadius.circular(radius),
       border: Border.all(
-        color: isLight ? accentColor.withOpacity(0.4) : accentColor.withOpacity(0.35),
+        color: isLight ? accentColor.withValues(alpha: 0.4) : accentColor.withValues(alpha: 0.35),
         width: 1.0,
       ),
       boxShadow: [
         BoxShadow(
           color: isLight
-              ? Colors.black.withOpacity(0.03)
-              : accentColor.withOpacity(0.08),
+              ? Colors.black.withValues(alpha: 0.03)
+              : accentColor.withValues(alpha: 0.08),
           blurRadius: 8,
           offset: const Offset(0, 2),
         ),
@@ -122,16 +122,16 @@ class AppDecorations {
     return BoxDecoration(
       color: isLight ? AppColors.surfaceLight : AppColors.surfaceDark,
       borderRadius: BorderRadius.circular(radius),
-      border: Border.all(color: isLight ? alertColor.withOpacity(0.4) : alertColor.withOpacity(0.4), width: 1),
+      border: Border.all(color: isLight ? alertColor.withValues(alpha: 0.4) : alertColor.withValues(alpha: 0.4), width: 1),
       boxShadow: [
-        BoxShadow(color: alertColor.withOpacity(isLight ? 0.08 : 0.15), blurRadius: 16, spreadRadius: -2),
+        BoxShadow(color: alertColor.withValues(alpha: isLight ? 0.08 : 0.15), blurRadius: 16, spreadRadius: -2),
       ],
     );
   }
 
   // ── Bottom Nav Bar ────────────────────────────────────────────────
   static BoxDecoration get bottomNavBar => BoxDecoration(
-    color: AppColors.surfaceDark.withOpacity(0.85),
+    color: AppColors.surfaceDark.withValues(alpha: 0.85),
     border: const Border(
       top: BorderSide(color: AppColors.glassBorder, width: 0.5),
     ),
@@ -181,3 +181,4 @@ class AppDecorations {
     letterSpacing: 1.5,
   );
 }
+

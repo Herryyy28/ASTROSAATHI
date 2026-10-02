@@ -37,14 +37,41 @@ import 'main_screen.dart';
 import '../../../kundli/presentation/screens/kundli_screen.dart';
 import '../../../matching/presentation/screens/matching_screen.dart';
 import '../../../reports/presentation/screens/custom_pdf_report_builder_screen.dart';
+import '../../../../core/widgets/nine_languages_modal.dart';
+import '../../../consult/presentation/widgets/astrosage_consult_home_section.dart';
+import '../../../consult/presentation/screens/talk_to_ai_astrologers_screen.dart';
+import '../../../consult/presentation/screens/chat_with_astrologers_screen.dart';
+import '../widgets/astrosage_classic_grid_view.dart';
+import '../../../reports/presentation/screens/predictions_reports_screen.dart';
+import '../../../panchang/presentation/screens/monthly_panchang_screen.dart';
+import '../../../kundli/presentation/screens/new_kundli_input_screen.dart';
+import '../../../explore/presentation/screens/explore_screen.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final gamePlanAsync = ref.watch(dailyGamePlanProvider);
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
@@ -54,106 +81,371 @@ class HomeScreen extends ConsumerWidget {
           color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
           gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
-        child: SafeArea(
-          bottom: false,
-          child: ResponsiveLayout(
-            child: gamePlanAsync.when(
-              loading: () => const Padding(
-                padding: EdgeInsets.all(24),
-                child: ShimmerLoader(itemCount: 5, itemHeight: 100),
+        child: Column(
+          children: [
+            _buildAstroSageTopBar(context),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  // Tab 0: Structured HOME Dashboard
+                  _buildHomeDashboard(context),
+                  // Tab 1: 100+ Free Reports Hub (Image 3)
+                  const PredictionsReportsScreen(isEmbedded: true),
+                  // Tab 2: Detailed Monthly Panchang (Image 2)
+                  const MonthlyPanchangScreen(isEmbedded: true),
+                  // Tab 3: Horoscope & Kundli Input (Image 5)
+                  const NewKundliInputScreen(isEmbedded: true),
+                ],
               ),
-              error: (error, stack) => ErrorStateWidget(
-                message: error.toString().replaceFirst('Exception: ', ''),
-                onRetry: () => ref.invalidate(dailyGamePlanProvider),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAstroSageTopBar(BuildContext context) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+    return Container(
+      color: const Color(0xFFF5A623), // AstroSage Golden Yellow
+      child: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              child: Row(
+                children: [
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'AstroSaathi Kundli',
+                      style: GoogleFonts.outfit(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.notifications_rounded, color: Colors.black87, size: 24),
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('No new notifications.')),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.search_rounded, color: Colors.black87, size: 26),
+                    onPressed: () => AstroCommandCenterModal.show(context),
+                  ),
+                  PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert_rounded, color: Colors.black87, size: 26),
+                    color: isLight ? Colors.white : AppColors.surfaceDark,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    offset: const Offset(0, 50),
+                    onSelected: (value) {
+                      if (value == 'all_features') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const ExploreScreen()),
+                        );
+                      } else if (value == 'settings') {
+                        ref.read(mainNavIndexProvider.notifier).state = 4;
+                      }
+                    },
+                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                      PopupMenuItem<String>(
+                        value: 'all_features',
+                        child: Row(
+                          children: [
+                            Icon(Icons.grid_view_rounded, size: 20, color: AppColors.getTextPrimary(context)),
+                            const SizedBox(width: 12),
+                            Text('All Features', style: GoogleFonts.inter(color: AppColors.getTextPrimary(context), fontWeight: FontWeight.w500)),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuDivider(),
+                      PopupMenuItem<String>(
+                        value: 'settings',
+                        child: Row(
+                          children: [
+                            Icon(Icons.settings_rounded, size: 20, color: AppColors.getTextPrimary(context)),
+                            const SizedBox(width: 12),
+                            Text('Settings', style: GoogleFonts.inter(color: AppColors.getTextPrimary(context), fontWeight: FontWeight.w500)),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuDivider(),
+                      PopupMenuItem<String>(
+                        value: 'language',
+                        child: Row(
+                          children: [
+                            Icon(Icons.language_rounded, size: 20, color: AppColors.getTextPrimary(context)),
+                            const SizedBox(width: 12),
+                            Text('Language', style: GoogleFonts.inter(color: AppColors.getTextPrimary(context), fontWeight: FontWeight.w500)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              data: (plan) => _buildGamePlanUI(context, ref, plan),
+            ),
+            TabBar(
+              controller: _tabController,
+              isScrollable: false,
+              indicatorColor: Colors.black87,
+              indicatorWeight: 3.0,
+              labelColor: Colors.black87,
+              unselectedLabelColor: Colors.black54,
+              labelStyle: GoogleFonts.outfit(
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+                letterSpacing: 0.4,
+              ),
+              unselectedLabelStyle: GoogleFonts.outfit(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.4,
+              ),
+              tabs: const [
+                Tab(text: 'HOME'),
+                Tab(text: 'REPORTS'),
+                Tab(text: 'PANCHANG'),
+                Tab(text: 'HOROSCOPE'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHomeDashboard(BuildContext context) {
+    final gamePlanAsync = ref.watch(dailyGamePlanProvider);
+
+    return ResponsiveLayout(
+      child: gamePlanAsync.when(
+        loading: () => const Padding(
+          padding: EdgeInsets.all(24),
+          child: ShimmerLoader(itemCount: 5, itemHeight: 100),
+        ),
+        error: (error, stack) => ErrorStateWidget(
+          message: error.toString().replaceFirst('Exception: ', ''),
+          onRetry: () => ref.invalidate(dailyGamePlanProvider),
+        ),
+        data: (plan) => _buildGamePlanUI(context, ref, plan),
+      ),
+    );
+  }
+
+  Widget _buildActiveProfileHeader(BuildContext context, WidgetRef ref) {
+    final activeProfile = ref.watch(activeProfileProvider);
+    final userName = activeProfile.name.isNotEmpty ? activeProfile.name : 'Seeker';
+    final isLight = Theme.of(context).brightness == Brightness.light;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: isLight ? Colors.white : AppColors.surfaceDark,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isLight ? const Color(0xFFEEEEEE) : AppColors.borderDark,
+          width: 0.8,
+        ),
+        boxShadow: isLight
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ]
+            : null,
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF5A623).withValues(alpha: 0.15),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.person_rounded,
+              color: Color(0xFFE65100),
+              size: 20,
             ),
           ),
-        ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        userName,
+                        style: GoogleFonts.outfit(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.getTextPrimary(context),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE8F5E9),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        'Simha Lagna',
+                        style: GoogleFonts.inter(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFF2E7D32),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  activeProfile.birthPlace.isNotEmpty
+                      ? activeProfile.birthPlace
+                      : 'Kundli active for today',
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    color: AppColors.getTextSecondary(context),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () => ProfileSwitcherModal.show(context),
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF5A623).withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: const Color(0xFFF5A623).withValues(alpha: 0.4), width: 0.8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Switch',
+                    style: GoogleFonts.outfit(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFFE65100),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Icon(Icons.swap_vert_rounded, size: 14, color: Color(0xFFE65100)),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildGamePlanUI(BuildContext context, WidgetRef ref, GamePlanData plan) {
     final hPad = context.responsive<double>(
-      mobile: 20,
-      tablet: 32,
-      desktop: 40,
+      mobile: 16,
+      tablet: 24,
+      desktop: 32,
     );
-    final isWide = !context.isMobile;
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
         SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              hPad,
-              context.responsive(mobile: 16, tablet: 24, desktop: 24),
-              hPad,
-              100,
-            ),
+            padding: EdgeInsets.fromLTRB(hPad, 12, hPad, 100),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 1. Greeting
-                _buildGreeting().fadeSlideUp(),
-                const SizedBox(height: 16),
+                // 1. Active Profile Header Bar (Image 5 & AstroSage Header)
+                _buildActiveProfileHeader(context, ref),
+                const SizedBox(height: 12),
 
-                // 2. Today's main astrology insight
-                if (isWide) ...[
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                // 2. AstroSage Consult Section with 3 Primary Big Buttons & 3x4 Grid inside middleWidget (Image 2 & 4)
+                AstrosageConsultHomeSection(
+                  middleWidget: Column(
                     children: [
-                      Expanded(
-                        child: const BirthChartCard(),
+                      // 3 Large Action Cards: Kundli | Matching | Horoscope (Image 2)
+                      AstrosagePrimaryActionCards(
+                        onSelectTab: (idx) => _tabController.animateTo(idx),
                       ),
-                      const SizedBox(width: 24),
-                      Expanded(
-                        child: _buildEnergyCard(context, plan).fadeSlideUp(delay: 60.ms),
+                      const SizedBox(height: 14),
+
+                      // 3x4 Classic Tools Grid (Image 4)
+                      AstrosageClassicGridView(
+                        onSelectTab: (idx) => _tabController.animateTo(idx),
                       ),
                     ],
                   ),
-                ] else ...[
-                  const BirthChartCard(),
-                  const SizedBox(height: 16),
-                  _buildEnergyCard(context, plan).fadeSlideUp(delay: 60.ms),
-                ],
-                const SizedBox(height: 16),
+                ),
+                const SizedBox(height: 24),
 
-                // 3. Quick Actions
-                _buildQuickActions(context, ref).fadeSlideUp(delay: 80.ms),
-                const SizedBox(height: 16),
+                // 3. Section Title: Today's Personal Cosmic Game Plan
+                Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5A623),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "TODAY'S COSMIC GAME PLAN",
+                      style: GoogleFonts.outfit(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.getTextPrimary(context),
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
 
-                // 4. Daily Check-In
-                const DailyCheckInWidget().fadeSlideUp(delay: 100.ms),
-                const SizedBox(height: 16),
+                // 4. Energy Score & Cosmic Alignment
+                _buildEnergyCard(context, plan).fadeSlideUp(delay: 50.ms),
+                const SizedBox(height: 14),
 
-                // 5. Daily Game Plan / Routine
-                const DailyRoutineWidget().fadeSlideUp(delay: 120.ms),
-                const SizedBox(height: 16),
+                // 5. Auspicious Muhurat Window
+                _buildBestWindow(plan).fadeSlideUp(delay: 70.ms),
+                const SizedBox(height: 14),
 
-                // 6. Upcoming Events & Best Windows
-                const UpcomingEventsWidget().fadeSlideUp(delay: 140.ms),
-                const SizedBox(height: 16),
-                _buildBestWindow(plan).fadeSlideUp(delay: 160.ms),
-                const SizedBox(height: 16),
+                // 6. Daily Check-In & Routine
+                const DailyCheckInWidget().fadeSlideUp(delay: 90.ms),
+                const SizedBox(height: 14),
+                const DailyRoutineWidget().fadeSlideUp(delay: 110.ms),
+                const SizedBox(height: 14),
 
-                // 7. Astro Baba Prompt
-                _buildAstroBabaPrompt().fadeSlideUp(delay: 180.ms),
-                const SizedBox(height: 16),
-
-                // 8. Premium / Deeper Reports & Tools
-                WhatChangedTodayCard(gamePlan: plan).fadeSlideUp(delay: 200.ms),
-                const SizedBox(height: 16),
-                const PersonalCosmicCalendarWidget().fadeSlideUp(delay: 220.ms),
-                const SizedBox(height: 16),
-                _buildCategories(context, plan).fadeSlideUp(delay: 240.ms),
-                const SizedBox(height: 16),
-                const AdMobBannerWidget(),
-                const SizedBox(height: 16),
-
-                // Do / Careful / Avoid Reference
+                // 7. Actionable Guidelines (Do / Be Careful / Avoid)
                 Consumer(
                   builder: (context, ref, _) {
                     final l10n = AppLocalizations.of(context, ref);
@@ -166,25 +458,25 @@ class HomeScreen extends ConsumerWidget {
                           plan.doList,
                           AppColors.success,
                           Icons.check_circle_rounded,
-                          260,
+                          130,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 14),
                         _buildActionSection(
                           context,
                           l10n.beCarefulTitle,
                           plan.beCarefulList,
                           AppColors.warning,
                           Icons.warning_rounded,
-                          280,
+                          150,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 14),
                         _buildActionSection(
                           context,
                           l10n.avoidTitle,
                           plan.avoidList,
                           AppColors.error,
                           Icons.cancel_rounded,
-                          300,
+                          170,
                         ),
                       ],
                     );
@@ -196,284 +488,6 @@ class HomeScreen extends ConsumerWidget {
         ),
       ],
     );
-  }
-
-  Widget _buildQuickActions(BuildContext context, WidgetRef ref) {
-    final actions = [
-      {
-        'title': 'Kundli',
-        'icon': Icons.auto_awesome_rounded,
-        'color': AppColors.primary,
-        'onTap': () => ref.read(mainNavIndexProvider.notifier).state = 1,
-      },
-      {
-        'title': 'Gun Milan',
-        'icon': Icons.favorite_rounded,
-        'color': AppColors.secondary,
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MatchingScreen())),
-      },
-      {
-        'title': 'Muhurat',
-        'icon': Icons.schedule_rounded,
-        'color': AppColors.infoDark,
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MuhuratScreen())),
-      },
-      {
-        'title': 'PDF Report',
-        'icon': Icons.picture_as_pdf_rounded,
-        'color': AppColors.successDark,
-        'onTap': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomPdfReportBuilderScreen())),
-      },
-    ];
-
-    return Row(
-      children: [
-        for (int i = 0; i < actions.length; i++) ...[
-          if (i > 0) const SizedBox(width: 8),
-          Expanded(
-            child: InkWell(
-              onTap: actions[i]['onTap'] as VoidCallback,
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: AppColors.getSurface(context),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.getBorder(context), width: 0.8),
-                ),
-                child: Column(
-                  children: [
-                    Icon(actions[i]['icon'] as IconData, color: actions[i]['color'] as Color, size: 20),
-                    const SizedBox(height: 6),
-                    Text(
-                      actions[i]['title'] as String,
-                      style: GoogleFonts.outfit(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.getTextPrimary(context),
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-
-  Widget _buildGreeting() {
-    final hour = DateTime.now().hour;
-    String greeting;
-    return Consumer(
-      builder: (context, ref, _) {
-        final l10n = AppLocalizations.of(context, ref);
-        final lang = ref.watch(localeProvider);
-
-        if (hour < 12) {
-          greeting = l10n.goodMorning;
-        } else if (hour < 17) {
-          greeting = l10n.goodAfternoon;
-        } else {
-          greeting = l10n.goodEvening;
-        }
-
-        final activeProfile = ref.watch(activeProfileProvider);
-        final userName = activeProfile.name;
-        final displayGreeting = userName.isNotEmpty
-            ? '$greeting, $userName'
-            : greeting;
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.14),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.primary.withOpacity(0.28), width: 1.0),
-                  ),
-                  child: const Icon(
-                    Icons.wb_sunny_rounded,
-                    color: AppColors.primary,
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    displayGreeting,
-                    style: GoogleFonts.outfit(
-                      fontSize: context.responsive<double>(
-                        mobile: 20,
-                        tablet: 24,
-                        desktop: 28,
-                      ),
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.getTextPrimary(context),
-                      letterSpacing: -0.3,
-                      height: 1.1,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  icon: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.getSurfaceElevated(context),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.getBorder(context), width: 0.8),
-                    ),
-                    child: Icon(
-                      Icons.share_rounded,
-                      color: AppColors.getPrimary(context),
-                      size: 18,
-                    ),
-                  ),
-                  onPressed: () {
-                    final plan = ref.read(dailyGamePlanProvider).value;
-                    if (plan != null) {
-                      ShareableCosmicCardModal.show(context, plan);
-                    }
-                  },
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                  icon: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColors.getSurfaceElevated(context),
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.getBorder(context), width: 0.8),
-                    ),
-                    child: Icon(
-                      Icons.search_rounded,
-                      color: AppColors.getPrimary(context),
-                      size: 18,
-                    ),
-                  ),
-                  onPressed: () {
-                    AstroCommandCenterModal.show(context);
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                  child: GestureDetector(
-                    onTap: () => ProfileSwitcherModal.show(context),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: AppColors.getPrimary(context).withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: AppColors.getPrimary(context).withOpacity(0.4), width: 1.0),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.star_rounded,
-                            size: 13,
-                            color: AppColors.getPrimary(context),
-                          ),
-                          const SizedBox(width: 6),
-                          Flexible(
-                            child: Text(
-                              activeProfile.name.isNotEmpty ? activeProfile.name : 'Profile',
-                              style: GoogleFonts.outfit(
-                                fontSize: 12.5,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.getPrimary(context),
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Icon(Icons.swap_vert_rounded, size: 14, color: AppColors.getPrimary(context)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Consumer(
-                  builder: (context, ref, _) {
-                    final gameState = ref.watch(gamificationProvider);
-                    return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: AppColors.warning.withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.warning.withOpacity(0.35)),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('🔥', style: TextStyle(fontSize: 11)),
-                          const SizedBox(width: 3),
-                          Text(
-                            '${gameState.streakDays}d',
-                            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.warning),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    _formatDate(lang),
-                    textAlign: TextAlign.end,
-                    style: GoogleFonts.inter(
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.getTextSecondary(context),
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  String _formatDate(AppLanguage lang) {
-    final now = DateTime.now();
-    List<String> days;
-    List<String> months;
-
-    if (lang == AppLanguage.hindi) {
-      days = ['सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार', 'रविवार'];
-      months = ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'];
-    } else if (lang == AppLanguage.gujarati) {
-      days = ['સોમવાર', 'મંગળવાર', 'બુધવાર', 'ગુરુવાર', 'શુક્રવાર', 'શનિવાર', 'રવિવાર'];
-      months = ['જાન્યુઆરી', 'ફેબ્રુઆરી', 'માર્ચ', 'એપ્રિલ', 'મે', 'જૂન', 'જુલાઇ', 'ઓગસ્ટ', 'સપ્ટેમ્બર', 'ઓક્ટોબર', 'નવેમ્બર', 'ડિસેમ્બર'];
-    } else {
-      days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-      months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    }
-    return '${days[(now.weekday - 1) % 7]} · ${now.day} ${months[(now.month - 1) % 12]}';
   }
 
 
@@ -515,7 +529,7 @@ class HomeScreen extends ConsumerWidget {
                       value: animatedValue / 10,
                       strokeWidth: 7,
                       backgroundColor: AppColors.surfaceHighlightDark
-                          .withOpacity(0.5),
+                          .withValues(alpha: 0.5),
                       color: AppColors.primary,
                       strokeCap: StrokeCap.round,
                     ),
@@ -566,9 +580,9 @@ class HomeScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.12),
+              color: AppColors.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+              border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -720,7 +734,7 @@ class HomeScreen extends ConsumerWidget {
                     height: 6,
                     margin: const EdgeInsets.only(top: 7),
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.5),
+                      color: color.withValues(alpha: 0.5),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -763,7 +777,7 @@ class HomeScreen extends ConsumerWidget {
                 height: 48,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primary.withOpacity(0.12),
+                  color: AppColors.primary.withValues(alpha: 0.12),
                 ),
                 child: const Icon(
                   Icons.wb_sunny_rounded,
@@ -872,7 +886,7 @@ class HomeScreen extends ConsumerWidget {
             ref.read(mainNavIndexProvider.notifier).state =
                 3; // Navigate to Astro AI tab (Index 3)
           },
-          borderColor: AppColors.secondary.withOpacity(0.4),
+          borderColor: AppColors.secondary.withValues(alpha: 0.4),
           glowColor: AppColors.purpleGlow,
           padding: const EdgeInsets.all(20),
           child: Row(
@@ -883,7 +897,7 @@ class HomeScreen extends ConsumerWidget {
                 height: 36,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.secondary.withOpacity(0.15),
+                  color: AppColors.secondary.withValues(alpha: 0.15),
                 ),
                 child: const Icon(
                   Icons.auto_awesome,

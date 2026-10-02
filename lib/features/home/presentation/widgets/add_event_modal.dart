@@ -20,7 +20,7 @@ class AddEventModal extends ConsumerStatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.75),
+      barrierColor: Colors.black.withValues(alpha: 0.75),
       builder: (context) => AddEventModal(initialDate: initialDate),
     );
   }
@@ -92,7 +92,7 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
               maxHeight: MediaQuery.of(context).size.height * 0.85,
             ),
             decoration: BoxDecoration(
-              color: isLight ? AppColors.surfaceLight.withOpacity(0.96) : const Color(0xF20F141C),
+              color: isLight ? AppColors.surfaceLight.withValues(alpha: 0.96) : const Color(0xF20F141C),
               borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
               border: Border.all(color: AppColors.getGlassBorder(context), width: 1.0),
             ),
@@ -186,7 +186,7 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                             margin: const EdgeInsets.only(right: 8),
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
-                              color: isSel ? cat.color.withOpacity(0.2) : AppColors.getSurfaceSecondary(context),
+                              color: isSel ? cat.color.withValues(alpha: 0.2) : AppColors.getSurfaceSecondary(context),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
                                 color: isSel ? cat.color : AppColors.getGlassBorder(context),
@@ -298,9 +298,9 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.12),
+                      color: AppColors.primary.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.primary.withOpacity(0.4)),
+                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                     ),
                     child: Row(
                       children: [
@@ -339,7 +339,7 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                               Text(
                                 score >= 8.5
                                     ? '✦ Peak Window! Favorable transits for ${_selectedCategory.label.toLowerCase()}.'
-                                    : (score >= 6.5 ? 'Good timing. Planetary energy aligns favorably.' : '⚠️ Caution Window! Consider shifting time by 30 mins.'),
+                                    : (score >= 6.5 ? 'Good timing. Planetary energy aligns favorably.' : 'âš ï¸ Caution Window! Consider shifting time by 30 mins.'),
                                 style: GoogleFonts.inter(
                                   fontSize: 11,
                                   color: AppColors.getTextSecondary(context),
@@ -431,3 +431,4 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
     );
   }
 }
+
