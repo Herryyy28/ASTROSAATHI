@@ -1,10 +1,11 @@
-﻿import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 class AppConfig {
   static String get baseUrl {
     if (kReleaseMode) return 'https://api.astrosaathi.app';
-    if (!kIsWeb && Platform.isAndroid) return 'http://10.0.2.2:3000';
+    const envUrl = String.fromEnvironment('API_BASE_URL');
+    if (envUrl.isNotEmpty) return envUrl;
+    // 127.0.0.1:3000 works on physical Android devices via adb reverse, iOS, and Web.
     return 'http://127.0.0.1:3000';
   }
 

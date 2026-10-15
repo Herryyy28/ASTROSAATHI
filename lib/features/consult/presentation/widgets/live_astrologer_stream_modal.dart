@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../data/models/astrologer_model.dart';
 
 class LiveAstrologerStreamModal extends StatefulWidget {

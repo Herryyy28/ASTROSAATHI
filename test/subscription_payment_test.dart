@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:AstroSaathi/core/providers/subscription_provider.dart';
+import 'package:astrosaathi/core/providers/subscription_provider.dart';
 
 void main() {
   group('💳 Subscription & Real-Time Payment Flow Verification', () {

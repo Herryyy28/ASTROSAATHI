@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/routing/app_router.dart';
+import '../../../../core/providers/profile_provider.dart';
 
 /// Elite Production Splash Screen for AstroSaathi
 /// Displays official App Icon, gold gradient brand logo title, and slogan badge.
@@ -25,11 +26,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   }
 
   Future<void> _navigateToNext() async {
-    await Future.delayed(const Duration(milliseconds: 400));
+    await Future.delayed(const Duration(milliseconds: 600));
     if (!mounted) return;
 
     bool isDone = false;
     try {
+      await ref.read(profilesListProvider.notifier).loadProfiles();
       isDone = ref.read(onboardingCompleteProvider);
     } catch (e) {
       debugPrint('Error checking onboarding status: $e');

@@ -1,4 +1,3 @@
-import '../../../astrology/presentation/widgets/birth_chart_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,28 +18,16 @@ import '../../../../core/theme/utils/responsive.dart';
 import '../../../../core/engine/models/game_plan_data.dart';
 import '../../../../core/widgets/why_this_bottom_sheet.dart';
 
-import '../../../../core/widgets/admob_banner_widget.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../search/presentation/widgets/astro_command_center_modal.dart';
-import '../widgets/what_changed_today_card.dart';
 import '../widgets/daily_check_in_widget.dart';
 import '../widgets/daily_routine_widget.dart';
-import '../widgets/upcoming_events_widget.dart';
-import '../../../../core/providers/gamification_provider.dart';
 import '../../../muhurat/presentation/screens/muhurat_screen.dart';
 import '../../../profile/presentation/widgets/profile_switcher_modal.dart';
-import '../widgets/personal_cosmic_calendar_widget.dart';
-import '../widgets/shareable_cosmic_card_modal.dart';
 import 'main_screen.dart';
 
 
-import '../../../kundli/presentation/screens/kundli_screen.dart';
-import '../../../matching/presentation/screens/matching_screen.dart';
-import '../../../reports/presentation/screens/custom_pdf_report_builder_screen.dart';
-import '../../../../core/widgets/nine_languages_modal.dart';
 import '../../../consult/presentation/widgets/astrosage_consult_home_section.dart';
-import '../../../consult/presentation/screens/talk_to_ai_astrologers_screen.dart';
-import '../../../consult/presentation/screens/chat_with_astrologers_screen.dart';
 import '../widgets/astrosage_classic_grid_view.dart';
 import '../../../reports/presentation/screens/predictions_reports_screen.dart';
 import '../../../panchang/presentation/screens/monthly_panchang_screen.dart';
@@ -180,17 +167,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                           ],
                         ),
                       ),
-                      const PopupMenuDivider(),
-                      PopupMenuItem<String>(
-                        value: 'language',
-                        child: Row(
-                          children: [
-                            Icon(Icons.language_rounded, size: 20, color: AppColors.getTextPrimary(context)),
-                            const SizedBox(width: 12),
-                            Text('Language', style: GoogleFonts.inter(color: AppColors.getTextPrimary(context), fontWeight: FontWeight.w500)),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ],
@@ -248,6 +224,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final activeProfile = ref.watch(activeProfileProvider);
     final userName = activeProfile.name.isNotEmpty ? activeProfile.name : 'Seeker';
     final isLight = Theme.of(context).brightness == Brightness.light;
+    final kundliAsync = ref.watch(typedKundliDataProvider);
+    final lagnaText = kundliAsync.when(
+      data: (k) => '${k.ascendantSign} Lagna',
+      loading: () => 'Lagna Calc...',
+      error: (err, stack) => activeProfile.dob.isNotEmpty ? 'Vedic Lagna' : 'Setup Profile',
+    );
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -310,7 +292,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        'Simha Lagna',
+                        lagnaText,
                         style: GoogleFonts.inter(
                           fontSize: 10,
                           fontWeight: FontWeight.w700,
@@ -809,118 +791,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               Icon(
                 Icons.chevron_right_rounded,
                 color: AppColors.getTextMuted(context),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildCategories(BuildContext context, GamePlanData plan) {
-    final entries = plan.categories.entries.toList();
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
-      child: Row(
-        children: entries.map((e) {
-          return Container(
-            width: 105,
-            margin: const EdgeInsets.only(right: 12),
-            child: GlassCard(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
-              child: Column(
-                children: [
-                  Text(
-                    e.key.toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppColors.getTextSecondary(context),
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                Text(
-                  e.value.toStringAsFixed(0),
-                  style: GoogleFonts.outfit(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.getTextPrimary(context),
-                  ),
-                ),
-                  const SizedBox(height: 8),
-                  // Mini progress bar
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(2),
-                    child: LinearProgressIndicator(
-                      value: e.value / 10,
-                      backgroundColor: AppColors.getSurfaceSecondary(context),
-                      color: _getCategoryColor(e.value),
-                      minHeight: 3,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Color _getCategoryColor(double score) {
-    if (score >= 7) return AppColors.success;
-    if (score >= 5) return AppColors.primary;
-    return AppColors.warning;
-  }
-
-  Widget _buildAstroBabaPrompt() {
-    return Consumer(
-      builder: (context, ref, _) {
-        return GlassCard(
-          onTap: () {
-            ref.read(mainNavIndexProvider.notifier).state =
-                3; // Navigate to Astro AI tab (Index 3)
-          },
-          borderColor: AppColors.secondary.withValues(alpha: 0.4),
-          glowColor: AppColors.purpleGlow,
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.secondary.withValues(alpha: 0.15),
-                ),
-                child: const Icon(
-                  Icons.auto_awesome,
-                  color: AppColors.secondary,
-                  size: 18,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  AppLocalizations.of(context, ref).askAstroBabaBtn,
-                  style: GoogleFonts.outfit(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.getTextPrimary(context),
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: AppColors.getTextMuted(context),
-                size: 16,
               ),
             ],
           ),

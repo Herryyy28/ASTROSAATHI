@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -386,7 +385,7 @@ class AstroRemindersScreen extends ConsumerWidget {
                             ),
                           ),
                         );
-                      }).toList(),
+                      }),
                   ],
                 ),
               ),
@@ -431,7 +430,7 @@ class AstroRemindersScreen extends ConsumerWidget {
         ),
         Switch.adaptive(
           value: value,
-          activeColor: AppColors.primary,
+          activeThumbColor: AppColors.primary,
           onChanged: onChanged,
         ),
       ],

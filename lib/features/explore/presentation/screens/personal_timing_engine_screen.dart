@@ -229,7 +229,7 @@ class _PersonalTimingEngineScreenState extends State<PersonalTimingEngineScreen>
                   ),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
-                    value: _selectedActivity,
+                    initialValue: _selectedActivity,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: AppColors.getSurface(context),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:AstroSaathi/core/theme/utils/responsive.dart';
-import 'package:AstroSaathi/core/widgets/responsive_layout.dart';
+import 'package:astrosaathi/core/theme/utils/responsive.dart';
+import 'package:astrosaathi/core/widgets/responsive_layout.dart';
 
 void main() {
   group('📐 Responsive Device Viewport & Layout Test Suite', () {

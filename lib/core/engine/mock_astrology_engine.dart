@@ -6,6 +6,7 @@ import 'models/horoscope_data.dart';
 import 'models/astrology_validation.dart';
 import 'astrology_engine.dart';
 import '../utils/zodiac_sign_utils.dart';
+import '../utils/vedic_astronomy_utils.dart';
 
 class MockAstrologyEngine implements AstrologyEngine {
   @override
@@ -130,41 +131,41 @@ class MockAstrologyEngine implements AstrologyEngine {
 
   @override
   Future<PanchangData> calculatePanchang(String date, String location, {String languageCode = 'en'}) async {
-    final lang = languageCode.toLowerCase();
-    if (lang == 'hi') {
-      return PanchangData(
-        tithi: 'शुक्ल पक्ष दशमी',
-        vara: 'गुरुवार',
-        nakshatra: 'रोहिणी (चंद्रमा शासित)',
-        yoga: 'सिद्धि योग',
-        karana: 'तैतिल',
-        sunrise: '06:12 AM',
-        sunset: '06:45 PM',
-        rahuKaal: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
-      );
-    } else if (lang == 'gu') {
-      return PanchangData(
-        tithi: 'શુક્લ પક્ષ દશમી',
-        vara: 'ગુરુવાર',
-        nakshatra: 'રોહિણી (ચંદ્ર શાસિત)',
-        yoga: 'સિદ્ધિ યોગ',
-        karana: 'તૈતિલ',
-        sunrise: '06:12 AM',
-        sunset: '06:45 PM',
-        rahuKaal: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
-      );
-    } else {
-      return PanchangData(
-        tithi: 'Shukla Paksha Dashami',
-        vara: 'Thursday',
-        nakshatra: 'Rohini (Moon Ruled)',
-        yoga: 'Siddhi Yoga',
-        karana: 'Taitila',
-        sunrise: '06:12 AM',
-        sunset: '06:45 PM',
-        rahuKaal: TimeWindow(start: '01:30 PM', end: '03:00 PM'),
-      );
+    DateTime parsedDate;
+    try {
+      parsedDate = DateTime.parse(date);
+    } catch (_) {
+      parsedDate = DateTime.now();
     }
+
+    double lat = 28.6139;
+    double lon = 77.2090;
+    if (location.contains(',')) {
+      final parts = location.split(',');
+      if (parts.length >= 2) {
+        lat = double.tryParse(parts[0].trim()) ?? 28.6139;
+        lon = double.tryParse(parts[1].trim()) ?? 77.2090;
+      }
+    }
+
+    final calc = VedicAstronomyUtils.calculatePanchang(
+      date: parsedDate,
+      latitude: lat,
+      longitude: lon,
+    );
+
+    final rahu = calc['rahuKaal'] as Map<String, String>;
+
+    return PanchangData(
+      tithi: calc['tithi'] as String,
+      vara: calc['vara'] as String,
+      nakshatra: calc['nakshatra'] as String,
+      yoga: calc['yoga'] as String,
+      karana: calc['karana'] as String,
+      sunrise: calc['sunrise'] as String,
+      sunset: calc['sunset'] as String,
+      rahuKaal: TimeWindow(start: rahu['start']!, end: rahu['end']!),
+    );
   }
 
   @override

@@ -1,5 +1,5 @@
-import 'package:AstroSaathi/core/engine/models/astrology_validation.dart';
-import 'package:AstroSaathi/core/utils/zodiac_sign_utils.dart';
+import 'package:astrosaathi/core/engine/models/astrology_validation.dart';
+import 'package:astrosaathi/core/utils/zodiac_sign_utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

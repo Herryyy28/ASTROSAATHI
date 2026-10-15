@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../search/presentation/widgets/astro_command_center_modal.dart';
 import '../../data/models/astrologer_model.dart';
 import 'personal_astrologer_chat_screen.dart';
 
@@ -73,7 +72,7 @@ class _ChatWithAstrologersScreenState extends ConsumerState<ChatWithAstrologersS
                 padding: const EdgeInsets.only(bottom: 90),
                 physics: const BouncingScrollPhysics(),
                 itemCount: _filteredAstrologers.length,
-                separatorBuilder: (_, __) => Divider(height: 1, indent: 84, color: AppColors.getGlassBorder(context)),
+                separatorBuilder: (_, _) => Divider(height: 1, indent: 84, color: AppColors.getGlassBorder(context)),
                 itemBuilder: (context, index) {
                   final a = _filteredAstrologers[index];
                   return _buildAstrologerListCard(a, isLight);
@@ -176,7 +175,7 @@ class _ChatWithAstrologersScreenState extends ConsumerState<ChatWithAstrologersS
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: _filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           final filter = _filters[index];
           final isSelected = filter == _selectedFilter;

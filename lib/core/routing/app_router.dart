@@ -1,12 +1,12 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/home/presentation/screens/main_screen.dart';
 import '../../features/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/splash/presentation/screens/splash_screen.dart';
-
 import '../../features/auth/presentation/screens/auth_screen.dart';
+import '../../features/auth/data/auth_repository.dart';
 import '../providers/profile_provider.dart';
 
 /// Provider that checks if the user has completed onboarding.
@@ -25,15 +25,31 @@ class RouterNotifier extends ChangeNotifier {
         notifyListeners();
       },
     );
+    _ref.listen<UserSessionState>(
+      userSessionProvider,
+      (previous, next) {
+        notifyListeners();
+      },
+    );
   }
 
   String? redirect(BuildContext context, GoRouterState state) {
+    final loc = state.matchedLocation;
+    // Splash screen handles its own timed transition
+    if (loc == '/splash') return null;
+    // Auth screen must always be reachable
+    if (loc == '/auth') return null;
+
     final isDone = _ref.read(onboardingCompleteProvider);
 
-    final isOnboardingLocation = state.matchedLocation == '/onboarding';
-    if (!isDone && !isOnboardingLocation) {
+    if (!isDone && loc != '/onboarding') {
       return '/onboarding';
     }
+
+    if (isDone && loc == '/onboarding') {
+      return '/';
+    }
+
     return null;
   }
 }
@@ -46,7 +62,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final notifier = ref.read(routerNotifierProvider);
 
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/splash',
     refreshListenable: notifier,
     redirect: notifier.redirect,
     routes: [
@@ -69,5 +85,3 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
-
-

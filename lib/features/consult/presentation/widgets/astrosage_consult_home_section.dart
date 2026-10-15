@@ -9,7 +9,6 @@ import 'live_astrologer_stream_modal.dart';
 
 import '../../../kundli/presentation/screens/new_kundli_input_screen.dart';
 import '../../../matching/presentation/screens/matching_screen.dart';
-import '../../../home/presentation/screens/main_screen.dart';
 
 class AstrosageConsultHomeSection extends StatelessWidget {
   final Widget? middleWidget;
@@ -205,7 +204,7 @@ class AstrosageConsultHomeSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             itemCount: liveList.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               final a = liveList[index];
               return GestureDetector(
@@ -335,7 +334,7 @@ class AstrosageConsultHomeSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             itemCount: list.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               final a = list[index];
               return Container(

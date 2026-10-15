@@ -604,10 +604,13 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
         ),
         child: Row(
           children: [
+            // ignore: deprecated_member_use
             Radio<PlanTier>(
               value: tier,
+              // ignore: deprecated_member_use
               groupValue: _selectedTier,
               activeColor: isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700),
+              // ignore: deprecated_member_use
               onChanged: (val) {
                 if (val != null) setState(() => _selectedTier = val);
               },
@@ -705,6 +708,12 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   }
 
   Future<void> _handleSubscribe() async {
+    final session = ref.read(userSessionProvider);
+    if (!session.isAuthenticated) {
+      _showAuthRequiredSheet(context);
+      return;
+    }
+
     // Development Mode Bypass: Directly upgrade to premium without Razorpay
     await ref.read(subscriptionProvider.notifier).upgradeToTier(_selectedTier);
     if (!mounted) return;
@@ -998,6 +1007,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           .read(subscriptionProvider.notifier)
           .grantPremiumAccess(_selectedTier, _currentOrderId);
 
+      if (!mounted) return;
       Navigator.pop(context); // Close VIP upgrade modal
 
       Navigator.push(

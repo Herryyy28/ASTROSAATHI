@@ -15,6 +15,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../astrology/presentation/widgets/birth_chart_card.dart';
 import '../widgets/interactive_dasha_timeline.dart';
 import '../../../profile/presentation/widgets/profile_switcher_modal.dart';
+import 'new_kundli_input_screen.dart';
 
 /// Provider for selected kundli tab index
 final kundliTabProvider = StateProvider<int>((ref) => 0);
@@ -60,19 +61,61 @@ class KundliScreen extends ConsumerWidget {
 
                 // ── Content ────────────────────────────────
                 Expanded(
-                  child: chartAsync.when(
-                    loading: () => const Padding(
-                      padding: EdgeInsets.all(24),
-                      child: ShimmerLoader(itemCount: 4, itemHeight: 100),
-                    ),
-                    error: (error, stack) => ErrorStateWidget(
-                      message: error.toString().replaceFirst('Exception: ', ''),
-                      onRetry: () => ref.invalidate(birthChartProvider),
-                    ),
-                    data: (chartData) => _buildTabContent(
-                      context, ref, selectedTab, chartData, l10n,
-                    ),
-                  ),
+                  child: !ref.watch(hasBirthProfileProvider)
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: GlassCard(
+                              padding: const EdgeInsets.all(24),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(Icons.account_circle_outlined, size: 56, color: AppColors.primary),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    'Birth Details Required',
+                                    style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Please set up your exact Date of Birth, Time, and Birthplace to generate your authentic personalized Vedic Kundli.',
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.inter(fontSize: 14, color: AppColors.getTextSecondary(context)),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (_) => const NewKundliInputScreen()),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.add_circle_outline_rounded, color: Colors.white),
+                                    label: const Text('Open Profile Setup', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: AppColors.primary,
+                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      : chartAsync.when(
+                          loading: () => const Padding(
+                            padding: EdgeInsets.all(24),
+                            child: ShimmerLoader(itemCount: 4, itemHeight: 100),
+                          ),
+                          error: (error, stack) => ErrorStateWidget(
+                            message: error.toString().replaceFirst('Exception: ', ''),
+                            onRetry: () => ref.invalidate(birthChartProvider),
+                          ),
+                          data: (chartData) => _buildTabContent(
+                            context, ref, selectedTab, chartData, l10n,
+                          ),
+                        ),
                 ),
               ],
             ),

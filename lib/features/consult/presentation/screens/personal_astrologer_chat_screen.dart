@@ -17,16 +17,36 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
   final TextEditingController _messageController = TextEditingController();
   final List<Map<String, dynamic>> _messages = [];
   final ScrollController _scrollController = ScrollController();
+  bool _isTyping = false;
 
   @override
   void initState() {
     super.initState();
     // Initial greeting from astrologer
     _messages.add({
-      'text': 'Pranam! I am ${widget.astrologer.name}. How can I guide you with your astrological chart today?',
+      'text': 'Pranam! I am ${widget.astrologer.name}, specialist in ${widget.astrologer.specialty}. How can I assist your spiritual and astrological journey today?',
       'isMe': false,
       'time': '${DateTime.now().hour}:${DateTime.now().minute.toString().padLeft(2, '0')}',
     });
+  }
+
+  String _generateAstrologerReply(String query) {
+    final q = query.toLowerCase();
+    final spec = widget.astrologer.specialty;
+
+    if (q.contains('job') || q.contains('career') || q.contains('promotion') || q.contains('work') || q.contains('business')) {
+      return 'Based on my Vedic examination of your chart, your 10th House of Karma is currently influenced by a favorable aspect of Jupiter. If you maintain patience through the ongoing transit, a breakthrough opportunity or promotion will manifest within the next 45 to 60 days. I recommend chanting the Gayatri Mantra daily during morning Brahma Muhurta.';
+    } else if (q.contains('marriage') || q.contains('love') || q.contains('partner') || q.contains('relationship') || q.contains('divorce')) {
+      return 'Regarding marital and relationship harmony: Your 7th House indicates Venus transiting an auspicious quadrant. To harmonize communication and dissolve any mild Kuja (Mars) tension, lighting a ghee lamp in the North-East direction on Fridays will bring peace and mutual understanding.';
+    } else if (q.contains('health') || q.contains('stress') || q.contains('disease') || q.contains('pain')) {
+      return 'Analyzing your 6th and 8th houses for physical vitality: The Sun is your primary Karaka of health. Drink water stored in a copper vessel in the morning and offer Arghya to Surya Dev at sunrise to strengthen your aura and nervous energy.';
+    } else if (q.contains('money') || q.contains('finance') || q.contains('wealth') || q.contains('debt') || q.contains('loan')) {
+      return 'Looking into your Dhana (Wealth) Bhava (2nd & 11th houses): Lakshmi Yoga is partially active. Keep financial transactions clear and avoid high-risk speculative investments during Rahu Kaal. Favorable results will stabilize soon.';
+    } else if (q.contains('gem') || q.contains('stone') || q.contains('remedy') || q.contains('puja')) {
+      return 'As a $spec practitioner, I suggest performing an Anushthan of Om Namah Shivaya 108 times daily. For gemstone recommendations, ensure your birth time is verified to the minute before wearing natural gemstones like Yellow Sapphire or Pearl.';
+    } else {
+      return 'I have evaluated your birth chart details. The current planetary period (Dasha) shows a transformative phase that requires mental calm and steady perseverance. Focus on constructive decisions, and favorable transits will support your goals.';
+    }
   }
 
   void _sendMessage() {
@@ -40,16 +60,19 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
         'time': '${DateTime.now().hour}:${DateTime.now().minute.toString().padLeft(2, '0')}',
       });
       _messageController.clear();
+      _isTyping = true;
     });
 
     _scrollToBottom();
 
-    // Simulate reply after 1.5 seconds
-    Future.delayed(const Duration(milliseconds: 1500), () {
+    // Contextual astrologer consultation reply
+    Future.delayed(const Duration(milliseconds: 1400), () {
       if (!mounted) return;
+      final reply = _generateAstrologerReply(text);
       setState(() {
+        _isTyping = false;
         _messages.add({
-          'text': 'Let me check your planetary alignments regarding this. Give me a moment.',
+          'text': reply,
           'isMe': false,
           'time': '${DateTime.now().hour}:${DateTime.now().minute.toString().padLeft(2, '0')}',
         });
@@ -113,7 +136,7 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
                 end: Alignment.bottomRight,
               ),
               boxShadow: [
-                BoxShadow(color: a.primaryAccent.withOpacity(0.3), blurRadius: 15, spreadRadius: 2),
+                BoxShadow(color: a.primaryAccent.withValues(alpha: 0.3), blurRadius: 15, spreadRadius: 2),
               ],
             ),
             child: Center(
@@ -179,11 +202,12 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
     final isLight = Theme.of(context).brightness == Brightness.light;
     
     return Scaffold(
-      backgroundColor: isLight ? const Color(0xFFE5E5E5) : const Color(0xFF0D0D0D),
+      backgroundColor: Colors.transparent,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: AppBar(
-          backgroundColor: isLight ? const Color(0xFF075E54) : const Color(0xFF1F2C34),
+          backgroundColor: AppColors.getSurface(context),
+          elevation: 0,
           titleSpacing: 0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
@@ -224,21 +248,42 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
             ),
           ),
           actions: [
-            IconButton(icon: const Icon(Icons.videocam_rounded, color: Colors.white), onPressed: () {}),
-            IconButton(icon: const Icon(Icons.call_rounded, color: Colors.white), onPressed: () {}),
-            IconButton(icon: const Icon(Icons.more_vert_rounded, color: Colors.white), onPressed: () {}),
+            IconButton(
+              tooltip: 'Start Video Call',
+              icon: const Icon(Icons.videocam_rounded, color: Colors.white),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Video consultation requires an active booking slot with ${widget.astrologer.name}.'),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              tooltip: 'Start Voice Call',
+              icon: const Icon(Icons.call_rounded, color: Colors.white),
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Voice consultation requires an active booking slot with ${widget.astrologer.name}.'),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              tooltip: 'Astrologer Profile Details',
+              icon: const Icon(Icons.info_outline_rounded, color: Colors.white),
+              onPressed: _showAstrologerDetails,
+            ),
           ],
         ),
       ),
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: const AssetImage('assets/images/chat_bg.png'), // Typical WhatsApp background fallback
-            fit: BoxFit.cover,
-            colorFilter: isLight 
-                ? ColorFilter.mode(Colors.white.withOpacity(0.9), BlendMode.lighten)
-                : ColorFilter.mode(const Color(0xFF0D1418).withOpacity(0.95), BlendMode.darken),
-          ),
+          color: isLight ? AppColors.backgroundLight : null,
+          gradient: isLight ? null : AppColors.cosmicRadialGradient,
         ),
         child: Column(
           children: [
@@ -254,7 +299,39 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
                 },
               ),
             ),
-            _buildMessageInput(isLight),
+            if (_isTyping)
+              Padding(
+                padding: const EdgeInsets.only(left: 16, bottom: 8),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: isLight ? Colors.black12 : AppColors.surfaceDark,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(
+                            width: 12,
+                            height: 12,
+                            child: CircularProgressIndicator(strokeWidth: 1.5, color: Color(0xFFF5A623)),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '${widget.astrologer.name} is examining your chart...',
+                            style: GoogleFonts.inter(fontSize: 12, fontStyle: FontStyle.italic),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            SafeArea(
+              child: _buildMessageInput(isLight),
+            ),
           ],
         ),
       ),
@@ -271,8 +348,12 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
             color: isMe 
-                ? (isLight ? const Color(0xFFDCF8C6) : const Color(0xFF005C4B))
-                : (isLight ? Colors.white : const Color(0xFF202C33)),
+                ? AppColors.getPrimary(context).withValues(alpha: 0.15)
+                : AppColors.getSurface(context),
+            border: Border.all(
+              color: isMe ? AppColors.getPrimary(context).withValues(alpha: 0.4) : AppColors.getBorder(context),
+              width: 0.8,
+            ),
             borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(12),
               topRight: const Radius.circular(12),
@@ -280,7 +361,7 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
               bottomRight: isMe ? const Radius.circular(0) : const Radius.circular(12),
             ),
             boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 2, offset: const Offset(0, 1)),
+              BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 2, offset: const Offset(0, 1)),
             ],
           ),
           child: Stack(
@@ -292,8 +373,8 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
                   style: GoogleFonts.inter(
                     fontSize: 15,
                     color: isMe 
-                        ? (isLight ? Colors.black87 : const Color(0xFFE9EDEF))
-                        : (isLight ? Colors.black87 : const Color(0xFFE9EDEF)),
+                        ? AppColors.getTextPrimary(context)
+                        : AppColors.getTextPrimary(context),
                   ),
                 ),
               ),
@@ -307,14 +388,12 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
                       time,
                       style: GoogleFonts.inter(
                         fontSize: 11,
-                        color: isMe 
-                            ? (isLight ? Colors.black54 : Colors.white60)
-                            : (isLight ? Colors.black54 : Colors.white60),
+                        color: AppColors.getTextSecondary(context),
                       ),
                     ),
                     if (isMe) ...[
                       const SizedBox(width: 4),
-                      Icon(Icons.done_all_rounded, size: 14, color: isLight ? const Color(0xFF34B7F1) : const Color(0xFF53BDEB)),
+                      Icon(Icons.done_all_rounded, size: 14, color: AppColors.getPrimary(context)),
                     ],
                   ],
                 ),
@@ -336,13 +415,14 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: isLight ? Colors.white : const Color(0xFF2A3942),
+                color: AppColors.getSurface(context),
                 borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppColors.getBorder(context)),
               ),
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.emoji_emotions_outlined, color: isLight ? Colors.black54 : const Color(0xFF8696A0)),
+                    icon: Icon(Icons.emoji_emotions_outlined, color: AppColors.getTextSecondary(context)),
                     onPressed: () {},
                   ),
                   Expanded(
@@ -350,17 +430,17 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
                       controller: _messageController,
                       maxLines: 5,
                       minLines: 1,
-                      style: TextStyle(color: isLight ? Colors.black87 : const Color(0xFFD1D7DB)),
+                      style: TextStyle(color: AppColors.getTextPrimary(context)),
                       decoration: InputDecoration(
                         hintText: 'Message',
-                        hintStyle: TextStyle(color: isLight ? Colors.black54 : const Color(0xFF8696A0)),
+                        hintStyle: TextStyle(color: AppColors.getTextSecondary(context)),
                         border: InputBorder.none,
                         contentPadding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.attach_file_rounded, color: isLight ? Colors.black54 : const Color(0xFF8696A0)),
+                    icon: Icon(Icons.attach_file_rounded, color: AppColors.getTextSecondary(context)),
                     onPressed: () {},
                   ),
                   const SizedBox(width: 4),
@@ -372,8 +452,8 @@ class _PersonalAstrologerChatScreenState extends State<PersonalAstrologerChatScr
           Container(
             height: 48,
             width: 48,
-            decoration: const BoxDecoration(
-              color: Color(0xFF00A884),
+            decoration: BoxDecoration(
+              color: AppColors.getPrimary(context),
               shape: BoxShape.circle,
             ),
             child: IconButton(

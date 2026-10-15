@@ -19,8 +19,22 @@ class AuthScreen extends ConsumerStatefulWidget {
 }
 
 class _AuthScreenState extends ConsumerState<AuthScreen> {
-  final bool _isSignUp = false;
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  bool _isSignUp = false;
   bool _isLoading = false;
+  bool _obscurePassword = true;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   void _showToast(String msg, {bool isError = true}) {
     CosmicNotification.show(
@@ -28,6 +42,49 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       message: msg,
       icon: isError ? Icons.error_outline_rounded : Icons.check_circle_rounded,
     );
+  }
+
+  Future<void> _handleSubmit() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    final name = _nameController.text.trim();
+
+    setState(() => _isLoading = true);
+
+    try {
+      bool success = false;
+      if (_isSignUp) {
+        success = await ref.read(userSessionProvider.notifier).register(name, email, password);
+        if (success) {
+          _showToast('Account created successfully! Welcome, $name', isError: false);
+          if (mounted && context.canPop()) {
+            context.pop();
+          } else if (mounted) {
+            context.go('/');
+          }
+        } else {
+          _showToast('Registration failed. Please check credentials or try logging in.');
+        }
+      } else {
+        success = await ref.read(userSessionProvider.notifier).login(email, password);
+        if (success) {
+          _showToast('Signed in successfully! Welcome back', isError: false);
+          if (mounted && context.canPop()) {
+            context.pop();
+          } else if (mounted) {
+            context.go('/');
+          }
+        } else {
+          _showToast('Invalid email or password. Please verify and retry.');
+        }
+      }
+    } catch (e) {
+      _showToast('Authentication error: ${e.toString()}');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -47,13 +104,18 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
             child: Column(
               children: [
-                
-                // Back Button & Header
+                // Top Navigation Bar
                 Row(
                   children: [
                     IconButton(
                       icon: Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.getTextPrimary(context)),
-                      onPressed: () => context.pop(),
+                      onPressed: () {
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          context.go('/');
+                        }
+                      },
                     ),
                     Expanded(
                       child: Text(
@@ -72,9 +134,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
 
-                // Logo Icon
+                // Celestial Emblem
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -82,13 +144,15 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     color: AppColors.primary.withValues(alpha: 0.15),
                     border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
                   ),
-                  child: const Icon(Icons.stars_rounded, size: 48, color: AppColors.primary),
+                  child: const Icon(Icons.stars_rounded, size: 44, color: AppColors.primary),
                 ).fadeSlideUp(),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
 
                 Text(
-                  _isSignUp ? 'Join AstroSaathi for Personalized Vedic Guidance' : 'Sign in to sync your Kundli & Family Profiles',
+                  _isSignUp
+                      ? 'Join AstroSaathi for Personalized Vedic Guidance'
+                      : 'Sign in to access your Kundli & Consultations',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: context.fontSM,
@@ -96,108 +160,283 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                   ),
                 ).fadeSlideUp(delay: 100.ms),
 
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
 
-                // Glass Card with 1-Tap Sign-In Options
-                GlassCard(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Google Sign-In Primary Button
-                      ElevatedButton.icon(
-                        onPressed: _isLoading
-                            ? null
-                            : () async {
-                                setState(() => _isLoading = true);
-                                final success = await ref
-                                    .read(userSessionProvider.notifier)
-                                    .loginWithGoogle();
-                                setState(() => _isLoading = false);
-
-                                if (success && mounted) {
-                                  _showToast('Signed in with Google successfully!', isError: false);
-                                  context.pop();
-                                } else if (mounted) {
-                                  _showToast('Google Sign-In failed or cancelled.');
-                                }
-                              },
-                        icon: Image.network(
-                          'https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg',
-                          height: 22,
-                          errorBuilder: (context, error, stackTrace) => const Icon(
-                            Icons.g_mobiledata_rounded,
-                            color: Colors.white,
-                            size: 28,
-                          ),
-                        ),
-                        label: Text(
-                          'Continue with Google',
-                          style: GoogleFonts.outfit(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 2,
-                        ),
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Continue as Guest Option
-                      OutlinedButton(
-                        onPressed: () => context.pop(),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          side: BorderSide(color: AppColors.getGlassBorder(context)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        child: Text(
-                          'Continue as Guest',
-                          style: GoogleFonts.outfit(
-                            color: AppColors.getTextSecondary(context),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ).fadeSlideUp(delay: 200.ms),
-
-                const SizedBox(height: 24),
-
-                // Currently Authenticated status if any
+                // If already logged in, show current session banner
                 if (session.isAuthenticated) ...[
                   GlassCard(
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        const Icon(Icons.check_circle_rounded, color: Colors.greenAccent),
+                        const Icon(Icons.check_circle_rounded, color: Colors.greenAccent, size: 28),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: Text(
-                            'Signed in as ${session.name} (${session.email})',
-                            style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Logged In',
+                                style: GoogleFonts.outfit(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.greenAccent,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Text(
+                                '${session.name ?? "User"} (${session.email ?? "No Email"})',
+                                style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
+                              ),
+                            ],
                           ),
                         ),
                         TextButton(
-                          onPressed: () => ref.read(userSessionProvider.notifier).logout(),
+                          onPressed: () async {
+                            await ref.read(userSessionProvider.notifier).logout();
+                            _showToast('Signed out', isError: false);
+                          },
                           child: const Text('Logout', style: TextStyle(color: AppColors.error)),
                         ),
                       ],
                     ),
-                  ),
+                  ).fadeSlideUp(delay: 150.ms),
+                  const SizedBox(height: 20),
                 ],
+
+                // Main Auth Form Glass Card
+                GlassCard(
+                  padding: const EdgeInsets.all(22),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Tab switcher: Sign In vs Sign Up
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: AppColors.getSurfaceSecondary(context),
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => setState(() => _isSignUp = false),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    decoration: BoxDecoration(
+                                      color: !_isSignUp ? AppColors.primary : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      'Sign In',
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.outfit(
+                                        fontWeight: FontWeight.bold,
+                                        color: !_isSignUp ? Colors.white : AppColors.getTextSecondary(context),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => setState(() => _isSignUp = true),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    decoration: BoxDecoration(
+                                      color: _isSignUp ? AppColors.primary : Colors.transparent,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      'Create Account',
+                                      textAlign: TextAlign.center,
+                                      style: GoogleFonts.outfit(
+                                        fontWeight: FontWeight.bold,
+                                        color: _isSignUp ? Colors.white : AppColors.getTextSecondary(context),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Name field (Sign Up only)
+                        if (_isSignUp) ...[
+                          TextFormField(
+                            controller: _nameController,
+                            style: TextStyle(color: AppColors.getTextPrimary(context)),
+                            decoration: InputDecoration(
+                              labelText: 'Full Name',
+                              prefixIcon: const Icon(Icons.person_outline_rounded, color: AppColors.primary),
+                              filled: true,
+                              fillColor: AppColors.getSurfaceSecondary(context),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                            ),
+                            validator: (val) {
+                              if (val == null || val.trim().isEmpty) return 'Please enter your name';
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 14),
+                        ],
+
+                        // Email field
+                        TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          style: TextStyle(color: AppColors.getTextPrimary(context)),
+                          decoration: InputDecoration(
+                            labelText: 'Email Address',
+                            prefixIcon: const Icon(Icons.email_outlined, color: AppColors.primary),
+                            filled: true,
+                            fillColor: AppColors.getSurfaceSecondary(context),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                          ),
+                          validator: (val) {
+                            if (val == null || val.trim().isEmpty) return 'Please enter your email';
+                            if (!val.contains('@') || !val.contains('.')) return 'Please enter a valid email';
+                            return null;
+                          },
+                        ),
+
+                        const SizedBox(height: 14),
+
+                        // Password field
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: _obscurePassword,
+                          style: TextStyle(color: AppColors.getTextPrimary(context)),
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            prefixIcon: const Icon(Icons.lock_outline_rounded, color: AppColors.primary),
+                            suffixIcon: IconButton(
+                              icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+                              onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                            ),
+                            filled: true,
+                            fillColor: AppColors.getSurfaceSecondary(context),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+                          ),
+                          validator: (val) {
+                            if (val == null || val.isEmpty) return 'Please enter password';
+                            if (val.length < 6) return 'Password must be at least 6 characters';
+                            return null;
+                          },
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Primary Submit Button
+                        ElevatedButton(
+                          onPressed: _isLoading ? null : _handleSubmit,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          ),
+                          child: _isLoading
+                              ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                              : Text(
+                                  _isSignUp ? 'Create AstroSaathi Account' : 'Sign In',
+                                  style: GoogleFonts.outfit(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        // Divider with OR
+                        Row(
+                          children: [
+                            Expanded(child: Divider(color: AppColors.getGlassBorder(context))),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                'OR',
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  color: AppColors.getTextSecondary(context),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            Expanded(child: Divider(color: AppColors.getGlassBorder(context))),
+                          ],
+                        ),
+
+                        const SizedBox(height: 18),
+
+                        // Google Sign-In Secondary Button
+                        OutlinedButton.icon(
+                          onPressed: _isLoading
+                              ? null
+                              : () async {
+                                  setState(() => _isLoading = true);
+                                  final success = await ref
+                                      .read(userSessionProvider.notifier)
+                                      .loginWithGoogle();
+                                  if (!mounted) return;
+                                  setState(() => _isLoading = false);
+
+                                  if (success) {
+                                    _showToast('Signed in with Google successfully!', isError: false);
+                                    if (mounted && context.canPop()) {
+                                      context.pop();
+                                    } else if (mounted) {
+                                      context.go('/');
+                                    }
+                                  } else {
+                                    _showToast('Google Sign-In failed or cancelled.');
+                                  }
+                                },
+                          icon: const Icon(Icons.g_mobiledata_rounded, color: AppColors.primary, size: 28),
+                          label: Text(
+                            'Continue with Google',
+                            style: GoogleFonts.outfit(
+                              color: AppColors.getTextPrimary(context),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 13),
+                            side: BorderSide(color: AppColors.getGlassBorder(context)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        // Continue as Guest Option
+                        TextButton(
+                          onPressed: () {
+                            if (context.canPop()) {
+                              context.pop();
+                            } else {
+                              context.go('/');
+                            }
+                          },
+                          child: Text(
+                            'Continue as Guest',
+                            style: GoogleFonts.outfit(
+                              color: AppColors.getTextSecondary(context),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ).fadeSlideUp(delay: 200.ms),
               ],
             ),
           ),
@@ -206,4 +445,3 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     );
   }
 }
-

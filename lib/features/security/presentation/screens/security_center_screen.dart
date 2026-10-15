@@ -340,7 +340,7 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                       style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextMuted(context)),
                                     ),
                                     value: _isBiometricEnabled,
-                                    activeColor: AppColors.primary,
+                                    activeThumbColor: AppColors.primary,
                                     onChanged: (val) async {
                                       await SecureStorageService.setBiometricsEnabled(val);
                                       setState(() => _isBiometricEnabled = val);
@@ -365,7 +365,7 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                       style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextMuted(context)),
                                     ),
                                     value: _isMfaEnabled,
-                                    activeColor: AppColors.primary,
+                                    activeThumbColor: AppColors.primary,
                                     onChanged: (val) async {
                                       await SecureStorageService.setMfaEnabled(val);
                                       setState(() => _isMfaEnabled = val);

@@ -17,9 +17,9 @@ class AstroBabaNotifier extends StateNotifier<List<ChatMessage>> {
   static String _getGreeting(AppLanguage lang) {
     switch (lang) {
       case AppLanguage.hindi:
-        return 'à¤ªà¥à¤°à¤£à¤¾à¤®! à¤®à¥ˆà¤‚ à¤à¤¸à¥à¤Ÿà¥à¤°à¥‹ à¤¬à¤¾à¤¬à¤¾ à¤¹à¥‚à¤, à¤†à¤ªà¤•à¤¾ à¤µà¥à¤¯à¤•à¥à¤¤à¤¿à¤—à¤¤ à¤œà¥à¤¯à¥‹à¤¤à¤¿à¤·à¥€à¥¤ à¤†à¤œ à¤†à¤ª à¤…à¤ªà¤¨à¥‡ à¤­à¤µà¤¿à¤·à¥à¤¯ à¤¯à¤¾ à¤°à¤¾à¤¶à¤¿à¤«à¤² à¤•à¥‡ à¤¬à¤¾à¤°à¥‡ à¤®à¥‡à¤‚ à¤•à¥à¤¯à¤¾ à¤œà¤¾à¤¨à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆà¤‚?';
+        return 'प्रणाम! मैं एस्ट्रो बाबा हूँ, आपका व्यक्तिगत ज्योतिषी। आज आप अपने भविष्य या राशिफल के बारे में क्या जानना चाहते हैं?';
       case AppLanguage.gujarati:
-        return 'àªªà«àª°àª£àª¾àª®! àª¹à«àª‚ àªàª¸à«àªŸà«àª°à«‹ àª¬àª¾àª¬àª¾ àª›à«àª‚, àª¤àª®àª¾àª°à«‹ àªµà«àª¯àª•à«àª¤àª¿àª—àª¤ àªœà«àª¯à«‹àª¤àª¿àª·à«€. àª†àªœà«‡ àª¤àª®à«‡ àª¤àª®àª¾àª°àª¾ àª­àªµàª¿àª·à«àª¯ àªµàª¿àª¶à«‡ àª¶à«àª‚ àªœàª¾àª£àªµàª¾ àª®àª¾àª‚àª—à«‹ àª›à«‹?';
+        return 'પ્રણામ! હું એસ્ટ્રો બાબા છું, તમારો વ્યક્તિગત જ્યોતિષી. આજે તમે તમારા ભવિષ્ય વિશે શું જાણવા માંગો છો?';
       case AppLanguage.english:
       default:
         return 'I am Astro Baba, your personal astrologer. What would you like to know today?';
@@ -86,7 +86,12 @@ class AstroBabaNotifier extends StateNotifier<List<ChatMessage>> {
           '${profile.latitude},${profile.longitude},${profile.timezone}';
       final date = DateTime.now().toIso8601String();
 
-      final response = await engine.askAstroBaba(text, date, location,
+      // Enrich query with profile birth details if available
+      final enrichedQuestion = profile.name.isNotEmpty
+          ? '$text [Seeker: ${profile.name}, DOB: ${profile.dob}, Time: ${profile.birthTime}, Place: ${profile.birthPlace}]'
+          : text;
+
+      final response = await engine.askAstroBaba(enrichedQuestion, date, location,
           languageCode: lang.code);
 
       state = [
@@ -102,10 +107,10 @@ class AstroBabaNotifier extends StateNotifier<List<ChatMessage>> {
       String errorMsg;
       if (lang == AppLanguage.hindi) {
         errorMsg =
-            'à¤•à¥à¤·à¤®à¤¾ à¤•à¤°à¥‡à¤‚, à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤®à¥‡à¤‚ à¤¨à¤•à¥à¤·à¤¤à¥à¤° à¤§à¥à¤‚à¤§à¤²à¥‡ à¤¹à¥ˆà¤‚à¥¤ à¤¨à¥€à¤šà¥‡ "à¤ªà¥à¤¨à¤ƒ à¤ªà¥à¤°à¤¯à¤¾à¤¸ à¤•à¤°à¥‡à¤‚" à¤¦à¤¬à¤¾à¤à¤à¥¤';
+            'क्षमा करें, वर्तमान में नक्षत्र धुंधले हैं। नीचे "पुनः प्रयास करें" दबाएं।';
       } else if (lang == AppLanguage.gujarati) {
         errorMsg =
-            'àª®àª¾àª« àª•àª°àª¶à«‹, àª…àª¤à«àª¯àª¾àª°à«‡ àª—à«àª°àª¹à«‹ àª¸à«àªªàª·à«àªŸ àª¨àª¥à«€. àª¨à«€àªšà«‡ "àª«àª°à«€ àªªà«àª°àª¯àª¾àª¸" àªŸà«…àªª àª•àª°à«‹.';
+            'માફ કરશો, અત્યારે ગ્રહો સ્પષ્ટ નથી. નીચે "ફરી પ્રયાસ" ટૅપ કરો.';
       } else {
         errorMsg =
             'The stars are cloudy right now. Tap "Retry" to try again.';
@@ -146,4 +151,3 @@ final astroBabaProvider =
 
 /// True while Astro Baba is awaiting an AI response.
 final astroBabaLoadingProvider = StateProvider<bool>((ref) => false);
-

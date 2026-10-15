@@ -119,7 +119,7 @@ class NineLanguagesModal extends ConsumerWidget {
               child: ListView.separated(
                 physics: const BouncingScrollPhysics(),
                 itemCount: languages.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                separatorBuilder: (_, _) => const SizedBox(height: 10),
                 itemBuilder: (context, index) {
                   final lang = languages[index];
                   final isSelected = lang == currentLang;

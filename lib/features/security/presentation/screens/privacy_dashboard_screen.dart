@@ -242,7 +242,7 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
                                 ),
                               ),
                               value: _isAiIsolated,
-                              activeColor: AppColors.primary,
+                              activeThumbColor: AppColors.primary,
                               onChanged: (val) async {
                                 await SecureStorageService.setAiDataIsolated(val);
                                 setState(() => _isAiIsolated = val);

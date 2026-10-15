@@ -1,6 +1,7 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/birth_details.dart';
 
 import 'subscription_provider.dart';
 
@@ -82,6 +83,33 @@ class BirthProfileData {
       longitude: longitude ?? this.longitude,
       timezone: timezone ?? this.timezone,
       isPrimary: isPrimary ?? this.isPrimary,
+    );
+  }
+
+  BirthDetails toBirthDetails() {
+    return BirthDetails(
+      name: name,
+      dob: dob,
+      birthTime: birthTime,
+      birthPlace: birthPlace,
+      latitude: latitude,
+      longitude: longitude,
+      timezone: timezone,
+    );
+  }
+
+  factory BirthProfileData.fromBirthDetails(BirthDetails details, {String? id, String relationship = 'Self', bool isPrimary = false}) {
+    return BirthProfileData(
+      id: id ?? 'profile_${DateTime.now().millisecondsSinceEpoch}',
+      name: details.name,
+      relationship: relationship,
+      dob: details.dob,
+      birthTime: details.birthTime,
+      birthPlace: details.birthPlace,
+      latitude: details.latitude,
+      longitude: details.longitude,
+      timezone: details.timezone,
+      isPrimary: isPrimary,
     );
   }
 }

@@ -1,4 +1,4 @@
-﻿import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../engine/astrology_engine.dart';
 import '../engine/api_astrology_engine.dart';
 import '../engine/models/game_plan_data.dart';
@@ -6,6 +6,9 @@ import '../engine/models/panchang_data.dart';
 import '../engine/models/muhurat_data.dart';
 import 'locale_provider.dart';
 import 'profile_provider.dart';
+import '../models/astrology_models.dart';
+import '../network/api_result.dart';
+import 'repository_providers.dart';
 
 final astrologyEngineProvider = Provider<AstrologyEngine>((ref) {
   return ApiAstrologyEngine();
@@ -69,5 +72,15 @@ final birthChartProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   
   final profileIdentifier = profile.name.isNotEmpty ? profile.name : profile.id;
   return await engine.getBirthChart(date, time, location, languageCode: lang.code, profileId: profileIdentifier);
+});
+
+final typedKundliDataProvider = FutureProvider<KundliData>((ref) async {
+  final repo = ref.watch(astrologyRepoProvider);
+  final profile = ref.watch(activeProfileProvider);
+  final result = await repo.generateKundli(profile.toBirthDetails());
+  return switch (result) {
+    Success(data: final k) => k,
+    Failure(exception: final e) => throw e,
+  };
 });
 

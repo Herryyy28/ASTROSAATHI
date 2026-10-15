@@ -210,18 +210,16 @@ class ProfileScreen extends ConsumerWidget {
                           ),
                         ).animate().fadeIn(delay: 540.ms),
 
-                        // VIP Account Deletion & Reset (Shows when VIP is enabled)
-                        if (subState.isPremium) ...[
-                          const SizedBox(height: 8),
-                          _buildSettingsTile(
-                            context,
-                            icon: Icons.delete_forever_rounded,
-                            iconColor: AppColors.error,
-                            title: l10n.deleteAccount,
-                            subtitle: 'Erase all profile details & return to entry onboarding',
-                            onTap: () => _showDeleteAccountDialog(context, ref),
-                          ).animate().fadeIn(delay: 600.ms),
-                        ],
+                        // Account Deletion & Reset (Available to all users)
+                        const SizedBox(height: 8),
+                        _buildSettingsTile(
+                          context,
+                          icon: Icons.delete_forever_rounded,
+                          iconColor: AppColors.error,
+                          title: l10n.deleteAccount,
+                          subtitle: 'Erase all profile details & return to entry onboarding',
+                          onTap: () => _showDeleteAccountDialog(context, ref),
+                        ).animate().fadeIn(delay: 600.ms),
 
                         // Sign Out Option
                         const SizedBox(height: 8),

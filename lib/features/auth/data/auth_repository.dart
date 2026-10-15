@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -158,7 +158,7 @@ class UserSessionNotifier extends StateNotifier<UserSessionState> {
 }
 
 class AuthRepository {
-  final String baseUrl = AppConfig.baseUrl;
+  final String baseUrl = AppConfig.apiBaseUrl;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   FirebaseAuth? get _firebaseAuth => FirebaseService.instance.auth;
@@ -384,9 +384,13 @@ class AuthRepository {
     required Map<String, double> focusWeights,
   }) async {
     try {
+      final token = await getAuthToken() ?? 'mock_jwt_token';
       await http.post(
         Uri.parse('$baseUrl/users/profile'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
         body: jsonEncode({
           'fullName': name,
           'dateOfBirth': dob,
@@ -397,7 +401,7 @@ class AuthRepository {
           'timeZone': timeZone,
           'focusWeights': focusWeights,
         }),
-      ).timeout(const Duration(seconds: 2));
+      ).timeout(const Duration(seconds: 4));
     } catch (_) {}
   }
 

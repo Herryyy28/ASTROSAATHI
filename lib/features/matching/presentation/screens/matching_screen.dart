@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../core/models/birth_details.dart';
+import '../../../../core/models/matchmaking_models.dart';
+import '../../../../core/providers/matchmaking_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/utils/zodiac_sign_utils.dart';
+import '../../../../core/widgets/empty_state_widget.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../home/presentation/screens/main_screen.dart';
 import '../widgets/guna_radar_painter.dart';
@@ -20,22 +23,21 @@ class MatchingScreen extends ConsumerStatefulWidget {
 class _MatchingScreenState extends ConsumerState<MatchingScreen>
     with SingleTickerProviderStateMixin {
   final _p1NameController = TextEditingController(text: 'Rohan');
-  final _p2NameController = TextEditingController(text: 'Priya');
+  final _p1DobController = TextEditingController(text: '1995-05-15');
+  final _p1TimeController = TextEditingController(text: '08:30');
+  final _p1PlaceController = TextEditingController(text: 'New Delhi, India');
 
-  String _p1Sign = 'Aries';
-  String _p2Sign = 'Leo';
+  final _p2NameController = TextEditingController(text: 'Priya');
+  final _p2DobController = TextEditingController(text: '1997-08-20');
+  final _p2TimeController = TextEditingController(text: '14:15');
+  final _p2PlaceController = TextEditingController(text: 'Mumbai, India');
 
   late TabController _tabController;
-
-  final List<String> _zodiacSigns = const [
-    'Aries', 'Taurus', 'Gemini', 'Cancer',
-    'Leo', 'Virgo', 'Libra', 'Scorpio',
-    'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'
-  ];
 
   final List<String> _tabs = [
     'RESULTS',
     'DETAILS',
+    'HISTORY',
     'VARNA',
     'VASYA',
     'TARA',
@@ -46,10 +48,12 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
     'NADI',
   ];
 
-  double totalScore = 25.5;
-  String grade = 'Good';
+  double totalScore = 28.0;
+  String grade = 'Exceptional';
+  String manglikStatus = 'Both Non-Manglik (Anukool)';
+  String recommendation = 'Highly Auspicious Match';
   String summaryText =
-      'Rohan (Aries) and Priya (Leo) achieve an authentic Ashtakoota compatibility score of 25.5 out of 36 Gunas (Auspicious Match).';
+      'Rohan & Priya achieve an authentic Ashtakoota compatibility score of 28.0 out of 36 Gunas (Auspicious Match).';
 
   static const Map<String, double> maxScores = {
     'Varna': 1.0,
@@ -75,11 +79,11 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
 
   Map<String, double> rawScores = {
     'Varna': 1.0,
-    'Vasya': 1.0,
-    'Tara': 1.5,
+    'Vasya': 2.0,
+    'Tara': 3.0,
     'Yoni': 2.0,
-    'Maitri': 5.0,
-    'Gana': 0.0,
+    'Maitri': 4.0,
+    'Gana': 5.0,
     'Bhakoot': 7.0,
     'Nadi': 8.0,
   };
@@ -87,75 +91,166 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
   @override
   void initState() {
     super.initState();
-    // Default to DETAILS tab to match Image 4
+    // Default to DETAILS tab to match Vedic Milan overview
     _tabController = TabController(length: _tabs.length, vsync: this, initialIndex: 1);
 
     final active = ref.read(activeProfileProvider);
     if (active.name.isNotEmpty) {
       _p1NameController.text = active.name;
-      final z = ZodiacSignUtils.getZodiacFromName(active.name);
-      if (z != null) {
-        _p1Sign = z.englishName;
-      }
+      if (active.dob.isNotEmpty) _p1DobController.text = active.dob;
+      if (active.birthTime.isNotEmpty) _p1TimeController.text = active.birthTime;
+      if (active.birthPlace.isNotEmpty) _p1PlaceController.text = active.birthPlace;
     }
-    _calculateMatch();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _calculateMatch();
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _p1NameController.dispose();
+    _p1DobController.dispose();
+    _p1TimeController.dispose();
+    _p1PlaceController.dispose();
+
     _p2NameController.dispose();
+    _p2DobController.dispose();
+    _p2TimeController.dispose();
+    _p2PlaceController.dispose();
     super.dispose();
   }
 
-  void _calculateMatch() {
-    final idx1 = _zodiacSigns.indexOf(_p1Sign);
-    final idx2 = _zodiacSigns.indexOf(_p2Sign);
+  Future<void> _calculateMatch() async {
+    final first = MatchProfile(
+      id: 'p1',
+      name: _p1NameController.text.trim().isNotEmpty ? _p1NameController.text.trim() : 'Partner 1',
+      gender: 'male',
+      birthDetails: BirthDetails(
+        name: _p1NameController.text.trim(),
+        dob: _p1DobController.text.trim().isNotEmpty ? _p1DobController.text.trim() : '1995-01-01',
+        birthTime: _p1TimeController.text.trim().isNotEmpty ? _p1TimeController.text.trim() : '12:00',
+        birthPlace: _p1PlaceController.text.trim().isNotEmpty ? _p1PlaceController.text.trim() : 'Delhi, India',
+        latitude: 28.6139,
+        longitude: 77.2090,
+      ),
+    );
 
-    final varna = (idx1 ~/ 3 >= idx2 ~/ 3) ? 1.0 : 0.5;
-    final vasya = (idx1 % 3 == idx2 % 3) ? 2.0 : 1.0;
-    final distance = (idx2 - idx1 + 12) % 12;
-    final tara = (distance % 9 == 3 || distance % 9 == 5) ? 1.5 : 3.0;
-    final yoni = (idx1 == idx2) ? 4.0 : 2.0;
+    final second = MatchProfile(
+      id: 'p2',
+      name: _p2NameController.text.trim().isNotEmpty ? _p2NameController.text.trim() : 'Partner 2',
+      gender: 'female',
+      birthDetails: BirthDetails(
+        name: _p2NameController.text.trim(),
+        dob: _p2DobController.text.trim().isNotEmpty ? _p2DobController.text.trim() : '1997-01-01',
+        birthTime: _p2TimeController.text.trim().isNotEmpty ? _p2TimeController.text.trim() : '12:00',
+        birthPlace: _p2PlaceController.text.trim().isNotEmpty ? _p2PlaceController.text.trim() : 'Mumbai, India',
+        latitude: 19.0760,
+        longitude: 72.8777,
+      ),
+    );
 
-    final isSameLord = (idx1 % 6 == idx2 % 6);
-    final maitri = isSameLord ? 5.0 : 4.0;
+    final result = await ref.read(matchmakingProvider.notifier).calculateMatch(
+      first: first,
+      second: second,
+    );
 
-    final gana = (idx1 % 3 == idx2 % 3) ? 6.0 : 0.0;
-    final houseDiff = (idx2 - idx1 + 12) % 12 + 1;
-    final bhakoot = (houseDiff == 2 || houseDiff == 12 || houseDiff == 6 || houseDiff == 8) ? 0.0 : 7.0;
-    final nadi = (idx1 % 3 == idx2 % 3 && idx1 != idx2) ? 0.0 : 8.0;
-
-    final calculatedTotal = varna + vasya + tara + yoni + maitri + gana + bhakoot + nadi;
-
-    String calculatedGrade = 'Good';
-    if (calculatedTotal >= 28) {
-      calculatedGrade = 'Exceptional';
-    } else if (calculatedTotal >= 24) {
-      calculatedGrade = 'Good';
-    } else if (calculatedTotal >= 18) {
-      calculatedGrade = 'Average';
-    } else {
-      calculatedGrade = 'Challenging';
+    if (result != null && mounted) {
+      _applyResult(result);
     }
+  }
 
+  void _applyResult(CompatibilityResult result) {
     setState(() {
-      totalScore = calculatedTotal;
-      grade = calculatedGrade;
-      rawScores = {
-        'Varna': varna,
-        'Vasya': vasya,
-        'Tara': tara,
-        'Yoni': yoni,
-        'Maitri': maitri,
-        'Gana': gana,
-        'Bhakoot': bhakoot,
-        'Nadi': nadi,
-      };
-      summaryText =
-          '${_p1NameController.text} ($_p1Sign) & ${_p2NameController.text} ($_p2Sign) achieve an Ashtakoota compatibility score of $calculatedTotal / 36 ($calculatedGrade Match).';
+      totalScore = result.totalScore;
+      summaryText = result.summary;
+      manglikStatus = result.manglikStatus;
+      recommendation = result.recommendation;
+
+      if (totalScore >= 28) {
+        grade = 'Exceptional';
+      } else if (totalScore >= 21) {
+        grade = 'Good';
+      } else if (totalScore >= 18) {
+        grade = 'Average';
+      } else {
+        grade = 'Challenging';
+      }
+
+      final Map<String, double> updated = {};
+      for (final g in result.gunas) {
+        updated[g.kootaName] = g.obtainedScore;
+      }
+      rawScores = updated;
     });
+  }
+
+  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+    DateTime initial = DateTime(1995, 1, 1);
+    try {
+      final parts = controller.text.split('-');
+      if (parts.length == 3) {
+        initial = DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
+      }
+    } catch (_) {}
+
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: DateTime(1940),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFFF5A623),
+              onPrimary: Colors.black,
+              onSurface: Colors.black87,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      final formatted = '${picked.year.toString().padLeft(4, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
+      controller.text = formatted;
+      _calculateMatch();
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context, TextEditingController controller) async {
+    TimeOfDay initial = const TimeOfDay(hour: 12, minute: 0);
+    try {
+      final parts = controller.text.split(':');
+      if (parts.length >= 2) {
+        initial = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1].split(' ')[0]));
+      }
+    } catch (_) {}
+
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: initial,
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: Color(0xFFF5A623),
+              onPrimary: Colors.black,
+              onSurface: Colors.black87,
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      controller.text = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+      _calculateMatch();
+    }
   }
 
   @override
@@ -163,12 +258,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
     ref.listen(activeProfileProvider, (previous, next) {
       if (next.name.isNotEmpty && next.name != _p1NameController.text) {
         _p1NameController.text = next.name;
-        final z = ZodiacSignUtils.getZodiacFromName(next.name);
-        if (z != null) {
-          setState(() {
-            _p1Sign = z.englishName;
-          });
-        }
+        if (next.dob.isNotEmpty) _p1DobController.text = next.dob;
+        if (next.birthTime.isNotEmpty) _p1TimeController.text = next.birthTime;
+        if (next.birthPlace.isNotEmpty) _p1PlaceController.text = next.birthPlace;
         _calculateMatch();
       }
     });
@@ -181,10 +273,10 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
         child: ResponsiveLayout(
           child: Column(
             children: [
-              // ── Top Bar (AstroSage Golden Header) ─────────────────
+              // ── Top Bar (AstroSaathi Golden Header) ─────────────────
               _buildGoldenAppBar(context),
 
-              // ── Tab Bar (RESULTS, DETAILS, VARNA, VASYA...) ────────
+              // ── Tab Bar (RESULTS, DETAILS, HISTORY, VARNA, VASYA...) ────────
               _buildTabBar(context),
 
               // ── Tab Views ──────────────────────────────────────────
@@ -194,45 +286,46 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                   physics: const BouncingScrollPhysics(),
                   children: [
                     _buildResultsTab(context, isLight),
-                    _buildDetailsTab(context, isLight), // Image 4 Table View
+                    _buildDetailsTab(context, isLight),
+                    _buildHistoryTab(context, isLight),
                     _buildGunaInfoTab(
-                      'Varna (Work & Ego Compatibility)',
-                      'Maximum Points: 1.0\nObtained: ${rawScores['Varna']}\n\n'
+                      'Varna (Work & Spiritual Compatibility)',
+                      'Maximum Points: 1.0\nObtained: ${rawScores['Varna'] ?? 0.0}\n\n'
                           'Varna indicates mental compatibility and spiritual inclinations. It assesses the intellectual and work attitude harmony between partners.',
                     ),
                     _buildGunaInfoTab(
                       'Vasya (Dominance & Magnetic Attraction)',
-                      'Maximum Points: 2.0\nObtained: ${rawScores['Vasya']}\n\n'
+                      'Maximum Points: 2.0\nObtained: ${rawScores['Vasya'] ?? 0.0}\n\n'
                           'Vasya represents the degree of mutual influence and magnetic attraction. It reveals whether one partner naturally dominates or if power is shared equally.',
                     ),
                     _buildGunaInfoTab(
                       'Tara (Destiny & Longevity)',
-                      'Maximum Points: 3.0\nObtained: ${rawScores['Tara']}\n\n'
+                      'Maximum Points: 3.0\nObtained: ${rawScores['Tara'] ?? 0.0}\n\n'
                           'Tara measures the birth star (Nakshatra) compatibility, determining the mutual prosperity, good fortune, and health longevity in matrimonial life.',
                     ),
                     _buildGunaInfoTab(
                       'Yoni (Mentality & Biological Harmony)',
-                      'Maximum Points: 4.0\nObtained: ${rawScores['Yoni']}\n\n'
+                      'Maximum Points: 4.0\nObtained: ${rawScores['Yoni'] ?? 0.0}\n\n'
                           'Yoni represents biological attraction, intimate compatibility, and instinctive mutual affection between husband and wife.',
                     ),
                     _buildGunaInfoTab(
                       'Maitri (Friendship & Psychological Compatibility)',
-                      'Maximum Points: 5.0\nObtained: ${rawScores['Maitri']}\n\n'
+                      'Maximum Points: 5.0\nObtained: ${rawScores['Graha Maitri'] ?? rawScores['Maitri'] ?? 0.0}\n\n'
                           'Graha Maitri evaluates the planetary friendship between Moon sign lords. High points ensure lasting friendship and emotional understanding.',
                     ),
                     _buildGunaInfoTab(
                       'Gana (Temperament & Lifestyle Harmony)',
-                      'Maximum Points: 6.0\nObtained: ${rawScores['Gana']}\n\n'
+                      'Maximum Points: 6.0\nObtained: ${rawScores['Gana'] ?? 0.0}\n\n'
                           'Gana classifies human nature into Deva (divine), Manushya (human), and Rakshasa (demonic). Similar ganas ensure domestic peace.',
                     ),
                     _buildGunaInfoTab(
                       'Bhakoot (Love, Family & Financial Prosperity)',
-                      'Maximum Points: 7.0\nObtained: ${rawScores['Bhakoot']}\n\n'
+                      'Maximum Points: 7.0\nObtained: ${rawScores['Bhakoot'] ?? 0.0}\n\n'
                           'Bhakoot relates to emotional bonding, child birth, and economic progress. Auspicious alignment creates wealth and harmony.',
                     ),
                     _buildGunaInfoTab(
                       'Nadi (Health, Genetics & Heredity)',
-                      'Maximum Points: 8.0\nObtained: ${rawScores['Nadi']}\n\n'
+                      'Maximum Points: 8.0\nObtained: ${rawScores['Nadi'] ?? 0.0}\n\n'
                           'Nadi is the single highest-scoring Guna (8 points). It assesses genetic compatibility, nervous constitution, and offspring longevity.',
                     ),
                   ],
@@ -247,7 +340,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
 
   Widget _buildGoldenAppBar(BuildContext context) {
     return Container(
-      color: const Color(0xFFF5A623), // AstroSage Golden Yellow
+      color: const Color(0xFFF5A623),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       child: Row(
         children: [
@@ -263,19 +356,37 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             ),
           ),
           IconButton(
+            tooltip: 'Share Kundli Milan Result',
             icon: const Icon(Icons.share_outlined, color: Colors.black87, size: 22),
             onPressed: () {
+              final text = '✦ AstroSaathi Vedic Milan ✦\n'
+                  '${_p1NameController.text} & ${_p2NameController.text}\n'
+                  'Compatibility: ${totalScore.toStringAsFixed(1)} / 36.0 Gunas ($grade)\n'
+                  'Manglik Status: $manglikStatus\n'
+                  'Recommendation: $recommendation\n'
+                  'Summary: $summaryText';
+              Clipboard.setData(ClipboardData(text: text));
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Sharing Kundli Milan Result...')),
+                const SnackBar(
+                  content: Text('Milan summary copied to clipboard!'),
+                  duration: Duration(seconds: 2),
+                ),
               );
             },
           ),
           IconButton(
-            icon: const Icon(Icons.file_download_outlined, color: Colors.black87, size: 22),
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Downloading detailed Match PDF Report...')),
-              );
+            tooltip: 'Save Match to History',
+            icon: const Icon(Icons.bookmark_add_outlined, color: Colors.black87, size: 22),
+            onPressed: () async {
+              final ok = await ref.read(matchmakingProvider.notifier).saveCurrentMatch();
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(ok ? 'Match saved to history!' : 'Match already saved.'),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
+              }
             },
           ),
           PopupMenuButton<String>(
@@ -284,9 +395,21 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             onSelected: (value) {
               if (value == 'settings') {
                 ref.read(mainNavIndexProvider.notifier).state = 4;
+              } else if (value == 'history') {
+                _tabController.animateTo(2);
               }
             },
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                value: 'history',
+                child: Row(
+                  children: [
+                    Icon(Icons.history_rounded, size: 20, color: AppColors.getTextPrimary(context)),
+                    const SizedBox(width: 12),
+                    Text('Match History', style: GoogleFonts.inter(color: AppColors.getTextPrimary(context), fontWeight: FontWeight.w500)),
+                  ],
+                ),
+              ),
               PopupMenuItem<String>(
                 value: 'settings',
                 child: Row(
@@ -329,9 +452,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
     );
   }
 
-  /// Exact replica of Image 4: Guna Milan Result in Detail Table & Score
+  /// Guna Milan Result in Detail Table & Score
   Widget _buildDetailsTab(BuildContext context, bool isLight) {
-    final keys = ['Varna', 'Vasya', 'Tara', 'Yoni', 'Maitri', 'Gana', 'Bhakoot', 'Nadi'];
+    final keys = ['Varna', 'Vasya', 'Tara', 'Yoni', 'Graha Maitri', 'Gana', 'Bhakoot', 'Nadi'];
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -341,13 +464,31 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
           // Section Title
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-            child: Text(
-              'Guna Milan Result in Detail',
-              style: GoogleFonts.outfit(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-                color: AppColors.getTextPrimary(context),
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Guna Milan Result in Detail',
+                  style: GoogleFonts.outfit(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.getTextPrimary(context),
+                  ),
+                ),
+                TextButton.icon(
+                  icon: const Icon(Icons.bookmark_add_outlined, size: 16),
+                  label: const Text('Save Match'),
+                  style: TextButton.styleFrom(foregroundColor: const Color(0xFFF5A623)),
+                  onPressed: () async {
+                    final ok = await ref.read(matchmakingProvider.notifier).saveCurrentMatch();
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(ok ? 'Saved to history!' : 'Match already saved')),
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
           ),
 
@@ -415,9 +556,10 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             itemCount: keys.length,
             itemBuilder: (context, index) {
               final key = keys[index];
-              final max = maxScores[key] ?? 1.0;
-              final obtained = rawScores[key] ?? 0.0;
-              final area = areasOfLife[key] ?? '';
+              final lookupKey = key == 'Graha Maitri' ? (rawScores.containsKey('Graha Maitri') ? 'Graha Maitri' : 'Maitri') : key;
+              final max = maxScores[key == 'Graha Maitri' ? 'Maitri' : key] ?? 1.0;
+              final obtained = rawScores[lookupKey] ?? 0.0;
+              final area = areasOfLife[key == 'Graha Maitri' ? 'Maitri' : key] ?? '';
               final isEven = index % 2 == 0;
 
               final rowBg = isEven
@@ -483,9 +625,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             },
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
 
-          // ── Big Score Banner (25.5 / 36) exactly matching Image 4 ──
+          // ── Big Score Banner (Score / 36) ──
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.symmetric(vertical: 24),
@@ -504,59 +646,98 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                 ),
               ],
             ),
-            child: Center(
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: totalScore.toStringAsFixed(1),
-                      style: GoogleFonts.outfit(
-                        fontSize: 48,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.getTextPrimary(context),
-                        letterSpacing: -1,
+            child: Column(
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: totalScore.toStringAsFixed(1),
+                        style: GoogleFonts.outfit(
+                          fontSize: 48,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.getTextPrimary(context),
+                          letterSpacing: -1,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: ' / 36',
-                      style: GoogleFonts.outfit(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.getTextSecondary(context),
+                      TextSpan(
+                        text: ' / 36',
+                        style: GoogleFonts.outfit(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.getTextSecondary(context),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+                const SizedBox(height: 6),
+                Text(
+                  '${(totalScore / 36.0 * 100).toStringAsFixed(0)}% Compatibility',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.getTextSecondary(context),
+                  ),
+                ),
+              ],
             ),
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 14),
 
-          // Astrological Verdict Badge
-          Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: totalScore >= 18
-                    ? const Color(0xFFE8F5E9)
-                    : const Color(0xFFFFEBEE),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
+          // Astrological Verdict Badges
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                decoration: BoxDecoration(
                   color: totalScore >= 18
-                      ? const Color(0xFF81C784)
-                      : const Color(0xFFE57373),
+                      ? const Color(0xFFE8F5E9)
+                      : const Color(0xFFFFEBEE),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: totalScore >= 18
+                        ? const Color(0xFF81C784)
+                        : const Color(0xFFE57373),
+                  ),
+                ),
+                child: Text(
+                  totalScore >= 18 ? '✦ $recommendation' : '⚠ $recommendation',
+                  style: GoogleFonts.inter(
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.bold,
+                    color: totalScore >= 18 ? const Color(0xFF2E7D32) : const Color(0xFFC62828),
+                  ),
                 ),
               ),
-              child: Text(
-                totalScore >= 18 ? '✦ Auspicious Match ($grade)' : '⚠ Needs Consultation',
-                style: GoogleFonts.inter(
-                  fontSize: 13,
-                  fontWeight: FontWeight.bold,
-                  color: totalScore >= 18 ? const Color(0xFF2E7D32) : const Color(0xFFC62828),
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                decoration: BoxDecoration(
+                  color: manglikStatus.contains('Both Non-Manglik') || manglikStatus.contains('Neutralized')
+                      ? const Color(0xFFE3F2FD)
+                      : const Color(0xFFFFF3E0),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: manglikStatus.contains('Both Non-Manglik') || manglikStatus.contains('Neutralized')
+                        ? const Color(0xFF64B5F6)
+                        : const Color(0xFFFFB74D),
+                  ),
+                ),
+                child: Text(
+                  manglikStatus,
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: manglikStatus.contains('Both Non-Manglik') || manglikStatus.contains('Neutralized')
+                        ? const Color(0xFF1565C0)
+                        : const Color(0xFFE65100),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
           const SizedBox(height: 48),
         ],
@@ -565,6 +746,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
   }
 
   Widget _buildResultsTab(BuildContext context, bool isLight) {
+    final state = ref.watch(matchmakingProvider);
+    final isCalculating = state.currentResult.isLoading;
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.all(16),
@@ -582,58 +766,135 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             child: Column(
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Partner 1 Inputs
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text('Partner 1 (Self)', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 13)),
+                          const SizedBox(height: 6),
                           TextField(
                             controller: _p1NameController,
-                            style: TextStyle(color: AppColors.getTextPrimary(context)),
+                            style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
                             decoration: InputDecoration(
-                              labelText: 'Partner 1',
-                              labelStyle: TextStyle(color: AppColors.getTextSecondary(context)),
+                              hintText: 'Name',
+                              isDense: true,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                               filled: true,
                               fillColor: AppColors.getSurfaceSecondary(context),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          _buildZodiacDropdown('Sign 1', _p1Sign, (val) {
-                            if (val != null) setState(() => _p1Sign = val);
-                          }),
+                          const SizedBox(height: 6),
+                          InkWell(
+                            onTap: () => _selectDate(context, _p1DobController),
+                            child: IgnorePointer(
+                              child: TextField(
+                                controller: _p1DobController,
+                                style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 12),
+                                decoration: InputDecoration(
+                                  hintText: 'YYYY-MM-DD',
+                                  prefixIcon: const Icon(Icons.calendar_today, size: 14),
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  filled: true,
+                                  fillColor: AppColors.getSurfaceSecondary(context),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          InkWell(
+                            onTap: () => _selectTime(context, _p1TimeController),
+                            child: IgnorePointer(
+                              child: TextField(
+                                controller: _p1TimeController,
+                                style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 12),
+                                decoration: InputDecoration(
+                                  hintText: 'HH:mm',
+                                  prefixIcon: const Icon(Icons.access_time, size: 14),
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  filled: true,
+                                  fillColor: AppColors.getSurfaceSecondary(context),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Icon(Icons.favorite_rounded, color: Color(0xFFE91E63), size: 28),
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
+                      child: Icon(Icons.favorite_rounded, color: Color(0xFFE91E63), size: 24),
                     ),
+                    // Partner 2 Inputs
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text('Partner 2 (Match)', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 13)),
+                          const SizedBox(height: 6),
                           TextField(
                             controller: _p2NameController,
-                            style: TextStyle(color: AppColors.getTextPrimary(context)),
+                            style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
                             decoration: InputDecoration(
-                              labelText: 'Partner 2',
-                              labelStyle: TextStyle(color: AppColors.getTextSecondary(context)),
+                              hintText: 'Name',
+                              isDense: true,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                               filled: true,
                               fillColor: AppColors.getSurfaceSecondary(context),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          _buildZodiacDropdown('Sign 2', _p2Sign, (val) {
-                            if (val != null) setState(() => _p2Sign = val);
-                          }),
+                          const SizedBox(height: 6),
+                          InkWell(
+                            onTap: () => _selectDate(context, _p2DobController),
+                            child: IgnorePointer(
+                              child: TextField(
+                                controller: _p2DobController,
+                                style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 12),
+                                decoration: InputDecoration(
+                                  hintText: 'YYYY-MM-DD',
+                                  prefixIcon: const Icon(Icons.calendar_today, size: 14),
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  filled: true,
+                                  fillColor: AppColors.getSurfaceSecondary(context),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 6),
+                          InkWell(
+                            onTap: () => _selectTime(context, _p2TimeController),
+                            child: IgnorePointer(
+                              child: TextField(
+                                controller: _p2TimeController,
+                                style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 12),
+                                decoration: InputDecoration(
+                                  hintText: 'HH:mm',
+                                  prefixIcon: const Icon(Icons.access_time, size: 14),
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  filled: true,
+                                  fillColor: AppColors.getSurfaceSecondary(context),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
                 SizedBox(
                   width: double.infinity,
                   height: 44,
@@ -643,8 +904,14 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                       foregroundColor: Colors.black87,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                     ),
-                    onPressed: _calculateMatch,
-                    child: Text('Recalculate Gun Milan', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                    onPressed: isCalculating ? null : _calculateMatch,
+                    child: isCalculating
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                          )
+                        : Text('Calculate Authentic Gun Milan', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
                   ),
                 ),
               ],
@@ -673,7 +940,10 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                   width: 200,
                   child: CustomPaint(
                     painter: GunaRadarPainter(
-                      scores: rawScores.map((k, v) => MapEntry(k, v / (maxScores[k] ?? 1.0))),
+                      scores: rawScores.map((k, v) {
+                        final max = maxScores[k == 'Graha Maitri' ? 'Maitri' : k] ?? 1.0;
+                        return MapEntry(k == 'Graha Maitri' ? 'Maitri' : k, v / max);
+                      }),
                     ),
                   ),
                 ),
@@ -683,7 +953,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
 
           const SizedBox(height: 16),
 
-          // Summary Text
+          // Summary Text Card
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -707,6 +977,79 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
           const SizedBox(height: 48),
         ],
       ),
+    );
+  }
+
+  Widget _buildHistoryTab(BuildContext context, bool isLight) {
+    final history = ref.watch(matchmakingHistoryProvider);
+
+    if (history.isEmpty) {
+      return const EmptyStateWidget(
+        icon: Icons.history_rounded,
+        title: 'No Saved Matches',
+        description: 'Calculate a match and tap "Save Match" to store and compare profiles here.',
+        emoji: '💍',
+      );
+    }
+
+    return ListView.separated(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.all(16),
+      itemCount: history.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      itemBuilder: (context, index) {
+        final match = history[index];
+        final isAuspicious = match.totalScore >= 18;
+
+        return Container(
+          decoration: BoxDecoration(
+            color: isLight ? Colors.white : AppColors.surfaceDark,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.getGlassBorder(context)),
+          ),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            onTap: () {
+              _applyResult(match);
+              _tabController.animateTo(1); // Go to DETAILS
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Loaded match for ${match.firstProfile.name} & ${match.secondProfile.name}')),
+              );
+            },
+            title: Text(
+              '${match.firstProfile.name} & ${match.secondProfile.name}',
+              style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 4),
+                Text(
+                  'Score: ${match.totalScore.toStringAsFixed(1)} / 36.0 (${match.recommendation})',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: isAuspicious ? const Color(0xFF2E7D32) : const Color(0xFFC62828),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  match.manglikStatus,
+                  style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+                ),
+              ],
+            ),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete_outline_rounded, size: 20, color: Colors.grey),
+              onPressed: () {
+                ref.read(matchmakingProvider.notifier).deleteFromHistory(index);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Match removed from history')),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -735,26 +1078,6 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildZodiacDropdown(String label, String currentVal, ValueChanged<String?> onChanged) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: AppColors.getSurfaceSecondary(context),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: currentVal,
-          isExpanded: true,
-          style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
-          dropdownColor: AppColors.getSurface(context),
-          items: _zodiacSigns.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
-          onChanged: onChanged,
-        ),
       ),
     );
   }

@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../consult/presentation/screens/talk_to_ai_astrologers_screen.dart';
-import '../../../kundli/presentation/screens/kundli_screen.dart';
 import '../../../kundli/presentation/screens/new_kundli_input_screen.dart';
 import '../../../matching/presentation/screens/matching_screen.dart';
 import '../../../panchang/presentation/screens/monthly_panchang_screen.dart';

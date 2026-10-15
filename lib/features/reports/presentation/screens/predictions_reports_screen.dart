@@ -321,7 +321,7 @@ class _PredictionsReportsScreenState extends ConsumerState<PredictionsReportsScr
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: _reportRows.length,
-                        separatorBuilder: (_, __) => Divider(
+                        separatorBuilder: (_, _) => Divider(
                           height: 1,
                           color: isLight ? const Color(0xFFEEEEEE) : AppColors.borderDark,
                         ),

@@ -10,7 +10,6 @@ import '../../../ai/presentation/screens/astro_baba_screen.dart';
 import '../../../consult/presentation/screens/chat_with_astrologers_screen.dart';
 import '../../../matching/presentation/screens/matching_screen.dart';
 import '../../../profile/presentation/screens/profile_screen.dart';
-import '../../../../l10n/app_localizations.dart';
 
 /// Provider for managing main navigation tab index globally
 final mainNavIndexProvider = StateProvider<int>((ref) => 0);
@@ -36,6 +35,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     _NavItem(icon: Icons.auto_awesome_outlined, activeIcon: Icons.auto_awesome, label: 'AI Astro'),
     _NavItem(icon: Icons.support_agent_outlined, activeIcon: Icons.support_agent_rounded, label: 'Consult'),
     _NavItem(icon: Icons.favorite_outline_rounded, activeIcon: Icons.favorite_rounded, label: 'Matching'),
+    _NavItem(icon: Icons.person_outline_rounded, activeIcon: Icons.person_rounded, label: 'Profile'),
   ];
 
   String _getNavLabel(BuildContext context, int index) {

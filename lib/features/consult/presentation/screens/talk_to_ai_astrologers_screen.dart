@@ -6,7 +6,6 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
 import '../../../search/presentation/widgets/astro_command_center_modal.dart';
 import '../../data/models/astrologer_model.dart';
-import 'ai_astrologer_call_screen.dart';
 
 class TalkToAiAstrologersScreen extends ConsumerStatefulWidget {
   const TalkToAiAstrologersScreen({super.key});
@@ -127,7 +126,7 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
                 padding: const EdgeInsets.fromLTRB(14, 8, 14, 90),
                 physics: const BouncingScrollPhysics(),
                 itemCount: _filteredAstrologers.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 16),
+                separatorBuilder: (_, _) => const SizedBox(height: 16),
                 itemBuilder: (context, index) {
                   final astrologer = _filteredAstrologers[index];
                   return _buildAstrologerCard(astrologer, isLight);
@@ -232,7 +231,7 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: _categories.length + 1,
-        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
           if (index == 0) {
             // Leading List Icon button like in AstroSage screenshot

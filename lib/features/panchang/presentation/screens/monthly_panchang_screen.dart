@@ -173,40 +173,43 @@ class _MonthlyPanchangScreenState extends ConsumerState<MonthlyPanchangScreen> {
                                         ? Border.all(color: Colors.black87, width: 1.2)
                                         : null,
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '$dayNumber',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w800,
-                                          color: isSelected
-                                              ? Colors.black87
-                                              : (isSunday ? const Color(0xFFD32F2F) : AppColors.getTextPrimary(context)),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '$dayNumber',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w800,
+                                            color: isSelected
+                                                ? Colors.black87
+                                                : (isSunday ? const Color(0xFFD32F2F) : AppColors.getTextPrimary(context)),
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      // Moon Phase Indicator
-                                      if (isPurnima)
-                                        const Icon(Icons.brightness_1_rounded, size: 12, color: Color(0xFFFFD54F))
-                                      else if (isAmavasya)
-                                        const Icon(Icons.circle, size: 12, color: Colors.black87)
-                                      else
-                                        Icon(
-                                          Icons.nightlight_round,
-                                          size: 11,
-                                          color: isSelected ? Colors.black54 : Colors.grey.shade400,
+                                        const SizedBox(height: 2),
+                                        // Moon Phase Indicator
+                                        if (isPurnima)
+                                          const Icon(Icons.brightness_1_rounded, size: 12, color: Color(0xFFFFD54F))
+                                        else if (isAmavasya)
+                                          const Icon(Icons.circle, size: 12, color: Colors.black87)
+                                        else
+                                          Icon(
+                                            Icons.nightlight_round,
+                                            size: 11,
+                                            color: isSelected ? Colors.black54 : Colors.grey.shade400,
+                                          ),
+                                        Text(
+                                          '${(dayNumber % 15) + 1}',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w600,
+                                            color: isSelected ? Colors.black87 : Colors.grey.shade600,
+                                          ),
                                         ),
-                                      Text(
-                                        '${(dayNumber % 15) + 1}',
-                                        style: GoogleFonts.inter(
-                                          fontSize: 9,
-                                          fontWeight: FontWeight.w600,
-                                          color: isSelected ? Colors.black87 : Colors.grey.shade600,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
@@ -235,7 +238,7 @@ class _MonthlyPanchangScreenState extends ConsumerState<MonthlyPanchangScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.fromLTRB(12, 6, 12, 32),
                       itemCount: _festivals.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 8),
+                      separatorBuilder: (_, _) => const SizedBox(height: 8),
                       itemBuilder: (context, index) {
                         final fest = _festivals[index];
                         return Container(

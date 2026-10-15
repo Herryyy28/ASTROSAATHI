@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:AstroSaathi/features/astrology/presentation/widgets/vedic_chart_painter.dart';
+import 'package:astrosaathi/features/astrology/presentation/widgets/vedic_chart_painter.dart';
 
 void main() {
   group('VedicChartGeometry Hit Detection Tests', () {

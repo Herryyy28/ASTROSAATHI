@@ -190,7 +190,7 @@ class _AstroAcademyScreenState extends State<AstroAcademyScreen> {
                       ),
                       Switch.adaptive(
                         value: _isExpertMode,
-                        activeColor: AppColors.primary,
+                        activeThumbColor: AppColors.primary,
                         onChanged: (val) => setState(() => _isExpertMode = val),
                       ),
                     ],

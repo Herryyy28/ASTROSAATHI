@@ -1,8 +1,8 @@
-import 'package:AstroSaathi/core/providers/profile_provider.dart';
+import 'package:astrosaathi/core/providers/profile_provider.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:AstroSaathi/core/utils/zodiac_sign_utils.dart';
-import 'package:AstroSaathi/features/astrology/services/pdf_report_generator.dart';
-import 'package:AstroSaathi/l10n/app_language.dart';
+import 'package:astrosaathi/core/utils/zodiac_sign_utils.dart';
+import 'package:astrosaathi/features/astrology/services/pdf_report_generator.dart';
+import 'package:astrosaathi/l10n/app_language.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 

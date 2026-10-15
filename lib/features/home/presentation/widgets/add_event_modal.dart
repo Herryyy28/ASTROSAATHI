@@ -381,19 +381,18 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                           leadTimeMinutes: _leadTimeMinutes,
                         );
 
-                        if (mounted) {
-                          Navigator.pop(context);
-                          AnimatedCosmicReminderModal.show(
-                            context,
-                            title: title,
-                            category: _selectedCategory.label,
-                            astroScore: score,
-                            dashaContext: '${_selectedCategory.label} Alignment Window',
-                            aiRecommendation: score >= 8.0
-                                ? 'Peak planetary alignment! Transit positions offer maximum success for this event.'
-                                : 'Timing window logged. Maintain focus during event execution.',
-                          );
-                        }
+                        if (!context.mounted) return;
+                        Navigator.pop(context);
+                        AnimatedCosmicReminderModal.show(
+                          context,
+                          title: title,
+                          category: _selectedCategory.label,
+                          astroScore: score,
+                          dashaContext: '${_selectedCategory.label} Alignment Window',
+                          aiRecommendation: score >= 8.0
+                              ? 'Peak planetary alignment! Transit positions offer maximum success for this event.'
+                              : 'Timing window logged. Maintain focus during event execution.',
+                        );
                       },
                       child: Ink(
                         decoration: BoxDecoration(
