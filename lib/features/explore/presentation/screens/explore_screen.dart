@@ -80,7 +80,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🌅',
         'title': l10n.explorePanchang,
         'subtitle': 'Tithi • Nakshatra • Yoga',
-        'gradient': const LinearGradient(colors: [Color(0xFF1E3C72), Color(0xFF2A5298)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PanchangScreen())),
       },
@@ -90,7 +90,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '⏱️',
         'title': l10n.exploreMuhurat,
         'subtitle': 'Abhijit • Rahu Kaal',
-        'gradient': const LinearGradient(colors: [Color(0xFF3A1C71), Color(0xFFD76D77)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MuhuratScreen())),
       },
@@ -100,7 +100,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '♋',
         'title': l10n.exploreHoroscope,
         'subtitle': 'Daily • Weekly • Yearly',
-        'gradient': const LinearGradient(colors: [Color(0xFF11998E), Color(0xFF38EF7D)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HoroscopeScreen())),
       },
@@ -112,7 +112,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '⚡',
         'title': l10n.exploreDosha,
         'subtitle': 'Mangal • Kaal Sarp • Yoga',
-        'gradient': const LinearGradient(colors: [Color(0xFFFF512F), Color(0xFFDD2476)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () {
           ref.read(kundliTabProvider.notifier).update((_) => 4);
@@ -125,7 +125,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '💞',
         'title': l10n.exploreCompatibility,
         'subtitle': '36 Gun Milan Analysis',
-        'gradient': const LinearGradient(colors: [Color(0xFF833AB4), Color(0xFFFD1D1D)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MatchingScreen())),
       },
@@ -135,7 +135,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🪐',
         'title': 'Transit & Sade Sati',
         'subtitle': 'Live Saturn & Gochar Impact',
-        'gradient': const LinearGradient(colors: [Color(0xFF4776E6), Color(0xFF8E54E9)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const TransitCenterScreen())),
       },
@@ -145,7 +145,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '👥',
         'title': 'Chart Synastry',
         'subtitle': 'Compare Any Two Profiles',
-        'gradient': const LinearGradient(colors: [Color(0xFFD9901A), Color(0xFFE5A63C)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChartComparisonScreen())),
       },
@@ -155,7 +155,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '📖',
         'title': 'Astro Academy',
         'subtitle': 'Glossary & Beginner Mode',
-        'gradient': const LinearGradient(colors: [Color(0xFF11998E), Color(0xFF38EF7D)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroAcademyScreen())),
       },
@@ -165,7 +165,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🎯',
         'title': 'Astro Decision Engine',
         'subtitle': 'Muhurat & Quantitative Timing',
-        'gradient': const LinearGradient(colors: [Color(0xFFE0A13A), Color(0xFFF9D38D)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroDecisionEngineScreen())),
       },
@@ -175,7 +175,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🧪',
         'title': 'Scenario Simulator',
         'subtitle': 'Location & Planetary Shift Test',
-        'gradient': const LinearGradient(colors: [Color(0xFF00C9FF), Color(0xFF92FE9D)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroScenarioSimulatorScreen())),
       },
@@ -185,7 +185,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🔭',
         'title': 'Future Event Radar',
         'subtitle': '90-Day Planetary Milestones',
-        'gradient': const LinearGradient(colors: [Color(0xFFF857A6), Color(0xFFFF5858)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FutureEventRadarScreen())),
       },
@@ -195,7 +195,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🏢',
         'title': 'Astro Workspace',
         'subtitle': 'Executive Command Workspace',
-        'gradient': const LinearGradient(colors: [Color(0xFFFFD700), Color(0xFFFFA500)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroWorkspaceScreen())),
       },
@@ -205,7 +205,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '👨‍👩‍👧‍👦',
         'title': 'Family Dashboard',
         'subtitle': 'Spouse, Kids & Partner Synergy',
-        'gradient': const LinearGradient(colors: [Color(0xFFFF758C), Color(0xFFFF7EB3)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FamilyAstrologyDashboardScreen())),
       },
@@ -215,7 +215,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '⏱️',
         'title': 'Sky Now & Ephemeris',
         'subtitle': 'Live Celestial Clock & Tables',
-        'gradient': const LinearGradient(colors: [Color(0xFF00ACC1), Color(0xFF00897B)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SkyNowScreen())),
       },
@@ -225,7 +225,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '📐',
         'title': 'Aspect Patterns',
         'subtitle': 'Grand Trines & Dominance',
-        'gradient': const LinearGradient(colors: [Color(0xFF43A047), Color(0xFF1B5E20)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ChartPatternsScreen())),
       },
@@ -235,7 +235,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🧬',
         'title': 'Human Design',
         'subtitle': 'BodyGraph & Sacral Authority',
-        'gradient': const LinearGradient(colors: [Color(0xFFE91E63), Color(0xFF9C27B0)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HumanDesignScreen())),
       },
@@ -247,7 +247,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '☀️',
         'title': 'Solar & Lunar Returns',
         'subtitle': 'Annual & Monthly Forecasts',
-        'gradient': const LinearGradient(colors: [Color(0xFFFFB300), Color(0xFFF57C00)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': true,
         'action': () {
           if (isPremium) {
@@ -263,7 +263,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🪐',
         'title': 'Saturn Return Center',
         'subtitle': '29.5-Year Maturity Tracker',
-        'gradient': const LinearGradient(colors: [Color(0xFF8E24AA), Color(0xFFD81B60)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': true,
         'action': () {
           if (isPremium) {
@@ -279,7 +279,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🔬',
         'title': 'Astro Research Mode',
         'subtitle': 'Raw Arc-Seconds & Notes',
-        'gradient': const LinearGradient(colors: [Color(0xFF546E7A), Color(0xFF263238)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': true,
         'action': () {
           if (isPremium) {
@@ -295,7 +295,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '📄',
         'title': 'Custom PDF Builder',
         'subtitle': 'Tailored VIP Report Export',
-        'gradient': const LinearGradient(colors: [Color(0xFFFFD700), Color(0xFFFF8C00)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': true,
         'action': () {
           if (isPremium) {
@@ -311,7 +311,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🗓️',
         'title': 'Personal Year Ahead',
         'subtitle': '12-Month Jan-Dec Forecast',
-        'gradient': const LinearGradient(colors: [Color(0xFFD9901A), Color(0xFFE5A63C)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': true,
         'action': () {
           if (isPremium) {
@@ -327,7 +327,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '📡',
         'title': '90-Day Future Radar',
         'subtitle': 'Visual Timeline & Events',
-        'gradient': const LinearGradient(colors: [Color(0xFF00E5FF), Color(0xFF00897B)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': true,
         'action': () {
           if (isPremium) {
@@ -343,7 +343,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '⏱️',
         'title': 'Personal Timing Engine',
         'subtitle': 'Date Comparison Scorecard',
-        'gradient': const LinearGradient(colors: [Color(0xFFFF1744), Color(0xFFC62828)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': true,
         'action': () {
           if (isPremium) {
@@ -359,7 +359,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '💞',
         'title': 'Synastry & Composite',
         'subtitle': 'Dual Chart & Aspect Matrix',
-        'gradient': const LinearGradient(colors: [Color(0xFF833AB4), Color(0xFFFD1D1D)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': true,
         'action': () {
           if (isPremium) {
@@ -375,7 +375,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🌍',
         'title': 'Astrocartography',
         'subtitle': 'Global Power Lines & City Move',
-        'gradient': const LinearGradient(colors: [Color(0xFF11998E), Color(0xFF38EF7D)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': true,
         'action': () {
           if (isPremium) {
@@ -393,7 +393,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '💎',
         'title': l10n.exploreRemedies,
         'subtitle': 'Gemstones & Mantras',
-        'gradient': const LinearGradient(colors: [Color(0xFF00B4DB), Color(0xFF0083B0)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RemedyHubScreen())),
       },
@@ -403,7 +403,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
         'emoji': '🔢',
         'title': l10n.exploreNumerology,
         'subtitle': 'Life Path & Destiny',
-        'gradient': const LinearGradient(colors: [Color(0xFFF7971E), Color(0xFFFFD200)]),
+        'gradient': AppColors.purpleGradient,
         'isVip': false,
         'action': () => Navigator.push(context, MaterialPageRoute(builder: (_) => const NumerologyScreen())),
       },
@@ -573,7 +573,7 @@ class _ExploreScreenState extends ConsumerState<ExploreScreen> {
                                       value: ExploreFilter.freeOnly,
                                       child: Row(
                                         children: [
-                                          Icon(Icons.bolt_rounded, size: 18, color: Colors.greenAccent),
+                                          Icon(Icons.bolt_rounded, size: 18, color: AppColors.secondary),
                                           const SizedBox(width: 10),
                                           Text(
                                             'Free Tools Only',
@@ -1141,7 +1141,7 @@ class AnimatedVipBadge extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: isProfessional
             ? const LinearGradient(
-                colors: [Color(0xFF00E5FF), Color(0xFF00897B)],
+                colors: [AppColors.primaryLightMode, Color(0xFF00897B)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               )
@@ -1149,7 +1149,7 @@ class AnimatedVipBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: (isProfessional ? const Color(0xFF00E5FF) : const Color(0xFFE0A13A)).withValues(alpha: 0.4),
+            color: (isProfessional ? AppColors.primaryLightMode : const Color(0xFFE0A13A)).withValues(alpha: 0.4),
             blurRadius: 6,
             spreadRadius: 0,
           ),

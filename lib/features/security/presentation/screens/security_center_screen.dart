@@ -112,16 +112,16 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                 decoration: BoxDecoration(
-                                  color: Colors.greenAccent.withValues(alpha: 0.2),
+                                  color: AppColors.secondary.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.5)),
+                                  border: Border.all(color: AppColors.secondary.withValues(alpha: 0.5)),
                                 ),
                                 child: Text(
                                   'PROTECTED',
                                   style: GoogleFonts.outfit(
                                     fontSize: 9,
                                     fontWeight: FontWeight.w900,
-                                    color: Colors.greenAccent,
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ),
@@ -152,7 +152,7 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                           // 1. Security Score Banner
                           GlassCard(
                             padding: const EdgeInsets.all(16),
-                            borderColor: Colors.greenAccent.withValues(alpha: 0.4),
+                            borderColor: AppColors.secondary.withValues(alpha: 0.4),
                             child: Row(
                               children: [
                                 Container(
@@ -160,11 +160,11 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                   height: 48,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.greenAccent.withValues(alpha: 0.15),
-                                    border: Border.all(color: Colors.greenAccent, width: 1.5),
+                                    color: AppColors.secondary.withValues(alpha: 0.15),
+                                    border: Border.all(color: AppColors.secondary, width: 1.5),
                                   ),
                                   child: const Center(
-                                    child: Icon(Icons.shield_rounded, color: Colors.greenAccent, size: 26),
+                                    child: Icon(Icons.shield_rounded, color: AppColors.secondary, size: 26),
                                   ),
                                 ),
                                 const SizedBox(width: 14),
@@ -227,7 +227,7 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                       style: GoogleFonts.outfit(
                                         fontSize: 11,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.redAccent,
+                                        color: AppColors.pink,
                                       ),
                                     ),
                                   ),
@@ -397,7 +397,7 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                   padding: const EdgeInsets.symmetric(vertical: 6),
                                   child: Row(
                                     children: [
-                                      const Icon(Icons.check_circle_outline_rounded, color: Colors.greenAccent, size: 16),
+                                      const Icon(Icons.check_circle_outline_rounded, color: AppColors.secondary, size: 16),
                                       const SizedBox(width: 10),
                                       Expanded(
                                         child: Column(
@@ -426,7 +426,7 @@ class _SecurityCenterScreenState extends State<SecurityCenterScreen> {
                                         style: GoogleFonts.outfit(
                                           fontSize: 10,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.greenAccent,
+                                          color: AppColors.secondary,
                                         ),
                                       ),
                                     ],

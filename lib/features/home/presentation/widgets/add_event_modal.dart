@@ -42,7 +42,9 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
   void initState() {
     super.initState();
     _selectedDate = widget.initialDate ?? DateTime.now();
-    _selectedTime = TimeOfDay.fromDateTime(_selectedDate.add(const Duration(hours: 1)));
+    _selectedTime = TimeOfDay.fromDateTime(
+      _selectedDate.add(const Duration(hours: 1)),
+    );
   }
 
   @override
@@ -72,7 +74,9 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
     } else if (hour >= 16 && hour <= 18) {
       score += 0.8;
     }
-    return (score > 10.0) ? 10.0 : ((score < 4.0) ? 4.0 : double.parse(score.toStringAsFixed(1)));
+    return (score > 10.0)
+        ? 10.0
+        : ((score < 4.0) ? 4.0 : double.parse(score.toStringAsFixed(1)));
   }
 
   @override
@@ -82,7 +86,9 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
     final score = _calculatedScore;
 
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         child: BackdropFilter(
@@ -92,9 +98,16 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
               maxHeight: MediaQuery.of(context).size.height * 0.85,
             ),
             decoration: BoxDecoration(
-              color: isLight ? AppColors.surfaceLight.withValues(alpha: 0.96) : const Color(0xF20F141C),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-              border: Border.all(color: AppColors.getGlassBorder(context), width: 1.0),
+              color: isLight
+                  ? AppColors.surfaceLight.withValues(alpha: 0.96)
+                  : const Color(0xF20F141C),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(32),
+              ),
+              border: Border.all(
+                color: AppColors.getGlassBorder(context),
+                width: 1.0,
+              ),
             ),
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -129,7 +142,11 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                                 gradient: AppColors.goldGradient,
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Icon(Icons.event_available_rounded, color: Colors.black, size: 20),
+                              child: const Icon(
+                                Icons.event_available_rounded,
+                                color: Colors.black,
+                                size: 20,
+                              ),
                             ),
                             const SizedBox(width: 12),
                             Expanded(
@@ -148,7 +165,10 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                         ),
                       ),
                       IconButton(
-                        icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context)),
+                        icon: Icon(
+                          Icons.close_rounded,
+                          color: AppColors.getTextSecondary(context),
+                        ),
                         onPressed: () => Navigator.pop(context),
                       ),
                     ],
@@ -158,20 +178,40 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                   // Event Title Input
                   TextField(
                     controller: _titleController,
-                    style: GoogleFonts.inter(color: AppColors.getTextPrimary(context)),
+                    style: GoogleFonts.inter(
+                      color: AppColors.getTextPrimary(context),
+                    ),
                     decoration: InputDecoration(
-                      labelText: 'Event Title (e.g. Client Meeting, Property Deal)',
-                      labelStyle: TextStyle(color: AppColors.getTextSecondary(context), fontSize: 13),
+                      labelText:
+                          'Event Title (e.g. Client Meeting, Property Deal)',
+                      labelStyle: TextStyle(
+                        color: AppColors.getTextSecondary(context),
+                        fontSize: 13,
+                      ),
                       filled: true,
                       fillColor: AppColors.getSurfaceSecondary(context),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
-                      prefixIcon: const Icon(Icons.edit_rounded, color: AppColors.primary, size: 18),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide.none,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.edit_rounded,
+                        color: AppColors.primary,
+                        size: 18,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
 
                   // Category Selector
-                  Text('EVENT CATEGORY', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.getTextMuted(context))),
+                  Text(
+                    'EVENT CATEGORY',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.getTextMuted(context),
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -184,25 +224,42 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             margin: const EdgeInsets.only(right: 8),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
                             decoration: BoxDecoration(
-                              color: isSel ? cat.color.withValues(alpha: 0.2) : AppColors.getSurfaceSecondary(context),
+                              color: isSel
+                                  ? cat.color.withValues(alpha: 0.2)
+                                  : AppColors.getSurfaceSecondary(context),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: isSel ? cat.color : AppColors.getGlassBorder(context),
+                                color: isSel
+                                    ? cat.color
+                                    : AppColors.getGlassBorder(context),
                                 width: isSel ? 1.5 : 0.6,
                               ),
                             ),
                             child: Row(
                               children: [
-                                Icon(cat.icon, size: 14, color: isSel ? cat.color : AppColors.getTextSecondary(context)),
+                                Icon(
+                                  cat.icon,
+                                  size: 14,
+                                  color: isSel
+                                      ? cat.color
+                                      : AppColors.getTextSecondary(context),
+                                ),
                                 const SizedBox(width: 6),
                                 Text(
                                   cat.label,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    fontWeight: isSel ? FontWeight.bold : FontWeight.w500,
-                                    color: isSel ? cat.color : AppColors.getTextSecondary(context),
+                                    fontWeight: isSel
+                                        ? FontWeight.bold
+                                        : FontWeight.w500,
+                                    color: isSel
+                                        ? cat.color
+                                        : AppColors.getTextSecondary(context),
                                   ),
                                 ),
                               ],
@@ -223,29 +280,56 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                             final picked = await showDatePicker(
                               context: context,
                               initialDate: _selectedDate,
-                              firstDate: DateTime.now().subtract(const Duration(days: 1)),
-                              lastDate: DateTime.now().add(const Duration(days: 365)),
+                              firstDate: DateTime.now().subtract(
+                                const Duration(days: 1),
+                              ),
+                              lastDate: DateTime.now().add(
+                                const Duration(days: 365),
+                              ),
                             );
-                            if (picked != null) setState(() => _selectedDate = picked);
+                            if (picked != null && mounted) {
+                              setState(() => _selectedDate = picked);
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               color: AppColors.getSurfaceSecondary(context),
                               borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: AppColors.getGlassBorder(context), width: 0.8),
+                              border: Border.all(
+                                color: AppColors.getGlassBorder(context),
+                                width: 0.8,
+                              ),
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.calendar_today_rounded, size: 16, color: AppColors.primary),
+                                const Icon(
+                                  Icons.calendar_today_rounded,
+                                  size: 16,
+                                  color: AppColors.primary,
+                                ),
                                 const SizedBox(width: 8),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Date', style: TextStyle(fontSize: 10, color: AppColors.getTextMuted(context))),
                                     Text(
-                                      DateFormat('EEE, dd MMM').format(_selectedDate),
-                                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                                      'Date',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: AppColors.getTextMuted(context),
+                                      ),
+                                    ),
+                                    Text(
+                                      DateFormat(
+                                        'EEE, dd MMM',
+                                      ).format(_selectedDate),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.getTextPrimary(
+                                          context,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -262,26 +346,47 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                               context: context,
                               initialTime: _selectedTime,
                             );
-                            if (picked != null) setState(() => _selectedTime = picked);
+                            if (picked != null && mounted) {
+                              setState(() => _selectedTime = picked);
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               color: AppColors.getSurfaceSecondary(context),
                               borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: AppColors.getGlassBorder(context), width: 0.8),
+                              border: Border.all(
+                                color: AppColors.getGlassBorder(context),
+                                width: 0.8,
+                              ),
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.access_time_rounded, size: 16, color: AppColors.primary),
+                                const Icon(
+                                  Icons.access_time_rounded,
+                                  size: 16,
+                                  color: AppColors.primary,
+                                ),
                                 const SizedBox(width: 8),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('Time', style: TextStyle(fontSize: 10, color: AppColors.getTextMuted(context))),
+                                    Text(
+                                      'Time',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: AppColors.getTextMuted(context),
+                                      ),
+                                    ),
                                     Text(
                                       _selectedTime.format(context),
-                                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.getTextPrimary(
+                                          context,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -300,7 +405,9 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                     decoration: BoxDecoration(
                       color: AppColors.primary.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.4),
+                      ),
                     ),
                     child: Row(
                       children: [
@@ -339,7 +446,9 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                               Text(
                                 score >= 8.5
                                     ? '✦ Peak Window! Favorable transits for ${_selectedCategory.label.toLowerCase()}.'
-                                    : (score >= 6.5 ? 'Good timing. Planetary energy aligns favorably.' : 'âš ï¸ Caution Window! Consider shifting time by 30 mins.'),
+                                    : (score >= 6.5
+                                          ? 'Good timing. Planetary energy aligns favorably.'
+                                          : 'âš ï¸ Caution Window! Consider shifting time by 30 mins.'),
                                 style: GoogleFonts.inter(
                                   fontSize: 11,
                                   color: AppColors.getTextSecondary(context),
@@ -360,7 +469,9 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
                       onPressed: () async {
                         final title = _titleController.text.trim();
@@ -373,13 +484,17 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                           return;
                         }
 
-                        await ref.read(reminderProvider.notifier).addReminder(
-                          title: title,
-                          category: _selectedCategory,
-                          eventTime: eventDt,
-                          notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
-                          leadTimeMinutes: _leadTimeMinutes,
-                        );
+                        await ref
+                            .read(reminderProvider.notifier)
+                            .addReminder(
+                              title: title,
+                              category: _selectedCategory,
+                              eventTime: eventDt,
+                              notes: _notesController.text.trim().isEmpty
+                                  ? null
+                                  : _notesController.text.trim(),
+                              leadTimeMinutes: _leadTimeMinutes,
+                            );
 
                         if (!context.mounted) return;
                         Navigator.pop(context);
@@ -388,7 +503,8 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                           title: title,
                           category: _selectedCategory.label,
                           astroScore: score,
-                          dashaContext: '${_selectedCategory.label} Alignment Window',
+                          dashaContext:
+                              '${_selectedCategory.label} Alignment Window',
                           aiRecommendation: score >= 8.0
                               ? 'Peak planetary alignment! Transit positions offer maximum success for this event.'
                               : 'Timing window logged. Maintain focus during event execution.',
@@ -404,7 +520,11 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.check_circle_rounded, color: Colors.black, size: 20),
+                              const Icon(
+                                Icons.check_circle_rounded,
+                                color: Colors.black,
+                                size: 20,
+                              ),
                               const SizedBox(width: 8),
                               Text(
                                 'SCHEDULE & SET REMINDER',
@@ -430,4 +550,3 @@ class _AddEventModalState extends ConsumerState<AddEventModal> {
     );
   }
 }
-

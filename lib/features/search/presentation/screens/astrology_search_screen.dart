@@ -37,49 +37,56 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Kundli Birth Chart',
       'category': 'Features',
-      'description': 'View interactive North & South Indian natal charts, house meanings, planetary strengths & dignities.',
+      'description':
+          'View interactive North & South Indian natal charts, house meanings, planetary strengths & dignities.',
       'action': 'Open Kundli',
       'screen': 'kundli',
     },
     {
       'term': 'Gun Milan & Compatibility',
       'category': 'Features',
-      'description': '36-Guna Ashtakoota compatibility analysis and relationship synastry for prospective matches.',
+      'description':
+          '36-Guna Ashtakoota compatibility analysis and relationship synastry for prospective matches.',
       'action': 'Open Matching',
       'screen': 'matching',
     },
     {
       'term': 'Astro Baba AI Guide',
       'category': 'Features',
-      'description': 'Ask conversational Vedic astrology queries regarding career, love, health, Dasha timing & remedies.',
+      'description':
+          'Ask conversational Vedic astrology queries regarding career, love, health, Dasha timing & remedies.',
       'action': 'Ask Astro Baba',
       'screen': 'astrobaba',
     },
     {
       'term': 'Custom PDF Report Generator',
       'category': 'Features',
-      'description': 'Build & export multi-language personalized Vedic birth chart reports in PDF format with custom sections.',
+      'description':
+          'Build & export multi-language personalized Vedic birth chart reports in PDF format with custom sections.',
       'action': 'Build PDF',
       'screen': 'pdf',
     },
     {
       'term': 'Personal Timing & Muhurat Engine',
       'category': 'Features',
-      'description': 'Calculate auspicious time windows for contracts, interviews, travel, property, and ceremonies.',
+      'description':
+          'Calculate auspicious time windows for contracts, interviews, travel, property, and ceremonies.',
       'action': 'View Timing Engine',
       'screen': 'timing',
     },
     {
       'term': '90-Day Cosmic Future Radar',
       'category': 'Features',
-      'description': 'Planetary transit calendar mapping major astrological opportunities and challenge periods.',
+      'description':
+          'Planetary transit calendar mapping major astrological opportunities and challenge periods.',
       'action': 'Open Future Radar',
       'screen': 'radar',
     },
     {
       'term': 'Smart Astro Reminders & Alerts',
       'category': 'Features',
-      'description': 'Configure morning score alerts, Rahu Kaal pre-warnings, and Shubh Muhurat window notifications.',
+      'description':
+          'Configure morning score alerts, Rahu Kaal pre-warnings, and Shubh Muhurat window notifications.',
       'action': 'Open Reminders',
       'screen': 'reminders',
     },
@@ -88,7 +95,8 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Sun (Surya)',
       'category': 'Planet',
-      'description': 'Represents the Atma (soul), leadership, father, vitality, self-expression, and willpower in Vedic astrology. Exalted in Aries, debility in Libra.',
+      'description':
+          'Represents the Atma (soul), leadership, father, vitality, self-expression, and willpower in Vedic astrology. Exalted in Aries, debility in Libra.',
       'ruler': 'Leo (Simha)',
       'gemstone': 'Ruby (Manik)',
       'mantra': 'Om Suryaya Namaha',
@@ -96,7 +104,8 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Moon (Chandra)',
       'category': 'Planet',
-      'description': 'Governs the Manas (mind), emotions, mother, mental serenity, intuition, and sleep rhythms. Exalted in Taurus, debility in Scorpio.',
+      'description':
+          'Governs the Manas (mind), emotions, mother, mental serenity, intuition, and sleep rhythms. Exalted in Taurus, debility in Scorpio.',
       'ruler': 'Cancer (Karka)',
       'gemstone': 'Pearl (Moti)',
       'mantra': 'Om Chandraya Namaha',
@@ -104,7 +113,8 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Mars (Mangal)',
       'category': 'Planet',
-      'description': 'Symbol of physical energy, courage, brother, land property, ambition, and technical focus. Exalted in Capricorn, debility in Cancer.',
+      'description':
+          'Symbol of physical energy, courage, brother, land property, ambition, and technical focus. Exalted in Capricorn, debility in Cancer.',
       'ruler': 'Aries (Mesha) & Scorpio (Vrishchika)',
       'gemstone': 'Red Coral (Moonga)',
       'mantra': 'Om Angarakaya Namaha',
@@ -112,7 +122,8 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Mercury (Budh)',
       'category': 'Planet',
-      'description': 'Lord of intelligence, analytical reasoning, trade, speech, witty articulation, and commerce. Exalted in Virgo, debility in Pisces.',
+      'description':
+          'Lord of intelligence, analytical reasoning, trade, speech, witty articulation, and commerce. Exalted in Virgo, debility in Pisces.',
       'ruler': 'Gemini (Mithuna) & Virgo (Kanya)',
       'gemstone': 'Emerald (Panna)',
       'mantra': 'Om Budhaya Namaha',
@@ -120,7 +131,8 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Jupiter (Brihaspati / Guru)',
       'category': 'Planet',
-      'description': 'The supreme benefic planet representing higher wisdom, spiritual dharma, children, wealth, and teachers. Exalted in Cancer, debility in Capricorn.',
+      'description':
+          'The supreme benefic planet representing higher wisdom, spiritual dharma, children, wealth, and teachers. Exalted in Cancer, debility in Capricorn.',
       'ruler': 'Sagittarius (Dhanu) & Pisces (Meena)',
       'gemstone': 'Yellow Sapphire (Pukhraj)',
       'mantra': 'Om Brihaspataye Namaha',
@@ -128,7 +140,8 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Venus (Shukra)',
       'category': 'Planet',
-      'description': 'Governs love, sensual beauty, luxury, artistic creativity, marriage harmony, and diplomacy. Exalted in Pisces, debility in Virgo.',
+      'description':
+          'Governs love, sensual beauty, luxury, artistic creativity, marriage harmony, and diplomacy. Exalted in Pisces, debility in Virgo.',
       'ruler': 'Taurus (Vrishabha) & Libra (Tula)',
       'gemstone': 'Diamond (Heera) or White Zircon',
       'mantra': 'Om Shukraya Namaha',
@@ -136,7 +149,8 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Saturn (Shani)',
       'category': 'Planet',
-      'description': 'The Karmic taskmaster representing discipline, endurance, longevity, justice, and practical labor. Exalted in Libra, debility in Aries.',
+      'description':
+          'The Karmic taskmaster representing discipline, endurance, longevity, justice, and practical labor. Exalted in Libra, debility in Aries.',
       'ruler': 'Capricorn (Makara) & Aquarius (Kumbha)',
       'gemstone': 'Blue Sapphire (Neelam)',
       'mantra': 'Om Sham Shanaishcharaya Namaha',
@@ -144,7 +158,8 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Rahu (North Lunar Node)',
       'category': 'Planet',
-      'description': 'Shadow planet representing worldly ambitions, cutting-edge technology, foreign travel, obsession, and sudden shifts.',
+      'description':
+          'Shadow planet representing worldly ambitions, cutting-edge technology, foreign travel, obsession, and sudden shifts.',
       'ruler': 'Co-ruler of Aquarius',
       'gemstone': 'Hessonite Garnet (Gomed)',
       'mantra': 'Om Rahave Namaha',
@@ -152,7 +167,8 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Ketu (South Lunar Node)',
       'category': 'Planet',
-      'description': 'Shadow planet representing spiritual liberation (Moksha), detachment, occult wisdom, intuition, and ascetic enlightenment.',
+      'description':
+          'Shadow planet representing spiritual liberation (Moksha), detachment, occult wisdom, intuition, and ascetic enlightenment.',
       'ruler': 'Co-ruler of Scorpio',
       'gemstone': 'Cat’s Eye (Lehsuniya)',
       'mantra': 'Om Ketave Namaha',
@@ -162,116 +178,138 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     {
       'term': 'Mesha (Aries)',
       'category': 'Rashi',
-      'description': '1st sign, Fire element, ruled by Mars. Symbolizes fearless initiative, entrepreneurial drive, physical vigor, and direct leadership.',
+      'description':
+          '1st sign, Fire element, ruled by Mars. Symbolizes fearless initiative, entrepreneurial drive, physical vigor, and direct leadership.',
     },
     {
       'term': 'Vrishabha (Taurus)',
       'category': 'Rashi',
-      'description': '2nd sign, Earth element, ruled by Venus. Symbolizes grounded stability, sensory appreciation, material security, and enduring loyalty.',
+      'description':
+          '2nd sign, Earth element, ruled by Venus. Symbolizes grounded stability, sensory appreciation, material security, and enduring loyalty.',
     },
     {
       'term': 'Mithuna (Gemini)',
       'category': 'Rashi',
-      'description': '3rd sign, Air element, ruled by Mercury. Known for versatile curiosity, rapid communication, intellectual exploration, and adaptability.',
+      'description':
+          '3rd sign, Air element, ruled by Mercury. Known for versatile curiosity, rapid communication, intellectual exploration, and adaptability.',
     },
     {
       'term': 'Karka (Cancer)',
       'category': 'Rashi',
-      'description': '4th sign, Water element, ruled by Moon. Centers around emotional nurturing, home foundation, empathy, intuition, and family devotion.',
+      'description':
+          '4th sign, Water element, ruled by Moon. Centers around emotional nurturing, home foundation, empathy, intuition, and family devotion.',
     },
     {
       'term': 'Simha (Leo)',
       'category': 'Rashi',
-      'description': '5th sign, Fire element, ruled by Sun. Radiates regal confidence, creative generosity, natural dignity, and authoritative leadership.',
+      'description':
+          '5th sign, Fire element, ruled by Sun. Radiates regal confidence, creative generosity, natural dignity, and authoritative leadership.',
     },
     {
       'term': 'Kanya (Virgo)',
       'category': 'Rashi',
-      'description': '6th sign, Earth element, ruled by Mercury. Excels in precise analytical mastery, holistic healing, systematic efficiency, and practical service.',
+      'description':
+          '6th sign, Earth element, ruled by Mercury. Excels in precise analytical mastery, holistic healing, systematic efficiency, and practical service.',
     },
     {
       'term': 'Tula (Libra)',
       'category': 'Rashi',
-      'description': '7th sign, Air element, ruled by Venus. Governs diplomatic justice, aesthetic harmony, consensual partnerships, and balanced agreements.',
+      'description':
+          '7th sign, Air element, ruled by Venus. Governs diplomatic justice, aesthetic harmony, consensual partnerships, and balanced agreements.',
     },
     {
       'term': 'Vrishchika (Scorpio)',
       'category': 'Rashi',
-      'description': '8th sign, Water element, ruled by Mars & Ketu. Marked by intense transformation, deep psychological penetration, regenerative power, and secrecy.',
+      'description':
+          '8th sign, Water element, ruled by Mars & Ketu. Marked by intense transformation, deep psychological penetration, regenerative power, and secrecy.',
     },
     {
       'term': 'Dhanu (Sagittarius)',
       'category': 'Rashi',
-      'description': '9th sign, Fire element, ruled by Jupiter. Driven by philosophical exploration, higher truth, international travel, optimism, and moral dharma.',
+      'description':
+          '9th sign, Fire element, ruled by Jupiter. Driven by philosophical exploration, higher truth, international travel, optimism, and moral dharma.',
     },
     {
       'term': 'Makara (Capricorn)',
       'category': 'Rashi',
-      'description': '10th sign, Earth element, ruled by Saturn. The master architect of executive responsibility, societal institutions, enduring reputation, and grit.',
+      'description':
+          '10th sign, Earth element, ruled by Saturn. The master architect of executive responsibility, societal institutions, enduring reputation, and grit.',
     },
     {
       'term': 'Kumbha (Aquarius)',
       'category': 'Rashi',
-      'description': '11th sign, Air element, ruled by Saturn & Rahu. Envisions collective progress, humanitarian causes, scientific innovations, and wide community networks.',
+      'description':
+          '11th sign, Air element, ruled by Saturn & Rahu. Envisions collective progress, humanitarian causes, scientific innovations, and wide community networks.',
     },
     {
       'term': 'Meena (Pisces)',
       'category': 'Rashi',
-      'description': '12th sign, Water element, ruled by Jupiter. Channel of universal compassion, poetic artistry, meditative transcendence, and mystical surrender.',
+      'description':
+          '12th sign, Water element, ruled by Jupiter. Channel of universal compassion, poetic artistry, meditative transcendence, and mystical surrender.',
     },
 
     // ── 12 Bhavas (Astrological Houses) ──────────────────────
     {
       'term': '1st House (Tanu Bhava / Lagna)',
       'category': 'Bhava',
-      'description': 'The physical self, bodily vitality, constitution, personality traits, general outlook on life, and personal appearance.',
+      'description':
+          'The physical self, bodily vitality, constitution, personality traits, general outlook on life, and personal appearance.',
     },
     {
       'term': '2nd House (Dhana Bhava)',
       'category': 'Bhava',
-      'description': 'Accumulated wealth, liquid savings, family lineage, speech demeanor, dietary habits, and moral values.',
+      'description':
+          'Accumulated wealth, liquid savings, family lineage, speech demeanor, dietary habits, and moral values.',
     },
     {
       'term': '4th House (Sukha Bhava)',
       'category': 'Bhava',
-      'description': 'Inner emotional peace, mother, real estate property, vehicles, primary education, and domestic environment.',
+      'description':
+          'Inner emotional peace, mother, real estate property, vehicles, primary education, and domestic environment.',
     },
     {
       'term': '7th House (Kalatra Bhava)',
       'category': 'Bhava',
-      'description': 'Spousal marriage, intimate partnerships, commercial joint ventures, public interactions, and foreign contracts.',
+      'description':
+          'Spousal marriage, intimate partnerships, commercial joint ventures, public interactions, and foreign contracts.',
     },
     {
       'term': '10th House (Karma Bhava)',
       'category': 'Bhava',
-      'description': 'Career profession, worldly executive authority, societal reputation, public accomplishments, and father/mentors.',
+      'description':
+          'Career profession, worldly executive authority, societal reputation, public accomplishments, and father/mentors.',
     },
 
     // ── Yogas, Dashas & Muhurat ──────────────────────────────
     {
       'term': 'Gajakesari Yoga',
       'category': 'Yoga',
-      'description': 'Formed when Jupiter occupies a Kendra (1st, 4th, 7th, or 10th) from the natal Moon. Bestows enduring wisdom, respect, and moral standing.',
+      'description':
+          'Formed when Jupiter occupies a Kendra (1st, 4th, 7th, or 10th) from the natal Moon. Bestows enduring wisdom, respect, and moral standing.',
     },
     {
       'term': 'Budhaditya Yoga',
       'category': 'Yoga',
-      'description': 'Formed by conjunction of Sun and Mercury. Enhances sharp intellect, professional prestige, speech fluency, and executive clarity.',
+      'description':
+          'Formed by conjunction of Sun and Mercury. Enhances sharp intellect, professional prestige, speech fluency, and executive clarity.',
     },
     {
       'term': 'Vimshottari Dasha',
       'category': 'Dasha',
-      'description': 'The 120-year planetary cycle based on the natal Moon Nakshatra. Dictates the unfolding timing of karma, major events, and life chapters.',
+      'description':
+          'The 120-year planetary cycle based on the natal Moon Nakshatra. Dictates the unfolding timing of karma, major events, and life chapters.',
     },
     {
       'term': 'Abhijit Muhurat',
       'category': 'Muhurat',
-      'description': 'The highly auspicious midday window (approximately 48 minutes centered on local solar noon) blessed by Lord Vishnu to neutralize minor planetary doshas.',
+      'description':
+          'The highly auspicious midday window (approximately 48 minutes centered on local solar noon) blessed by Lord Vishnu to neutralize minor planetary doshas.',
     },
     {
       'term': 'Rahu Kaal',
       'category': 'Muhurat',
-      'description': 'A 90-minute daily planetary segment ruled by Rahu. In Vedic tradition, starting new financial ventures or journeys during this window is avoided.',
+      'description':
+          'A 90-minute daily planetary segment ruled by Rahu. In Vedic tradition, starting new financial ventures or journeys during this window is avoided.',
     },
   ];
 
@@ -285,19 +323,42 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     if (item['category'] == 'Features') {
       final screen = item['screen'];
       if (screen == 'kundli') {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const KundliScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const KundliScreen()),
+        );
       } else if (screen == 'matching') {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const MatchingScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const MatchingScreen()),
+        );
       } else if (screen == 'astrobaba') {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroBabaScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const AstroBabaScreen()),
+        );
       } else if (screen == 'pdf') {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomPdfReportBuilderScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const CustomPdfReportBuilderScreen(),
+          ),
+        );
       } else if (screen == 'timing') {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const PersonalTimingEngineScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const PersonalTimingEngineScreen()),
+        );
       } else if (screen == 'radar') {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const FutureRadarScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const FutureRadarScreen()),
+        );
       } else if (screen == 'reminders') {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroRemindersScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const AstroRemindersScreen()),
+        );
       }
     } else {
       _showAstrologyDetailsSheet(item);
@@ -314,7 +375,9 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
         decoration: BoxDecoration(
           color: AppColors.getSurface(context),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-          border: Border(top: BorderSide(color: AppColors.getGlassBorder(context))),
+          border: Border(
+            top: BorderSide(color: AppColors.getGlassBorder(context)),
+          ),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -324,19 +387,31 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.4),
+                    ),
                   ),
                   child: Text(
                     item['category']!.toUpperCase(),
-                    style: GoogleFonts.outfit(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary),
+                    style: GoogleFonts.outfit(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context)),
+                  icon: Icon(
+                    Icons.close_rounded,
+                    color: AppColors.getTextSecondary(context),
+                  ),
                   onPressed: () => Navigator.pop(ctx),
                 ),
               ],
@@ -359,7 +434,9 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                 color: AppColors.getTextPrimary(context).withValues(alpha: 0.9),
               ),
             ),
-            if (item['ruler'] != null || item['gemstone'] != null || item['mantra'] != null) ...[
+            if (item['ruler'] != null ||
+                item['gemstone'] != null ||
+                item['mantra'] != null) ...[
               const SizedBox(height: 16),
               Divider(color: AppColors.getDivider(context)),
               const SizedBox(height: 8),
@@ -387,13 +464,20 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
             width: 140,
             child: Text(
               label,
-              style: GoogleFonts.inter(fontSize: 12, color: AppColors.getTextSecondary(context)),
+              style: GoogleFonts.inter(
+                fontSize: 12,
+                color: AppColors.getTextSecondary(context),
+              ),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: GoogleFonts.outfit(fontSize: 12.5, fontWeight: FontWeight.bold, color: AppColors.primary),
+              style: GoogleFonts.outfit(
+                fontSize: 12.5,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
             ),
           ),
         ],
@@ -403,21 +487,22 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
     final query = _queryController.text.trim().toLowerCase();
 
     final results = _knowledgeBase.where((item) {
-      final matchesQuery = query.isEmpty ||
+      final matchesQuery =
+          query.isEmpty ||
           item['term']!.toLowerCase().contains(query) ||
           item['description']!.toLowerCase().contains(query);
-      final matchesFilter = _selectedFilter == 'All' || item['category'] == _selectedFilter;
+      final matchesFilter =
+          _selectedFilter == 'All' || item['category'] == _selectedFilter;
       return matchesQuery && matchesFilter;
     }).toList();
 
     return Scaffold(
-      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
+      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : Colors.transparent,
+        backgroundColor: AppColors.backgroundLight,
         elevation: 0,
         title: Text(
           'Vedic Astrology Knowledge Search',
@@ -430,10 +515,7 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
         iconTheme: IconThemeData(color: AppColors.getTextPrimary(context)),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
-          gradient: isLight ? null : AppColors.cosmicRadialGradient,
-        ),
+        color: AppColors.backgroundLight,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -442,14 +524,28 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
               TextField(
                 controller: _queryController,
                 onChanged: (_) => setState(() {}),
-                style: GoogleFonts.inter(color: AppColors.getTextPrimary(context), fontSize: 14),
+                style: GoogleFonts.inter(
+                  color: AppColors.getTextPrimary(context),
+                  fontSize: 14,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Search Planet, Rashi, House, Feature...',
-                  hintStyle: GoogleFonts.inter(color: AppColors.getTextMuted(context), fontSize: 13),
-                  prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primary, size: 22),
+                  hintStyle: GoogleFonts.inter(
+                    color: AppColors.getTextMuted(context),
+                    fontSize: 13,
+                  ),
+                  prefixIcon: const Icon(
+                    Icons.search_rounded,
+                    color: AppColors.primary,
+                    size: 22,
+                  ),
                   suffixIcon: query.isNotEmpty
                       ? IconButton(
-                          icon: Icon(Icons.clear_rounded, color: AppColors.getTextSecondary(context), size: 18),
+                          icon: Icon(
+                            Icons.clear_rounded,
+                            color: AppColors.getTextSecondary(context),
+                            size: 18,
+                          ),
                           onPressed: () {
                             _queryController.clear();
                             setState(() {});
@@ -458,7 +554,10 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                       : null,
                   filled: true,
                   fillColor: AppColors.getSurface(context),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                     borderSide: BorderSide(color: AppColors.getBorder(context)),
@@ -492,12 +591,18 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                         selectedColor: AppColors.primary,
                         backgroundColor: AppColors.getSurface(context),
                         labelStyle: GoogleFonts.outfit(
-                          color: isSelected ? Colors.black : AppColors.getTextPrimary(context),
+                          color: isSelected
+                              ? Colors.white
+                              : AppColors.getTextPrimary(context),
                           fontSize: 12,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
                         side: BorderSide(
-                          color: isSelected ? AppColors.primary : AppColors.getBorder(context),
+                          color: isSelected
+                              ? AppColors.primary
+                              : AppColors.getBorder(context),
                         ),
                         onSelected: (sel) {
                           if (sel) setState(() => _selectedFilter = filter);
@@ -516,7 +621,10 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                         child: Text(
                           'No matching astrology terms found.\nTry a different search keyword.',
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.inter(color: AppColors.getTextMuted(context), fontSize: 13),
+                          style: GoogleFonts.inter(
+                            color: AppColors.getTextMuted(context),
+                            fontSize: 13,
+                          ),
                         ),
                       )
                     : ListView.builder(
@@ -532,7 +640,9 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                               color: AppColors.getSurface(context),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: isFeature ? AppColors.primary.withValues(alpha: 0.5) : AppColors.getBorder(context),
+                                color: isFeature
+                                    ? AppColors.primary.withValues(alpha: 0.5)
+                                    : AppColors.getBorder(context),
                                 width: 0.8,
                               ),
                             ),
@@ -544,32 +654,53 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(14),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
                                           Text(
                                             item['term']!,
                                             style: GoogleFonts.outfit(
-                                              color: isFeature ? AppColors.primary : AppColors.getTextPrimary(context),
+                                              color: isFeature
+                                                  ? AppColors.primary
+                                                  : AppColors.getTextPrimary(
+                                                      context,
+                                                    ),
                                               fontSize: 15,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                           const Spacer(),
                                           Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: 3,
+                                            ),
                                             decoration: BoxDecoration(
-                                              color: (isFeature ? AppColors.primary : Colors.grey).withValues(alpha: 0.14),
-                                              borderRadius: BorderRadius.circular(8),
+                                              color:
+                                                  (isFeature
+                                                          ? AppColors.primary
+                                                          : Colors.grey)
+                                                      .withValues(alpha: 0.14),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                               border: Border.all(
-                                                color: (isFeature ? AppColors.primary : Colors.grey).withValues(alpha: 0.3),
+                                                color:
+                                                    (isFeature
+                                                            ? AppColors.primary
+                                                            : Colors.grey)
+                                                        .withValues(alpha: 0.3),
                                               ),
                                             ),
                                             child: Text(
                                               item['category']!,
                                               style: GoogleFonts.outfit(
-                                                color: isFeature ? AppColors.primary : AppColors.getTextSecondary(context),
+                                                color: isFeature
+                                                    ? AppColors.primary
+                                                    : AppColors.getTextSecondary(
+                                                        context,
+                                                      ),
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -577,9 +708,13 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                                           ),
                                           const SizedBox(width: 6),
                                           Icon(
-                                            isFeature ? Icons.arrow_forward_rounded : Icons.info_outline_rounded,
+                                            isFeature
+                                                ? Icons.arrow_forward_rounded
+                                                : Icons.info_outline_rounded,
                                             size: 16,
-                                            color: AppColors.getTextSecondary(context),
+                                            color: AppColors.getTextSecondary(
+                                              context,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -587,7 +722,9 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
                                       Text(
                                         item['description']!,
                                         style: GoogleFonts.inter(
-                                          color: AppColors.getTextSecondary(context),
+                                          color: AppColors.getTextSecondary(
+                                            context,
+                                          ),
                                           fontSize: 12,
                                           height: 1.4,
                                         ),
@@ -608,4 +745,3 @@ class _AstrologySearchScreenState extends State<AstrologySearchScreen> {
     );
   }
 }
-

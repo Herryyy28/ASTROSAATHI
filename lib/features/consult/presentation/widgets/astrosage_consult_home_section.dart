@@ -78,7 +78,11 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                 border: Border.all(color: const Color(0xFFFFD54F), width: 2),
               ),
               child: const Center(
-                child: Icon(Icons.support_agent_rounded, color: Color(0xFFC62828), size: 30),
+                child: Icon(
+                  Icons.support_agent_rounded,
+                  color: Color(0xFFC62828),
+                  size: 30,
+                ),
               ),
             ),
             const SizedBox(width: 14),
@@ -97,7 +101,10 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFFD54F),
                           borderRadius: BorderRadius.circular(6),
@@ -128,19 +135,29 @@ class AstrosageConsultHomeSection extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFFFD54F),
                 foregroundColor: const Color(0xFFB71C1C),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 elevation: 0,
               ),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const TalkToAiAstrologersScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const TalkToAiAstrologersScreen(),
+                  ),
                 );
               },
               child: Text(
                 'Chat Now',
-                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w800),
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
           ],
@@ -170,14 +187,21 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFE53935),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     'LIVE',
-                    style: GoogleFonts.inter(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ],
@@ -186,13 +210,23 @@ class AstrosageConsultHomeSection extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const ChatWithAstrologersScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const ChatWithAstrologersScreen(),
+                  ),
                 );
               },
-              icon: const Icon(Icons.refresh_rounded, size: 16, color: Color(0xFFFF9800)),
+              icon: const Icon(
+                Icons.refresh_rounded,
+                size: 16,
+                color: AppColors.actionPurple,
+              ),
               label: Text(
                 'View All',
-                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFFFF9800)),
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.actionPurple,
+                ),
               ),
             ),
           ],
@@ -213,11 +247,11 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                   width: 96,
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE65100),
+                    color: AppColors.actionPurple,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFE65100).withValues(alpha: 0.3),
+                        color: AppColors.actionPurple.withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 3),
                       ),
@@ -236,7 +270,10 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white,
-                              border: Border.all(color: const Color(0xFFFFD54F), width: 2),
+                              border: Border.all(
+                                color: const Color(0xFFFFD54F),
+                                width: 2,
+                              ),
                             ),
                             child: Center(
                               child: Text(
@@ -244,7 +281,7 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                                 style: GoogleFonts.outfit(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
-                                  color: const Color(0xFFE65100),
+                                  color: AppColors.actionPurple,
                                 ),
                               ),
                             ),
@@ -252,7 +289,10 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                           Positioned(
                             bottom: -4,
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 1,
+                              ),
                               decoration: BoxDecoration(
                                 color: const Color(0xFFD50000),
                                 borderRadius: BorderRadius.circular(8),
@@ -316,13 +356,23 @@ class AstrosageConsultHomeSection extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const ChatWithAstrologersScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const ChatWithAstrologersScreen(),
+                  ),
                 );
               },
-              icon: const Icon(Icons.refresh_rounded, size: 16, color: Color(0xFFFF9800)),
+              icon: const Icon(
+                Icons.refresh_rounded,
+                size: 16,
+                color: AppColors.actionPurple,
+              ),
               label: Text(
                 'View All',
-                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFFFF9800)),
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.actionPurple,
+                ),
               ),
             ),
           ],
@@ -344,12 +394,16 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                   color: isLight ? Colors.white : AppColors.surfaceDark,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isLight ? const Color(0xFFEEEEEE) : AppColors.borderDark,
+                    color: isLight
+                        ? const Color(0xFFEEEEEE)
+                        : AppColors.borderDark,
                     width: 1,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: isLight ? 0.05 : 0.20),
+                      color: Colors.black.withValues(
+                        alpha: isLight ? 0.05 : 0.20,
+                      ),
                       blurRadius: 8,
                       offset: const Offset(0, 3),
                     ),
@@ -359,14 +413,21 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                   children: [
                     // Top tag: Today's Offer
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFD54F),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         "Today's Offer",
-                        style: GoogleFonts.inter(fontSize: 8.5, fontWeight: FontWeight.w800, color: const Color(0xFFE65100)),
+                        style: GoogleFonts.inter(
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.actionPurple,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -380,7 +441,7 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             gradient: LinearGradient(
-                              colors: [a.primaryAccent, const Color(0xFFFF8F00)],
+                              colors: [a.primaryAccent, AppColors.actionPurple],
                             ),
                           ),
                           child: Center(
@@ -403,7 +464,10 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: const Color(0xFF00E676),
-                              border: Border.all(color: Colors.white, width: 1.5),
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 1.5,
+                              ),
                             ),
                           ),
                         ),
@@ -448,25 +512,31 @@ class AstrosageConsultHomeSection extends StatelessWidget {
                       height: 26,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFFF9800),
+                          backgroundColor: AppColors.actionPurple,
                           foregroundColor: Colors.white,
                           padding: EdgeInsets.zero,
                           elevation: 0,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(13)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(13),
+                          ),
                         ),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) => AstroBabaScreen(
-                                initialMessage: 'Pranam ${a.name}, please analyze my horoscope.',
+                                initialMessage:
+                                    'Pranam ${a.name}, please analyze my horoscope.',
                               ),
                             ),
                           );
                         },
                         child: Text(
                           'Connect',
-                          style: GoogleFonts.inter(fontSize: 10.5, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.inter(
+                            fontSize: 10.5,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -497,7 +567,7 @@ class AstrosagePrimaryActionCards extends StatelessWidget {
             context,
             title: 'Kundli',
             icon: Icons.grid_goldenratio_rounded,
-            iconColor: const Color(0xFFFF9800),
+            iconColor: AppColors.actionPurple,
             isLight: isLight,
             onTap: () {
               if (onSelectTab != null) {
@@ -505,7 +575,9 @@ class AstrosagePrimaryActionCards extends StatelessWidget {
               } else {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const NewKundliInputScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const NewKundliInputScreen(),
+                  ),
                 );
               }
             },
@@ -533,7 +605,7 @@ class AstrosagePrimaryActionCards extends StatelessWidget {
             context,
             title: 'Horoscope',
             icon: Icons.balance_rounded,
-            iconColor: const Color(0xFFFF9800),
+            iconColor: AppColors.actionPurple,
             isLight: isLight,
             onTap: () {
               if (onSelectTab != null) {
@@ -541,7 +613,9 @@ class AstrosagePrimaryActionCards extends StatelessWidget {
               } else {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const NewKundliInputScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const NewKundliInputScreen(),
+                  ),
                 );
               }
             },

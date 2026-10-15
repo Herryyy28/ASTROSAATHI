@@ -29,7 +29,8 @@ class InteractiveDashaTimeline extends StatefulWidget {
   const InteractiveDashaTimeline({super.key});
 
   @override
-  State<InteractiveDashaTimeline> createState() => _InteractiveDashaTimelineState();
+  State<InteractiveDashaTimeline> createState() =>
+      _InteractiveDashaTimelineState();
 }
 
 class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
@@ -114,55 +115,66 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
               Expanded(
                 child: Row(
                   children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      gradient: AppColors.goldGradient,
-                      borderRadius: BorderRadius.circular(12),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        gradient: AppColors.goldGradient,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.account_tree_rounded,
+                        color: Colors.white,
+                        size: 18,
+                      ),
                     ),
-                    child: const Icon(Icons.account_tree_rounded, color: Colors.black, size: 18),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'INTERACTIVE DASHA TIMELINE',
-                          style: GoogleFonts.outfit(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.8,
-                            color: AppColors.getPrimary(context),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'INTERACTIVE DASHA TIMELINE',
+                            style: GoogleFonts.outfit(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.8,
+                              color: AppColors.getPrimary(context),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          'Vimshottari Dasha Tree (Mahadasha â†’ Antardasha)',
-                          style: GoogleFonts.inter(
-                            fontSize: 10.5,
-                            color: AppColors.getTextSecondary(context),
+                          Text(
+                            'Vimshottari Dasha Tree (Mahadasha â†’ Antardasha)',
+                            style: GoogleFonts.inter(
+                              fontSize: 10.5,
+                              color: AppColors.getTextSecondary(context),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            IconButton(
-                icon: const Icon(Icons.help_outline_rounded, size: 18, color: AppColors.primary),
+              IconButton(
+                icon: const Icon(
+                  Icons.help_outline_rounded,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
                 onPressed: () {
                   ExplainChartModal.show(
                     context,
                     term: 'Vimshottari Dasha System',
                     title: 'What is a Dasha?',
-                    simpleExplanation: 'Vimshottari Dasha is the planetary timeline of your life. It divides a 120-year cycle into major periods (Mahadashas) ruled by specific planets that dictate which area of your life is highlighted.',
-                    technicalDetail: 'Based on the exact Nakshatra of your natal Moon at birth. Mahadashas range from 6 years (Sun) to 20 years (Venus).',
-                    keyTakeaway: 'Your active Mahadasha lord sets the theme of your current life chapter (e.g. Jupiter = wisdom & expansion).',
+                    simpleExplanation:
+                        'Vimshottari Dasha is the planetary timeline of your life. It divides a 120-year cycle into major periods (Mahadashas) ruled by specific planets that dictate which area of your life is highlighted.',
+                    technicalDetail:
+                        'Based on the exact Nakshatra of your natal Moon at birth. Mahadashas range from 6 years (Sun) to 20 years (Venus).',
+                    keyTakeaway:
+                        'Your active Mahadasha lord sets the theme of your current life chapter (e.g. Jupiter = wisdom & expansion).',
                   );
                 },
               ),
@@ -203,17 +215,23 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
                           _expandedIndex = isExpanded ? null : idx;
                         });
                       },
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       leading: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: item.isActive ? AppColors.getPrimary(context) : AppColors.getSurfaceElevated(context),
+                          color: item.isActive
+                              ? AppColors.getPrimary(context)
+                              : AppColors.getSurfaceElevated(context),
                         ),
                         child: Icon(
                           Icons.auto_awesome,
                           size: 16,
-                          color: item.isActive ? Colors.black : AppColors.getTextSecondary(context),
+                          color: item.isActive
+                              ? Colors.white
+                              : AppColors.getTextSecondary(context),
                         ),
                       ),
                       title: Row(
@@ -230,24 +248,36 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
                           ),
                           if (item.isActive)
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.getPrimary(context),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: const Text(
                                 'ACTIVE NOW',
-                                style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.black),
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                         ],
                       ),
                       subtitle: Text(
                         item.durationText,
-                        style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: AppColors.getTextSecondary(context),
+                        ),
                       ),
                       trailing: Icon(
-                        isExpanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
+                        isExpanded
+                            ? Icons.expand_less_rounded
+                            : Icons.expand_more_rounded,
                         color: AppColors.getTextSecondary(context),
                       ),
                     ),
@@ -283,7 +313,13 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
                                       shape: BoxShape.circle,
                                       color: sub.isActive
                                           ? AppColors.getPrimary(context)
-                                          : (sub.isCompleted ? AppColors.getGlassBorder(context) : AppColors.getTextMuted(context)),
+                                          : (sub.isCompleted
+                                                ? AppColors.getGlassBorder(
+                                                    context,
+                                                  )
+                                                : AppColors.getTextMuted(
+                                                    context,
+                                                  )),
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -292,8 +328,12 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
                                       sub.planet,
                                       style: GoogleFonts.outfit(
                                         fontSize: 13,
-                                        fontWeight: sub.isActive ? FontWeight.bold : FontWeight.w500,
-                                        color: sub.isActive ? AppColors.getPrimary(context) : AppColors.getTextPrimary(context),
+                                        fontWeight: sub.isActive
+                                            ? FontWeight.bold
+                                            : FontWeight.w500,
+                                        color: sub.isActive
+                                            ? AppColors.getPrimary(context)
+                                            : AppColors.getTextPrimary(context),
                                       ),
                                     ),
                                   ),
@@ -302,7 +342,9 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
                                       sub.durationText,
                                       style: TextStyle(
                                         fontSize: 11,
-                                        color: AppColors.getTextSecondary(context),
+                                        color: AppColors.getTextSecondary(
+                                          context,
+                                        ),
                                       ),
                                       textAlign: TextAlign.end,
                                       overflow: TextOverflow.ellipsis,
@@ -325,4 +367,3 @@ class _InteractiveDashaTimelineState extends State<InteractiveDashaTimeline> {
     );
   }
 }
-

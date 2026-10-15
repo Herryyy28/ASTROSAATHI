@@ -18,12 +18,10 @@ class DataPrivacyScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
-
     return Scaffold(
-      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
+      backgroundColor: AppColors.backgroundLight,
       appBar: AppBar(
-        backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : Colors.transparent,
+        backgroundColor: AppColors.backgroundLight,
         elevation: 0,
         title: Text(
           'Data Privacy & Sovereignty',
@@ -35,10 +33,7 @@ class DataPrivacyScreen extends ConsumerWidget {
         iconTheme: IconThemeData(color: AppColors.getTextPrimary(context)),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
-          gradient: isLight ? null : AppColors.cosmicRadialGradient,
-        ),
+        color: AppColors.backgroundLight,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           children: [
@@ -105,13 +100,18 @@ class DataPrivacyScreen extends ConsumerWidget {
                 foregroundColor: AppColors.primary,
                 side: const BorderSide(color: AppColors.primary),
                 padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
               onPressed: () => _showExportDialog(context, ref),
               icon: const Icon(Icons.download_rounded),
               label: Text(
                 'Export My Astrological Data (JSON)',
-                style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold),
+                style: GoogleFonts.outfit(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 12),
@@ -119,7 +119,10 @@ class DataPrivacyScreen extends ConsumerWidget {
             // Delete Account & Data Button
             TextButton.icon(
               onPressed: () => _showDeleteDialog(context, ref),
-              icon: const Icon(Icons.delete_forever_rounded, color: AppColors.error),
+              icon: const Icon(
+                Icons.delete_forever_rounded,
+                color: AppColors.error,
+              ),
               label: Text(
                 'Delete All My Data & Account',
                 style: GoogleFonts.outfit(
@@ -135,7 +138,12 @@ class DataPrivacyScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPrivacyPoint(BuildContext context, IconData icon, String title, String subtitle) {
+  Widget _buildPrivacyPoint(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String subtitle,
+  ) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -198,7 +206,10 @@ class DataPrivacyScreen extends ConsumerWidget {
         'currentStreakDays': gamification.streakDays,
         'karmaXp': gamification.karmaXp,
         'todayMood': gamification.todayMood,
-        'unlockedBadges': gamification.badges.where((b) => b.isUnlocked).map((b) => b.title).toList(),
+        'unlockedBadges': gamification.badges
+            .where((b) => b.isUnlocked)
+            .map((b) => b.title)
+            .toList(),
       },
     };
 
@@ -211,7 +222,10 @@ class DataPrivacyScreen extends ConsumerWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           'Your Astrological Data Export',
-          style: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+          style: GoogleFonts.outfit(
+            fontWeight: FontWeight.bold,
+            color: AppColors.getTextPrimary(context),
+          ),
         ),
         content: SizedBox(
           width: double.maxFinite,
@@ -221,7 +235,10 @@ class DataPrivacyScreen extends ConsumerWidget {
             children: [
               Text(
                 'Complete on-device profile, coordinates, and habit records formatted in JSON:',
-                style: GoogleFonts.inter(fontSize: 12, color: AppColors.getTextSecondary(context)),
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  color: AppColors.getTextSecondary(context),
+                ),
               ),
               const SizedBox(height: 12),
               Container(
@@ -235,7 +252,10 @@ class DataPrivacyScreen extends ConsumerWidget {
                 child: SingleChildScrollView(
                   child: Text(
                     jsonString,
-                    style: const TextStyle(fontFamily: 'monospace', fontSize: 11),
+                    style: const TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 11,
+                    ),
                   ),
                 ),
               ),
@@ -245,12 +265,15 @@ class DataPrivacyScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogCtx),
-            child: Text('Close', style: TextStyle(color: AppColors.getTextMuted(context))),
+            child: Text(
+              'Close',
+              style: TextStyle(color: AppColors.getTextMuted(context)),
+            ),
           ),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.black,
+              foregroundColor: Colors.white,
             ),
             onPressed: () async {
               await Clipboard.setData(ClipboardData(text: jsonString));
@@ -259,7 +282,8 @@ class DataPrivacyScreen extends ConsumerWidget {
                 CosmicNotification.showSuccess(
                   context,
                   title: 'Data Copied! 📋',
-                  message: 'Your personal astrological profile JSON has been copied to your clipboard.',
+                  message:
+                      'Your personal astrological profile JSON has been copied to your clipboard.',
                 );
               }
             },
@@ -306,7 +330,9 @@ class DataPrivacyScreen extends ConsumerWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.error,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
             onPressed: () async {
               Navigator.pop(dialogContext);
@@ -321,7 +347,8 @@ class DataPrivacyScreen extends ConsumerWidget {
                 CosmicNotification.showSuccess(
                   context,
                   title: 'Data Erased',
-                  message: 'All your local device data has been completely wiped.',
+                  message:
+                      'All your local device data has been completely wiped.',
                 );
                 context.go('/onboarding');
               }
@@ -333,4 +360,3 @@ class DataPrivacyScreen extends ConsumerWidget {
     );
   }
 }
-

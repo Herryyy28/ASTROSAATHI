@@ -29,7 +29,10 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
             children: [
               // Header App Bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -38,9 +41,16 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                         decoration: BoxDecoration(
                           color: AppColors.getSurfaceElevated(context),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                          border: Border.all(
+                            color: AppColors.getBorder(context),
+                            width: 0.8,
+                          ),
                         ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.getTextPrimary(context),
+                          size: 18,
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -65,7 +75,10 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                               ),
                               const SizedBox(width: 6),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
                                   gradient: AppColors.goldGradient,
                                   borderRadius: BorderRadius.circular(6),
@@ -75,7 +88,7 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                                   style: GoogleFonts.outfit(
                                     fontSize: 9,
                                     fontWeight: FontWeight.w900,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -105,8 +118,18 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                         showCheckmark: false,
                         selected: _selectedTab == 0,
                         onSelected: (_) => setState(() => _selectedTab = 0),
-                        avatar: const Icon(Icons.wb_sunny_rounded, size: 16, color: Colors.amberAccent),
-                        label: Text('Solar Return (Yearly)', style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold)),
+                        avatar: const Icon(
+                          Icons.wb_sunny_rounded,
+                          size: 16,
+                          color: AppColors.pink,
+                        ),
+                        label: Text(
+                          'Solar Return (Yearly)',
+                          style: GoogleFonts.outfit(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         selectedColor: AppColors.primary,
                         backgroundColor: Colors.white.withValues(alpha: 0.06),
                       ),
@@ -117,8 +140,18 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                         showCheckmark: false,
                         selected: _selectedTab == 1,
                         onSelected: (_) => setState(() => _selectedTab = 1),
-                        avatar: const Icon(Icons.nightlight_round, size: 16, color: Colors.cyanAccent),
-                        label: Text('Lunar Return (Monthly)', style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold)),
+                        avatar: const Icon(
+                          Icons.nightlight_round,
+                          size: 16,
+                          color: AppColors.primaryLightMode,
+                        ),
+                        label: Text(
+                          'Lunar Return (Monthly)',
+                          style: GoogleFonts.outfit(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         selectedColor: AppColors.primary,
                         backgroundColor: Colors.white.withValues(alpha: 0.06),
                       ),
@@ -148,7 +181,7 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                                     style: GoogleFonts.outfit(
                                       fontSize: 11,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.amberAccent,
+                                      color: AppColors.pink,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -156,9 +189,14 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                                 ),
                                 const SizedBox(width: 8),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: Colors.amberAccent.withValues(alpha: 0.15),
+                                    color: AppColors.pink.withValues(
+                                      alpha: 0.15,
+                                    ),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
@@ -166,23 +204,37 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                                     style: GoogleFonts.outfit(
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.amberAccent,
+                                      color: AppColors.pink,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 12),
-                            Text('Yearly Theme: Executive Leadership & Financial Expansion', style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context))),
+                            Text(
+                              'Yearly Theme: Executive Leadership & Financial Expansion',
+                              style: GoogleFonts.outfit(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.getTextPrimary(context),
+                              ),
+                            ),
                             const SizedBox(height: 6),
-                            Text('Your 2026 Solar Return Sun lands in the 10th House of Career, conjunct natal Jupiter. Expect high visibility and major professional milestones.', style: GoogleFonts.inter(fontSize: 12, color: AppColors.getTextSecondary(context), height: 1.4)),
+                            Text(
+                              'Your 2026 Solar Return Sun lands in the 10th House of Career, conjunct natal Jupiter. Expect high visibility and major professional milestones.',
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                color: AppColors.getTextSecondary(context),
+                                height: 1.4,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ] else ...[
                       GlassCard(
                         padding: const EdgeInsets.all(18),
-                        borderColor: Colors.cyanAccent.withValues(alpha: 0.4),
+                        borderColor: AppColors.primaryLightMode.withValues(alpha: 0.4),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -194,7 +246,7 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                                     style: GoogleFonts.outfit(
                                       fontSize: 11,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.cyanAccent,
+                                      color: AppColors.primaryLightMode,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -202,9 +254,14 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                                 ),
                                 const SizedBox(width: 8),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: Colors.cyanAccent.withValues(alpha: 0.15),
+                                    color: AppColors.primaryLightMode.withValues(
+                                      alpha: 0.15,
+                                    ),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
@@ -212,16 +269,30 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
                                     style: GoogleFonts.outfit(
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.cyanAccent,
+                                      color: AppColors.primaryLightMode,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 12),
-                            Text('Emotional Focus: Strategic Clarity & Intuitive Decisions', style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context))),
+                            Text(
+                              'Emotional Focus: Strategic Clarity & Intuitive Decisions',
+                              style: GoogleFonts.outfit(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.getTextPrimary(context),
+                              ),
+                            ),
                             const SizedBox(height: 6),
-                            Text('Moon returns to Shatabhisha Nakshatra in your 5th House, favoring creative projects, intellectual clarity, and emotional balance.', style: GoogleFonts.inter(fontSize: 12, color: AppColors.getTextSecondary(context), height: 1.4)),
+                            Text(
+                              'Moon returns to Shatabhisha Nakshatra in your 5th House, favoring creative projects, intellectual clarity, and emotional balance.',
+                              style: GoogleFonts.inter(
+                                fontSize: 12,
+                                color: AppColors.getTextSecondary(context),
+                                height: 1.4,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -236,4 +307,3 @@ class _ReturnsCenterScreenState extends State<ReturnsCenterScreen> {
     );
   }
 }
-

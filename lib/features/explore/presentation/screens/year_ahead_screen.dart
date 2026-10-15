@@ -140,7 +140,7 @@ class _YearAheadScreenState extends State<YearAheadScreen> {
     final isLight = AppColors.isLight(context);
     final primaryTextColor = AppColors.getTextPrimary(context);
     final activeMonth = _months[_selectedMonthIndex];
-    final accentGold = isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700);
+    final accentGold = isLight ? const Color(0xFFB87308) : AppColors.secondary;
 
     return Scaffold(
       backgroundColor: AppColors.getBackground(context),
@@ -304,7 +304,7 @@ class _YearAheadScreenState extends State<YearAheadScreen> {
                     style: GoogleFonts.outfit(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
-                      color: isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF),
+                      color: isLight ? const Color(0xFF00796B) : AppColors.primaryLightMode,
                     ),
                   ),
                   Divider(color: AppColors.getDivider(context), height: 24),

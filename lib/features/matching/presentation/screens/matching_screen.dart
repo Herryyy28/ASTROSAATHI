@@ -92,14 +92,22 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
   void initState() {
     super.initState();
     // Default to DETAILS tab to match Vedic Milan overview
-    _tabController = TabController(length: _tabs.length, vsync: this, initialIndex: 1);
+    _tabController = TabController(
+      length: _tabs.length,
+      vsync: this,
+      initialIndex: 1,
+    );
 
     final active = ref.read(activeProfileProvider);
     if (active.name.isNotEmpty) {
       _p1NameController.text = active.name;
       if (active.dob.isNotEmpty) _p1DobController.text = active.dob;
-      if (active.birthTime.isNotEmpty) _p1TimeController.text = active.birthTime;
-      if (active.birthPlace.isNotEmpty) _p1PlaceController.text = active.birthPlace;
+      if (active.birthTime.isNotEmpty) {
+        _p1TimeController.text = active.birthTime;
+      }
+      if (active.birthPlace.isNotEmpty) {
+        _p1PlaceController.text = active.birthPlace;
+      }
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -125,13 +133,21 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
   Future<void> _calculateMatch() async {
     final first = MatchProfile(
       id: 'p1',
-      name: _p1NameController.text.trim().isNotEmpty ? _p1NameController.text.trim() : 'Partner 1',
+      name: _p1NameController.text.trim().isNotEmpty
+          ? _p1NameController.text.trim()
+          : 'Partner 1',
       gender: 'male',
       birthDetails: BirthDetails(
         name: _p1NameController.text.trim(),
-        dob: _p1DobController.text.trim().isNotEmpty ? _p1DobController.text.trim() : '1995-01-01',
-        birthTime: _p1TimeController.text.trim().isNotEmpty ? _p1TimeController.text.trim() : '12:00',
-        birthPlace: _p1PlaceController.text.trim().isNotEmpty ? _p1PlaceController.text.trim() : 'Delhi, India',
+        dob: _p1DobController.text.trim().isNotEmpty
+            ? _p1DobController.text.trim()
+            : '1995-01-01',
+        birthTime: _p1TimeController.text.trim().isNotEmpty
+            ? _p1TimeController.text.trim()
+            : '12:00',
+        birthPlace: _p1PlaceController.text.trim().isNotEmpty
+            ? _p1PlaceController.text.trim()
+            : 'Delhi, India',
         latitude: 28.6139,
         longitude: 77.2090,
       ),
@@ -139,22 +155,29 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
 
     final second = MatchProfile(
       id: 'p2',
-      name: _p2NameController.text.trim().isNotEmpty ? _p2NameController.text.trim() : 'Partner 2',
+      name: _p2NameController.text.trim().isNotEmpty
+          ? _p2NameController.text.trim()
+          : 'Partner 2',
       gender: 'female',
       birthDetails: BirthDetails(
         name: _p2NameController.text.trim(),
-        dob: _p2DobController.text.trim().isNotEmpty ? _p2DobController.text.trim() : '1997-01-01',
-        birthTime: _p2TimeController.text.trim().isNotEmpty ? _p2TimeController.text.trim() : '12:00',
-        birthPlace: _p2PlaceController.text.trim().isNotEmpty ? _p2PlaceController.text.trim() : 'Mumbai, India',
+        dob: _p2DobController.text.trim().isNotEmpty
+            ? _p2DobController.text.trim()
+            : '1997-01-01',
+        birthTime: _p2TimeController.text.trim().isNotEmpty
+            ? _p2TimeController.text.trim()
+            : '12:00',
+        birthPlace: _p2PlaceController.text.trim().isNotEmpty
+            ? _p2PlaceController.text.trim()
+            : 'Mumbai, India',
         latitude: 19.0760,
         longitude: 72.8777,
       ),
     );
 
-    final result = await ref.read(matchmakingProvider.notifier).calculateMatch(
-      first: first,
-      second: second,
-    );
+    final result = await ref
+        .read(matchmakingProvider.notifier)
+        .calculateMatch(first: first, second: second);
 
     if (result != null && mounted) {
       _applyResult(result);
@@ -186,12 +209,19 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
     });
   }
 
-  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+  Future<void> _selectDate(
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
     DateTime initial = DateTime(1995, 1, 1);
     try {
       final parts = controller.text.split('-');
       if (parts.length == 3) {
-        initial = DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
+        initial = DateTime(
+          int.parse(parts[0]),
+          int.parse(parts[1]),
+          int.parse(parts[2]),
+        );
       }
     } catch (_) {}
 
@@ -204,9 +234,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFFF5A623),
-              onPrimary: Colors.black,
-              onSurface: Colors.black87,
+              primary: AppColors.primaryLightMode,
+              onPrimary: AppColors.surfaceLight,
+              onSurface: AppColors.textPrimaryLight,
             ),
           ),
           child: child!,
@@ -215,18 +245,25 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
     );
 
     if (picked != null) {
-      final formatted = '${picked.year.toString().padLeft(4, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
+      final formatted =
+          '${picked.year.toString().padLeft(4, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
       controller.text = formatted;
       _calculateMatch();
     }
   }
 
-  Future<void> _selectTime(BuildContext context, TextEditingController controller) async {
+  Future<void> _selectTime(
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
     TimeOfDay initial = const TimeOfDay(hour: 12, minute: 0);
     try {
       final parts = controller.text.split(':');
       if (parts.length >= 2) {
-        initial = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1].split(' ')[0]));
+        initial = TimeOfDay(
+          hour: int.parse(parts[0]),
+          minute: int.parse(parts[1].split(' ')[0]),
+        );
       }
     } catch (_) {}
 
@@ -237,9 +274,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: Color(0xFFF5A623),
-              onPrimary: Colors.black,
-              onSurface: Colors.black87,
+              primary: AppColors.primaryLightMode,
+              onPrimary: AppColors.surfaceLight,
+              onSurface: AppColors.textPrimaryLight,
             ),
           ),
           child: child!,
@@ -248,7 +285,8 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
     );
 
     if (picked != null) {
-      controller.text = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+      controller.text =
+          '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
       _calculateMatch();
     }
   }
@@ -260,7 +298,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
         _p1NameController.text = next.name;
         if (next.dob.isNotEmpty) _p1DobController.text = next.dob;
         if (next.birthTime.isNotEmpty) _p1TimeController.text = next.birthTime;
-        if (next.birthPlace.isNotEmpty) _p1PlaceController.text = next.birthPlace;
+        if (next.birthPlace.isNotEmpty) {
+          _p1PlaceController.text = next.birthPlace;
+        }
         _calculateMatch();
       }
     });
@@ -268,7 +308,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
     final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: isLight ? const Color(0xFFF9F9F9) : AppColors.backgroundDark,
+      backgroundColor: isLight
+          ? AppColors.backgroundLight
+          : AppColors.backgroundDark,
       body: SafeArea(
         child: ResponsiveLayout(
           child: Column(
@@ -340,26 +382,50 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
 
   Widget _buildGoldenAppBar(BuildContext context) {
     return Container(
-      color: const Color(0xFFF5A623),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      color: AppColors.backgroundLight,
+      padding: const EdgeInsets.fromLTRB(8, 8, 10, 10),
       child: Row(
         children: [
-          const SizedBox(width: 8),
+          IconButton(
+            tooltip: 'Back',
+            onPressed: () => Navigator.maybePop(context),
+            icon: const Icon(
+              Icons.arrow_back_rounded,
+              color: AppColors.primaryLightMode,
+            ),
+          ),
           Expanded(
-            child: Text(
-              'AstroSaathi Matching',
-              style: GoogleFonts.outfit(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-                color: Colors.black87,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Compatibility',
+                  style: GoogleFonts.outfit(
+                    fontSize: 21,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primaryLightMode,
+                  ),
+                ),
+                Text(
+                  'Vedic relationship guidance',
+                  style: GoogleFonts.inter(
+                    fontSize: 11.5,
+                    color: AppColors.textSecondaryLight,
+                  ),
+                ),
+              ],
             ),
           ),
           IconButton(
             tooltip: 'Share Kundli Milan Result',
-            icon: const Icon(Icons.share_outlined, color: Colors.black87, size: 22),
+            icon: const Icon(
+              Icons.share_outlined,
+              color: AppColors.textPrimaryLight,
+              size: 22,
+            ),
             onPressed: () {
-              final text = '✦ AstroSaathi Vedic Milan ✦\n'
+              final text =
+                  '✦ AstroSaathi Vedic Milan ✦\n'
                   '${_p1NameController.text} & ${_p2NameController.text}\n'
                   'Compatibility: ${totalScore.toStringAsFixed(1)} / 36.0 Gunas ($grade)\n'
                   'Manglik Status: $manglikStatus\n'
@@ -376,13 +442,21 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
           ),
           IconButton(
             tooltip: 'Save Match to History',
-            icon: const Icon(Icons.bookmark_add_outlined, color: Colors.black87, size: 22),
+            icon: const Icon(
+              Icons.bookmark_add_outlined,
+              color: AppColors.textPrimaryLight,
+              size: 22,
+            ),
             onPressed: () async {
-              final ok = await ref.read(matchmakingProvider.notifier).saveCurrentMatch();
+              final ok = await ref
+                  .read(matchmakingProvider.notifier)
+                  .saveCurrentMatch();
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(ok ? 'Match saved to history!' : 'Match already saved.'),
+                    content: Text(
+                      ok ? 'Match saved to history!' : 'Match already saved.',
+                    ),
                     duration: const Duration(seconds: 2),
                   ),
                 );
@@ -390,7 +464,11 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             },
           ),
           PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert_rounded, color: Colors.black87, size: 24),
+            icon: const Icon(
+              Icons.more_vert_rounded,
+              color: AppColors.textPrimaryLight,
+              size: 24,
+            ),
             offset: const Offset(0, 40),
             onSelected: (value) {
               if (value == 'settings') {
@@ -404,9 +482,19 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                 value: 'history',
                 child: Row(
                   children: [
-                    Icon(Icons.history_rounded, size: 20, color: AppColors.getTextPrimary(context)),
+                    Icon(
+                      Icons.history_rounded,
+                      size: 20,
+                      color: AppColors.getTextPrimary(context),
+                    ),
                     const SizedBox(width: 12),
-                    Text('Match History', style: GoogleFonts.inter(color: AppColors.getTextPrimary(context), fontWeight: FontWeight.w500)),
+                    Text(
+                      'Match History',
+                      style: GoogleFonts.inter(
+                        color: AppColors.getTextPrimary(context),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -414,9 +502,19 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                 value: 'settings',
                 child: Row(
                   children: [
-                    Icon(Icons.settings_rounded, size: 20, color: AppColors.getTextPrimary(context)),
+                    Icon(
+                      Icons.settings_rounded,
+                      size: 20,
+                      color: AppColors.getTextPrimary(context),
+                    ),
                     const SizedBox(width: 12),
-                    Text('Settings', style: GoogleFonts.inter(color: AppColors.getTextPrimary(context), fontWeight: FontWeight.w500)),
+                    Text(
+                      'Settings',
+                      style: GoogleFonts.inter(
+                        color: AppColors.getTextPrimary(context),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -429,15 +527,15 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
 
   Widget _buildTabBar(BuildContext context) {
     return Container(
-      color: const Color(0xFFF5A623),
+      color: AppColors.highlightSurface,
       child: TabBar(
         controller: _tabController,
         isScrollable: true,
         tabAlignment: TabAlignment.start,
-        indicatorColor: Colors.black,
+        indicatorColor: AppColors.primaryLightMode,
         indicatorWeight: 3.5,
-        labelColor: Colors.black,
-        unselectedLabelColor: Colors.black54,
+        labelColor: AppColors.primaryLightMode,
+        unselectedLabelColor: AppColors.textSecondaryLight,
         labelStyle: GoogleFonts.outfit(
           fontSize: 13,
           fontWeight: FontWeight.w800,
@@ -454,7 +552,16 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
 
   /// Guna Milan Result in Detail Table & Score
   Widget _buildDetailsTab(BuildContext context, bool isLight) {
-    final keys = ['Varna', 'Vasya', 'Tara', 'Yoni', 'Graha Maitri', 'Gana', 'Bhakoot', 'Nadi'];
+    final keys = [
+      'Varna',
+      'Vasya',
+      'Tara',
+      'Yoni',
+      'Graha Maitri',
+      'Gana',
+      'Bhakoot',
+      'Nadi',
+    ];
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -464,8 +571,11 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
           // Section Title
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
               children: [
                 Text(
                   'Guna Milan Result in Detail',
@@ -478,12 +588,20 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                 TextButton.icon(
                   icon: const Icon(Icons.bookmark_add_outlined, size: 16),
                   label: const Text('Save Match'),
-                  style: TextButton.styleFrom(foregroundColor: const Color(0xFFF5A623)),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.primaryLightMode,
+                  ),
                   onPressed: () async {
-                    final ok = await ref.read(matchmakingProvider.notifier).saveCurrentMatch();
+                    final ok = await ref
+                        .read(matchmakingProvider.notifier)
+                        .saveCurrentMatch();
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(ok ? 'Saved to history!' : 'Match already saved')),
+                        SnackBar(
+                          content: Text(
+                            ok ? 'Saved to history!' : 'Match already saved',
+                          ),
+                        ),
                       );
                     }
                   },
@@ -494,7 +612,7 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
 
           // 4-Column Table Header
           Container(
-            color: isLight ? const Color(0xFFEBEBEB) : const Color(0xFF2C2436),
+            color: AppColors.secondaryBackground,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Row(
               children: [
@@ -556,19 +674,30 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             itemCount: keys.length,
             itemBuilder: (context, index) {
               final key = keys[index];
-              final lookupKey = key == 'Graha Maitri' ? (rawScores.containsKey('Graha Maitri') ? 'Graha Maitri' : 'Maitri') : key;
-              final max = maxScores[key == 'Graha Maitri' ? 'Maitri' : key] ?? 1.0;
+              final lookupKey = key == 'Graha Maitri'
+                  ? (rawScores.containsKey('Graha Maitri')
+                        ? 'Graha Maitri'
+                        : 'Maitri')
+                  : key;
+              final max =
+                  maxScores[key == 'Graha Maitri' ? 'Maitri' : key] ?? 1.0;
               final obtained = rawScores[lookupKey] ?? 0.0;
-              final area = areasOfLife[key == 'Graha Maitri' ? 'Maitri' : key] ?? '';
+              final area =
+                  areasOfLife[key == 'Graha Maitri' ? 'Maitri' : key] ?? '';
               final isEven = index % 2 == 0;
 
               final rowBg = isEven
-                  ? (isLight ? Colors.white : AppColors.surfaceDark)
-                  : (isLight ? const Color(0xFFF4F4F4) : const Color(0xFF20182A));
+                  ? AppColors.surfaceLight
+                  : (isLight
+                        ? const Color(0xFFF4F4F4)
+                        : const Color(0xFF20182A));
 
               return Container(
                 color: rowBg,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     Expanded(
@@ -632,12 +761,11 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.symmetric(vertical: 24),
             decoration: BoxDecoration(
-              color: isLight ? const Color(0xFFEBEBEB) : const Color(0xFF241C2D),
+              color: isLight
+                  ? const Color(0xFFEBEBEB)
+                  : const Color(0xFF241C2D),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isLight ? const Color(0xFFDDDDDD) : AppColors.borderDark,
-                width: 1,
-              ),
+              border: Border.all(color: AppColors.highlightSurface, width: 1),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: isLight ? 0.04 : 0.20),
@@ -687,11 +815,16 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
           const SizedBox(height: 14),
 
           // Astrological Verdict Badges
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 8,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
                   color: totalScore >= 18
                       ? const Color(0xFFE8F5E9)
@@ -708,20 +841,29 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                   style: GoogleFonts.inter(
                     fontSize: 12.5,
                     fontWeight: FontWeight.bold,
-                    color: totalScore >= 18 ? const Color(0xFF2E7D32) : const Color(0xFFC62828),
+                    color: totalScore >= 18
+                        ? const Color(0xFF2E7D32)
+                        : const Color(0xFFC62828),
                   ),
                 ),
               ),
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
-                  color: manglikStatus.contains('Both Non-Manglik') || manglikStatus.contains('Neutralized')
+                  color:
+                      manglikStatus.contains('Both Non-Manglik') ||
+                          manglikStatus.contains('Neutralized')
                       ? const Color(0xFFE3F2FD)
                       : const Color(0xFFFFF3E0),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: manglikStatus.contains('Both Non-Manglik') || manglikStatus.contains('Neutralized')
+                    color:
+                        manglikStatus.contains('Both Non-Manglik') ||
+                            manglikStatus.contains('Neutralized')
                         ? const Color(0xFF64B5F6)
                         : const Color(0xFFFFB74D),
                   ),
@@ -731,7 +873,9 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: manglikStatus.contains('Both Non-Manglik') || manglikStatus.contains('Neutralized')
+                    color:
+                        manglikStatus.contains('Both Non-Manglik') ||
+                            manglikStatus.contains('Neutralized')
                         ? const Color(0xFF1565C0)
                         : const Color(0xFFE65100),
                   ),
@@ -773,18 +917,33 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Partner 1 (Self)', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 13)),
+                          Text(
+                            'Partner 1 (Self)',
+                            style: GoogleFonts.outfit(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
                           const SizedBox(height: 6),
                           TextField(
                             controller: _p1NameController,
-                            style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
+                            style: TextStyle(
+                              color: AppColors.getTextPrimary(context),
+                              fontSize: 13,
+                            ),
                             decoration: InputDecoration(
                               hintText: 'Name',
                               isDense: true,
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 10,
+                              ),
                               filled: true,
                               fillColor: AppColors.getSurfaceSecondary(context),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -793,34 +952,63 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                             child: IgnorePointer(
                               child: TextField(
                                 controller: _p1DobController,
-                                style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 12),
+                                style: TextStyle(
+                                  color: AppColors.getTextPrimary(context),
+                                  fontSize: 12,
+                                ),
                                 decoration: InputDecoration(
                                   hintText: 'YYYY-MM-DD',
-                                  prefixIcon: const Icon(Icons.calendar_today, size: 14),
+                                  prefixIcon: const Icon(
+                                    Icons.calendar_today,
+                                    size: 14,
+                                  ),
                                   isDense: true,
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 10,
+                                  ),
                                   filled: true,
-                                  fillColor: AppColors.getSurfaceSecondary(context),
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                                  fillColor: AppColors.getSurfaceSecondary(
+                                    context,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 6),
                           InkWell(
-                            onTap: () => _selectTime(context, _p1TimeController),
+                            onTap: () =>
+                                _selectTime(context, _p1TimeController),
                             child: IgnorePointer(
                               child: TextField(
                                 controller: _p1TimeController,
-                                style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 12),
+                                style: TextStyle(
+                                  color: AppColors.getTextPrimary(context),
+                                  fontSize: 12,
+                                ),
                                 decoration: InputDecoration(
                                   hintText: 'HH:mm',
-                                  prefixIcon: const Icon(Icons.access_time, size: 14),
+                                  prefixIcon: const Icon(
+                                    Icons.access_time,
+                                    size: 14,
+                                  ),
                                   isDense: true,
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 10,
+                                  ),
                                   filled: true,
-                                  fillColor: AppColors.getSurfaceSecondary(context),
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                                  fillColor: AppColors.getSurfaceSecondary(
+                                    context,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none,
+                                  ),
                                 ),
                               ),
                             ),
@@ -829,26 +1017,48 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                       ),
                     ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
-                      child: Icon(Icons.favorite_rounded, color: Color(0xFFE91E63), size: 24),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 24,
+                      ),
+                      child: Icon(
+                        Icons.favorite_rounded,
+                        color: AppColors.pink,
+                        size: 24,
+                      ),
                     ),
                     // Partner 2 Inputs
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Partner 2 (Match)', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 13)),
+                          Text(
+                            'Partner 2 (Match)',
+                            style: GoogleFonts.outfit(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                          ),
                           const SizedBox(height: 6),
                           TextField(
                             controller: _p2NameController,
-                            style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 13),
+                            style: TextStyle(
+                              color: AppColors.getTextPrimary(context),
+                              fontSize: 13,
+                            ),
                             decoration: InputDecoration(
                               hintText: 'Name',
                               isDense: true,
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 10,
+                              ),
                               filled: true,
                               fillColor: AppColors.getSurfaceSecondary(context),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 6),
@@ -857,34 +1067,63 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                             child: IgnorePointer(
                               child: TextField(
                                 controller: _p2DobController,
-                                style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 12),
+                                style: TextStyle(
+                                  color: AppColors.getTextPrimary(context),
+                                  fontSize: 12,
+                                ),
                                 decoration: InputDecoration(
                                   hintText: 'YYYY-MM-DD',
-                                  prefixIcon: const Icon(Icons.calendar_today, size: 14),
+                                  prefixIcon: const Icon(
+                                    Icons.calendar_today,
+                                    size: 14,
+                                  ),
                                   isDense: true,
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 10,
+                                  ),
                                   filled: true,
-                                  fillColor: AppColors.getSurfaceSecondary(context),
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                                  fillColor: AppColors.getSurfaceSecondary(
+                                    context,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                           const SizedBox(height: 6),
                           InkWell(
-                            onTap: () => _selectTime(context, _p2TimeController),
+                            onTap: () =>
+                                _selectTime(context, _p2TimeController),
                             child: IgnorePointer(
                               child: TextField(
                                 controller: _p2TimeController,
-                                style: TextStyle(color: AppColors.getTextPrimary(context), fontSize: 12),
+                                style: TextStyle(
+                                  color: AppColors.getTextPrimary(context),
+                                  fontSize: 12,
+                                ),
                                 decoration: InputDecoration(
                                   hintText: 'HH:mm',
-                                  prefixIcon: const Icon(Icons.access_time, size: 14),
+                                  prefixIcon: const Icon(
+                                    Icons.access_time,
+                                    size: 14,
+                                  ),
                                   isDense: true,
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 10,
+                                  ),
                                   filled: true,
-                                  fillColor: AppColors.getSurfaceSecondary(context),
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                                  fillColor: AppColors.getSurfaceSecondary(
+                                    context,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide.none,
+                                  ),
                                 ),
                               ),
                             ),
@@ -900,18 +1139,28 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                   height: 44,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFF5A623),
-                      foregroundColor: Colors.black87,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      backgroundColor: AppColors.primaryLightMode,
+                      foregroundColor: AppColors.surfaceLight,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                     onPressed: isCalculating ? null : _calculateMatch,
                     child: isCalculating
                         ? const SizedBox(
                             width: 20,
                             height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.black,
+                            ),
                           )
-                        : Text('Calculate Authentic Gun Milan', style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                        : Text(
+                            'Calculate Authentic Gun Milan',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
               ],
@@ -932,7 +1181,10 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
               children: [
                 Text(
                   'Ashtakoot Compatibility Radar',
-                  style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.outfit(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
@@ -941,8 +1193,13 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                   child: CustomPaint(
                     painter: GunaRadarPainter(
                       scores: rawScores.map((k, v) {
-                        final max = maxScores[k == 'Graha Maitri' ? 'Maitri' : k] ?? 1.0;
-                        return MapEntry(k == 'Graha Maitri' ? 'Maitri' : k, v / max);
+                        final max =
+                            maxScores[k == 'Graha Maitri' ? 'Maitri' : k] ??
+                            1.0;
+                        return MapEntry(
+                          k == 'Graha Maitri' ? 'Maitri' : k,
+                          v / max,
+                        );
                       }),
                     ),
                   ),
@@ -963,7 +1220,11 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             ),
             child: Row(
               children: [
-                const Icon(Icons.auto_awesome_rounded, color: Color(0xFFF5A623), size: 24),
+                const Icon(
+                  Icons.auto_awesome_rounded,
+                  color: AppColors.primaryLightMode,
+                  size: 24,
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
@@ -987,7 +1248,8 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
       return const EmptyStateWidget(
         icon: Icons.history_rounded,
         title: 'No Saved Matches',
-        description: 'Calculate a match and tap "Save Match" to store and compare profiles here.',
+        description:
+            'Calculate a match and tap "Save Match" to store and compare profiles here.',
         emoji: '💍',
       );
     }
@@ -1008,17 +1270,27 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             border: Border.all(color: AppColors.getGlassBorder(context)),
           ),
           child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
+            ),
             onTap: () {
               _applyResult(match);
               _tabController.animateTo(1); // Go to DETAILS
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Loaded match for ${match.firstProfile.name} & ${match.secondProfile.name}')),
+                SnackBar(
+                  content: Text(
+                    'Loaded match for ${match.firstProfile.name} & ${match.secondProfile.name}',
+                  ),
+                ),
               );
             },
             title: Text(
               '${match.firstProfile.name} & ${match.secondProfile.name}',
-              style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 16),
+              style: GoogleFonts.outfit(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1028,18 +1300,27 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
                   'Score: ${match.totalScore.toStringAsFixed(1)} / 36.0 (${match.recommendation})',
                   style: GoogleFonts.inter(
                     fontSize: 13,
-                    color: isAuspicious ? const Color(0xFF2E7D32) : const Color(0xFFC62828),
+                    color: isAuspicious
+                        ? const Color(0xFF2E7D32)
+                        : const Color(0xFFC62828),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   match.manglikStatus,
-                  style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    color: AppColors.getTextSecondary(context),
+                  ),
                 ),
               ],
             ),
             trailing: IconButton(
-              icon: const Icon(Icons.delete_outline_rounded, size: 20, color: Colors.grey),
+              icon: const Icon(
+                Icons.delete_outline_rounded,
+                size: 20,
+                color: Colors.grey,
+              ),
               onPressed: () {
                 ref.read(matchmakingProvider.notifier).deleteFromHistory(index);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -1062,7 +1343,11 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
         children: [
           Text(
             title,
-            style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.bold, color: const Color(0xFFF5A623)),
+            style: GoogleFonts.outfit(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primaryLightMode,
+            ),
           ),
           const SizedBox(height: 14),
           Container(
@@ -1074,7 +1359,11 @@ class _MatchingScreenState extends ConsumerState<MatchingScreen>
             ),
             child: Text(
               content,
-              style: GoogleFonts.inter(fontSize: 14, height: 1.5, color: AppColors.getTextPrimary(context)),
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                height: 1.5,
+                color: AppColors.getTextPrimary(context),
+              ),
             ),
           ),
         ],

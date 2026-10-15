@@ -1,8 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
 
-/// Single Source of Truth Card component implementing the Blinkit card system.
+/// Legacy-compatible card surface backed by the AstroSaathi design system.
 class GlassCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
@@ -25,9 +25,8 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = AppColors.getSurface(context);
-    final defaultBorderColor = AppColors.getBorder(context);
-    final isLight = AppColors.isLight(context);
+    final cardColor = AppColors.surfaceLight;
+    final defaultBorderColor = AppColors.borderLight;
     final radiusValue = borderRadius ?? AppRadius.card;
 
     final card = Container(
@@ -42,15 +41,11 @@ class GlassCard extends StatelessWidget {
         ),
         boxShadow: [
           if (glowColor != null)
-            BoxShadow(
-              color: glowColor!,
-              blurRadius: 16,
-              spreadRadius: -2,
-            ),
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isLight ? 0.03 : 0.25),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
+            BoxShadow(color: glowColor!, blurRadius: 16, spreadRadius: -2),
+          const BoxShadow(
+            color: Color(0x0D25283A),
+            blurRadius: 18,
+            offset: Offset(0, 7),
           ),
         ],
       ),
@@ -64,7 +59,7 @@ class GlassCard extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(radiusValue),
           splashColor: AppColors.getPrimary(context).withValues(alpha: 0.12),
-          highlightColor: isLight ? Colors.black.withValues(alpha: 0.04) : AppColors.glassHighlight,
+          highlightColor: AppColors.highlightSurface.withValues(alpha: 0.35),
           child: card,
         ),
       );
@@ -72,4 +67,3 @@ class GlassCard extends StatelessWidget {
     return card;
   }
 }
-

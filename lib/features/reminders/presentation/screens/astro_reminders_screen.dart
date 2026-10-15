@@ -29,7 +29,10 @@ class AstroRemindersScreen extends ConsumerWidget {
             children: [
               // Header App Bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -38,9 +41,16 @@ class AstroRemindersScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: AppColors.getSurfaceElevated(context),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                          border: Border.all(
+                            color: AppColors.getBorder(context),
+                            width: 0.8,
+                          ),
                         ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.getTextPrimary(context),
+                          size: 18,
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -85,7 +95,11 @@ class AstroRemindersScreen extends ConsumerWidget {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.notifications_active_rounded, color: AppColors.primary, size: 18),
+                              const Icon(
+                                Icons.notifications_active_rounded,
+                                color: AppColors.primary,
+                                size: 18,
+                              ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: FittedBox(
@@ -110,9 +124,11 @@ class AstroRemindersScreen extends ConsumerWidget {
                           _buildSwitchRow(
                             context,
                             title: 'Morning Score Push (07:00 AM)',
-                            subtitle: 'Daily 1–10 Energy Score & Gajakesari/Planet transit summary',
+                            subtitle:
+                                'Daily 1–10 Energy Score & Gajakesari/Planet transit summary',
                             value: reminderState.morningScoreNotification,
-                            onChanged: (val) => notifier.updateSettings(morningScore: val),
+                            onChanged: (val) =>
+                                notifier.updateSettings(morningScore: val),
                           ),
                           const Divider(height: 24),
 
@@ -120,9 +136,11 @@ class AstroRemindersScreen extends ConsumerWidget {
                           _buildSwitchRow(
                             context,
                             title: '20-min Rahu Kaal Pre-Warning',
-                            subtitle: 'Get notified 20 minutes before Rahu Kaal starts to defer major deals',
+                            subtitle:
+                                'Get notified 20 minutes before Rahu Kaal starts to defer major deals',
                             value: reminderState.rahuKaalNotification,
-                            onChanged: (val) => notifier.updateSettings(rahuKaal: val),
+                            onChanged: (val) =>
+                                notifier.updateSettings(rahuKaal: val),
                           ),
                           const Divider(height: 24),
 
@@ -130,9 +148,11 @@ class AstroRemindersScreen extends ConsumerWidget {
                           _buildSwitchRow(
                             context,
                             title: 'Golden Window (Shubh Muhurat) Lead Alert',
-                            subtitle: 'Receive notification when your peak daily timing window opens',
+                            subtitle:
+                                'Receive notification when your peak daily timing window opens',
                             value: reminderState.shubhMuhuratNotification,
-                            onChanged: (val) => notifier.updateSettings(shubhMuhurat: val),
+                            onChanged: (val) =>
+                                notifier.updateSettings(shubhMuhurat: val),
                           ),
                           const Divider(height: 24),
 
@@ -140,9 +160,11 @@ class AstroRemindersScreen extends ConsumerWidget {
                           _buildSwitchRow(
                             context,
                             title: 'Daily Mood & Cosmic Check-In',
-                            subtitle: 'Evening reflection prompt to track emotions & claim +5 Karma XP',
+                            subtitle:
+                                'Evening reflection prompt to track emotions & claim +5 Karma XP',
                             value: reminderState.dailyCheckInNotification,
-                            onChanged: (val) => notifier.updateSettings(dailyCheckIn: val),
+                            onChanged: (val) =>
+                                notifier.updateSettings(dailyCheckIn: val),
                           ),
                           const Divider(height: 24),
 
@@ -150,9 +172,11 @@ class AstroRemindersScreen extends ConsumerWidget {
                           _buildSwitchRow(
                             context,
                             title: 'Spiritual Routine (Surya Arghya & Gayatri)',
-                            subtitle: 'Dawn alerts for Surya Arghya, Gayatri Mantra & evening stillness',
+                            subtitle:
+                                'Dawn alerts for Surya Arghya, Gayatri Mantra & evening stillness',
                             value: reminderState.dailyRoutineNotification,
-                            onChanged: (val) => notifier.updateSettings(dailyRoutine: val),
+                            onChanged: (val) =>
+                                notifier.updateSettings(dailyRoutine: val),
                           ),
                           const Divider(height: 24),
 
@@ -160,9 +184,11 @@ class AstroRemindersScreen extends ConsumerWidget {
                           _buildSwitchRow(
                             context,
                             title: '108 Mala Bead Japa Reminder',
-                            subtitle: 'Gentle vibration alert for daily mantra chanting & +15 XP reward',
+                            subtitle:
+                                'Gentle vibration alert for daily mantra chanting & +15 XP reward',
                             value: reminderState.japaReminderNotification,
-                            onChanged: (val) => notifier.updateSettings(japa: val),
+                            onChanged: (val) =>
+                                notifier.updateSettings(japa: val),
                           ),
                           const Divider(height: 24),
 
@@ -170,9 +196,11 @@ class AstroRemindersScreen extends ConsumerWidget {
                           _buildSwitchRow(
                             context,
                             title: 'Cosmic Streak Protector Alert',
-                            subtitle: 'Alert before midnight so you never break your active devotion streak',
+                            subtitle:
+                                'Alert before midnight so you never break your active devotion streak',
                             value: reminderState.streakProtectorNotification,
-                            onChanged: (val) => notifier.updateSettings(streakProtector: val),
+                            onChanged: (val) =>
+                                notifier.updateSettings(streakProtector: val),
                           ),
                         ],
                       ),
@@ -182,16 +210,22 @@ class AstroRemindersScreen extends ConsumerWidget {
                     // Test Real-Time Animated Reminder Banner
                     GlassCard(
                       padding: const EdgeInsets.all(16),
-                      borderColor: const Color(0xFFFFD700).withValues(alpha: 0.5),
+                      borderColor: AppColors.secondary.withValues(alpha: 0.5),
                       child: Row(
                         children: [
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFFFD700).withValues(alpha: 0.18),
+                              color: AppColors.secondary.withValues(
+                                alpha: 0.18,
+                              ),
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.notifications_active_rounded, color: Color(0xFFFFD700), size: 20),
+                            child: const Icon(
+                              Icons.notifications_active_rounded,
+                              color: AppColors.secondary,
+                              size: 20,
+                            ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
@@ -208,7 +242,10 @@ class AstroRemindersScreen extends ConsumerWidget {
                                 ),
                                 Text(
                                   'Test the real-time animated popup dialog for scheduled events',
-                                  style: GoogleFonts.inter(fontSize: 10.5, color: AppColors.getTextSecondary(context)),
+                                  style: GoogleFonts.inter(
+                                    fontSize: 10.5,
+                                    color: AppColors.getTextSecondary(context),
+                                  ),
                                 ),
                               ],
                             ),
@@ -216,15 +253,24 @@ class AstroRemindersScreen extends ConsumerWidget {
                           const SizedBox(width: 8),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFFFD700),
-                              foregroundColor: const Color(0xFF1B1403),
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: AppColors.secondary,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                            onPressed: () => AnimatedCosmicReminderModal.show(context),
+                            onPressed: () =>
+                                AnimatedCosmicReminderModal.show(context),
                             child: Text(
                               'Test Alert',
-                              style: GoogleFonts.outfit(fontSize: 11.5, fontWeight: FontWeight.bold),
+                              style: GoogleFonts.outfit(
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
@@ -254,10 +300,18 @@ class AstroRemindersScreen extends ConsumerWidget {
                         const SizedBox(width: 8),
                         TextButton.icon(
                           onPressed: () => AddEventModal.show(context),
-                          icon: const Icon(Icons.add_circle_outline_rounded, size: 14, color: AppColors.primary),
+                          icon: const Icon(
+                            Icons.add_circle_outline_rounded,
+                            size: 14,
+                            color: AppColors.primary,
+                          ),
                           label: Text(
                             'Add Event',
-                            style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary),
+                            style: GoogleFonts.outfit(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
                           ),
                         ),
                       ],
@@ -271,17 +325,28 @@ class AstroRemindersScreen extends ConsumerWidget {
                         child: Center(
                           child: Column(
                             children: [
-                              const Icon(Icons.event_note_rounded, size: 36, color: AppColors.primary),
+                              const Icon(
+                                Icons.event_note_rounded,
+                                size: 36,
+                                color: AppColors.primary,
+                              ),
                               const SizedBox(height: 8),
                               Text(
                                 'No Personal Events Scheduled Yet',
-                                style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                                style: GoogleFonts.outfit(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.getTextPrimary(context),
+                                ),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 'Schedule meetings, travels or property deals to receive astrological timing scores & reminders.',
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.inter(fontSize: 12, color: AppColors.getTextSecondary(context)),
+                                style: GoogleFonts.inter(
+                                  fontSize: 12,
+                                  color: AppColors.getTextSecondary(context),
+                                ),
                               ),
                             ],
                           ),
@@ -298,10 +363,16 @@ class AstroRemindersScreen extends ConsumerWidget {
                                 Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    color: reminder.category.color.withValues(alpha: 0.18),
+                                    color: reminder.category.color.withValues(
+                                      alpha: 0.18,
+                                    ),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Icon(reminder.category.icon, size: 18, color: reminder.category.color),
+                                  child: Icon(
+                                    reminder.category.icon,
+                                    size: 18,
+                                    color: reminder.category.color,
+                                  ),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
@@ -310,12 +381,16 @@ class AstroRemindersScreen extends ConsumerWidget {
                                       context,
                                       title: reminder.title,
                                       category: reminder.category.name,
-                                      astroScore: reminder.astroScore.toDouble(),
-                                      dashaContext: 'Mercury-Jupiter Transit Alignment',
-                                      aiRecommendation: reminder.astroRecommendation,
+                                      astroScore: reminder.astroScore
+                                          .toDouble(),
+                                      dashaContext:
+                                          'Mercury-Jupiter Transit Alignment',
+                                      aiRecommendation:
+                                          reminder.astroRecommendation,
                                     ),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           children: [
@@ -325,24 +400,36 @@ class AstroRemindersScreen extends ConsumerWidget {
                                                 style: GoogleFonts.outfit(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.bold,
-                                                  color: AppColors.getTextPrimary(context),
+                                                  color:
+                                                      AppColors.getTextPrimary(
+                                                        context,
+                                                      ),
                                                 ),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
                                             Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 8,
+                                                    vertical: 3,
+                                                  ),
                                               decoration: BoxDecoration(
-                                                color: AppColors.getPrimary(context).withValues(alpha: 0.15),
-                                                borderRadius: BorderRadius.circular(10),
+                                                color: AppColors.getPrimary(
+                                                  context,
+                                                ).withValues(alpha: 0.15),
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
                                               ),
                                               child: Text(
                                                 '★ ${reminder.astroScore}/10',
                                                 style: TextStyle(
                                                   fontSize: 11,
                                                   fontWeight: FontWeight.bold,
-                                                  color: AppColors.getPrimary(context),
+                                                  color: AppColors.getPrimary(
+                                                    context,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -351,7 +438,12 @@ class AstroRemindersScreen extends ConsumerWidget {
                                         const SizedBox(height: 4),
                                         Text(
                                           reminder.astroRecommendation,
-                                          style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+                                          style: GoogleFonts.inter(
+                                            fontSize: 11,
+                                            color: AppColors.getTextSecondary(
+                                              context,
+                                            ),
+                                          ),
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -362,21 +454,32 @@ class AstroRemindersScreen extends ConsumerWidget {
                                 const SizedBox(width: 6),
                                 IconButton(
                                   tooltip: 'Test Alert',
-                                  icon: const Icon(Icons.notifications_active_rounded, size: 18, color: Color(0xFFFFD700)),
+                                  icon: const Icon(
+                                    Icons.notifications_active_rounded,
+                                    size: 18,
+                                    color: AppColors.secondary,
+                                  ),
                                   onPressed: () {
                                     AnimatedCosmicReminderModal.show(
                                       context,
                                       title: reminder.title,
                                       category: reminder.category.name,
-                                      astroScore: reminder.astroScore.toDouble(),
-                                      dashaContext: 'Mercury-Jupiter Transit Alignment',
-                                      aiRecommendation: reminder.astroRecommendation,
+                                      astroScore: reminder.astroScore
+                                          .toDouble(),
+                                      dashaContext:
+                                          'Mercury-Jupiter Transit Alignment',
+                                      aiRecommendation:
+                                          reminder.astroRecommendation,
                                     );
                                   },
                                 ),
                                 IconButton(
                                   tooltip: 'Delete',
-                                  icon: const Icon(Icons.delete_outline_rounded, size: 18, color: Colors.redAccent),
+                                  icon: const Icon(
+                                    Icons.delete_outline_rounded,
+                                    size: 18,
+                                    color: AppColors.pink,
+                                  ),
                                   onPressed: () {
                                     notifier.deleteReminder(reminder.id);
                                   },
@@ -439,4 +542,3 @@ class AstroRemindersScreen extends ConsumerWidget {
 }
 
 final reminderStateProvider = reminderProvider;
-

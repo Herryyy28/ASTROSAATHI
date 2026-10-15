@@ -18,7 +18,7 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
       'type': 'Manifesting Generator',
       'profile': '5/1 Heretic / Investigator',
       'percentage': '32% of Population',
-      'color': Colors.amberAccent,
+      'color': AppColors.pink,
       'strategy': 'To Respond & Inform before swift action',
       'authority': 'Sacral Authority (Gut Response)',
       'signature': 'Satisfaction & Flow',
@@ -28,22 +28,58 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
       'description':
           'The multi-passionate visionary builder. Possesses sustainable sacral motor energy coupled with throat initiation. Moves with rapid acceleration, learns through course-correction, and excels when responding to authentic external requests.',
       'centersList': [
-        {'name': 'Head / Crown', 'defined': true, 'role': 'Inspiration & Pressure to Know'},
-        {'name': 'Ajna Center', 'defined': true, 'role': 'Conceptualization & Mental Framing'},
-        {'name': 'Throat Center', 'defined': true, 'role': 'Manifestation & Articulation'},
-        {'name': 'G-Center (Identity)', 'defined': false, 'role': 'Open to Direction & Love'},
-        {'name': 'Heart / Ego', 'defined': false, 'role': 'Variable Willpower Energy'},
-        {'name': 'Sacral Center', 'defined': true, 'role': 'Sustained Life Force & Vitality'},
-        {'name': 'Solar Plexus', 'defined': false, 'role': 'Empathetic Emotional Reception'},
-        {'name': 'Spleen Center', 'defined': false, 'role': 'Intuitive Body Sensing'},
-        {'name': 'Root Center', 'defined': false, 'role': 'Adrenaline & Physical Pressure'},
+        {
+          'name': 'Head / Crown',
+          'defined': true,
+          'role': 'Inspiration & Pressure to Know',
+        },
+        {
+          'name': 'Ajna Center',
+          'defined': true,
+          'role': 'Conceptualization & Mental Framing',
+        },
+        {
+          'name': 'Throat Center',
+          'defined': true,
+          'role': 'Manifestation & Articulation',
+        },
+        {
+          'name': 'G-Center (Identity)',
+          'defined': false,
+          'role': 'Open to Direction & Love',
+        },
+        {
+          'name': 'Heart / Ego',
+          'defined': false,
+          'role': 'Variable Willpower Energy',
+        },
+        {
+          'name': 'Sacral Center',
+          'defined': true,
+          'role': 'Sustained Life Force & Vitality',
+        },
+        {
+          'name': 'Solar Plexus',
+          'defined': false,
+          'role': 'Empathetic Emotional Reception',
+        },
+        {
+          'name': 'Spleen Center',
+          'defined': false,
+          'role': 'Intuitive Body Sensing',
+        },
+        {
+          'name': 'Root Center',
+          'defined': false,
+          'role': 'Adrenaline & Physical Pressure',
+        },
       ],
     },
     {
       'type': 'Generator',
       'profile': '3/5 Martyr / Heretic',
       'percentage': '36% of Population',
-      'color': Colors.orangeAccent,
+      'color': AppColors.actionPurple,
       'strategy': 'Wait to Respond (Never initiate cold)',
       'authority': 'Sacral Authority (Gut Sounds: Uh-huh / Un-un)',
       'signature': 'Pure Satisfaction & Mastery',
@@ -53,22 +89,58 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
       'description':
           'The steady master craftsman and backbone of the world. Built with deep enduring energy to master skills step-by-step. Finding tasks that light up the sacral gut response turns work into effortless devotion.',
       'centersList': [
-        {'name': 'Head / Crown', 'defined': false, 'role': 'Open to Global Wonder'},
-        {'name': 'Ajna Center', 'defined': false, 'role': 'Open Mental Flexibility'},
-        {'name': 'Throat Center', 'defined': false, 'role': 'Speaks When Prompted'},
-        {'name': 'G-Center (Identity)', 'defined': false, 'role': 'Adaptive Sense of Place'},
-        {'name': 'Heart / Ego', 'defined': false, 'role': 'Free from Need to Prove'},
-        {'name': 'Sacral Center', 'defined': true, 'role': 'Unstoppable Creative Generator'},
-        {'name': 'Solar Plexus', 'defined': false, 'role': 'Clear Emotional Baseline'},
-        {'name': 'Spleen Center', 'defined': true, 'role': 'Instant Immune & Survival Instincts'},
-        {'name': 'Root Center', 'defined': true, 'role': 'Steady Rhythmic Work Drive'},
+        {
+          'name': 'Head / Crown',
+          'defined': false,
+          'role': 'Open to Global Wonder',
+        },
+        {
+          'name': 'Ajna Center',
+          'defined': false,
+          'role': 'Open Mental Flexibility',
+        },
+        {
+          'name': 'Throat Center',
+          'defined': false,
+          'role': 'Speaks When Prompted',
+        },
+        {
+          'name': 'G-Center (Identity)',
+          'defined': false,
+          'role': 'Adaptive Sense of Place',
+        },
+        {
+          'name': 'Heart / Ego',
+          'defined': false,
+          'role': 'Free from Need to Prove',
+        },
+        {
+          'name': 'Sacral Center',
+          'defined': true,
+          'role': 'Unstoppable Creative Generator',
+        },
+        {
+          'name': 'Solar Plexus',
+          'defined': false,
+          'role': 'Clear Emotional Baseline',
+        },
+        {
+          'name': 'Spleen Center',
+          'defined': true,
+          'role': 'Instant Immune & Survival Instincts',
+        },
+        {
+          'name': 'Root Center',
+          'defined': true,
+          'role': 'Steady Rhythmic Work Drive',
+        },
       ],
     },
     {
       'type': 'Projector',
       'profile': '1/3 Investigator / Martyr',
       'percentage': '21% of Population',
-      'color': Colors.cyanAccent,
+      'color': AppColors.primaryLightMode,
       'strategy': 'Wait for the Formal Recognition & Invitation',
       'authority': 'Splenic / Intuitive Guidance',
       'signature': 'Success & Masterful Efficiency',
@@ -78,22 +150,54 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
       'description':
           'The wise seer and guide of human systems. Not designed to toil in heavy manual labor, but rather to observe, direct, and optimize the energy of others. Thrives when genuinely recognized and invited for their perspective.',
       'centersList': [
-        {'name': 'Head / Crown', 'defined': false, 'role': 'Receptive to Divine Queries'},
-        {'name': 'Ajna Center', 'defined': true, 'role': 'Fixed Analytical Perception'},
-        {'name': 'Throat Center', 'defined': true, 'role': 'Authoritative Articulation'},
-        {'name': 'G-Center (Identity)', 'defined': true, 'role': 'Magnetic Identity Core'},
+        {
+          'name': 'Head / Crown',
+          'defined': false,
+          'role': 'Receptive to Divine Queries',
+        },
+        {
+          'name': 'Ajna Center',
+          'defined': true,
+          'role': 'Fixed Analytical Perception',
+        },
+        {
+          'name': 'Throat Center',
+          'defined': true,
+          'role': 'Authoritative Articulation',
+        },
+        {
+          'name': 'G-Center (Identity)',
+          'defined': true,
+          'role': 'Magnetic Identity Core',
+        },
         {'name': 'Heart / Ego', 'defined': false, 'role': 'Wise in True Worth'},
-        {'name': 'Sacral Center', 'defined': false, 'role': 'Non-Sacral; Needs Rest Cycles'},
-        {'name': 'Solar Plexus', 'defined': false, 'role': 'Reflects Others Feelings'},
-        {'name': 'Spleen Center', 'defined': false, 'role': 'Senses Health Vulnerabilities'},
-        {'name': 'Root Center', 'defined': false, 'role': 'Refuses Rush and False Hurry'},
+        {
+          'name': 'Sacral Center',
+          'defined': false,
+          'role': 'Non-Sacral; Needs Rest Cycles',
+        },
+        {
+          'name': 'Solar Plexus',
+          'defined': false,
+          'role': 'Reflects Others Feelings',
+        },
+        {
+          'name': 'Spleen Center',
+          'defined': false,
+          'role': 'Senses Health Vulnerabilities',
+        },
+        {
+          'name': 'Root Center',
+          'defined': false,
+          'role': 'Refuses Rush and False Hurry',
+        },
       ],
     },
     {
       'type': 'Manifestor',
       'profile': '2/4 Hermit / Opportunist',
       'percentage': '9% of Population',
-      'color': Colors.redAccent,
+      'color': AppColors.pink,
       'strategy': 'To Inform Others Before Taking Action',
       'authority': 'Emotional Solar Plexus (Wait for wave clarity)',
       'signature': 'Deep Inner Peace & Autonomy',
@@ -103,22 +207,58 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
       'description':
           'The sovereign trailblazer and initiator. The only type biologically designed to spark new paradigms without waiting for permission. Informing loved ones and colleagues beforehand dissolves obstacles and resistance.',
       'centersList': [
-        {'name': 'Head / Crown', 'defined': false, 'role': 'Unfiltered Inspiration Stream'},
-        {'name': 'Ajna Center', 'defined': false, 'role': 'Unconditioned Cognitive Flow'},
-        {'name': 'Throat Center', 'defined': true, 'role': 'Spontaneous Creative Catalyst'},
-        {'name': 'G-Center (Identity)', 'defined': false, 'role': 'Fluid Adaptable Essence'},
-        {'name': 'Heart / Ego', 'defined': true, 'role': 'Iron Willpower & Command'},
-        {'name': 'Sacral Center', 'defined': false, 'role': 'Sprint & Rest Cadence'},
-        {'name': 'Solar Plexus', 'defined': false, 'role': 'Calm Detached Insight'},
-        {'name': 'Spleen Center', 'defined': false, 'role': 'Sensitive to Environments'},
-        {'name': 'Root Center', 'defined': true, 'role': 'High-Impact Burst Generator'},
+        {
+          'name': 'Head / Crown',
+          'defined': false,
+          'role': 'Unfiltered Inspiration Stream',
+        },
+        {
+          'name': 'Ajna Center',
+          'defined': false,
+          'role': 'Unconditioned Cognitive Flow',
+        },
+        {
+          'name': 'Throat Center',
+          'defined': true,
+          'role': 'Spontaneous Creative Catalyst',
+        },
+        {
+          'name': 'G-Center (Identity)',
+          'defined': false,
+          'role': 'Fluid Adaptable Essence',
+        },
+        {
+          'name': 'Heart / Ego',
+          'defined': true,
+          'role': 'Iron Willpower & Command',
+        },
+        {
+          'name': 'Sacral Center',
+          'defined': false,
+          'role': 'Sprint & Rest Cadence',
+        },
+        {
+          'name': 'Solar Plexus',
+          'defined': false,
+          'role': 'Calm Detached Insight',
+        },
+        {
+          'name': 'Spleen Center',
+          'defined': false,
+          'role': 'Sensitive to Environments',
+        },
+        {
+          'name': 'Root Center',
+          'defined': true,
+          'role': 'High-Impact Burst Generator',
+        },
       ],
     },
     {
       'type': 'Reflector',
       'profile': '6/2 Role Model / Hermit',
       'percentage': '1% of Population (Ultra Rare)',
-      'color': Colors.purpleAccent,
+      'color': AppColors.actionPurple,
       'strategy': 'Wait a Full 28-Day Lunar Cycle for major decisions',
       'authority': 'Lunar Ephemeris Authority',
       'signature': 'Childlike Surprise & Wonder',
@@ -128,15 +268,51 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
       'description':
           'The cosmic barometer and sacred mirror. With all nine centers open to the cosmos, the Reflector samples and reflects the purity, toxicity, or harmony of their environment. Decisions require patient communion with the moon.',
       'centersList': [
-        {'name': 'Head / Crown', 'defined': false, 'role': 'Open Cosmic Gateway'},
-        {'name': 'Ajna Center', 'defined': false, 'role': 'Open Holographic Mind'},
-        {'name': 'Throat Center', 'defined': false, 'role': 'Voice of the Whole Tribe'},
-        {'name': 'G-Center (Identity)', 'defined': false, 'role': 'Chameleon Soul of Places'},
-        {'name': 'Heart / Ego', 'defined': false, 'role': 'Open to Divine Sovereignty'},
-        {'name': 'Sacral Center', 'defined': false, 'role': 'Open Life Force Well'},
-        {'name': 'Solar Plexus', 'defined': false, 'role': 'Vast Ocean of Empathy'},
-        {'name': 'Spleen Center', 'defined': false, 'role': 'Cellular Environmental Antenna'},
-        {'name': 'Root Center', 'defined': false, 'role': 'Open Rhythmic Vessel'},
+        {
+          'name': 'Head / Crown',
+          'defined': false,
+          'role': 'Open Cosmic Gateway',
+        },
+        {
+          'name': 'Ajna Center',
+          'defined': false,
+          'role': 'Open Holographic Mind',
+        },
+        {
+          'name': 'Throat Center',
+          'defined': false,
+          'role': 'Voice of the Whole Tribe',
+        },
+        {
+          'name': 'G-Center (Identity)',
+          'defined': false,
+          'role': 'Chameleon Soul of Places',
+        },
+        {
+          'name': 'Heart / Ego',
+          'defined': false,
+          'role': 'Open to Divine Sovereignty',
+        },
+        {
+          'name': 'Sacral Center',
+          'defined': false,
+          'role': 'Open Life Force Well',
+        },
+        {
+          'name': 'Solar Plexus',
+          'defined': false,
+          'role': 'Vast Ocean of Empathy',
+        },
+        {
+          'name': 'Spleen Center',
+          'defined': false,
+          'role': 'Cellular Environmental Antenna',
+        },
+        {
+          'name': 'Root Center',
+          'defined': false,
+          'role': 'Open Rhythmic Vessel',
+        },
       ],
     },
   ];
@@ -159,7 +335,10 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
             children: [
               // Header App Bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -168,9 +347,16 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                         decoration: BoxDecoration(
                           color: AppColors.getSurfaceElevated(context),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                          border: Border.all(
+                            color: AppColors.getBorder(context),
+                            width: 0.8,
+                          ),
                         ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.getTextPrimary(context),
+                          size: 18,
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -195,18 +381,25 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                               ),
                               const SizedBox(width: 6),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: Colors.amberAccent.withValues(alpha: 0.2),
+                                  color: AppColors.pink.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: Colors.amberAccent.withValues(alpha: 0.5)),
+                                  border: Border.all(
+                                    color: AppColors.pink.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                  ),
                                 ),
                                 child: Text(
                                   'EDUCATIONAL',
                                   style: GoogleFonts.outfit(
                                     fontSize: 9,
                                     fontWeight: FontWeight.w900,
-                                    color: Colors.amberAccent,
+                                    color: AppColors.pink,
                                   ),
                                 ),
                               ),
@@ -233,11 +426,17 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                 decoration: BoxDecoration(
                   color: AppColors.primary.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.25),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.info_outline_rounded, color: AppColors.primary, size: 18),
+                    const Icon(
+                      Icons.info_outline_rounded,
+                      color: AppColors.primary,
+                      size: 18,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -257,7 +456,10 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
               SizedBox(
                 height: 48,
                 child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
                   scrollDirection: Axis.horizontal,
                   itemCount: _archetypes.length,
                   separatorBuilder: (_, _) => const SizedBox(width: 8),
@@ -271,15 +473,21 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                         item['type'] as String,
                         style: GoogleFonts.outfit(
                           fontSize: 12,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                          color: isSelected ? Colors.black : AppColors.getTextPrimary(context),
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.w500,
+                          color: isSelected
+                              ? Colors.white
+                              : AppColors.getTextPrimary(context),
                         ),
                       ),
                       selected: isSelected,
                       selectedColor: color,
                       backgroundColor: AppColors.getSurfaceSecondary(context),
                       side: BorderSide(
-                        color: isSelected ? color : AppColors.getBorder(context),
+                        color: isSelected
+                            ? color
+                            : AppColors.getBorder(context),
                       ),
                       onSelected: (_) {
                         setState(() {
@@ -294,7 +502,10 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
               // Main Body Content
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   physics: const BouncingScrollPhysics(),
                   children: [
                     // Main Archetype Card
@@ -317,7 +528,10 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
                                 decoration: BoxDecoration(
                                   color: currentAccent.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(8),
@@ -355,16 +569,45 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                             style: GoogleFonts.inter(
                               fontSize: 12,
                               height: 1.45,
-                              color: AppColors.getTextPrimary(context).withValues(alpha: 0.9),
+                              color: AppColors.getTextPrimary(
+                                context,
+                              ).withValues(alpha: 0.9),
                             ),
                           ),
-                          Divider(color: AppColors.getDivider(context), height: 24),
-                          _buildDetailRow(context, 'Core Strategy', current['strategy'] as String),
-                          _buildDetailRow(context, 'Inner Authority', current['authority'] as String),
-                          _buildDetailRow(context, 'Emotional Signature', current['signature'] as String),
-                          _buildDetailRow(context, 'Not-Self Theme', current['notSelf'] as String),
-                          _buildDetailRow(context, 'Defined Centers', current['definedCenters'] as String),
-                          _buildDetailRow(context, 'Archetypal Cross', current['cross'] as String),
+                          Divider(
+                            color: AppColors.getDivider(context),
+                            height: 24,
+                          ),
+                          _buildDetailRow(
+                            context,
+                            'Core Strategy',
+                            current['strategy'] as String,
+                          ),
+                          _buildDetailRow(
+                            context,
+                            'Inner Authority',
+                            current['authority'] as String,
+                          ),
+                          _buildDetailRow(
+                            context,
+                            'Emotional Signature',
+                            current['signature'] as String,
+                          ),
+                          _buildDetailRow(
+                            context,
+                            'Not-Self Theme',
+                            current['notSelf'] as String,
+                          ),
+                          _buildDetailRow(
+                            context,
+                            'Defined Centers',
+                            current['definedCenters'] as String,
+                          ),
+                          _buildDetailRow(
+                            context,
+                            'Archetypal Cross',
+                            current['cross'] as String,
+                          ),
                         ],
                       ),
                     ),
@@ -382,73 +625,100 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
                     ),
                     const SizedBox(height: 8),
 
-                    ...((current['centersList'] as List<Map<String, dynamic>>).map((center) {
-                      final bool isDefined = center['defined'] as bool;
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: AppColors.getSurfaceSecondary(context),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: isDefined ? currentAccent.withValues(alpha: 0.4) : AppColors.getBorder(context),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              isDefined ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded,
-                              color: isDefined ? currentAccent : AppColors.getTextMuted(context),
-                              size: 18,
+                    ...((current['centersList'] as List<Map<String, dynamic>>)
+                        .map((center) {
+                          final bool isDefined = center['defined'] as bool;
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 10,
                             ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
+                            decoration: BoxDecoration(
+                              color: AppColors.getSurfaceSecondary(context),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: isDefined
+                                    ? currentAccent.withValues(alpha: 0.4)
+                                    : AppColors.getBorder(context),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  isDefined
+                                      ? Icons.check_circle_rounded
+                                      : Icons.radio_button_unchecked_rounded,
+                                  color: isDefined
+                                      ? currentAccent
+                                      : AppColors.getTextMuted(context),
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        center['name'] as String,
-                                        style: GoogleFonts.outfit(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.getTextPrimary(context),
-                                        ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            center['name'] as String,
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.getTextPrimary(
+                                                context,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 6,
+                                              vertical: 1,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  (isDefined
+                                                          ? currentAccent
+                                                          : Colors.grey)
+                                                      .withValues(alpha: 0.12),
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            child: Text(
+                                              isDefined ? 'DEFINED' : 'OPEN',
+                                              style: GoogleFonts.outfit(
+                                                fontSize: 9,
+                                                fontWeight: FontWeight.bold,
+                                                color: isDefined
+                                                    ? currentAccent
+                                                    : AppColors.getTextMuted(
+                                                        context,
+                                                      ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const SizedBox(width: 8),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
-                                        decoration: BoxDecoration(
-                                          color: (isDefined ? currentAccent : Colors.grey).withValues(alpha: 0.12),
-                                          borderRadius: BorderRadius.circular(6),
-                                        ),
-                                        child: Text(
-                                          isDefined ? 'DEFINED' : 'OPEN',
-                                          style: GoogleFonts.outfit(
-                                            fontSize: 9,
-                                            fontWeight: FontWeight.bold,
-                                            color: isDefined ? currentAccent : AppColors.getTextMuted(context),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        center['role'] as String,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 11,
+                                          color: AppColors.getTextSecondary(
+                                            context,
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    center['role'] as String,
-                                    style: GoogleFonts.inter(
-                                      fontSize: 11,
-                                      color: AppColors.getTextSecondary(context),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    })),
+                          );
+                        })),
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -492,4 +762,3 @@ class _HumanDesignScreenState extends State<HumanDesignScreen> {
     );
   }
 }
-

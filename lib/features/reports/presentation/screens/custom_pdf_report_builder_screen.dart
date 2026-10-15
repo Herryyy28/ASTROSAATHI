@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/glass_card.dart';
-import '../../../../core/widgets/cosmic_notification.dart';
+
 import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/astro_components.dart';
+import '../../../../core/widgets/cosmic_notification.dart';
 import '../../../../l10n/app_language.dart';
 import '../../../astrology/services/pdf_report_generator.dart';
 
@@ -12,10 +13,12 @@ class CustomPdfReportBuilderScreen extends ConsumerStatefulWidget {
   const CustomPdfReportBuilderScreen({super.key});
 
   @override
-  ConsumerState<CustomPdfReportBuilderScreen> createState() => _CustomPdfReportBuilderScreenState();
+  ConsumerState<CustomPdfReportBuilderScreen> createState() =>
+      _CustomPdfReportBuilderScreenState();
 }
 
-class _CustomPdfReportBuilderScreenState extends ConsumerState<CustomPdfReportBuilderScreen> {
+class _CustomPdfReportBuilderScreenState
+    extends ConsumerState<CustomPdfReportBuilderScreen> {
   final Map<String, bool> _selectedSections = {
     'Full Natal Birth Chart (D1 & D9 Navamsha)': true,
     'Vimshottari Dasha 5-Year Forecast': true,
@@ -29,204 +32,100 @@ class _CustomPdfReportBuilderScreenState extends ConsumerState<CustomPdfReportBu
   bool _isGenerating = false;
 
   @override
-  Widget build(BuildContext context) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
-    final activeProfile = ref.watch(activeProfileProvider);
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Container(
-        decoration: BoxDecoration(
-          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
-          gradient: isLight ? null : AppColors.cosmicRadialGradient,
+  Widget build(BuildContext context) => AstroDetailScaffold(
+    title: 'Custom PDF report',
+    subtitle: 'Choose the sections you want in your personal report.',
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const AstroPageIntro(
+          icon: Icons.picture_as_pdf_outlined,
+          tag: 'PREMIUM REPORT',
+          title: 'Build it around your questions',
+          subtitle:
+              'Create a focused, watermark-free report using the readings most useful to you.',
         ),
-        child: SafeArea(
+        const SizedBox(height: 24),
+        const AstroSectionHeader(title: 'Included sections'),
+        const SizedBox(height: 12),
+        AstroCard(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Column(
-            children: [
-              // Header App Bar
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-                child: Row(
-                  children: [
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      icon: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.getSurfaceElevated(context),
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
-                        ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  'Custom PDF Builder',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.getTextPrimary(context),
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  gradient: AppColors.goldGradient,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  'VIP EXCLUSIVE',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            'Generate tailored watermark-free PDF reports',
-                            style: GoogleFonts.inter(
-                              fontSize: 11,
-                              color: AppColors.getTextSecondary(context),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+            children: _selectedSections.keys.map((section) {
+              final selected = _selectedSections[section]!;
+              return CheckboxListTile(
+                value: selected,
+                onChanged: (value) =>
+                    setState(() => _selectedSections[section] = value ?? false),
+                title: Text(
+                  section,
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    height: 1.35,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimaryLight,
+                  ),
                 ),
-              ),
-
-              // Main Section Selection
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    GlassCard(
-                      padding: const EdgeInsets.all(16),
-                      borderColor: AppColors.primary.withValues(alpha: 0.4),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'SELECT REPORT SECTIONS TO INCLUDE',
-                            style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
-                          ),
-                          const SizedBox(height: 12),
-
-                          ..._selectedSections.keys.map((section) {
-                            final isChecked = _selectedSections[section]!;
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: CheckboxListTile(
-                                value: isChecked,
-                                onChanged: (val) => setState(() => _selectedSections[section] = val!),
-                                title: Text(
-                                  section,
-                                  style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.w600, color: AppColors.getTextPrimary(context)),
-                                ),
-                                activeColor: AppColors.primary,
-                                checkColor: Colors.black,
-                                contentPadding: EdgeInsets.zero,
-                                controlAffinity: ListTileControlAffinity.leading,
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Generate Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                        ),
-                        icon: _isGenerating
-                            ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black))
-                            : const Icon(Icons.picture_as_pdf_rounded, size: 18),
-                        label: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            _isGenerating ? 'Generating VIP PDF...' : 'Download Custom VIP PDF Report',
-                            style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        onPressed: _isGenerating
-                            ? null
-                            : () async {
-                                if (!_selectedSections.values.any((selected) => selected)) {
-                                  CosmicNotification.show(
-                                    context,
-                                    title: 'No Sections Selected ✦',
-                                    message: 'Please select at least one section to include in the custom report.',
-                                    icon: Icons.checklist_rounded,
-                                  );
-                                  return;
-                                }
-
-                                setState(() => _isGenerating = true);
-                                try {
-                                  await PdfReportGenerator.downloadAndPrintPdf(
-                                    userName: activeProfile.name.isEmpty ? 'Astro Seeker' : activeProfile.name,
-                                    dob: activeProfile.dob,
-                                    birthTime: activeProfile.birthTime,
-                                    birthPlace: activeProfile.birthPlace,
-                                    language: AppLanguage.english,
-                                    selectedSections: _selectedSections,
-                                  );
-                                  if (!context.mounted) return;
-                                  CosmicNotification.show(
-                                    context,
-                                    title: 'Report Generated 📄',
-                                    message: 'Custom VIP PDF Report generated & ready to print/save!',
-                                    icon: Icons.picture_as_pdf_rounded,
-                                  );
-                                } catch (e) {
-                                  if (!context.mounted) return;
-                                  CosmicNotification.show(
-                                    context,
-                                    title: 'PDF Generation Error',
-                                    message: 'Could not generate report: ${e.toString().replaceAll('Exception: ', '')}',
-                                    icon: Icons.error_outline_rounded,
-                                  );
-                                } finally {
-                                  if (mounted) setState(() => _isGenerating = false);
-                                }
-                              },
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                  ],
-                ),
-              ),
-            ],
+                activeColor: AppColors.primaryLightMode,
+                checkColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+                controlAffinity: ListTileControlAffinity.leading,
+              );
+            }).toList(),
           ),
         ),
-      ),
-    );
+        const SizedBox(height: 20),
+        AstroPrimaryButton(
+          label: _isGenerating ? 'Generating report…' : 'Generate PDF report',
+          icon: Icons.download_rounded,
+          loading: _isGenerating,
+          onPressed: _isGenerating ? null : _generateReport,
+        ),
+      ],
+    ),
+  );
+
+  Future<void> _generateReport() async {
+    if (!_selectedSections.values.any((selected) => selected)) {
+      CosmicNotification.show(
+        context,
+        title: 'Select a section',
+        message: 'Choose at least one section to include in your report.',
+        icon: Icons.checklist_rounded,
+      );
+      return;
+    }
+
+    setState(() => _isGenerating = true);
+    final activeProfile = ref.read(activeProfileProvider);
+    try {
+      await PdfReportGenerator.downloadAndPrintPdf(
+        userName: activeProfile.name.isEmpty
+            ? 'Astro Seeker'
+            : activeProfile.name,
+        dob: activeProfile.dob,
+        birthTime: activeProfile.birthTime,
+        birthPlace: activeProfile.birthPlace,
+        language: AppLanguage.english,
+        selectedSections: _selectedSections,
+      );
+      if (!mounted) return;
+      CosmicNotification.show(
+        context,
+        title: 'Report generated',
+        message: 'Your custom PDF report is ready to print or save.',
+        icon: Icons.picture_as_pdf_rounded,
+      );
+    } catch (error) {
+      if (!mounted) return;
+      CosmicNotification.show(
+        context,
+        title: 'Could not generate report',
+        message: error.toString().replaceAll('Exception: ', ''),
+        icon: Icons.error_outline_rounded,
+      );
+    } finally {
+      if (mounted) setState(() => _isGenerating = false);
+    }
   }
 }
-

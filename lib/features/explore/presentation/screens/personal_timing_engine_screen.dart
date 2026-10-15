@@ -274,7 +274,7 @@ class _PersonalTimingEngineScreenState extends State<PersonalTimingEngineScreen>
 
             // Date Comparison Cards
             ..._getDateComparisons(_selectedActivity).map((item) {
-              final Color col = isLight ? (item['color'] as Color) : (item['rating'] == 'Moderate' ? const Color(0xFFFFD700) : const Color(0xFF00E5FF));
+              final Color col = isLight ? (item['color'] as Color) : (item['rating'] == 'Moderate' ? AppColors.secondary : AppColors.primaryLightMode);
               return Container(
                 margin: const EdgeInsets.only(bottom: 14),
                 padding: const EdgeInsets.all(16),

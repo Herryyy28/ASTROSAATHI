@@ -1,152 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/glass_card.dart';
+import '../../../../core/widgets/astro_components.dart';
 
 class AstroResearchScreen extends StatelessWidget {
   const AstroResearchScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Container(
-        decoration: BoxDecoration(
-          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
-          gradient: isLight ? null : AppColors.cosmicRadialGradient,
+  Widget build(BuildContext context) => AstroDetailScaffold(
+    title: 'Research mode',
+    subtitle:
+        'Raw ephemeris coordinates and calculation notes for practitioners.',
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const AstroPageIntro(
+          icon: Icons.science_outlined,
+          tag: 'PRACTITIONER VIEW',
+          title: 'Ephemeris coordinates',
+          subtitle:
+              'Precise longitude, declination, and sidereal values in one readable surface.',
         ),
-        child: SafeArea(
+        const SizedBox(height: 24),
+        const AstroSectionHeader(title: 'Current positions'),
+        const SizedBox(height: 12),
+        AstroCard(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Column(
+            children: const [
+              _CoordinateRow(
+                body: 'Sun',
+                longitude: '194° 22′ 18.42″',
+                detail: 'Declination −05° 42′ 11″',
+              ),
+              Divider(),
+              _CoordinateRow(
+                body: 'Moon',
+                longitude: '308° 45′ 02.19″',
+                detail: 'Declination −12° 18′ 45″',
+              ),
+              Divider(),
+              _CoordinateRow(
+                body: 'Ascendant',
+                longitude: '194° 12′ 34.00″',
+                detail: 'Sidereal time 14h 22m 18s',
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _CoordinateRow extends StatelessWidget {
+  const _CoordinateRow({
+    required this.body,
+    required this.longitude,
+    required this.detail,
+  });
+  final String body;
+  final String longitude;
+  final String detail;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 14),
+    child: Row(
+      children: [
+        Container(
+          width: 38,
+          height: 38,
+          decoration: BoxDecoration(
+            color: AppColors.softLavender,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Icon(
+            Icons.public_rounded,
+            size: 19,
+            color: AppColors.primaryLightMode,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header App Bar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: AppColors.getSurfaceElevated(context),
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
-                        ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  'Astrology Research Mode',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.getTextPrimary(context),
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  gradient: AppColors.goldGradient,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  'PRACTITIONER',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w900,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            'Raw coordinates, house cusps & notes',
-                            style: GoogleFonts.inter(
-                              fontSize: 11,
-                              color: AppColors.getTextSecondary(context),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              Text(
+                body,
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimaryLight,
                 ),
               ),
-
-              // Main Body
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    GlassCard(
-                      padding: const EdgeInsets.all(18),
-                      borderColor: AppColors.primary.withValues(alpha: 0.4),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('RAW EPHEMERIS COORDINATES (ARC-SECONDS)', style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary)),
-                          const SizedBox(height: 10),
-                          _buildCoordTile(context, 'Sun â˜€ï¸', '194Â° 22\' 18.42"', 'Declination: -05Â° 42\' 11"'),
-                          _buildCoordTile(context, 'Moon 🌙', '308Â° 45\' 02.19"', 'Declination: -12Â° 18\' 45"'),
-                          _buildCoordTile(context, 'Ascendant â¬†ï¸', '194Â° 12\' 34.00"', 'Sidereal Time: 14h 22m 18s'),
-                        ],
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 3),
+              Text(
+                detail,
+                style: GoogleFonts.inter(
+                  fontSize: 11,
+                  color: AppColors.textSecondaryLight,
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildCoordTile(BuildContext context, String body, String long, String decl) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              body,
-              style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+        const SizedBox(width: 10),
+        Flexible(
+          child: Text(
+            longitude,
+            textAlign: TextAlign.right,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primaryLightMode,
             ),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            flex: 3,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(long, style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.primary)),
-                Text(decl, style: GoogleFonts.inter(fontSize: 10, color: AppColors.getTextSecondary(context))),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
 }
-

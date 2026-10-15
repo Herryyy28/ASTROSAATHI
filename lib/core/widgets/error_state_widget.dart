@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -8,7 +8,7 @@ import '../theme/design_tokens.dart';
 import '../../l10n/app_localizations.dart';
 import 'gradient_button.dart';
 
-/// Fully theme-adaptive error state widget with retry action.
+/// Shared error state using the same light-card hierarchy as the main app.
 class ErrorStateWidget extends ConsumerWidget {
   final String? title;
   final String? message;
@@ -39,29 +39,38 @@ class ErrorStateWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 96,
-                height: 96,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: errorColor.withValues(alpha: 0.08),
-                  border: Border.all(color: errorColor.withValues(alpha: 0.25), width: 1.5),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.cloud_off_rounded,
-                    size: 42,
-                    color: errorColor,
+                    width: 96,
+                    height: 96,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: errorColor.withValues(alpha: 0.08),
+                      border: Border.all(
+                        color: errorColor.withValues(alpha: 0.25),
+                        width: 1.5,
+                      ),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        Icons.cloud_off_rounded,
+                        size: 42,
+                        color: errorColor,
+                      ),
+                    ),
+                  )
+                  .animate(onPlay: (c) => c.repeat(reverse: true))
+                  .moveY(
+                    begin: -4,
+                    end: 4,
+                    duration: 2.seconds,
+                    curve: Curves.easeInOut,
                   ),
-                ),
-              ).animate(onPlay: (c) => c.repeat(reverse: true))
-               .moveY(begin: -4, end: 4, duration: 2.seconds, curve: Curves.easeInOut),
 
               const SizedBox(height: AppSpacing.xxxl),
 
               Text(
                 displayTitle,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.outfit(
+                style: GoogleFonts.inter(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   color: textPrimary,
@@ -83,10 +92,7 @@ class ErrorStateWidget extends ConsumerWidget {
 
               const SizedBox(height: AppSpacing.xxxl),
 
-              GradientButton(
-                text: l10n.retry,
-                onPressed: onRetry,
-              ),
+              GradientButton(text: l10n.retry, onPressed: onRetry),
             ],
           ).fadeSlideUp(),
         ),
@@ -94,4 +100,3 @@ class ErrorStateWidget extends ConsumerWidget {
     );
   }
 }
-

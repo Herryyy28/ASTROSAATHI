@@ -45,4 +45,9 @@ abstract class AstrologyEngine {
     String languageCode = 'en',
     String? profileId,
   });
+
+  Future<List<Map<String, dynamic>>> getCurrentPlanetaryPositions(
+    String date,
+    String location,
+  );
 }

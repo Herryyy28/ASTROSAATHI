@@ -66,8 +66,12 @@ class _ZodiacIconState extends State<ZodiacIcon> {
 
   @override
   Widget build(BuildContext context) {
-    final symbol = ZodiacSymbols.glyphs[widget.sign] ?? AppColors.zodiacEmojis[widget.sign] ?? '✦';
-    final accentColor = ZodiacSymbols.signAccentColors[widget.sign] ?? AppColors.primary;
+    final symbol =
+        ZodiacSymbols.glyphs[widget.sign] ??
+        AppColors.zodiacEmojis[widget.sign] ??
+        '✦';
+    final accentColor =
+        ZodiacSymbols.signAccentColors[widget.sign] ?? AppColors.primary;
     final isLight = Theme.of(context).brightness == Brightness.light;
 
     final bgColor = widget.isSelected
@@ -112,10 +116,14 @@ class _ZodiacIconState extends State<ZodiacIcon> {
               symbol,
               style: GoogleFonts.outfit(
                 fontSize: widget.size * 0.58,
-                fontWeight: widget.isSelected ? FontWeight.bold : FontWeight.w600,
+                fontWeight: widget.isSelected
+                    ? FontWeight.bold
+                    : FontWeight.w600,
                 color: widget.isSelected
                     ? accentColor
-                    : (isLight ? AppColors.textPrimaryLight : AppColors.textPrimaryDark),
+                    : (isLight
+                          ? AppColors.textPrimaryLight
+                          : AppColors.textPrimaryDark),
               ),
             ),
           ),
@@ -169,11 +177,7 @@ class _CosmicIconBadgeState extends State<CosmicIconBadge> {
           ),
         ),
         child: Center(
-          child: Icon(
-            widget.icon,
-            size: widget.size,
-            color: accent,
-          ),
+          child: Icon(widget.icon, size: widget.size, color: accent),
         ),
       ),
     );
@@ -196,4 +200,3 @@ class _CosmicIconBadgeState extends State<CosmicIconBadge> {
     );
   }
 }
-

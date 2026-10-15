@@ -4,9 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'core/services/firebase_service.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-
 import 'core/routing/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
@@ -16,23 +13,14 @@ import 'core/providers/theme_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize centralized Firebase service
-  await FirebaseService.instance.initialize();
-
-  try {
-    await MobileAds.instance.initialize();
-  } catch (e) {
-    debugPrint('MobileAds initialization warning: $e');
-  }
-
   // Enforce consistent dark system UI overlay styling across platforms
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.dark,
-      systemNavigationBarColor: AppColors.backgroundDark,
-      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+      systemNavigationBarColor: AppColors.surfaceLight,
+      systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
 
@@ -46,15 +34,11 @@ void main() async {
     return true;
   };
 
-  // Allow runtime font fetching
-  GoogleFonts.config.allowRuntimeFetching = true;
+  // Frontend-only builds must never fetch font files at runtime.
+  GoogleFonts.config.allowRuntimeFetching = false;
 
   // Render main app immediately so UI opens instantly without waiting for ad SDK
-  runApp(
-    const ProviderScope(
-      child: AstroSaathiApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: AstroSaathiApp()));
 }
 
 class AstroSaathiApp extends ConsumerWidget {
@@ -64,14 +48,14 @@ class AstroSaathiApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
     final language = ref.watch(localeProvider);
-    final appThemeMode = ref.watch(themeModeProvider);
+    ref.watch(themeModeProvider);
 
     return MaterialApp.router(
       title: 'AstroSaathi',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: appThemeMode.mode,
+      themeMode: ThemeMode.light,
       locale: Locale(language.code),
       supportedLocales: const [
         Locale('en'),
@@ -100,13 +84,10 @@ class AstroSaathiApp extends ConsumerWidget {
           maxScaleFactor: 1.0,
         );
         return MediaQuery(
-          data: mediaQueryData.copyWith(
-            textScaler: clampedTextScaler,
-          ),
+          data: mediaQueryData.copyWith(textScaler: clampedTextScaler),
           child: child ?? const SizedBox.shrink(),
         );
       },
     );
   }
 }
-

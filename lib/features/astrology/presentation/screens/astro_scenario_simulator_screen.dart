@@ -8,11 +8,14 @@ class AstroScenarioSimulatorScreen extends StatefulWidget {
   const AstroScenarioSimulatorScreen({super.key});
 
   @override
-  State<AstroScenarioSimulatorScreen> createState() => _AstroScenarioSimulatorScreenState();
+  State<AstroScenarioSimulatorScreen> createState() =>
+      _AstroScenarioSimulatorScreenState();
 }
 
-class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScreen> {
-  int _selectedScenarioType = 0; // 0: Location Shift, 1: Timing Shift, 2: Future Date
+class _AstroScenarioSimulatorScreenState
+    extends State<AstroScenarioSimulatorScreen> {
+  int _selectedScenarioType =
+      0; // 0: Location Shift, 1: Timing Shift, 2: Future Date
 
   // Scenario 0: Location Shift State (World Cities & Countries)
   String _originCity = 'Ahmedabad, India';
@@ -42,7 +45,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Mercury Midheaven Line',
       'score': '+1.1',
       'verdict': 'STRONG SYNERGY',
-      'detail': 'Mercury 10th house placement boosts financial trading and commerce authority.',
+      'detail':
+          'Mercury 10th house placement boosts financial trading and commerce authority.',
     },
     {
       'city': 'Delhi',
@@ -51,7 +55,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Sun Zenith Authority Line',
       'score': '+1.3',
       'verdict': 'PEAK SYNERGY',
-      'detail': 'Sun in 10th house strengthens executive leadership and administrative recognition.',
+      'detail':
+          'Sun in 10th house strengthens executive leadership and administrative recognition.',
     },
     {
       'city': 'Bengaluru',
@@ -60,7 +65,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Rahu Technocracy Line',
       'score': '+1.5',
       'verdict': 'HIGH SYNERGY',
-      'detail': 'Rahu-Mercury alignment favors tech innovation, startups, and software engineering.',
+      'detail':
+          'Rahu-Mercury alignment favors tech innovation, startups, and software engineering.',
     },
     {
       'city': 'Jaipur',
@@ -69,7 +75,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Jupiter Cultural Heritage Trine',
       'score': '+1.0',
       'verdict': 'FAVORABLE SHIFT',
-      'detail': 'Jupiter in 9th house enhances creative arts, architectural legacy, and spiritual peace.',
+      'detail':
+          'Jupiter in 9th house enhances creative arts, architectural legacy, and spiritual peace.',
     },
     {
       'city': 'Hyderabad',
@@ -78,7 +85,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Kuber Cyber Node',
       'score': '+1.4',
       'verdict': 'HIGH SYNERGY',
-      'detail': 'Venus-Mercury 11th house synergy accelerates enterprise tech & wealth building.',
+      'detail':
+          'Venus-Mercury 11th house synergy accelerates enterprise tech & wealth building.',
     },
     {
       'city': 'Dubai',
@@ -87,7 +95,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Jupiter Midheaven Line',
       'score': '+1.8',
       'verdict': 'PEAK SYNERGY',
-      'detail': 'Jupiter on Midheaven opens a 6-month window of rapid wealth creation & executive status.',
+      'detail':
+          'Jupiter on Midheaven opens a 6-month window of rapid wealth creation & executive status.',
     },
     {
       'city': 'London',
@@ -96,7 +105,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Venus IC Harmony Line',
       'score': '+0.9',
       'verdict': 'MODERATE SYNERGY',
-      'detail': 'Venus in 4th house brings domestic comfort, luxury living, and creative opportunities.',
+      'detail':
+          'Venus in 4th house brings domestic comfort, luxury living, and creative opportunities.',
     },
     {
       'city': 'Toronto',
@@ -105,7 +115,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Moon Descendant Line',
       'score': '+0.6',
       'verdict': 'BALANCED',
-      'detail': 'Moon on Descendant deepens emotional partnerships, family immigration, and community stability.',
+      'detail':
+          'Moon on Descendant deepens emotional partnerships, family immigration, and community stability.',
     },
     {
       'city': 'Vancouver',
@@ -114,7 +125,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Neptune-Venus Coastal Trine',
       'score': '+0.8',
       'verdict': 'HARMONIOUS',
-      'detail': 'Venus-Neptune harmonic aspect favors wellness, natural living, and balanced lifestyle.',
+      'detail':
+          'Venus-Neptune harmonic aspect favors wellness, natural living, and balanced lifestyle.',
     },
     {
       'city': 'New York',
@@ -123,7 +135,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Sun Midheaven Power Line',
       'score': '+1.6',
       'verdict': 'PEAK SYNERGY',
-      'detail': 'Sun on Midheaven dramatically elevates ambition, global recognition, and capital growth.',
+      'detail':
+          'Sun on Midheaven dramatically elevates ambition, global recognition, and capital growth.',
     },
     {
       'city': 'San Francisco',
@@ -132,7 +145,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Mercury Node Synergy',
       'score': '+1.4',
       'verdict': 'HIGH SYNERGY',
-      'detail': 'Mercury in 11th house of gains triggers major venture funding and tech network expansion.',
+      'detail':
+          'Mercury in 11th house of gains triggers major venture funding and tech network expansion.',
     },
     {
       'city': 'Chicago',
@@ -141,7 +155,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Saturn-Sun Industry Zenith',
       'score': '+1.2',
       'verdict': 'STRONG SYNERGY',
-      'detail': 'Saturn-Sun conjunction in 10th house rewards industrial enterprise & executive grit.',
+      'detail':
+          'Saturn-Sun conjunction in 10th house rewards industrial enterprise & executive grit.',
     },
     {
       'city': 'Los Angeles',
@@ -150,7 +165,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Venus Media Zenith Line',
       'score': '+1.5',
       'verdict': 'PEAK SYNERGY',
-      'detail': 'Venus on Zenith amplifies public presence, media production, and entertainment charisma.',
+      'detail':
+          'Venus on Zenith amplifies public presence, media production, and entertainment charisma.',
     },
     {
       'city': 'Singapore',
@@ -159,7 +175,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Kuber Lakshmi Axis',
       'score': '+1.7',
       'verdict': 'PEAK SYNERGY',
-      'detail': 'Venus-Jupiter 2nd & 11th lord connection creates optimum wealth accumulation conditions.',
+      'detail':
+          'Venus-Jupiter 2nd & 11th lord connection creates optimum wealth accumulation conditions.',
     },
     {
       'city': 'Sydney',
@@ -168,7 +185,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Mars Zenith Drive Line',
       'score': '+0.8',
       'verdict': 'DYNAMIC SHIFT',
-      'detail': 'Mars on Zenith energizes physical vitality, real estate ventures, and independent initiative.',
+      'detail':
+          'Mars on Zenith energizes physical vitality, real estate ventures, and independent initiative.',
     },
     {
       'city': 'Tokyo',
@@ -177,7 +195,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Saturn Stability Line',
       'score': '+0.5',
       'verdict': 'STABLE & DISCIPLINED',
-      'detail': 'Saturn in 6th house yields disciplined hard work, long-term security, and structural success.',
+      'detail':
+          'Saturn in 6th house yields disciplined hard work, long-term security, and structural success.',
     },
     {
       'city': 'Berlin',
@@ -186,7 +205,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Mercury-Jupiter Trine',
       'score': '+1.0',
       'verdict': 'FAVORABLE',
-      'detail': 'Mercury-Jupiter trine supports academic research, intellectual property, and industrial contracts.',
+      'detail':
+          'Mercury-Jupiter trine supports academic research, intellectual property, and industrial contracts.',
     },
     {
       'city': 'Paris',
@@ -195,7 +215,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Venus Zenith Beauty Line',
       'score': '+1.3',
       'verdict': 'HIGH SYNERGY',
-      'detail': 'Venus on Zenith brings aesthetic fulfillment, brand elevation, and artistic recognition.',
+      'detail':
+          'Venus on Zenith brings aesthetic fulfillment, brand elevation, and artistic recognition.',
     },
     {
       'city': 'Rome',
@@ -204,7 +225,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Jupiter Solar Wisdom Node',
       'score': '+1.1',
       'verdict': 'STRONG SYNERGY',
-      'detail': 'Jupiter in 9th house inspires cultural depth, philosophy, and legal accomplishments.',
+      'detail':
+          'Jupiter in 9th house inspires cultural depth, philosophy, and legal accomplishments.',
     },
     {
       'city': 'Barcelona',
@@ -213,7 +235,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Sun-Venus Coastal Trine',
       'score': '+1.2',
       'verdict': 'HIGH SYNERGY',
-      'detail': 'Sun-Venus harmony enhances vibrant social life, design innovation, and lifestyle joy.',
+      'detail':
+          'Sun-Venus harmony enhances vibrant social life, design innovation, and lifestyle joy.',
     },
     {
       'city': 'Amsterdam',
@@ -222,7 +245,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Mercury Global Commerce Line',
       'score': '+1.3',
       'verdict': 'HIGH SYNERGY',
-      'detail': 'Mercury in 10th house boosts international trade, logistics, and digital nomad growth.',
+      'detail':
+          'Mercury in 10th house boosts international trade, logistics, and digital nomad growth.',
     },
     {
       'city': 'Zurich',
@@ -231,7 +255,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Kuber Financial Fortress Axis',
       'score': '+1.6',
       'verdict': 'PEAK SYNERGY',
-      'detail': 'Saturn-Jupiter 2nd house strength provides unparalleled asset protection and financial security.',
+      'detail':
+          'Saturn-Jupiter 2nd house strength provides unparalleled asset protection and financial security.',
     },
     {
       'city': 'Bangkok',
@@ -240,7 +265,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Venus-Jupiter Hospitality Line',
       'score': '+1.1',
       'verdict': 'FAVORABLE SHIFT',
-      'detail': 'Jupiter in 5th house favors tourism, creative endeavors, and culinary business.',
+      'detail':
+          'Jupiter in 5th house favors tourism, creative endeavors, and culinary business.',
     },
     {
       'city': 'Kuala Lumpur',
@@ -249,7 +275,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': 'Mercury-Rahu Regional Gateway',
       'score': '+1.2',
       'verdict': 'STRONG SYNERGY',
-      'detail': 'Rahu-Mercury alignment unlocks South-East Asian market expansion and commercial gains.',
+      'detail':
+          'Rahu-Mercury alignment unlocks South-East Asian market expansion and commercial gains.',
     },
   ];
 
@@ -260,7 +287,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
     for (final loc in _presetLocations) {
       final fullPreset = '${loc['city']}, ${loc['country']}'.toLowerCase();
       final cityOnly = loc['city']!.toLowerCase();
-      if (fullPreset == cleanInput.toLowerCase() || cityOnly == cleanInput.toLowerCase()) {
+      if (fullPreset == cleanInput.toLowerCase() ||
+          cityOnly == cleanInput.toLowerCase()) {
         return loc;
       }
     }
@@ -270,7 +298,10 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
     final cityName = parts[0].trim();
     final countryName = parts.length > 1 ? parts[1].trim() : 'Global';
 
-    final hash = cleanInput.toLowerCase().codeUnits.fold(0, (prev, elem) => prev + elem);
+    final hash = cleanInput.toLowerCase().codeUnits.fold(
+      0,
+      (prev, elem) => prev + elem,
+    );
 
     final lines = [
       'Jupiter Zenith Midheaven Line',
@@ -281,7 +312,12 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'Kuber Wealth Lakshmi Axis',
       'Mars Zenith Power Line',
     ];
-    final verdicts = ['PEAK SYNERGY', 'HIGH SYNERGY', 'STRONG SYNERGY', 'FAVORABLE SHIFT'];
+    final verdicts = [
+      'PEAK SYNERGY',
+      'HIGH SYNERGY',
+      'STRONG SYNERGY',
+      'FAVORABLE SHIFT',
+    ];
 
     final line = lines[hash % lines.length];
     final verdict = verdicts[hash % verdicts.length];
@@ -294,7 +330,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       'line': line,
       'score': score,
       'verdict': verdict,
-      'detail': 'Relocation to $cityName ($countryName) aligns $line, optimizing 10th Karma & 11th Gain houses.',
+      'detail':
+          'Relocation to $cityName ($countryName) aligns $line, optimizing 10th Karma & 11th Gain houses.',
     };
   }
 
@@ -319,9 +356,13 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
               height: MediaQuery.of(context).size.height * 0.78,
               decoration: BoxDecoration(
                 color: isLight ? AppColors.surfaceLight : AppColors.surfaceDark,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(28),
+                ),
                 border: Border.all(
-                  color: isLight ? Colors.black.withValues(alpha: 0.08) : AppColors.glassBorder,
+                  color: isLight
+                      ? Colors.black.withValues(alpha: 0.08)
+                      : AppColors.glassBorder,
                 ),
               ),
               child: SafeArea(
@@ -347,13 +388,17 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                       child: Row(
                         children: [
                           Icon(
-                            isOrigin ? Icons.my_location_rounded : Icons.flight_land_rounded,
+                            isOrigin
+                                ? Icons.my_location_rounded
+                                : Icons.flight_land_rounded,
                             color: AppColors.primary,
                             size: 22,
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            isOrigin ? 'Select Origin Location' : 'Select Target Location',
+                            isOrigin
+                                ? 'Select Origin Location'
+                                : 'Select Target Location',
                             style: GoogleFonts.outfit(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -376,15 +421,22 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                         ),
                         onChanged: (_) => setModalState(() {}),
                         decoration: InputDecoration(
-                          hintText: 'Type any World City & Country (e.g. Rome, Italy)...',
+                          hintText:
+                              'Type any World City & Country (e.g. Rome, Italy)...',
                           hintStyle: GoogleFonts.inter(
                             fontSize: 13,
                             color: AppColors.getTextMuted(context),
                           ),
-                          prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primary),
+                          prefixIcon: const Icon(
+                            Icons.search_rounded,
+                            color: AppColors.primary,
+                          ),
                           suffixIcon: searchController.text.isNotEmpty
                               ? IconButton(
-                                  icon: const Icon(Icons.clear_rounded, size: 18),
+                                  icon: const Icon(
+                                    Icons.clear_rounded,
+                                    size: 18,
+                                  ),
                                   onPressed: () {
                                     searchController.clear();
                                     setModalState(() {});
@@ -393,18 +445,28 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                               : null,
                           filled: true,
                           fillColor: AppColors.getSurfaceElevated(context),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(color: AppColors.getBorder(context)),
+                            borderSide: BorderSide(
+                              color: AppColors.getBorder(context),
+                            ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(color: AppColors.getBorder(context)),
+                            borderSide: BorderSide(
+                              color: AppColors.getBorder(context),
+                            ),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                            borderSide: const BorderSide(
+                              color: AppColors.primary,
+                              width: 1.5,
+                            ),
                           ),
                         ),
                       ),
@@ -420,13 +482,16 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.black,
+                              foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
                               ),
                             ),
-                            icon: const Icon(Icons.check_circle_rounded, size: 18),
+                            icon: const Icon(
+                              Icons.check_circle_rounded,
+                              size: 18,
+                            ),
                             label: Text(
                               'Use Custom Location: "${searchController.text.trim()}"',
                               style: GoogleFonts.outfit(
@@ -482,8 +547,14 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                           final loc = filteredPresets[index];
                           final locName = '${loc['city']}, ${loc['country']}';
                           final isSelected = isOrigin
-                              ? (_originCity.toLowerCase() == locName.toLowerCase() || _originCity.toLowerCase() == loc['city']!.toLowerCase())
-                              : (_targetCity.toLowerCase() == locName.toLowerCase() || _targetCity.toLowerCase() == loc['city']!.toLowerCase());
+                              ? (_originCity.toLowerCase() ==
+                                        locName.toLowerCase() ||
+                                    _originCity.toLowerCase() ==
+                                        loc['city']!.toLowerCase())
+                              : (_targetCity.toLowerCase() ==
+                                        locName.toLowerCase() ||
+                                    _targetCity.toLowerCase() ==
+                                        loc['city']!.toLowerCase());
 
                           return Container(
                             margin: const EdgeInsets.only(bottom: 6),
@@ -501,11 +572,16 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                             ),
                             child: ListTile(
                               dense: true,
-                              leading: Text(loc['flag']!, style: const TextStyle(fontSize: 22)),
+                              leading: Text(
+                                loc['flag']!,
+                                style: const TextStyle(fontSize: 22),
+                              ),
                               title: Text(
                                 '${loc['city']}, ${loc['country']}',
                                 style: GoogleFonts.outfit(
-                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.w600,
                                   fontSize: 14,
                                   color: AppColors.getTextPrimary(context),
                                 ),
@@ -518,8 +594,15 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                                 ),
                               ),
                               trailing: isSelected
-                                  ? const Icon(Icons.check_circle_rounded, color: AppColors.primary, size: 20)
-                                  : const Icon(Icons.chevron_right_rounded, size: 18),
+                                  ? const Icon(
+                                      Icons.check_circle_rounded,
+                                      color: AppColors.primary,
+                                      size: 20,
+                                    )
+                                  : const Icon(
+                                      Icons.chevron_right_rounded,
+                                      size: 18,
+                                    ),
                               onTap: () {
                                 setState(() {
                                   if (isOrigin) {
@@ -561,7 +644,10 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
             children: [
               // Top Header
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -570,9 +656,16 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                         decoration: BoxDecoration(
                           color: AppColors.getSurfaceElevated(context),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                          border: Border.all(
+                            color: AppColors.getBorder(context),
+                            width: 0.8,
+                          ),
                         ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.getTextPrimary(context),
+                          size: 18,
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -599,11 +692,20 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                               ),
                               const SizedBox(width: 6),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.secondary.withValues(alpha: 0.2),
+                                  color: AppColors.secondary.withValues(
+                                    alpha: 0.2,
+                                  ),
                                   borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: AppColors.secondary.withValues(alpha: 0.5)),
+                                  border: Border.all(
+                                    color: AppColors.secondary.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                  ),
                                 ),
                                 child: Text(
                                   'LABS',
@@ -636,11 +738,23 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    _buildTypeChip(0, Icons.flight_takeoff_rounded, 'Location Shift'),
+                    _buildTypeChip(
+                      0,
+                      Icons.flight_takeoff_rounded,
+                      'Location Shift',
+                    ),
                     const SizedBox(width: 8),
-                    _buildTypeChip(1, Icons.access_time_rounded, 'Timing Window'),
+                    _buildTypeChip(
+                      1,
+                      Icons.access_time_rounded,
+                      'Timing Window',
+                    ),
                     const SizedBox(width: 8),
-                    _buildTypeChip(2, Icons.calendar_month_rounded, 'Future Date'),
+                    _buildTypeChip(
+                      2,
+                      Icons.calendar_month_rounded,
+                      'Future Date',
+                    ),
                   ],
                 ),
               ),
@@ -652,9 +766,12 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    if (_selectedScenarioType == 0) _buildLocationSimulator(context),
-                    if (_selectedScenarioType == 1) _buildTimingSimulator(context),
-                    if (_selectedScenarioType == 2) _buildFutureDateSimulator(context),
+                    if (_selectedScenarioType == 0)
+                      _buildLocationSimulator(context),
+                    if (_selectedScenarioType == 1)
+                      _buildTimingSimulator(context),
+                    if (_selectedScenarioType == 2)
+                      _buildFutureDateSimulator(context),
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -686,9 +803,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
         style: GoogleFonts.outfit(
           fontSize: 12,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-          color: isSelected
-              ? Colors.black
-              : AppColors.getTextPrimary(context),
+          color: isSelected ? Colors.black : AppColors.getTextPrimary(context),
         ),
       ),
       selectedColor: AppColors.primary,
@@ -696,9 +811,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
           ? AppColors.getSurfaceSecondary(context)
           : Colors.white.withValues(alpha: 0.06),
       side: BorderSide(
-        color: isSelected
-            ? AppColors.primary
-            : AppColors.getBorder(context),
+        color: isSelected ? AppColors.primary : AppColors.getBorder(context),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     );
@@ -706,12 +819,13 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
 
   Widget _buildLocationSimulator(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
-    final greenColor = isLight ? Colors.green[800]! : Colors.greenAccent;
+    final greenColor = isLight ? Colors.green[800]! : AppColors.secondary;
 
     final originLoc = _resolveLocationData(_originCity);
     final targetLoc = _resolveLocationData(_targetCity);
 
-    final isSameLocation = originLoc['city']!.toLowerCase() == targetLoc['city']!.toLowerCase();
+    final isSameLocation =
+        originLoc['city']!.toLowerCase() == targetLoc['city']!.toLowerCase();
 
     return Column(
       children: [
@@ -722,7 +836,11 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
             children: [
               Text(
                 'COMPARE ASTROCARTOGRAPHY & RELOCATION',
-                style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary),
+                style: GoogleFonts.outfit(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                ),
               ),
               const SizedBox(height: 14),
 
@@ -733,32 +851,49 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('ORIGIN LOCATION', style: GoogleFonts.outfit(fontSize: 10, color: AppColors.getTextSecondary(context))),
+                        Text(
+                          'ORIGIN LOCATION',
+                          style: GoogleFonts.outfit(
+                            fontSize: 10,
+                            color: AppColors.getTextSecondary(context),
+                          ),
+                        ),
                         const SizedBox(height: 4),
                         InkWell(
                           onTap: () => _showCitySearchModal(context, true),
                           borderRadius: BorderRadius.circular(14),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 10,
+                            ),
                             decoration: BoxDecoration(
                               color: AppColors.getSurfaceElevated(context),
                               borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: AppColors.getBorder(context)),
+                              border: Border.all(
+                                color: AppColors.getBorder(context),
+                              ),
                             ),
                             child: Row(
                               children: [
-                                Text(originLoc['flag'] ?? 'ðŸŒ', style: const TextStyle(fontSize: 16)),
+                                Text(
+                                  originLoc['flag'] ?? 'ðŸŒ',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         originLoc['city']!,
                                         style: GoogleFonts.outfit(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold,
-                                          color: AppColors.getTextPrimary(context),
+                                          color: AppColors.getTextPrimary(
+                                            context,
+                                          ),
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -768,7 +903,9 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                                           originLoc['country']!,
                                           style: GoogleFonts.inter(
                                             fontSize: 10.5,
-                                            color: AppColors.getTextSecondary(context),
+                                            color: AppColors.getTextSecondary(
+                                              context,
+                                            ),
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -776,7 +913,11 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                                     ],
                                   ),
                                 ),
-                                const Icon(Icons.arrow_drop_down_rounded, color: AppColors.primary, size: 20),
+                                const Icon(
+                                  Icons.arrow_drop_down_rounded,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
                               ],
                             ),
                           ),
@@ -789,7 +930,11 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6),
                     child: IconButton(
-                      icon: const Icon(Icons.compare_arrows_rounded, color: AppColors.primary, size: 22),
+                      icon: const Icon(
+                        Icons.compare_arrows_rounded,
+                        color: AppColors.primary,
+                        size: 22,
+                      ),
                       onPressed: () {
                         setState(() {
                           final temp = _originCity;
@@ -805,32 +950,49 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('TARGET LOCATION', style: GoogleFonts.outfit(fontSize: 10, color: AppColors.getTextSecondary(context))),
+                        Text(
+                          'TARGET LOCATION',
+                          style: GoogleFonts.outfit(
+                            fontSize: 10,
+                            color: AppColors.getTextSecondary(context),
+                          ),
+                        ),
                         const SizedBox(height: 4),
                         InkWell(
                           onTap: () => _showCitySearchModal(context, false),
                           borderRadius: BorderRadius.circular(14),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 10,
+                            ),
                             decoration: BoxDecoration(
                               color: AppColors.getSurfaceElevated(context),
                               borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: AppColors.getBorder(context)),
+                              border: Border.all(
+                                color: AppColors.getBorder(context),
+                              ),
                             ),
                             child: Row(
                               children: [
-                                Text(targetLoc['flag'] ?? 'ðŸŒ', style: const TextStyle(fontSize: 16)),
+                                Text(
+                                  targetLoc['flag'] ?? 'ðŸŒ',
+                                  style: const TextStyle(fontSize: 16),
+                                ),
                                 const SizedBox(width: 6),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         targetLoc['city']!,
                                         style: GoogleFonts.outfit(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold,
-                                          color: AppColors.getTextPrimary(context),
+                                          color: AppColors.getTextPrimary(
+                                            context,
+                                          ),
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -840,7 +1002,9 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                                           targetLoc['country']!,
                                           style: GoogleFonts.inter(
                                             fontSize: 10.5,
-                                            color: AppColors.getTextSecondary(context),
+                                            color: AppColors.getTextSecondary(
+                                              context,
+                                            ),
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -848,7 +1012,11 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                                     ],
                                   ),
                                 ),
-                                const Icon(Icons.arrow_drop_down_rounded, color: AppColors.primary, size: 20),
+                                const Icon(
+                                  Icons.arrow_drop_down_rounded,
+                                  color: AppColors.primary,
+                                  size: 20,
+                                ),
                               ],
                             ),
                           ),
@@ -888,11 +1056,18 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
-                      color: greenColor.withValues(alpha: isLight ? 0.12 : 0.18),
+                      color: greenColor.withValues(
+                        alpha: isLight ? 0.12 : 0.18,
+                      ),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: greenColor.withValues(alpha: 0.5)),
+                      border: Border.all(
+                        color: greenColor.withValues(alpha: 0.5),
+                      ),
                     ),
                     child: Text(
                       isSameLocation
@@ -926,7 +1101,10 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                   children: [
                     Row(
                       children: [
-                        Text(originLoc['flag'] ?? 'ðŸŒ', style: const TextStyle(fontSize: 16)),
+                        Text(
+                          originLoc['flag'] ?? 'ðŸŒ',
+                          style: const TextStyle(fontSize: 16),
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           originLoc['city']!,
@@ -944,7 +1122,10 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                             color: AppColors.getPrimary(context),
                           ),
                         ),
-                        Text(targetLoc['flag'] ?? 'ðŸŒ', style: const TextStyle(fontSize: 16)),
+                        Text(
+                          targetLoc['flag'] ?? 'ðŸŒ',
+                          style: const TextStyle(fontSize: 16),
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           targetLoc['city']!,
@@ -982,7 +1163,11 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.info_outline_rounded, size: 18, color: AppColors.primary),
+                      const Icon(
+                        Icons.info_outline_rounded,
+                        size: 18,
+                        color: AppColors.primary,
+                      ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
@@ -1009,7 +1194,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                 _buildStructuredDetailItem(
                   context,
                   icon: Icons.auto_awesome_rounded,
-                  iconColor: Colors.purpleAccent,
+                  iconColor: AppColors.actionPurple,
                   title: 'Relocation & House Impact',
                   value: targetLoc['detail']!,
                 ),
@@ -1019,7 +1204,8 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                   icon: Icons.trending_up_rounded,
                   iconColor: greenColor,
                   title: 'Career & Wealth Synergy',
-                  value: '${targetLoc['score']} PTS gain over ${originLoc['city']}',
+                  value:
+                      '${targetLoc['score']} PTS gain over ${originLoc['city']}',
                 ),
               ],
 
@@ -1031,7 +1217,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.black,
+                    foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     elevation: 2,
                     shape: RoundedRectangleBorder(
@@ -1086,7 +1272,9 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
             : Colors.white.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: isLight ? Colors.black.withValues(alpha: 0.06) : AppColors.glassBorder,
+          color: isLight
+              ? Colors.black.withValues(alpha: 0.06)
+              : AppColors.glassBorder,
           width: 0.6,
         ),
       ),
@@ -1156,7 +1344,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
             score: '8.8/10',
             muhurat: 'Abhijit Muhurat',
             rahuStatus: 'Rahu-Kaal Free Window',
-            color: Colors.greenAccent,
+            color: AppColors.secondary,
           ),
           const SizedBox(height: 12),
           _buildTimingOptionCard(
@@ -1166,7 +1354,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
             score: '4.2/10',
             muhurat: 'Gulika Kaal Active',
             rahuStatus: 'Rahu Kaal Intersecting',
-            color: Colors.orangeAccent,
+            color: AppColors.actionPurple,
           ),
         ],
       ),
@@ -1269,10 +1457,7 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
       decoration: BoxDecoration(
         color: AppColors.getSurfaceElevated(context),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColors.getBorder(context),
-          width: 0.6,
-        ),
+        border: Border.all(color: AppColors.getBorder(context), width: 0.6),
       ),
       child: Row(
         children: [
@@ -1322,7 +1507,10 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 2,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.getSurfaceElevated(context),
                   borderRadius: BorderRadius.circular(12),
@@ -1331,20 +1519,31 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
                 child: DropdownButton<String>(
                   value: _targetMonth,
                   underline: const SizedBox.shrink(),
-                  icon: const Icon(Icons.arrow_drop_down_rounded, color: AppColors.primary),
-                  items: ['October 2026', 'November 2026', 'December 2026', 'January 2027']
-                      .map((m) => DropdownMenuItem(
-                            value: m,
-                            child: Text(
-                              m,
-                              style: GoogleFonts.outfit(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.getTextPrimary(context),
+                  icon: const Icon(
+                    Icons.arrow_drop_down_rounded,
+                    color: AppColors.primary,
+                  ),
+                  items:
+                      [
+                            'October 2026',
+                            'November 2026',
+                            'December 2026',
+                            'January 2027',
+                          ]
+                          .map(
+                            (m) => DropdownMenuItem(
+                              value: m,
+                              child: Text(
+                                m,
+                                style: GoogleFonts.outfit(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.getTextPrimary(context),
+                                ),
                               ),
                             ),
-                          ))
-                      .toList(),
+                          )
+                          .toList(),
                   onChanged: (val) => setState(() => _targetMonth = val!),
                 ),
               ),
@@ -1373,4 +1572,3 @@ class _AstroScenarioSimulatorScreenState extends State<AstroScenarioSimulatorScr
     );
   }
 }
-

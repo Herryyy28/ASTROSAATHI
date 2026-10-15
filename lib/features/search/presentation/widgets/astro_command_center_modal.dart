@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../ai/presentation/screens/astro_baba_screen.dart';
@@ -21,7 +21,8 @@ class AstroCommandCenterModal extends StatefulWidget {
   }
 
   @override
-  State<AstroCommandCenterModal> createState() => _AstroCommandCenterModalState();
+  State<AstroCommandCenterModal> createState() =>
+      _AstroCommandCenterModalState();
 }
 
 class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
@@ -34,7 +35,8 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
       'label': 'What should I know today?',
       'category': 'Daily Insights',
       'action': 'ai',
-      'query': 'What is my most important cosmic focus and energy score insight today?',
+      'query':
+          'What is my most important cosmic focus and energy score insight today?',
     },
     {
       'icon': Icons.event_available_rounded,
@@ -48,7 +50,8 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
       'label': 'Explain Saturn in my chart',
       'category': 'Kundli AI',
       'action': 'ai',
-      'query': 'Explain Saturn position in my birth chart, house lord dynamics, and core lessons.',
+      'query':
+          'Explain Saturn position in my birth chart, house lord dynamics, and core lessons.',
     },
     {
       'icon': Icons.rotate_right_rounded,
@@ -61,7 +64,8 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
       'label': 'What changed in my score today?',
       'category': 'Daily Delta',
       'action': 'ai',
-      'query': 'Why did my cosmic score change today? Explain Moon transit and Panchang shift.',
+      'query':
+          'Why did my cosmic score change today? Explain Moon transit and Panchang shift.',
     },
     {
       'icon': Icons.menu_book_rounded,
@@ -86,7 +90,11 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
     super.dispose();
   }
 
-  void _executeCommand(String query, {String action = 'ai', String? categoryFilter}) {
+  void _executeCommand(
+    String query, {
+    String action = 'ai',
+    String? categoryFilter,
+  }) {
     Navigator.pop(context);
 
     if (action == 'decision') {
@@ -124,13 +132,22 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
     if (text.isEmpty) return;
 
     final lower = text.toLowerCase();
-    if (lower.contains('search') || lower.contains('encyclopedia') || lower.contains('dictionary') || lower.contains('planet') || lower.contains('sign')) {
+    if (lower.contains('search') ||
+        lower.contains('encyclopedia') ||
+        lower.contains('dictionary') ||
+        lower.contains('planet') ||
+        lower.contains('sign')) {
       _executeCommand(text, action: 'search');
-    } else if (lower.contains('interview') || lower.contains('business') || lower.contains('timing') || lower.contains('when should')) {
+    } else if (lower.contains('interview') ||
+        lower.contains('business') ||
+        lower.contains('timing') ||
+        lower.contains('when should')) {
       _executeCommand(text, action: 'decision');
     } else if (lower.contains('transit') || lower.contains('gochar')) {
       _executeCommand(text, action: 'transit');
-    } else if (lower.contains('kundli') || lower.contains('house') || lower.contains('dasha')) {
+    } else if (lower.contains('kundli') ||
+        lower.contains('house') ||
+        lower.contains('dasha')) {
       _executeCommand(text, action: 'kundli');
     } else {
       _executeCommand(text, action: 'ai');
@@ -151,7 +168,10 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
               ? AppColors.surfaceLight.withValues(alpha: 0.96)
               : const Color(0xFF0D121F),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-          border: Border.all(color: AppColors.getGlassBorder(context), width: 1.2),
+          border: Border.all(
+            color: AppColors.getGlassBorder(context),
+            width: 1.2,
+          ),
           boxShadow: [
             BoxShadow(
               color: isLight
@@ -187,7 +207,11 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                     shape: BoxShape.circle,
                     gradient: AppColors.goldGradient,
                   ),
-                  child: const Icon(Icons.bolt_rounded, color: Colors.black, size: 18),
+                  child: const Icon(
+                    Icons.bolt_rounded,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -213,7 +237,11 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(context), size: 20),
+                  icon: Icon(
+                    Icons.close_rounded,
+                    color: AppColors.getTextSecondary(context),
+                    size: 20,
+                  ),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -225,13 +253,27 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
               controller: _commandController,
               focusNode: _focusNode,
               onSubmitted: (_) => _handleSubmit(),
-              style: GoogleFonts.inter(fontSize: 14, color: AppColors.getTextPrimary(context)),
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: AppColors.getTextPrimary(context),
+              ),
               decoration: InputDecoration(
-                hintText: 'Type any question or command... e.g., "Explain Saturn"',
-                hintStyle: GoogleFonts.inter(fontSize: 13, color: AppColors.getTextMuted(context)),
-                prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primary, size: 20),
+                hintText:
+                    'Type any question or command... e.g., "Explain Saturn"',
+                hintStyle: GoogleFonts.inter(
+                  fontSize: 13,
+                  color: AppColors.getTextMuted(context),
+                ),
+                prefixIcon: const Icon(
+                  Icons.search_rounded,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.arrow_forward_rounded, color: AppColors.primary),
+                  icon: const Icon(
+                    Icons.arrow_forward_rounded,
+                    color: AppColors.primary,
+                  ),
                   onPressed: _handleSubmit,
                 ),
                 filled: true,
@@ -242,9 +284,15 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
-                  borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                  borderSide: const BorderSide(
+                    color: AppColors.primary,
+                    width: 1.5,
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -286,14 +334,23 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                               },
                               borderRadius: BorderRadius.circular(14),
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 11,
+                                ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(14),
-                                  border: Border.all(color: AppColors.getGlassBorder(context)),
+                                  border: Border.all(
+                                    color: AppColors.getGlassBorder(context),
+                                  ),
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(cmd['icon'] as IconData, color: AppColors.primary, size: 16),
+                                    Icon(
+                                      cmd['icon'] as IconData,
+                                      color: AppColors.primary,
+                                      size: 16,
+                                    ),
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
@@ -301,7 +358,9 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                                         style: GoogleFonts.inter(
                                           fontSize: 12.5,
                                           fontWeight: FontWeight.w500,
-                                          color: AppColors.getTextPrimary(context),
+                                          color: AppColors.getTextPrimary(
+                                            context,
+                                          ),
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -309,9 +368,14 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                                     ),
                                     const SizedBox(width: 6),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
+                                      ),
                                       decoration: BoxDecoration(
-                                        color: AppColors.primary.withValues(alpha: 0.15),
+                                        color: AppColors.primary.withValues(
+                                          alpha: 0.15,
+                                        ),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Text(
@@ -324,7 +388,11 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
                                       ),
                                     ),
                                     const SizedBox(width: 4),
-                                    Icon(Icons.chevron_right_rounded, color: AppColors.getTextMuted(context), size: 16),
+                                    Icon(
+                                      Icons.chevron_right_rounded,
+                                      color: AppColors.getTextMuted(context),
+                                      size: 16,
+                                    ),
                                   ],
                                 ),
                               ),
@@ -344,4 +412,3 @@ class _AstroCommandCenterModalState extends State<AstroCommandCenterModal> {
     );
   }
 }
-

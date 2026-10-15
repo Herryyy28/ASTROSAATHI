@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSessionData {
@@ -19,15 +19,16 @@ class UserSessionData {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'deviceName': deviceName,
-        'platform': platform,
-        'lastActive': lastActive,
-        'location': location,
-        'isCurrent': isCurrent,
-      };
+    'id': id,
+    'deviceName': deviceName,
+    'platform': platform,
+    'lastActive': lastActive,
+    'location': location,
+    'isCurrent': isCurrent,
+  };
 
-  factory UserSessionData.fromJson(Map<String, dynamic> json) => UserSessionData(
+  factory UserSessionData.fromJson(Map<String, dynamic> json) =>
+      UserSessionData(
         id: json['id'] as String,
         deviceName: json['deviceName'] as String,
         platform: json['platform'] as String,
@@ -53,14 +54,15 @@ class SecurityLogEvent {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'eventType': eventType,
-        'timestamp': timestamp,
-        'device': device,
-        'status': status,
-      };
+    'id': id,
+    'eventType': eventType,
+    'timestamp': timestamp,
+    'device': device,
+    'status': status,
+  };
 
-  factory SecurityLogEvent.fromJson(Map<String, dynamic> json) => SecurityLogEvent(
+  factory SecurityLogEvent.fromJson(Map<String, dynamic> json) =>
+      SecurityLogEvent(
         id: json['id'] as String,
         eventType: json['eventType'] as String,
         timestamp: json['timestamp'] as String,
@@ -79,7 +81,10 @@ class SecureStorageService {
   static const _aiPrivacyIsolationKey = 'sec_ai_data_isolation_v1';
 
   // Save auth tokens safely
-  static Future<void> saveTokens({required String accessToken, required String refreshToken}) async {
+  static Future<void> saveTokens({
+    required String accessToken,
+    required String refreshToken,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_tokenKey, accessToken);
     await prefs.setString(_refreshTokenKey, refreshToken);
@@ -105,7 +110,10 @@ class SecureStorageService {
   static Future<void> setMfaEnabled(bool enabled) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_mfaEnabledKey, enabled);
-    await logSecurityEvent('MFA Status Changed', enabled ? 'Enabled' : 'Disabled');
+    await logSecurityEvent(
+      'MFA Status Changed',
+      enabled ? 'Enabled' : 'Disabled',
+    );
   }
 
   static Future<bool> isBiometricsEnabled() async {
@@ -116,7 +124,10 @@ class SecureStorageService {
   static Future<void> setBiometricsEnabled(bool enabled) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_biometricsKey, enabled);
-    await logSecurityEvent('Biometrics Status Changed', enabled ? 'Enabled' : 'Disabled');
+    await logSecurityEvent(
+      'Biometrics Status Changed',
+      enabled ? 'Enabled' : 'Disabled',
+    );
   }
 
   // AI Data Isolation Control
@@ -167,7 +178,10 @@ class SecureStorageService {
     final sessions = await getActiveSessions();
     final currentOnly = sessions.where((s) => s.isCurrent).toList();
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_sessionsKey, jsonEncode(currentOnly.map((s) => s.toJson()).toList()));
+    await prefs.setString(
+      _sessionsKey,
+      jsonEncode(currentOnly.map((s) => s.toJson()).toList()),
+    );
     await logSecurityEvent('Revoked Other Device Sessions', 'Success');
   }
 
@@ -186,7 +200,7 @@ class SecureStorageService {
     return [
       SecurityLogEvent(
         id: '1',
-        eventType: 'Firebase JWT Authentication',
+        eventType: 'Local demo session restored',
         timestamp: 'Today, 14:30',
         device: 'Android Phone',
         status: 'SUCCESS',
@@ -200,7 +214,7 @@ class SecureStorageService {
       ),
       SecurityLogEvent(
         id: '3',
-        eventType: 'Razorpay Security Verification',
+        eventType: 'Demo premium preview enabled',
         timestamp: '01 Sep, 18:45',
         device: 'Chrome Web',
         status: 'SUCCESS',
@@ -219,7 +233,9 @@ class SecureStorageService {
     );
     final updated = [newEvent, ...logs.take(19)];
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_logsKey, jsonEncode(updated.map((l) => l.toJson()).toList()));
+    await prefs.setString(
+      _logsKey,
+      jsonEncode(updated.map((l) => l.toJson()).toList()),
+    );
   }
 }
-

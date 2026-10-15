@@ -13,6 +13,7 @@ import '../../../../core/engine/models/panchang_data.dart';
 import '../../../../core/widgets/responsive_layout.dart';
 import '../../../../core/widgets/why_this_bottom_sheet.dart';
 import '../../../../core/widgets/admob_banner_widget.dart';
+import '../../../../core/widgets/astro_components.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -44,9 +45,16 @@ class PanchangScreen extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+                    const Icon(
+                      Icons.error_outline,
+                      color: AppColors.error,
+                      size: 48,
+                    ),
                     const SizedBox(height: 16),
-                    Text('Error loading Panchang', style: TextStyle(color: AppColors.error)),
+                    Text(
+                      'Error loading Panchang',
+                      style: TextStyle(color: AppColors.error),
+                    ),
                   ],
                 ),
               ),
@@ -58,10 +66,18 @@ class PanchangScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPanchangUI(BuildContext context, WidgetRef ref, PanchangData panchang) {
+  Widget _buildPanchangUI(
+    BuildContext context,
+    WidgetRef ref,
+    PanchangData panchang,
+  ) {
     final l10n = AppLocalizations.of(context, ref);
     final isLight = Theme.of(context).brightness == Brightness.light;
-    final hPad = context.responsive<double>(mobile: 20, tablet: 32, desktop: 40);
+    final hPad = context.responsive<double>(
+      mobile: 20,
+      tablet: 32,
+      desktop: 40,
+    );
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -83,7 +99,11 @@ class PanchangScreen extends ConsumerWidget {
                       IconButton(
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 20),
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
                         onPressed: () => Navigator.pop(context),
                       ),
                       const SizedBox(width: 8),
@@ -94,10 +114,10 @@ class PanchangScreen extends ConsumerWidget {
                         children: [
                           Text(
                             l10n.panchangTitle,
-                            style: GoogleFonts.outfit(
+                            style: GoogleFonts.playfairDisplay(
                               fontSize: 28,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.getTextPrimary(context),
+                              color: AppColors.primaryLightMode,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -115,7 +135,10 @@ class PanchangScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: isLight
                         ? AppColors.surfaceSecondaryLight
@@ -125,7 +148,11 @@ class PanchangScreen extends ConsumerWidget {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.sync, size: 12, color: AppColors.getTextMuted(context)),
+                      Icon(
+                        Icons.sync,
+                        size: 12,
+                        color: AppColors.getTextMuted(context),
+                      ),
                       const SizedBox(width: 4),
                       Flexible(
                         child: Text(
@@ -147,31 +174,46 @@ class PanchangScreen extends ConsumerWidget {
                 // ── Date Navigation Card (Backward & Forward Arrows) ──
                 Consumer(
                   builder: (context, ref, _) {
-                    final selectedDate = ref.watch(selectedPanchangDateProvider);
-                    final isToday = selectedDate.year == DateTime.now().year &&
+                    final selectedDate = ref.watch(
+                      selectedPanchangDateProvider,
+                    );
+                    final isToday =
+                        selectedDate.year == DateTime.now().year &&
                         selectedDate.month == DateTime.now().month &&
                         selectedDate.day == DateTime.now().day;
                     final formattedDate =
                         '${selectedDate.day} ${_monthName(selectedDate.month)} ${selectedDate.year}';
 
                     return GlassCard(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 18),
+                            icon: const Icon(
+                              Icons.arrow_back_ios_new_rounded,
+                              color: AppColors.primary,
+                              size: 18,
+                            ),
                             tooltip: 'Previous Day',
                             onPressed: () {
-                              ref.read(selectedPanchangDateProvider.notifier).state =
-                                  selectedDate.subtract(const Duration(days: 1));
+                              ref
+                                  .read(selectedPanchangDateProvider.notifier)
+                                  .state = selectedDate.subtract(
+                                const Duration(days: 1),
+                              );
                             },
                           ),
                           Expanded(
                             child: Column(
                               children: [
                                 Text(
-                                  isToday ? 'Today ($formattedDate)' : formattedDate,
+                                  isToday
+                                      ? 'Today ($formattedDate)'
+                                      : formattedDate,
                                   style: GoogleFonts.outfit(
                                     color: AppColors.getTextPrimary(context),
                                     fontWeight: FontWeight.bold,
@@ -184,23 +226,43 @@ class PanchangScreen extends ConsumerWidget {
                                 if (!isToday)
                                   TextButton(
                                     onPressed: () {
-                                      ref.read(selectedPanchangDateProvider.notifier).state = DateTime.now();
+                                      ref
+                                              .read(
+                                                selectedPanchangDateProvider
+                                                    .notifier,
+                                              )
+                                              .state =
+                                          DateTime.now();
                                     },
-                                    style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: const Size(0, 20)),
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      minimumSize: const Size(0, 20),
+                                    ),
                                     child: Text(
                                       'Reset to Today',
-                                      style: GoogleFonts.inter(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w600),
+                                      style: GoogleFonts.inter(
+                                        color: AppColors.primary,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
                               ],
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.primary, size: 18),
+                            icon: const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              color: AppColors.primary,
+                              size: 18,
+                            ),
                             tooltip: 'Next Day',
                             onPressed: () {
-                              ref.read(selectedPanchangDateProvider.notifier).state =
-                                  selectedDate.add(const Duration(days: 1));
+                              ref
+                                  .read(selectedPanchangDateProvider.notifier)
+                                  .state = selectedDate.add(
+                                const Duration(days: 1),
+                              );
                             },
                           ),
                         ],
@@ -212,7 +274,10 @@ class PanchangScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
 
                 // ── Sunrise / Sunset ──────────────────────────────
-                _buildSunMoonTimings(context, panchang).fadeSlideUp(delay: 100.ms),
+                _buildSunMoonTimings(
+                  context,
+                  panchang,
+                ).fadeSlideUp(delay: 100.ms),
                 const SizedBox(height: 20),
 
                 // ── Five Elements Section ─────────────────────────
@@ -229,17 +294,54 @@ class PanchangScreen extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Text(
                       'FIVE ELEMENTS',
-                      style: AppDecorations.sectionHeader(color: AppColors.secondary),
+                      style: AppDecorations.sectionHeader(
+                        color: AppColors.secondary,
+                      ),
                     ),
                   ],
                 ).fadeSlideUp(delay: 180.ms),
                 const SizedBox(height: 16),
 
-                _buildElementCard(context, 'Tithi', panchang.tithi, 'Lunar day', '🌙', 0),
-                _buildElementCard(context, 'Vara', panchang.vara, 'Day of the week', '📅', 1),
-                _buildElementCard(context, 'Nakshatra', panchang.nakshatra, 'Lunar mansion', '⭐', 2),
-                _buildElementCard(context, 'Yoga', panchang.yoga, 'Sun-Moon angle', '🔮', 3),
-                _buildElementCard(context, 'Karana', panchang.karana, 'Half lunar day', '☯️', 4),
+                _buildElementCard(
+                  context,
+                  'Tithi',
+                  panchang.tithi,
+                  'Lunar day',
+                  '☽',
+                  0,
+                ),
+                _buildElementCard(
+                  context,
+                  'Vara',
+                  panchang.vara,
+                  'Day of the week',
+                  '☉',
+                  1,
+                ),
+                _buildElementCard(
+                  context,
+                  'Nakshatra',
+                  panchang.nakshatra,
+                  'Lunar mansion',
+                  '✦',
+                  2,
+                ),
+                _buildElementCard(
+                  context,
+                  'Yoga',
+                  panchang.yoga,
+                  'Sun-Moon angle',
+                  '☯',
+                  3,
+                ),
+                _buildElementCard(
+                  context,
+                  'Karana',
+                  panchang.karana,
+                  'Half lunar day',
+                  '◐',
+                  4,
+                ),
 
                 const SizedBox(height: 16),
 
@@ -264,7 +366,7 @@ class PanchangScreen extends ConsumerWidget {
           Expanded(
             child: _buildTimingItem(
               context,
-              '☀️',
+              AstroSymbols.planet('Sun'),
               'Sunrise',
               panchang.sunrise,
               AppColors.primary,
@@ -278,7 +380,7 @@ class PanchangScreen extends ConsumerWidget {
           Expanded(
             child: _buildTimingItem(
               context,
-              '🌅',
+              AstroSymbols.planet('Sun'),
               'Sunset',
               panchang.sunset,
               AppColors.warning,
@@ -289,10 +391,19 @@ class PanchangScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTimingItem(BuildContext context, String emoji, String label, String time, Color color) {
+  Widget _buildTimingItem(
+    BuildContext context,
+    String glyph,
+    String label,
+    String time,
+    Color color,
+  ) {
     return Column(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 24)),
+        Text(
+          glyph,
+          style: GoogleFonts.notoSansSymbols2(fontSize: 24, color: color),
+        ),
         const SizedBox(height: 8),
         Text(
           label,
@@ -315,7 +426,14 @@ class PanchangScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildElementCard(BuildContext context, String name, String value, String description, String emoji, int index) {
+  Widget _buildElementCard(
+    BuildContext context,
+    String name,
+    String value,
+    String description,
+    String glyph,
+    int index,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
@@ -326,8 +444,10 @@ class PanchangScreen extends ConsumerWidget {
             planetFactor: name,
             houseFactor: 'Panchang Element ${index + 1}',
             transitFactor: 'Real-time Moon & Sun degree',
-            vedicInterpretation: 'In Vedic Astrology, $name ($value) is a fundamental pillar of $description influencing daily vital energy and Muhurat strength.',
-            practicalAction: 'Favorable for aligned spiritual routines and mindful decision-making.',
+            vedicInterpretation:
+                'In Vedic Astrology, $name ($value) is a fundamental pillar of $description influencing daily vital energy and Muhurat strength.',
+            practicalAction:
+                'Favorable for aligned spiritual routines and mindful decision-making.',
           );
         },
         child: GlassCard(
@@ -342,7 +462,13 @@ class PanchangScreen extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
-                  child: Text(emoji, style: const TextStyle(fontSize: 18)),
+                  child: Text(
+                    glyph,
+                    style: GoogleFonts.notoSansSymbols2(
+                      fontSize: 18,
+                      color: AppColors.primaryLightMode,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(width: 14),
@@ -372,7 +498,10 @@ class PanchangScreen extends ConsumerWidget {
               ),
               Flexible(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.getSurfaceSecondary(context),
                     borderRadius: BorderRadius.circular(8),
@@ -402,7 +531,10 @@ class PanchangScreen extends ConsumerWidget {
     ).fadeSlideUp(delay: Duration(milliseconds: 240 + (index * 80)));
   }
 
-  Widget _buildInauspiciousTimings(BuildContext context, PanchangData panchang) {
+  Widget _buildInauspiciousTimings(
+    BuildContext context,
+    PanchangData panchang,
+  ) {
     if (panchang.rahuKaal == null) return const SizedBox.shrink();
 
     return Column(
@@ -428,7 +560,10 @@ class PanchangScreen extends ConsumerWidget {
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(20),
-          decoration: AppDecorations.alertCard(alertColor: AppColors.error, context: context),
+          decoration: AppDecorations.alertCard(
+            alertColor: AppColors.error,
+            context: context,
+          ),
           child: Row(
             children: [
               Container(
@@ -438,7 +573,11 @@ class PanchangScreen extends ConsumerWidget {
                   shape: BoxShape.circle,
                   color: AppColors.error.withValues(alpha: 0.12),
                 ),
-                child: const Icon(Icons.warning_amber_rounded, color: AppColors.error, size: 22),
+                child: const Icon(
+                  Icons.warning_amber_rounded,
+                  color: AppColors.error,
+                  size: 22,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -481,7 +620,20 @@ class PanchangScreen extends ConsumerWidget {
   }
 
   String _monthName(int month) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return months[(month - 1) % 12];
   }
 }

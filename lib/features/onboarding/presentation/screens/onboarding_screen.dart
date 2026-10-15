@@ -1,1452 +1,919 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:geocoding/geocoding.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_decorations.dart';
-import '../../../../core/theme/app_animations.dart';
-import '../../../../core/widgets/gradient_button.dart';
-import '../../../../core/widgets/glass_card.dart';
-import '../../../../core/widgets/responsive_layout.dart';
-import '../../../../core/theme/utils/responsive.dart';
-import '../../../../core/providers/profile_provider.dart';
-import '../../../../features/auth/data/auth_repository.dart';
-import '../../../../core/widgets/location_permission_dialog.dart';
-import '../../../../core/widgets/cosmic_notification.dart';
-import '../../../../core/utils/zodiac_sign_utils.dart';
-import '../../../../core/routing/app_router.dart';
 import '../../../../core/engine/models/astrology_validation.dart';
+import '../../../../core/providers/locale_provider.dart';
+import '../../../../core/providers/profile_provider.dart';
+import '../../../../core/routing/app_router.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/zodiac_sign_utils.dart';
+import '../../../../core/widgets/astro_components.dart';
+import '../../../../demo/demo_locations.dart';
+import '../../../auth/data/auth_repository.dart';
 
-/// Elite Production Onboarding Screen for AstroSaathi
-/// Delivers a high-converting, celestial UI/UX with smooth transitions,
-/// real-time Nam Rashi discovery, precision birth inputs, and animated Kundli creation.
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
-
   @override
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState extends ConsumerState<OnboardingScreen>
-    with TickerProviderStateMixin {
-  final PageController _pageController = PageController();
-  int _currentIndex = 0;
-
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _dobController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController(
-    text: '07:30',
+class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
+  final _pageController = PageController();
+  final _nameController = TextEditingController();
+  final _placeController = TextEditingController(
+    text: 'Ahmedabad, Gujarat, India',
   );
-  final TextEditingController _placeController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _otpController = TextEditingController();
+  int _step = 0;
+  DateTime _dob = DateTime(1998, 3, 18);
+  TimeOfDay _time = const TimeOfDay(hour: 20, minute: 42);
+  bool _unknownTime = false;
+  String _gender = 'Male';
+  String _city = 'Ahmedabad, Gujarat, India';
+  final Set<String> _focus = {
+    'Love & Relationships',
+    'Career',
+    'Spiritual Growth',
+  };
+  String _system = 'Both';
+  AppLanguage _language = AppLanguage.english;
+  bool _saving = false;
 
-  bool _isOtpSent = false;
-  bool _isOtpVerified = false;
-
-  String _selectedGender = 'Male';
-  String _selectedAmPm = 'AM';
-  String _selectedCity = 'New Delhi, India';
-  bool _isUnknownTime = false;
-
-  final List<String> _popularCities = [
-    'New Delhi, India',
-    'Mumbai, India',
-    'Bengaluru, India',
-    'Kolkata, India',
-    'Chennai, India',
-    'Ahmedabad, India',
-    'Hyderabad, India',
-    'Pune, India',
-    'Jaipur, India',
-    'Surat, India',
-    'Lucknow, India',
-    'London, UK',
-    'New York, USA',
-    'Dubai, UAE',
-    'Singapore',
-    'Custom Location',
+  static const _cities = [
+    'Ahmedabad, Gujarat, India',
+    'New Delhi, Delhi, India',
+    'Mumbai, Maharashtra, India',
+    'Bengaluru, Karnataka, India',
+    'Kolkata, West Bengal, India',
+    'Chennai, Tamil Nadu, India',
+    'Hyderabad, Telangana, India',
+    'Pune, Maharashtra, India',
   ];
-
-  late AnimationController _pulseController;
-  late AnimationController _spinController;
-  ZodiacInfo? _detectedZodiac;
+  static const _areas = [
+    'Love & Relationships',
+    'Marriage',
+    'Career',
+    'Money & Wealth',
+    'Health & Wellness',
+    'Family',
+    'Education',
+    'Business',
+    'Spiritual Growth',
+    'Life Purpose',
+    'Personal Growth',
+    'Timing & Decisions',
+  ];
 
   @override
   void initState() {
     super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat(reverse: true);
-
-    _spinController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 12),
-    )..repeat();
-
-    _nameController.addListener(_onNameChanged);
-    _placeController.text = _selectedCity;
-  }
-
-  void _onNameChanged() {
-    final text = _nameController.text.trim();
-    if (text.isNotEmpty) {
-      final zodiac = ZodiacSignUtils.getZodiacFromName(text);
-      if (zodiac != _detectedZodiac) {
-        setState(() {
-          _detectedZodiac = zodiac;
-        });
-      }
-    } else {
-      if (_detectedZodiac != null) {
-        setState(() {
-          _detectedZodiac = null;
-        });
-      }
+    final existing = ref.read(profilesListProvider);
+    if (existing.isNotEmpty) {
+      final p = ref.read(activeProfileProvider);
+      _nameController.text = p.name;
+      _placeController.text = p.birthPlace;
+      _city = _cities.contains(p.birthPlace) ? p.birthPlace : _cities.first;
+      final parsed = DateTime.tryParse(p.dob);
+      if (parsed != null) _dob = parsed;
     }
   }
 
   @override
   void dispose() {
-    _nameController.removeListener(_onNameChanged);
-    _pulseController.dispose();
-    _spinController.dispose();
-    _nameController.dispose();
-    _dobController.dispose();
-    _timeController.dispose();
-    _placeController.dispose();
     _pageController.dispose();
+    _nameController.dispose();
+    _placeController.dispose();
     super.dispose();
   }
 
-  void _showError(String message) {
-    if (!mounted) return;
-    CosmicNotification.show(
-      context,
-      message: message,
-      icon: Icons.warning_amber_rounded,
-    );
-  }
-
-  void _previousPage() {
-    if (_currentIndex > 0) {
-      _pageController.previousPage(
-        duration: const Duration(milliseconds: 350),
-        curve: Curves.easeOutCubic,
-      );
-    }
-  }
-
-  void _nextPage() {
-    String? errorMessage;
-    if (_currentIndex == 1) {
-      final name = _nameController.text.trim();
-      if (name.isEmpty) {
-        errorMessage = 'Please enter your full name';
-      } else if (name.length < 2) {
-        errorMessage = 'Name must be at least 2 characters';
-      }
-    } else if (_currentIndex == 2) {
-      if (_dobController.text.trim().isEmpty) {
-        errorMessage = 'Please select your date of birth';
-      } else if (_timeController.text.trim().isEmpty) {
-        errorMessage = 'Please enter your birth time';
-      } else if (_placeController.text.trim().isEmpty) {
-        errorMessage = 'Please enter or select your place of birth';
-      } else {
-        try {
-          AstrologyValidator.validateDate(_dobController.text.trim());
-          AstrologyValidator.validateTime('${_timeController.text.trim()} $_selectedAmPm');
-        } on AstrologyValidationException catch (e) {
-          errorMessage = e.message;
-        }
-      }
-    }
-
-    if (errorMessage != null) {
-      _showError(errorMessage);
-      return;
-    }
-
-    if (_currentIndex < 2) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeOutCubic,
-      );
-    } else if (_currentIndex == 2) {
-      _generateChart();
-    }
-  }
-
-  void _generateChart() async {
-    final name = ZodiacSignUtils.capitalizeName(_nameController.text.trim());
-    final dob = _dobController.text.trim();
-    final fullTime = '${_timeController.text.trim()} $_selectedAmPm';
-    final place = _placeController.text.trim();
-
-    if (name.isEmpty || dob.isEmpty || fullTime.isEmpty || place.isEmpty) {
-      _showError('Please complete all birth details');
-      return;
-    }
-
-    try {
-      AstrologyValidator.validateDate(dob);
-      AstrologyValidator.validateTime(fullTime);
-    } on AstrologyValidationException catch (e) {
-      _showError(e.message);
-      return;
-    }
-
-    setState(() {
-      _currentIndex = 3;
-    });
-    if (_pageController.hasClients) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 400),
-        curve: Curves.easeOutCubic,
-      );
-    }
-
-    try {
-      final focusWeights = {'Career': 1.2, 'Love': 0.8, 'Money': 1.0};
-
-      double lat = 28.6139;
-      double lon = 77.2090;
-      try {
-        if (place.isNotEmpty && (Platform.isAndroid || Platform.isIOS)) {
-          final locations = await locationFromAddress(place).timeout(const Duration(seconds: 2));
-          if (locations.isNotEmpty) {
-            lat = locations.first.latitude;
-            lon = locations.first.longitude;
-          }
-        }
-      } catch (e) {
-        debugPrint('Geocoding failed during onboarding for $place: $e');
-      }
-
-      final profile = BirthProfileData(
-        id: 'primary',
-        name: name,
-        relationship: 'Self',
-        dob: dob,
-        birthTime: fullTime,
-        birthPlace: place,
-        latitude: lat,
-        longitude: lon,
-        timezone: '5.5',
-        isPrimary: true,
-      );
-
-      await ref
-          .read(profilesListProvider.notifier)
-          .upsertPrimaryProfile(
-            name: profile.name,
-            dob: profile.dob,
-            birthTime: profile.birthTime,
-            birthPlace: profile.birthPlace,
-            latitude: profile.latitude,
-            longitude: profile.longitude,
-            timezone: profile.timezone,
-          );
-
-      try {
-        await ref
-            .read(authRepositoryProvider)
-            .signInAnonymously()
-            .timeout(const Duration(milliseconds: 500));
-        await ref
-            .read(authRepositoryProvider)
-            .saveProfileData(
-              name: profile.name,
-              dob: profile.dob,
-              time: profile.birthTime,
-              place: profile.birthPlace,
-              latitude: profile.latitude,
-              longitude: profile.longitude,
-              timeZone: profile.timezone,
-              focusWeights: focusWeights,
-            )
-            .timeout(const Duration(milliseconds: 500));
-      } catch (_) {}
-    } catch (e) {
-      debugPrint('Failed to sync profile: $e');
-    } finally {
-      ref.invalidate(onboardingCompleteProvider);
-      ref.invalidate(profilesListProvider);
-
-      await Future.delayed(const Duration(milliseconds: 1200));
-
-      if (mounted) {
-        context.go('/');
-      }
-    }
-  }
-
   @override
-  Widget build(BuildContext context) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
-
-    return Scaffold(
-      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
-      body: Container(
-        decoration: BoxDecoration(
-          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
-          gradient: isLight ? null : AppColors.cosmicGradient,
-        ),
-        child: SafeArea(
-          child: ResponsiveLayout(
-            child: Column(
+  Widget build(BuildContext context) => Scaffold(
+    backgroundColor: AppColors.backgroundLight,
+    body: SafeArea(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 18, 8),
+            child: Row(
               children: [
-                // Top Navigation Bar (Header + Back Button + Progress)
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: context.responsive<double>(
-                      mobile: 20,
-                      tablet: 32,
-                      desktop: 40,
-                    ),
-                    vertical: 12,
+                IconButton(
+                  onPressed: _step == 0
+                      ? () => context.canPop() ? context.pop() : null
+                      : _back,
+                  icon: const Icon(
+                    Icons.chevron_left_rounded,
+                    color: AppColors.primaryLightMode,
                   ),
-                  child: Row(
-                    children: [
-                      if (_currentIndex > 0 && _currentIndex < 3)
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            color: isLight ? AppColors.textPrimaryLight : Colors.white,
-                            size: 20,
-                          ),
-                          onPressed: _previousPage,
-                        )
-                      else
-                        const SizedBox(width: 40),
-                      Expanded(
-                        child: _currentIndex < 3
-                            ? _buildSegmentedProgress(isLight)
-                            : const SizedBox.shrink(),
-                      ),
-                      if (_currentIndex < 3)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.getPrimary(context).withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: AppColors.getPrimary(context).withValues(alpha: 0.3),
-                            ),
-                          ),
-                          child: Text(
-                            'Step ${_currentIndex + 1}/3',
-                            style: GoogleFonts.outfit(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.getPrimary(context),
-                            ),
-                          ),
-                        )
-                      else
-                        const SizedBox(width: 40),
-                      if (_currentIndex == 0)
-                        TextButton(
-                          onPressed: () {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeOutCubic,
-                            );
-                          },
-                          child: Text(
-                            'Skip',
-                            style: GoogleFonts.outfit(
-                              color: AppColors.getPrimary(context),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                    ],
+                  style: IconButton.styleFrom(
+                    backgroundColor: AppColors.surfaceLight,
                   ),
                 ),
-
-                // Main Page View
+                const SizedBox(width: 8),
                 Expanded(
-                  child: PageView(
-                    controller: _pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    onPageChanged: (index) {
-                      setState(() => _currentIndex = index);
-                    },
-                    children: [
-                      _buildWelcomeStep(),
-                      _buildNameStep(),
-                      _buildBirthDetailsStep(),
-                      _buildGeneratingStep(),
-                    ],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: LinearProgressIndicator(
+                      value: (_step + 1) / 9,
+                      minHeight: 5,
+                      color: AppColors.actionPurple,
+                      backgroundColor: AppColors.softLavender,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Text(
+                  'Step ${_step + 1} of 9',
+                  style: const TextStyle(
+                    fontSize: 11.5,
+                    color: AppColors.textSecondaryLight,
                   ),
                 ),
               ],
             ),
           ),
-        ),
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              onPageChanged: (value) => setState(() => _step = value),
+              children: [
+                _name(),
+                _genderStep(),
+                _date(),
+                _timeStep(),
+                _place(),
+                _focusStep(),
+                _systemStep(),
+                _languageStep(),
+                _reviewStep(),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 16),
+            child: AstroPrimaryButton(
+              label: _step == 8 ? 'Create my profile' : 'Continue',
+              loading: _saving,
+              onPressed: _next,
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
 
-  Widget _buildSegmentedProgress(bool isLight) {
-    return Row(
-      children: List.generate(3, (index) {
-        final isActive = index <= _currentIndex;
-        final isCurrent = index == _currentIndex;
-        return Expanded(
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
-            height: 5,
-            margin: EdgeInsets.only(right: index < 2 ? 8 : 0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(3),
-              gradient: isActive ? AppColors.goldGradient : null,
-              color: isActive
-                  ? null
-                  : (isLight ? AppColors.borderLight : Colors.white.withValues(alpha: 0.12)),
-              boxShadow: isCurrent
-                  ? [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.6),
-                        blurRadius: 10,
-                        spreadRadius: 1,
-                      ),
-                    ]
-                  : null,
-            ),
-          ),
-        );
-      }),
-    ).fadeSlideUp();
-  }
-
-  Widget _buildWelcomeStep() {
-    final isLight = Theme.of(context).brightness == Brightness.light;
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
+  Widget _layout(String title, {String? subtitle, required Widget child}) =>
+      LayoutBuilder(
+        builder: (context, constraints) => SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: IntrinsicHeight(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const Spacer(),
-
-                    // Animated Glowing Cosmic Emblem
-                    Center(
-                      child: AnimatedBuilder(
-                        animation: _pulseController,
-                        builder: (context, child) {
-                          return Transform.scale(
-                            scale: 1.0 + (_pulseController.value * 0.04),
-                            child: child,
-                          );
-                        },
-                        child: Container(
-                          width: 120,
-                          height: 120,
-                          padding: const EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: AppColors.goldSubtleGradient,
-                            border: Border.all(
-                              color: AppColors.primary.withValues(alpha: 0.6),
-                              width: 2,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.35),
-                                blurRadius: 40,
-                                spreadRadius: 2,
-                              ),
-                            ],
-                          ),
-                          child: ClipOval(
-                            child: Image.asset(
-                              'assets/icon/app_icon.png',
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Center(
-                                    child: Icon(
-                                      Icons.auto_awesome,
-                                      size: 54,
-                                      color: AppColors.primary,
-                                    ),
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ).fadeSlideUp(),
-                    ),
-
-                    const SizedBox(height: 28),
-
-                    // Gold Mask Title
-                    ShaderMask(
-                      shaderCallback: (bounds) => LinearGradient(
-                        colors: isLight
-                            ? [
-                                AppColors.primaryLightMode,
-                                AppColors.primaryDarkLightMode,
-                                AppColors.secondary,
-                              ]
-                            : [
-                                const Color(0xFFFFFFFF),
-                                const Color(0xFFFFE899),
-                                const Color(0xFFE5B842),
-                              ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ).createShader(bounds),
-                      child: Text(
-                        'Unlock Your Cosmic Blueprint',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.plusJakartaSans(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w800,
-                          color: isLight ? AppColors.primaryLightMode : Colors.white,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                    ).fadeSlideUp(delay: 150.ms),
-
-                    const SizedBox(height: 10),
-
-                    Text(
-                      'Your Personal Vedic Astrologer & Kundli Companion',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        color: AppColors.getTextSecondary(context),
-                        height: 1.4,
-                      ),
-                    ).fadeSlideUp(delay: 250.ms),
-
-                    const SizedBox(height: 28),
-
-                    // Mobile OTP Verification Box
-                    GlassCard(
-                      borderRadius: 20,
-                      padding: const EdgeInsets.all(18),
-                      borderColor: AppColors.getGlassBorder(context),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.security_rounded,
-                                color: AppColors.getPrimary(context),
-                                size: 18,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                'Mobile Verification',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.getTextPrimary(context),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 14),
-                          
-                          if (!_isOtpSent) ...[
-                            TextField(
-                              controller: _phoneController,
-                              keyboardType: TextInputType.phone,
-                              style: TextStyle(color: AppColors.getTextPrimary(context)),
-                              decoration: AppDecorations.premiumInput(
-                                hintText: 'Enter Mobile Number',
-                                prefixIcon: Icons.phone_android_rounded,
-                                context: context,
-                              ),
-                            ),
-                          ] else if (!_isOtpVerified) ...[
-                            TextField(
-                              controller: _otpController,
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(color: AppColors.getTextPrimary(context)),
-                              decoration: AppDecorations.premiumInput(
-                                hintText: 'Enter 4-digit OTP',
-                                prefixIcon: Icons.lock_outline_rounded,
-                                context: context,
-                              ),
-                            ),
-                          ] else ...[
-                            Row(
-                              children: [
-                                const Icon(Icons.check_circle_rounded, color: Colors.green),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'Mobile Verified Successfully',
-                                  style: GoogleFonts.inter(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ],
-                      ),
-                    ).fadeSlideUp(delay: 350.ms),
-
-                    const Spacer(),
-
-                    // Trust Tagline
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.verified_user_outlined,
-                          size: 14,
-                          color: AppColors.getPrimary(context),
-                        ),
-                        const SizedBox(width: 6),
-                        Flexible(
-                          child: Text(
-                            '100% Accurate Vedic Calculations • Privacy Protected',
-                            style: GoogleFonts.inter(
-                              fontSize: 11.5,
-                              color: AppColors.getTextMuted(context),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ).fadeSlideUp(delay: 450.ms),
-
-                    const SizedBox(height: 16),
-
-                    GradientButton(
-                      text: _isOtpVerified
-                          ? 'Begin Your Cosmic Journey'
-                          : (_isOtpSent ? 'Verify OTP' : 'Send OTP'),
-                      icon: _isOtpVerified ? Icons.auto_awesome : Icons.arrow_forward_rounded,
-                      onPressed: () {
-                        if (_isOtpVerified) {
-                          _nextPage();
-                        } else if (_isOtpSent) {
-                          if (_otpController.text.length >= 4) {
-                            setState(() => _isOtpVerified = true);
-                            CosmicNotification.show(context, message: 'OTP Verified Successfully!', icon: Icons.check_circle_rounded);
-                          } else {
-                            CosmicNotification.show(context, message: 'Invalid OTP. Please enter 4 digits.', icon: Icons.error_outline_rounded);
-                          }
-                        } else {
-                          if (_phoneController.text.length >= 10) {
-                            setState(() => _isOtpSent = true);
-                            CosmicNotification.show(context, message: 'OTP Sent successfully to ${_phoneController.text}', icon: Icons.mark_email_read_rounded);
-                          } else {
-                            CosmicNotification.show(context, message: 'Enter a valid 10-digit mobile number', icon: Icons.error_outline_rounded);
-                          }
-                        }
-                      },
-                    ).fadeSlideUp(delay: 550.ms),
-
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildNameStep() {
-    final isLight = Theme.of(context).brightness == Brightness.light;
-
-    return _buildInputStep(
-      badgeTitle: 'PERSONALIZATION',
-      title: 'What should we call you?',
-      subtitle: 'Your name maps your Nam Rashi and personalizes daily forecasts.',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Name Text Field
-          TextField(
-            controller: _nameController,
-            textCapitalization: TextCapitalization.words,
-            style: GoogleFonts.outfit(
-              color: AppColors.getTextPrimary(context),
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-            decoration: AppDecorations.premiumInput(
-              hintText: 'Enter your full name',
-              prefixIcon: Icons.person_outline_rounded,
-              context: context,
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          // Gender Selection Segmented Pills
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Gender',
-                style: GoogleFonts.outfit(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.getTextSecondary(context),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: ['Male', 'Female', 'Other'].map((gender) {
-                  final isSelected = _selectedGender == gender;
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: GestureDetector(
-                        onTap: () => setState(() => _selectedGender = gender),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? AppColors.getPrimary(context).withValues(alpha: 0.2)
-                                : (isLight
-                                    ? AppColors.surfaceSecondaryLight
-                                    : Colors.white.withValues(alpha: 0.05)),
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                              color: isSelected
-                                  ? AppColors.getPrimary(context)
-                                  : AppColors.getGlassBorder(context),
-                              width: isSelected ? 1.5 : 0.8,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              gender,
-                              style: GoogleFonts.outfit(
-                                fontSize: 14,
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                                color: isSelected
-                                    ? AppColors.getPrimary(context)
-                                    : AppColors.getTextPrimary(context),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 24),
-
-          // Real-Time Nam Rashi Discovery Card
-          if (_detectedZodiac != null)
-            GlassCard(
-              borderRadius: 18,
-              padding: const EdgeInsets.all(16),
-              borderColor: AppColors.getPrimary(context).withValues(alpha: 0.5),
-              glowColor: AppColors.getPrimary(context).withValues(alpha: 0.2),
-              child: Row(
-                children: [
-                  Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.getPrimary(context).withValues(alpha: 0.15),
-                      border: Border.all(color: AppColors.getPrimary(context).withValues(alpha: 0.4)),
-                    ),
-                    child: Center(
-                      child: Text(
-                        _detectedZodiac!.symbol,
-                        style: const TextStyle(fontSize: 26),
-                      ),
-                    ),
+            constraints: BoxConstraints(minHeight: constraints.maxHeight - 44),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: GoogleFonts.playfairDisplay(
+                    fontSize: 30,
+                    height: 1.15,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryLightMode,
                   ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                'Nam Rashi: ${_detectedZodiac!.englishName}',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.getPrimary(context),
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              '(${_detectedZodiac!.hindiName})',
-                              style: GoogleFonts.outfit(
-                                fontSize: 13,
-                                color: AppColors.getTextSecondary(context),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Element: ${_detectedZodiac!.element} • Ruler: ${_detectedZodiac!.rulingPlanet}',
-                          style: GoogleFonts.inter(
-                            fontSize: 12,
-                            color: AppColors.getTextSecondary(context),
-                          ),
-                        ),
-                      ],
+                ),
+                if (subtitle != null) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      height: 1.5,
+                      color: AppColors.textSecondaryLight,
                     ),
                   ),
                 ],
+                const SizedBox(height: 30),
+                child,
+              ],
+            ),
+          ),
+        ),
+      );
+
+  Widget _name() => _layout(
+    'What should we call you?',
+    subtitle: "We'll use this to personalize your readings.",
+    child: AstroInput(controller: _nameController, hintText: 'Your name'),
+  );
+  Widget _genderStep() => _layout(
+    'What is your gender?',
+    child: Column(
+      children: ['Male', 'Female', 'Non-binary', 'Prefer not to say']
+          .map(
+            (g) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: AstroSelectCard(
+                title: g,
+                selected: _gender == g,
+                onTap: () => setState(() => _gender = g),
               ),
-            ).fadeSlideUp(),
+            ),
+          )
+          .toList(),
+    ),
+  );
 
-          const SizedBox(height: 28),
-
-          GradientButton(
-            text: 'Continue to Birth Details',
-            icon: Icons.arrow_forward_rounded,
-            onPressed: _nextPage,
+  Widget _date() {
+    final zodiac = _zodiacForDate(_dob);
+    return _layout(
+      'What is your date of birth?',
+      subtitle:
+          'Your birth date helps AstroSaathi calculate your zodiac placements and personalize your insights.',
+      child: Column(
+        children: [
+          AstroCard(
+            onTap: _pickDate,
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _dateColumn('DAY', '${_dob.day}'.padLeft(2, '0')),
+                ),
+                _separator(),
+                Expanded(child: _dateColumn('MONTH', _month(_dob.month))),
+                _separator(),
+                Expanded(child: _dateColumn('YEAR', '${_dob.year}')),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: AppColors.highlightSurface,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    '${_dob.day} ${DateTime(0, _dob.month).month == _dob.month ? _monthLong(_dob.month) : ''} ${_dob.year}',
+                    style: GoogleFonts.playfairDisplay(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primaryLightMode,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceLight,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Text(
+                    '${zodiac.$1} ${zodiac.$2}',
+                    style: const TextStyle(
+                      color: AppColors.secondary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.lock_outline_rounded,
+                size: 15,
+                color: AppColors.textSecondaryLight,
+              ),
+              SizedBox(width: 6),
+              Text(
+                'We use this only to personalize your astrology profile.',
+                style: TextStyle(
+                  fontSize: 11,
+                  color: AppColors.textSecondaryLight,
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildBirthDetailsStep() {
-    final isLight = Theme.of(context).brightness == Brightness.light;
+  Widget _dateColumn(String label, String value) => Column(
+    children: [
+      Text(
+        label,
+        style: const TextStyle(
+          fontSize: 10.5,
+          color: AppColors.textSecondaryLight,
+        ),
+      ),
+      const SizedBox(height: 18),
+      Text(
+        value,
+        style: GoogleFonts.playfairDisplay(
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          color: AppColors.primaryLightMode,
+        ),
+      ),
+      const SizedBox(height: 8),
+      const Icon(
+        Icons.unfold_more_rounded,
+        size: 18,
+        color: AppColors.textSecondaryLight,
+      ),
+    ],
+  );
+  Widget _separator() =>
+      Container(width: 1, height: 88, color: AppColors.softLavender);
 
-    return _buildInputStep(
-      badgeTitle: 'VEDIC KUNDLI CALCULATION',
-      title: 'Enter Precise Birth Details',
-      subtitle: 'Date, exact time, and birth city calculate your authentic Kundli.',
+  Widget _timeStep() {
+    final local = _unknownTime ? const TimeOfDay(hour: 12, minute: 0) : _time;
+    return _layout(
+      'What time were you born?',
+      subtitle:
+          'Your birth time helps us calculate your rising sign, houses and more precise planetary positions.',
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Date of Birth Field Button / Card
-          GestureDetector(
-            onTap: () async {
-              final date = await showDatePicker(
-                context: context,
-                initialDate: DateTime(2000, 1, 1),
-                firstDate: DateTime(1900),
-                lastDate: DateTime.now(),
-                builder: (context, child) {
-                  return Theme(
-                    data: Theme.of(context).copyWith(
-                      colorScheme: isLight
-                          ? const ColorScheme.light(
-                              primary: AppColors.primaryLightMode,
-                              onPrimary: Colors.white,
-                              surface: AppColors.surfaceLight,
-                              onSurface: AppColors.textPrimaryLight,
-                            )
-                          : const ColorScheme.dark(
-                              primary: AppColors.primary,
-                              onPrimary: Colors.black,
-                              surface: AppColors.surfaceDark,
-                              onSurface: Colors.white,
-                            ),
-                    ),
-                    child: child!,
-                  );
-                },
-              );
-              if (date != null) {
-                setState(() {
-                  _dobController.text =
-                      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
-                });
-              }
-            },
-            child: AbsorbPointer(
-              child: TextField(
-                controller: _dobController,
-                style: GoogleFonts.outfit(color: AppColors.getTextPrimary(context), fontSize: 16),
-                decoration: AppDecorations.premiumInput(
-                  hintText: 'Date of Birth (YYYY-MM-DD)',
-                  prefixIcon: Icons.calendar_today_rounded,
-                  context: context,
+          Text(
+            local.format(context),
+            style: GoogleFonts.playfairDisplay(
+              fontSize: 48,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primaryLightMode,
+            ),
+          ),
+          const SizedBox(height: 18),
+          AstroCard(
+            onTap: _unknownTime ? null : _pickTime,
+            child: Row(
+              children: [
+                Expanded(
+                  child: _dateColumn(
+                    'HOUR',
+                    '${local.hourOfPeriod == 0 ? 12 : local.hourOfPeriod}'
+                        .padLeft(2, '0'),
+                  ),
                 ),
-              ),
+                _separator(),
+                Expanded(
+                  child: _dateColumn(
+                    'MINUTE',
+                    '${local.minute}'.padLeft(2, '0'),
+                  ),
+                ),
+                _separator(),
+                Expanded(
+                  child: _dateColumn(
+                    'AM / PM',
+                    local.period == DayPeriod.am ? 'AM' : 'PM',
+                  ),
+                ),
+              ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4, left: 4),
-            child: Text(
-              'Birth date • Used for your birth chart planetary positions.',
-              style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
-            ),
-          ),
-
           const SizedBox(height: 14),
-
-          // Time of Birth + AM/PM Segment Toggle
-          Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: GestureDetector(
-                  onTap: () async {
-                    final time = await showTimePicker(
-                      context: context,
-                      initialTime: const TimeOfDay(hour: 7, minute: 30),
-                      builder: (context, child) {
-                        return Theme(
-                          data: Theme.of(context).copyWith(
-                            colorScheme: isLight
-                                ? const ColorScheme.light(
-                                    primary: AppColors.primaryLightMode,
-                                    onPrimary: Colors.white,
-                                    surface: AppColors.surfaceLight,
-                                    onSurface: AppColors.textPrimaryLight,
-                                  )
-                                : const ColorScheme.dark(
-                                    primary: AppColors.primary,
-                                    onPrimary: Colors.black,
-                                    surface: AppColors.surfaceDark,
-                                    onSurface: Colors.white,
-                                  ),
-                          ),
-                          child: child!,
-                        );
-                      },
-                    );
-                    if (time != null) {
-                      final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
-                      final minute = time.minute.toString().padLeft(2, '0');
-                      final period = time.period == DayPeriod.am ? 'AM' : 'PM';
-                      setState(() {
-                        _timeController.text =
-                            '${hour.toString().padLeft(2, '0')}:$minute';
-                        _selectedAmPm = period;
-                      });
-                    }
-                  },
-                  child: AbsorbPointer(
-                    child: TextField(
-                      controller: _timeController,
-                      style: GoogleFonts.outfit(color: AppColors.getTextPrimary(context), fontSize: 16),
-                      decoration: AppDecorations.premiumInput(
-                        hintText: 'Time (HH:MM)',
-                        prefixIcon: Icons.access_time_rounded,
-                        context: context,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                flex: 2,
-                child: Container(
-                  height: 54,
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: isLight
-                        ? AppColors.surfaceSecondaryLight
-                        : Colors.white.withValues(alpha: 0.06),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.getGlassBorder(context)),
-                  ),
-                  child: Row(
-                    children: ['AM', 'PM'].map((period) {
-                      final isSelected = _selectedAmPm == period;
-                      return Expanded(
-                        child: GestureDetector(
-                          onTap: () => setState(() => _selectedAmPm = period),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            decoration: BoxDecoration(
-                              color: isSelected ? AppColors.getPrimary(context) : Colors.transparent,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Center(
-                              child: Text(
-                                period,
-                                style: GoogleFonts.outfit(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: isSelected
-                                      ? Colors.black
-                                      : AppColors.getTextPrimary(context),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ),
-            ],
+          AstroSelectCard(
+            title: "I don't know my exact birth time",
+            subtitle: _unknownTime
+                ? 'A solar chart will be calculated at 12:00 PM.'
+                : null,
+            selected: _unknownTime,
+            onTap: () => setState(() => _unknownTime = !_unknownTime),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4, left: 4),
-            child: Text(
-              'Birth time • Used for Ascendant and house calculations.',
-              style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
-            ),
-          ),
+        ],
+      ),
+    );
+  }
 
-          // Exact Time Unknown Checkbox
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _isUnknownTime = !_isUnknownTime;
-                if (_isUnknownTime) {
-                  _timeController.text = '12:00';
-                  _selectedAmPm = 'PM';
-                }
-              });
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 4),
-              child: Row(
-                children: [
-                  Icon(
-                    _isUnknownTime ? Icons.check_box_rounded : Icons.check_box_outline_blank_rounded,
-                    color: _isUnknownTime ? AppColors.getPrimary(context) : AppColors.getTextSecondary(context),
-                    size: 18,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Exact birth time unknown (generate Surya / Solar Kundli)',
-                      style: GoogleFonts.inter(
-                        fontSize: 12,
-                        color: _isUnknownTime ? AppColors.getPrimary(context) : AppColors.getTextSecondary(context),
-                        fontWeight: _isUnknownTime ? FontWeight.w600 : FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (_isUnknownTime)
-            Padding(
-              padding: const EdgeInsets.only(top: 4, bottom: 6),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-                decoration: BoxDecoration(
-                  color: AppColors.getPrimary(context).withValues(alpha: 0.08),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.getPrimary(context).withValues(alpha: 0.2)),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.wb_sunny_rounded, color: AppColors.getPrimary(context), size: 15),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Surya Kundli defaults to 12:00 PM with the Sun as Lagna to calculate planetary sign placements accurately without Ascendant ambiguity.',
-                        style: GoogleFonts.inter(fontSize: 10.5, color: AppColors.getTextSecondary(context), height: 1.3),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-          const SizedBox(height: 14),
-
-          // City Location Dropdown / Selection
-          Container(
-            height: 54,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: isLight
-                  ? AppColors.surfaceSecondaryLight
-                  : Colors.white.withValues(alpha: 0.06),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.getGlassBorder(context)),
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: _popularCities.contains(_selectedCity)
-                    ? _selectedCity
-                    : 'Custom Location',
-                isExpanded: true,
-                dropdownColor: AppColors.getSurface(context),
-                icon: Icon(Icons.keyboard_arrow_down_rounded, color: AppColors.getPrimary(context)),
-                style: GoogleFonts.outfit(
-                  color: AppColors.getTextPrimary(context),
-                  fontSize: 15,
-                ),
-                items: _popularCities
+  Widget _place() => _layout(
+    'Where were you born?',
+    child: Column(
+      children: [
+        _selectField('COUNTRY', 'India', null),
+        const SizedBox(height: 12),
+        _selectField(
+          'STATE / REGION',
+          _city.split(',').length > 1 ? _city.split(',')[1].trim() : 'Gujarat',
+          null,
+        ),
+        const SizedBox(height: 12),
+        _selectField('CITY', _city.split(',').first, () async {
+          final value = await showModalBottomSheet<String>(
+            context: context,
+            backgroundColor: AppColors.backgroundLight,
+            builder: (_) => SafeArea(
+              child: ListView(
+                shrinkWrap: true,
+                children: _cities
                     .map(
-                      (city) => DropdownMenuItem(
-                        value: city,
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.location_on_outlined,
-                              size: 18,
-                              color: AppColors.getPrimary(context),
-                            ),
-                            const SizedBox(width: 10),
-                            Flexible(
-                              child: Text(
-                                city,
-                                style: GoogleFonts.outfit(
-                                  color: city == 'Custom Location'
-                                      ? AppColors.getPrimary(context)
-                                      : AppColors.getTextPrimary(context),
-                                  fontWeight: city == 'Custom Location'
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
+                      (c) => ListTile(
+                        title: Text(c),
+                        onTap: () => Navigator.pop(context, c),
                       ),
                     )
                     .toList(),
-                onChanged: (val) {
-                  if (val != null) {
-                    setState(() {
-                      _selectedCity = val;
-                      if (val != 'Custom Location') {
-                        _placeController.text = val;
-                      } else {
-                        _placeController.clear();
-                      }
-                    });
-                  }
-                },
               ),
             ),
+          );
+          if (value != null) {
+            setState(() {
+              _city = value;
+              _placeController.text = value;
+            });
+          }
+        }),
+        const SizedBox(height: 14),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: AppColors.highlightSurface,
+            borderRadius: BorderRadius.circular(20),
           ),
-
-          if (_selectedCity == 'Custom Location') ...[
-            const SizedBox(height: 12),
-            TextField(
-              controller: _placeController,
-              style: GoogleFonts.outfit(color: AppColors.getTextPrimary(context), fontSize: 16),
-              decoration: AppDecorations.premiumInput(
-                hintText: 'Enter City, State, Country',
-                prefixIcon: Icons.edit_location_alt_outlined,
-                context: context,
-              ),
-            ),
-          ],
-          Padding(
-            padding: const EdgeInsets.only(top: 4, left: 4),
-            child: Text(
-              'Birth place • Used for accurate location and timezone calculations.',
-              style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
-            ),
-          ),
-
-          const SizedBox(height: 8),
-
-          // Detect Location Action Button
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton.icon(
-              onPressed: () async {
-                final accepted = await LocationPermissionDialog.show(context);
-                if (accepted == true) {
-                  setState(() {
-                    _selectedCity = 'New Delhi, India';
-                    _placeController.text = 'New Delhi, India';
-                  });
-                }
-              },
-              icon: const Icon(
-                Icons.my_location_rounded,
-                color: AppColors.primary,
-                size: 16,
-              ),
-              label: Text(
-                'Auto-Detect Location',
-                style: GoogleFonts.inter(
-                  color: AppColors.primary,
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          GradientButton(
-            text: 'Generate My Birth Chart',
-            icon: Icons.auto_awesome,
-            onPressed: _nextPage,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildGeneratingStep() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-      child: Center(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Row(
             children: [
-              const SizedBox(height: 20),
-
-              // Animated Concentric Celestial Zodiac Wheel
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  RotationTransition(
-                    turns: _spinController,
-                    child: Container(
-                      width: 140,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.primary.withValues(alpha: 0.35),
-                          width: 2,
-                        ),
-                      ),
-                      child: Stack(
-                        children: List.generate(8, (i) {
-                          return Align(
-                            alignment: Alignment(
-                              0.85 * (i % 2 == 0 ? 1 : -1),
-                              0.85 * (i % 4 < 2 ? 1 : -1),
-                            ),
-                            child: Text(
-                              ['â™ˆ', 'â™‰', 'â™Š', 'â™‹', 'â™Œ', 'â™', 'â™Ž', 'â™'][i],
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: AppColors.primary.withValues(alpha: 0.6),
-                              ),
-                            ),
-                          );
-                        }),
-                      ),
-                    ),
+              const Icon(
+                Icons.location_on_outlined,
+                color: AppColors.secondary,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  _placeController.text,
+                  style: const TextStyle(
+                    color: AppColors.primaryLightMode,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Container(
-                    width: 96,
-                    height: 96,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: AppColors.goldSubtleGradient,
-                      border: Border.all(
-                        color: AppColors.primary,
-                        width: 1.5,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.4),
-                          blurRadius: 30,
-                          spreadRadius: 2,
-                        ),
-                      ],
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.stars_rounded,
-                        size: 42,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ),
-                ],
-              ).fadeSlideUp(),
-
-              const SizedBox(height: 32),
-
-              Text(
-                'Reading Your Celestial Chart...',
-                style: GoogleFonts.plusJakartaSans(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.getTextPrimary(context),
                 ),
-              ).animate(onPlay: (c) => c.repeat(reverse: true)).shimmer(
-                    duration: 1600.ms,
-                    color: AppColors.getPrimary(context),
-                  ),
-
-              const SizedBox(height: 24),
-
-              GlassCard(
-                borderRadius: 20,
-                padding: const EdgeInsets.all(18),
-                borderColor: AppColors.getGlassBorder(context),
-                child: Column(
-                  children: [
-                    _buildCheckItem('Nam Rashi & Zodiac Sign Mapped', 0),
-                    Divider(color: Theme.of(context).brightness == Brightness.light ? AppColors.dividerLight : Colors.white10, height: 16),
-                    _buildCheckItem('Planetary Positions & Kundli Calculated', 1),
-                    Divider(color: Theme.of(context).brightness == Brightness.light ? AppColors.dividerLight : Colors.white10, height: 16),
-                    _buildCheckItem('Vedic Guidance & Daily Horoscope Ready', 2),
-                  ],
-                ),
-              ).fadeSlideUp(delay: 200.ms),
+              ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildCheckItem(String text, int index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        children: [
-          Container(
-            width: 26,
-            height: 26,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.green.withValues(alpha: 0.2),
-              border: Border.all(color: Colors.green.shade400),
-            ),
-            child: const Icon(
-              Icons.check_rounded,
-              size: 16,
-              color: Colors.greenAccent,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: GoogleFonts.outfit(
-                fontSize: 14.5,
-                fontWeight: FontWeight.w500,
-                color: AppColors.getTextPrimary(context),
+      ],
+    ),
+  );
+  Widget _selectField(String label, String value, VoidCallback? onTap) =>
+      AstroCard(
+        onTap: onTap,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      letterSpacing: .5,
+                      color: AppColors.textSecondaryLight,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      color: AppColors.textPrimaryLight,
+                    ),
+                  ),
+                ],
               ),
             ),
+            if (onTap != null)
+              const Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: AppColors.secondary,
+              ),
+          ],
+        ),
+      );
+
+  Widget _focusStep() => _layout(
+    'What would you like AstroSaathi to help you with?',
+    subtitle: 'Choose what matters most to you right now.',
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '${_focus.length}/3 selected · Choose up to 3',
+          style: const TextStyle(
+            fontSize: 12,
+            color: AppColors.primaryLightMode,
           ),
-        ],
-      ),
-    )
-        .animate(delay: Duration(milliseconds: 300 + (index * 350)))
-        .fadeIn(duration: 400.ms)
-        .slideX(begin: 0.08);
+        ),
+        const SizedBox(height: 12),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: _areas.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            childAspectRatio: 1.72,
+          ),
+          itemBuilder: (_, i) {
+            final area = _areas[i];
+            final selected = _focus.contains(area);
+            return AstroSelectCard(
+              title: area,
+              icon: _areaIcon(area),
+              selected: selected,
+              onTap: () {
+                setState(() {
+                  if (selected) {
+                    _focus.remove(area);
+                  } else if (_focus.length < 3) {
+                    _focus.add(area);
+                  }
+                });
+              },
+            );
+          },
+        ),
+      ],
+    ),
+  );
+  Widget _systemStep() => _layout(
+    'What would you like to explore?',
+    child: Column(
+      children:
+          [
+                (
+                  'Vedic Astrology',
+                  'Kundli, Nakshatra, Dasha and planetary timing',
+                ),
+                (
+                  'Western Astrology',
+                  'Natal wheel, houses, aspects and transits',
+                ),
+                ('Both', 'Get a combined personalized experience'),
+              ]
+              .map(
+                (s) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: AstroSelectCard(
+                    title: s.$1 == 'Both' ? 'Both   RECOMMENDED' : s.$1,
+                    subtitle: s.$2,
+                    icon: s.$1 == 'Vedic Astrology'
+                        ? Icons.temple_hindu_outlined
+                        : s.$1 == 'Western Astrology'
+                        ? Icons.public_rounded
+                        : Icons.auto_awesome_outlined,
+                    selected: _system == s.$1,
+                    onTap: () => setState(() => _system = s.$1),
+                  ),
+                ),
+              )
+              .toList(),
+    ),
+  );
+  Widget _languageStep() => _layout(
+    'Which language do you prefer?',
+    subtitle: 'You can change this later in your profile.',
+    child: Column(
+      children: [
+        const AstroInput(
+          hintText: 'Search language',
+          prefixIcon: Icons.search_rounded,
+        ),
+        const SizedBox(height: 12),
+        ...AppLanguage.values.map(
+          (lang) => Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: AstroSelectCard(
+              title: lang.nativeName,
+              titleStyle: _languageStyle(lang),
+              selected: _language == lang,
+              onTap: () => setState(() => _language = lang),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+
+  TextStyle _languageStyle(AppLanguage language) {
+    const base = TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w600,
+      color: AppColors.textPrimaryLight,
+    );
+    return switch (language) {
+      AppLanguage.hindi ||
+      AppLanguage.marathi => GoogleFonts.notoSansDevanagari(textStyle: base),
+      AppLanguage.tamil => GoogleFonts.notoSansTamil(textStyle: base),
+      AppLanguage.kannada => GoogleFonts.notoSansKannada(textStyle: base),
+      AppLanguage.malayalam => GoogleFonts.notoSansMalayalam(textStyle: base),
+      AppLanguage.gujarati => GoogleFonts.notoSansGujarati(textStyle: base),
+      AppLanguage.bengali => GoogleFonts.notoSansBengali(textStyle: base),
+      AppLanguage.telugu => GoogleFonts.notoSansTelugu(textStyle: base),
+      AppLanguage.english => GoogleFonts.inter(textStyle: base),
+    };
   }
 
-  Widget _buildInputStep({
-    required String badgeTitle,
-    required String title,
-    required String subtitle,
-    required Widget child,
-  }) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: IntrinsicHeight(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Step Badge Header Pill
-                    Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.getPrimary(context).withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: AppColors.getPrimary(context).withValues(alpha: 0.35),
-                              width: 0.8,
-                            ),
-                          ),
-                          child: Text(
-                            '✦  $badgeTitle',
-                            style: GoogleFonts.plusJakartaSans(
-                              fontSize: 10.5,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.getPrimary(context),
-                              letterSpacing: 1.2,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ).fadeSlideUp(),
-
-                    const SizedBox(height: 16),
-
-                    Text(
-                      title,
-                      style: GoogleFonts.plusJakartaSans(
-                        fontSize: 26,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.getTextPrimary(context),
-                        letterSpacing: -0.4,
+  Widget _reviewStep() => _layout(
+    'Review your profile',
+    subtitle:
+        'Confirm these details before AstroSaathi prepares your personalized experience.',
+    child: Column(
+      children: [
+        AstroInsightCard(
+          child: Column(
+            children: [
+              _reviewRow(
+                Icons.person_outline_rounded,
+                'Name',
+                _nameController.text.trim(),
+              ),
+              _reviewRow(
+                Icons.cake_outlined,
+                'Birth date',
+                '${_dob.day} ${_monthLong(_dob.month)} ${_dob.year}',
+              ),
+              _reviewRow(
+                Icons.schedule_outlined,
+                'Birth time',
+                _unknownTime ? 'Estimated · 12:00 PM' : _time.format(context),
+              ),
+              _reviewRow(Icons.location_on_outlined, 'Birth place', _city),
+              _reviewRow(Icons.explore_outlined, 'Astrology', _system),
+              _reviewRow(
+                Icons.language_rounded,
+                'Language',
+                _language.nativeName,
+                last: true,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        AstroCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'FOCUS AREAS',
+                style: TextStyle(
+                  fontSize: 10.5,
+                  letterSpacing: .8,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.secondary,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: _focus
+                    .map(
+                      (area) => Chip(
+                        avatar: Icon(_areaIcon(area), size: 15),
+                        label: Text(area),
                       ),
-                    ).fadeSlideUp(delay: 100.ms),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 
-                    const SizedBox(height: 8),
-
-                    Text(
-                      subtitle,
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        color: AppColors.getTextSecondary(context),
-                        height: 1.35,
-                      ),
-                    ).fadeSlideUp(delay: 200.ms),
-
-                    const SizedBox(height: 24),
-
-                    child.fadeSlideUp(delay: 300.ms),
-
-                    const Spacer(),
-                  ],
+  Widget _reviewRow(
+    IconData icon,
+    String label,
+    String value, {
+    bool last = false,
+  }) => Column(
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 9),
+        child: Row(
+          children: [
+            Icon(icon, size: 18, color: AppColors.primaryLightMode),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(color: AppColors.textSecondaryLight),
+              ),
+            ),
+            Flexible(
+              child: Text(
+                value,
+                textAlign: TextAlign.right,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimaryLight,
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+      if (!last) const Divider(),
+    ],
+  );
+
+  IconData _areaIcon(String area) => switch (area) {
+    'Love & Relationships' => Icons.favorite_outline_rounded,
+    'Marriage' => Icons.volunteer_activism_outlined,
+    'Career' => Icons.work_outline_rounded,
+    'Money & Wealth' => Icons.savings_outlined,
+    'Health & Wellness' => Icons.spa_outlined,
+    'Family' => Icons.family_restroom_outlined,
+    'Education' => Icons.school_outlined,
+    'Business' => Icons.business_center_outlined,
+    'Spiritual Growth' => Icons.self_improvement_rounded,
+    'Life Purpose' => Icons.explore_outlined,
+    'Personal Growth' => Icons.trending_up_rounded,
+    _ => Icons.schedule_outlined,
+  };
+
+  void _back() => _pageController.previousPage(
+    duration: const Duration(milliseconds: 250),
+    curve: Curves.easeOut,
+  );
+  Future<void> _next() async {
+    if (_step == 0 && _nameController.text.trim().length < 2) {
+      _snack('Please enter your name');
+      return;
+    }
+    if (_step == 5 && _focus.isEmpty) {
+      _snack('Choose at least one focus area');
+      return;
+    }
+    if (_step < 8) {
+      await _pageController.nextPage(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+      );
+    } else {
+      await _save();
+    }
+  }
+
+  void _snack(String message) => ScaffoldMessenger.of(
+    context,
+  ).showSnackBar(SnackBar(content: Text(message)));
+  Future<void> _pickDate() async {
+    final value = await showDatePicker(
+      context: context,
+      initialDate: _dob,
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (_, child) => Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: const ColorScheme.light(
+            primary: AppColors.secondary,
+            surface: AppColors.surfaceLight,
           ),
-        );
-      },
+        ),
+        child: child!,
+      ),
     );
+    if (value != null) setState(() => _dob = value);
+  }
+
+  Future<void> _pickTime() async {
+    final value = await showTimePicker(
+      context: context,
+      initialTime: _time,
+      builder: (_, child) => Theme(
+        data: Theme.of(context).copyWith(
+          colorScheme: const ColorScheme.light(
+            primary: AppColors.secondary,
+            surface: AppColors.surfaceLight,
+          ),
+        ),
+        child: child!,
+      ),
+    );
+    if (value != null) setState(() => _time = value);
+  }
+
+  Future<void> _save() async {
+    setState(() => _saving = true);
+    final name = ZodiacSignUtils.capitalizeName(_nameController.text.trim());
+    final dob =
+        '${_dob.year}-${_dob.month.toString().padLeft(2, '0')}-${_dob.day.toString().padLeft(2, '0')}';
+    final t = _unknownTime ? const TimeOfDay(hour: 12, minute: 0) : _time;
+    final hour = t.hourOfPeriod == 0 ? 12 : t.hourOfPeriod;
+    final time =
+        '${hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')} ${t.period == DayPeriod.am ? 'AM' : 'PM'}';
+    try {
+      AstrologyValidator.validateDate(dob);
+      AstrologyValidator.validateTime(time);
+    } on AstrologyValidationException catch (e) {
+      _snack(e.message);
+      setState(() => _saving = false);
+      return;
+    }
+    final demoLocation =
+        demoBirthLocations[_placeController.text.trim()] ??
+        demoBirthLocations[_city] ??
+        demoBirthLocations.values.first;
+    final lat = demoLocation.latitude;
+    final lon = demoLocation.longitude;
+    final weights = <String, double>{for (final area in _focus) area: 1.0};
+    await ref
+        .read(profilesListProvider.notifier)
+        .upsertPrimaryProfile(
+          name: name,
+          dob: dob,
+          birthTime: time,
+          birthPlace: _placeController.text,
+          latitude: lat,
+          longitude: lon,
+          timezone: '5.5',
+          focusAreas: _focus.toList(),
+          gender: _gender,
+          birthTimeUnknown: _unknownTime,
+        );
+    await ref.read(localeProvider.notifier).setLanguage(_language);
+    try {
+      await ref
+          .read(authRepositoryProvider)
+          .signInAnonymously()
+          .timeout(const Duration(milliseconds: 600));
+      await ref
+          .read(authRepositoryProvider)
+          .saveProfileData(
+            name: name,
+            dob: dob,
+            time: time,
+            place: _placeController.text,
+            latitude: lat,
+            longitude: lon,
+            timeZone: '5.5',
+            focusWeights: weights,
+            gender: _gender,
+            astrologyPreference: _system,
+          )
+          .timeout(const Duration(seconds: 2));
+    } catch (_) {}
+    ref.invalidate(onboardingCompleteProvider);
+    ref.invalidate(profilesListProvider);
+    if (mounted) context.go('/');
+  }
+
+  String _month(int m) => const [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ][m - 1];
+  String _monthLong(int m) => const [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ][m - 1];
+  (String, String) _zodiacForDate(DateTime d) {
+    final md = d.month * 100 + d.day;
+    if (md >= 321 && md <= 419) return ('Aries', '♈');
+    if (md <= 219 || md >= 1222) return ('Capricorn', '♑');
+    if (md <= 320) return ('Pisces', '♓');
+    if (md <= 520) return ('Taurus', '♉');
+    if (md <= 620) return ('Gemini', '♊');
+    if (md <= 722) return ('Cancer', '♋');
+    if (md <= 822) return ('Leo', '♌');
+    if (md <= 922) return ('Virgo', '♍');
+    if (md <= 1022) return ('Libra', '♎');
+    if (md <= 1121) return ('Scorpio', '♏');
+    return ('Sagittarius', '♐');
   }
 }
-

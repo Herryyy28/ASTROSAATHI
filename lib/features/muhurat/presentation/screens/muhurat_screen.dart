@@ -19,22 +19,23 @@ class MuhuratScreen extends ConsumerWidget {
   const MuhuratScreen({super.key});
 
   final List<String> categories = const [
-    'Business', 'Meeting', 'Travel', 'Investment', 'Contract', 'Marriage', 'Property',
+    'Business',
+    'Meeting',
+    'Travel',
+    'Investment',
+    'Contract',
+    'Marriage',
+    'Property',
   ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final muhuratAsync = ref.watch(muhuratProvider(selectedCategory));
-    final isLight = Theme.of(context).brightness == Brightness.light;
-
     return Scaffold(
-      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
+      backgroundColor: AppColors.backgroundLight,
       body: Container(
-        decoration: BoxDecoration(
-          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
-          gradient: isLight ? null : AppColors.cosmicRadialGradient,
-        ),
+        color: AppColors.backgroundLight,
         child: SafeArea(
           bottom: false,
           child: ResponsiveLayout(
@@ -55,7 +56,11 @@ class MuhuratScreen extends ConsumerWidget {
                         IconButton(
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
-                          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.primary, size: 20),
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: AppColors.primary,
+                            size: 20,
+                          ),
                           onPressed: () => Navigator.pop(context),
                         ),
                         const SizedBox(width: 8),
@@ -66,10 +71,10 @@ class MuhuratScreen extends ConsumerWidget {
                           children: [
                             Text(
                               'Muhurat',
-                              style: GoogleFonts.outfit(
+                              style: GoogleFonts.playfairDisplay(
                                 fontSize: 28,
                                 fontWeight: FontWeight.w700,
-                                color: AppColors.getTextPrimary(context),
+                                color: AppColors.primaryLightMode,
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -89,21 +94,33 @@ class MuhuratScreen extends ConsumerWidget {
                   const SizedBox(height: 24),
 
                   // ── Category Selector ─────────────────────────────
-                  _buildCategorySelector(context, ref, selectedCategory).fadeSlideUp(delay: 100.ms),
+                  _buildCategorySelector(
+                    context,
+                    ref,
+                    selectedCategory,
+                  ).fadeSlideUp(delay: 100.ms),
 
                   const SizedBox(height: 20),
 
                   // ── Result ────────────────────────────────────────
                   Expanded(
                     child: muhuratAsync.when(
-                      loading: () => const ShimmerLoader(itemCount: 3, itemHeight: 90),
+                      loading: () =>
+                          const ShimmerLoader(itemCount: 3, itemHeight: 90),
                       error: (error, stack) => Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.error_outline, color: AppColors.error, size: 48),
+                            const Icon(
+                              Icons.error_outline,
+                              color: AppColors.error,
+                              size: 48,
+                            ),
                             const SizedBox(height: 12),
-                            Text('Error finding Muhurat', style: TextStyle(color: AppColors.error)),
+                            Text(
+                              'Error finding Muhurat',
+                              style: TextStyle(color: AppColors.error),
+                            ),
                           ],
                         ),
                       ),
@@ -119,8 +136,11 @@ class MuhuratScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildCategorySelector(BuildContext context, WidgetRef ref, String selected) {
-    final isLight = Theme.of(context).brightness == Brightness.light;
+  Widget _buildCategorySelector(
+    BuildContext context,
+    WidgetRef ref,
+    String selected,
+  ) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
@@ -131,22 +151,26 @@ class MuhuratScreen extends ConsumerWidget {
           return Padding(
             padding: const EdgeInsets.only(right: 10),
             child: GestureDetector(
-              onTap: () => ref.read(selectedCategoryProvider.notifier).state = category,
+              onTap: () =>
+                  ref.read(selectedCategoryProvider.notifier).state = category,
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeOutCubic,
-                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
-                  gradient: isSelected ? AppColors.goldGradient : null,
-                  color: isSelected ? null : (isLight ? AppColors.surfaceSecondaryLight : AppColors.glassSurface),
+                  color: isSelected
+                      ? AppColors.highlightSurface
+                      : AppColors.surfaceLight,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: isSelected ? Colors.transparent : AppColors.getGlassBorder(context),
-                    width: 0.5,
+                    color: isSelected
+                        ? AppColors.primaryLightMode
+                        : AppColors.borderLight,
+                    width: isSelected ? 1.2 : 0.6,
                   ),
-                  boxShadow: isSelected ? [
-                    BoxShadow(color: AppColors.goldGlow, blurRadius: 12, spreadRadius: -4),
-                  ] : null,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -154,14 +178,20 @@ class MuhuratScreen extends ConsumerWidget {
                     Icon(
                       icon,
                       size: 16,
-                      color: isSelected ? Colors.black : AppColors.getTextSecondary(context),
+                      color: isSelected
+                          ? AppColors.primaryLightMode
+                          : AppColors.textSecondaryLight,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       category,
                       style: TextStyle(
-                        color: isSelected ? Colors.black : AppColors.getTextPrimary(context),
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                        color: isSelected
+                            ? AppColors.primaryLightMode
+                            : AppColors.textPrimaryLight,
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w400,
                         fontSize: 14,
                       ),
                     ),
@@ -193,7 +223,11 @@ class MuhuratScreen extends ConsumerWidget {
                   shape: BoxShape.circle,
                   color: AppColors.primary.withValues(alpha: 0.12),
                 ),
-                child: const Icon(Icons.access_time_filled_rounded, color: AppColors.primary, size: 28),
+                child: const Icon(
+                  Icons.access_time_filled_rounded,
+                  color: AppColors.primary,
+                  size: 28,
+                ),
               ),
               const SizedBox(height: 16),
               Text(
@@ -246,7 +280,10 @@ class MuhuratScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           Container(
             padding: const EdgeInsets.all(20),
-            decoration: AppDecorations.alertCard(alertColor: AppColors.error, context: context),
+            decoration: AppDecorations.alertCard(
+              alertColor: AppColors.error,
+              context: context,
+            ),
             child: Row(
               children: [
                 Container(
@@ -256,7 +293,11 @@ class MuhuratScreen extends ConsumerWidget {
                     shape: BoxShape.circle,
                     color: AppColors.error.withValues(alpha: 0.12),
                   ),
-                  child: const Icon(Icons.block_rounded, color: AppColors.error, size: 20),
+                  child: const Icon(
+                    Icons.block_rounded,
+                    color: AppColors.error,
+                    size: 20,
+                  ),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -292,7 +333,13 @@ class MuhuratScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildDetailCard(BuildContext context, String label, String value, IconData icon, Color color) {
+  Widget _buildDetailCard(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return GlassCard(
       padding: const EdgeInsets.all(18),
       child: Row(

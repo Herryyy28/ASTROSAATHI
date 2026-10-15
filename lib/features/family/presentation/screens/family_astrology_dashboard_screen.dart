@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -38,18 +38,42 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
       if (dt != null) {
         final day = dt.day;
         final month = dt.month;
-        if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) return 'Aries â™ˆ';
-        if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) return 'Taurus â™‰';
-        if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) return 'Gemini â™Š';
-        if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) return 'Cancer â™‹';
-        if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) return 'Leo â™Œ';
-        if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) return 'Virgo â™';
-        if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) return 'Libra â™Ž';
-        if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) return 'Scorpio â™';
-        if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) return 'Sagittarius â™';
-        if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) return 'Capricorn â™‘';
-        if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) return 'Aquarius â™’';
-        if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) return 'Pisces â™“';
+        if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) {
+          return 'Aries â™ˆ';
+        }
+        if ((month == 4 && day >= 20) || (month == 5 && day <= 20)) {
+          return 'Taurus â™‰';
+        }
+        if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) {
+          return 'Gemini â™Š';
+        }
+        if ((month == 6 && day >= 21) || (month == 7 && day <= 22)) {
+          return 'Cancer â™‹';
+        }
+        if ((month == 7 && day >= 23) || (month == 8 && day <= 22)) {
+          return 'Leo â™Œ';
+        }
+        if ((month == 8 && day >= 23) || (month == 9 && day <= 22)) {
+          return 'Virgo â™';
+        }
+        if ((month == 9 && day >= 23) || (month == 10 && day <= 22)) {
+          return 'Libra â™Ž';
+        }
+        if ((month == 10 && day >= 23) || (month == 11 && day <= 21)) {
+          return 'Scorpio â™';
+        }
+        if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) {
+          return 'Sagittarius â™';
+        }
+        if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) {
+          return 'Capricorn â™‘';
+        }
+        if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) {
+          return 'Aquarius â™’';
+        }
+        if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) {
+          return 'Pisces â™“';
+        }
       }
     } catch (_) {}
     return 'Taurus â™‰';
@@ -61,11 +85,11 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
 
     final statusOptions = [
       {'status': 'High Synergy Window', 'color': Colors.pinkAccent},
-      {'status': 'Study & Focus Peak', 'color': Colors.amberAccent},
-      {'status': 'Peaceful Transit Window', 'color': Colors.cyanAccent},
-      {'status': 'Major Venture Alignment', 'color': Colors.greenAccent},
-      {'status': 'Creative Harmony Peak', 'color': Colors.purpleAccent},
-      {'status': 'Harmonious Gochar Window', 'color': Colors.orangeAccent},
+      {'status': 'Study & Focus Peak', 'color': AppColors.pink},
+      {'status': 'Peaceful Transit Window', 'color': AppColors.primaryLightMode},
+      {'status': 'Major Venture Alignment', 'color': AppColors.secondary},
+      {'status': 'Creative Harmony Peak', 'color': AppColors.actionPurple},
+      {'status': 'Harmonious Gochar Window', 'color': AppColors.actionPurple},
     ];
 
     final opt = statusOptions[hash % statusOptions.length];
@@ -107,7 +131,10 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
             children: [
               // Header App Bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -116,9 +143,16 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: AppColors.getSurfaceElevated(context),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                          border: Border.all(
+                            color: AppColors.getBorder(context),
+                            width: 0.8,
+                          ),
                         ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.getTextPrimary(context),
+                          size: 18,
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -143,7 +177,10 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                               ),
                               const SizedBox(width: 6),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
                                   gradient: AppColors.goldGradient,
                                   borderRadius: BorderRadius.circular(6),
@@ -153,7 +190,7 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                                   style: GoogleFonts.outfit(
                                     fontSize: 9,
                                     fontWeight: FontWeight.w900,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -203,18 +240,27 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                               ),
                               const SizedBox(width: 8),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: Colors.greenAccent.withValues(alpha: 0.15),
+                                  color: AppColors.secondary.withValues(
+                                    alpha: 0.15,
+                                  ),
                                   borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.5)),
+                                  border: Border.all(
+                                    color: AppColors.secondary.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                  ),
                                 ),
                                 child: Text(
                                   'HIGH SYNERGY ($avgSynergy/10)',
                                   style: GoogleFonts.outfit(
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.greenAccent,
+                                    color: AppColors.secondary,
                                   ),
                                 ),
                               ),
@@ -251,7 +297,11 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                         ),
                         TextButton.icon(
                           onPressed: () => AddFamilyMemberModal.show(context),
-                          icon: const Icon(Icons.person_add_rounded, size: 14, color: AppColors.primary),
+                          icon: const Icon(
+                            Icons.person_add_rounded,
+                            size: 14,
+                            color: AppColors.primary,
+                          ),
                           label: Text(
                             'Add Profile',
                             style: GoogleFonts.outfit(
@@ -271,10 +321,16 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(vertical: 24),
                         child: GlassCard(
                           padding: const EdgeInsets.all(24),
-                          borderColor: AppColors.primary.withValues(alpha: 0.25),
+                          borderColor: AppColors.primary.withValues(
+                            alpha: 0.25,
+                          ),
                           child: Column(
                             children: [
-                              const Icon(Icons.group_add_rounded, color: AppColors.primary, size: 40),
+                              const Icon(
+                                Icons.group_add_rounded,
+                                color: AppColors.primary,
+                                size: 40,
+                              ),
                               const SizedBox(height: 12),
                               Text(
                                 'No Family Profiles Saved Yet',
@@ -297,17 +353,27 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                               ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: AppColors.primary,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 18,
+                                    vertical: 10,
+                                  ),
                                 ),
-                                onPressed: () => AddFamilyMemberModal.show(context),
-                                icon: const Icon(Icons.add_rounded, color: Colors.black, size: 18),
+                                onPressed: () =>
+                                    AddFamilyMemberModal.show(context),
+                                icon: const Icon(
+                                  Icons.add_rounded,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
                                 label: Text(
                                   'Add First Member',
                                   style: GoogleFonts.outfit(
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -338,9 +404,13 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                               children: [
                                 CircleAvatar(
                                   radius: 20,
-                                  backgroundColor: color.withValues(alpha: 0.18),
+                                  backgroundColor: color.withValues(
+                                    alpha: 0.18,
+                                  ),
                                   child: Icon(
-                                    profile.isPrimary ? Icons.star_rounded : Icons.person_rounded,
+                                    profile.isPrimary
+                                        ? Icons.star_rounded
+                                        : Icons.person_rounded,
                                     color: color,
                                     size: 20,
                                   ),
@@ -348,7 +418,8 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -358,7 +429,9 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                                               style: GoogleFonts.outfit(
                                                 fontSize: 13.5,
                                                 fontWeight: FontWeight.bold,
-                                                color: AppColors.getTextPrimary(context),
+                                                color: AppColors.getTextPrimary(
+                                                  context,
+                                                ),
                                               ),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
@@ -369,7 +442,9 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                                             zodiac,
                                             style: GoogleFonts.inter(
                                               fontSize: 10.5,
-                                              color: AppColors.getTextMuted(context),
+                                              color: AppColors.getTextMuted(
+                                                context,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -389,12 +464,19 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: const Icon(Icons.compare_arrows_rounded, color: AppColors.primary, size: 18),
+                                  icon: const Icon(
+                                    Icons.compare_arrows_rounded,
+                                    color: AppColors.primary,
+                                    size: 18,
+                                  ),
                                   tooltip: 'Compare Chart',
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (_) => const ChartComparisonScreen()),
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            const ChartComparisonScreen(),
+                                      ),
                                     );
                                   },
                                 ),
@@ -407,11 +489,14 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                                     ),
                                     onSelected: (val) {
                                       if (val == 'delete') {
-                                        ref.read(profilesListProvider.notifier).deleteProfile(profile.id);
+                                        ref
+                                            .read(profilesListProvider.notifier)
+                                            .deleteProfile(profile.id);
                                         CosmicNotification.showSuccess(
                                           context,
                                           title: 'Profile Removed',
-                                          message: '${profile.name} was removed from family profiles.',
+                                          message:
+                                              '${profile.name} was removed from family profiles.',
                                           icon: Icons.person_remove_rounded,
                                         );
                                       }
@@ -421,11 +506,18 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                                         value: 'delete',
                                         child: Row(
                                           children: [
-                                            const Icon(Icons.delete_outline_rounded, color: Colors.redAccent, size: 16),
+                                            const Icon(
+                                              Icons.delete_outline_rounded,
+                                              color: AppColors.pink,
+                                              size: 16,
+                                            ),
                                             const SizedBox(width: 8),
                                             Text(
                                               'Remove Profile',
-                                              style: GoogleFonts.inter(fontSize: 12, color: Colors.redAccent),
+                                              style: GoogleFonts.inter(
+                                                fontSize: 12,
+                                                color: AppColors.pink,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -444,12 +536,20 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
                         padding: const EdgeInsets.only(top: 6, bottom: 24),
                         child: OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(color: AppColors.primary.withValues(alpha: 0.4)),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                            side: BorderSide(
+                              color: AppColors.primary.withValues(alpha: 0.4),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
                             padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
                           onPressed: () => AddFamilyMemberModal.show(context),
-                          icon: const Icon(Icons.person_add_alt_1_rounded, size: 16, color: AppColors.primary),
+                          icon: const Icon(
+                            Icons.person_add_alt_1_rounded,
+                            size: 16,
+                            color: AppColors.primary,
+                          ),
                           label: Text(
                             'Add Another Family Profile',
                             style: GoogleFonts.outfit(
@@ -470,4 +570,3 @@ class FamilyAstrologyDashboardScreen extends ConsumerWidget {
     );
   }
 }
-

@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_decorations.dart';
-import '../../../../core/theme/app_animations.dart';
-import '../../../../core/widgets/gradient_button.dart';
-import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../core/providers/subscription_provider.dart';
-import '../../../onboarding/presentation/screens/onboarding_screen.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/cosmic_notification.dart';
+import '../../../onboarding/presentation/screens/onboarding_screen.dart';
 
-/// Elite Production Trust, Privacy & Help Center Screen for AstroSaathi
-/// Delivers a hyper-professional UI with glassmorphic cards, Google Play Data Safety badges,
-/// interactive FAQ accordions, account erasure workflow, and direct support integration.
+/// Local-first trust, privacy, and support information for the demo build.
 class TrustCenterScreen extends ConsumerStatefulWidget {
   const TrustCenterScreen({super.key});
 
@@ -26,992 +19,1301 @@ class TrustCenterScreen extends ConsumerStatefulWidget {
   ConsumerState<TrustCenterScreen> createState() => _TrustCenterScreenState();
 }
 
-class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  String _selectedReportCategory = 'Rashi Calculation';
-  final TextEditingController _reportController = TextEditingController();
-  final TextEditingController _userEmailController = TextEditingController();
-
-  final List<String> _reportCategories = [
-    'Rashi Calculation',
-    'Planetary Transit',
-    'Panchang & Tithi',
-    'Dasha Period',
-    'Horoscope Prediction',
-    'Kundli Matching',
-    'Account & App Bug',
+class _TrustCenterScreenState extends ConsumerState<TrustCenterScreen> {
+  static const _tabs = <_TrustTabData>[
+    _TrustTabData('How It Works', Icons.auto_awesome_outlined),
+    _TrustTabData('Privacy & Safety', Icons.shield_outlined),
+    _TrustTabData('Account Deletion', Icons.delete_outline_rounded),
+    _TrustTabData('Help & Support', Icons.help_outline_rounded),
   ];
 
+  static const _reportCategories = <_IssueCategory>[
+    _IssueCategory('Rashi Calculation', Icons.brightness_5_outlined),
+    _IssueCategory('Kundli', Icons.grid_view_rounded),
+    _IssueCategory('Calendar', Icons.calendar_month_outlined),
+    _IssueCategory('Numerology', Icons.pin_outlined),
+    _IssueCategory('Synastry', Icons.favorite_border_rounded),
+    _IssueCategory('Horoscope', Icons.auto_awesome_outlined),
+    _IssueCategory('Profile', Icons.person_outline_rounded),
+    _IssueCategory('UI / App Bug', Icons.bug_report_outlined),
+    _IssueCategory('Other', Icons.more_horiz_rounded),
+  ];
+
+  static const _faqs = <_FaqData>[
+    _FaqData(
+      'How does AstroSaathi personalize my experience?',
+      'The demo uses the profile, birth details, selected focus areas, and local app state saved on this device to shape the screens and guidance you see.',
+    ),
+    _FaqData(
+      'Is my birth information stored online?',
+      'No. This frontend-only build keeps profile information in local app preferences on this device. It does not sync your birth details to an AstroSaathi server.',
+    ),
+    _FaqData(
+      'Can I change my birth details?',
+      'Yes. Open Profile, then Birth Details. The dedicated editor updates the locally saved profile without reopening onboarding.',
+    ),
+    _FaqData(
+      'Why does birth time matter?',
+      'Birth time influences time-sensitive astrology concepts such as the Ascendant and house placements. If the time is uncertain, treat precision-sensitive details as approximate.',
+    ),
+    _FaqData(
+      'How are daily insights generated?',
+      'Daily insights in this demo come from the app’s deterministic local demo engine and your saved profile context. They are not fetched from a live astrologer or remote AI service.',
+    ),
+    _FaqData(
+      'Can I use AstroSaathi without internet?',
+      'The core demo experience is designed to work locally. System actions outside the app, such as sharing a prepared report, depend on apps available on your device.',
+    ),
+    _FaqData(
+      'How do I reset my local data?',
+      'Open the Account Deletion tab and choose Clear Local App Data. Review the confirmation carefully because the local reset cannot be undone.',
+    ),
+    _FaqData(
+      'Why are some astronomy details unavailable?',
+      'Some exact angles, event timings, and ephemeris-level values require astronomy data that is not included in this frontend-only demo. AstroSaathi shows an unavailable state rather than inventing a value.',
+    ),
+  ];
+
+  final _reportController = TextEditingController();
+  final _emailController = TextEditingController();
+  int _selectedTab = 0;
   int? _expandedFaqIndex;
-
-  final List<Map<String, String>> _faqs = [
-    {
-      'question': 'How accurate are AstroSaathi birth charts?',
-      'answer':
-          'AstroSaathi uses exact Chitrapaksha (Lahiri) Ayanamsa ephemeris calculations. Planetary positions, Lagna degrees, and Nakshatra placements match official NASA JPL and Swiss Ephemeris mathematical matrices with 99.9% precision.',
-    },
-    {
-      'question': 'Is my personal birth data kept private?',
-      'answer':
-          'Yes, 100%. Your birth name, date, time, and coordinates are stored locally on your device or encrypted securely. We never sell or share user profiles with third-party advertisers.',
-    },
-    {
-      'question': 'Why is exact birth time so important?',
-      'answer':
-          'In Vedic Astrology (Jyotish), the Lagna (Ascendant) changes approximately every 2 hours and the Moon Nakshatra moves rapidly. Accurate birth time ensures precise house placement and exact Dasha timing.',
-    },
-    {
-      'question': 'How can I delete all my data?',
-      'answer':
-          'You can permanently delete all profiles, saved Kundlis, and local history directly under the "Account Deletion" tab on this screen, or via our web portal at https://astrosaathi.app/delete-account.',
-    },
-    {
-      'question': 'Does the AI invent astrologic planetary positions?',
-      'answer':
-          'No. Our AI companion (Astro Baba) solely interprets deterministic astronomical calculations derived mathematically. The AI never alters planetary degrees or generates random charts.',
-    },
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 4, vsync: this);
-  }
+  String? _selectedReportCategory;
 
   @override
   void dispose() {
-    _tabController.dispose();
     _reportController.dispose();
-    _userEmailController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
-  Future<void> _launchUrl(String urlStr) async {
-    final uri = Uri.parse(urlStr);
-    try {
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-      } else {
-        _copyToClipboard(urlStr);
-      }
-    } catch (_) {
-      _copyToClipboard(urlStr);
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundLight,
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildHeader(),
+            _buildCategoryNavigation(),
+            const SizedBox(height: 8),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 210),
+                switchInCurve: Curves.easeOut,
+                switchOutCurve: Curves.easeIn,
+                transitionBuilder: (child, animation) => FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0, .015),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  ),
+                ),
+                child: KeyedSubtree(
+                  key: ValueKey(_selectedTab),
+                  child: switch (_selectedTab) {
+                    0 => _buildHowItWorksTab(),
+                    1 => _buildPrivacyTab(),
+                    2 => _buildDeletionTab(),
+                    _ => _buildHelpTab(),
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  void _copyToClipboard(String text) {
-    Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Copied "$text" to clipboard'),
-        backgroundColor: AppColors.success,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 14, 20, 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Semantics(
+            button: true,
+            label: 'Back',
+            child: IconButton(
+              tooltip: 'Back',
+              onPressed: () => Navigator.maybePop(context),
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: AppColors.textPrimaryLight,
+                size: 20,
+              ),
+            ),
+          ),
+          Container(
+            width: 46,
+            height: 46,
+            decoration: const BoxDecoration(
+              color: AppColors.softLavender,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.shield_outlined,
+              color: AppColors.primaryLightMode,
+              size: 23,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Trust & Help Center',
+                  style: GoogleFonts.plusJakartaSans(
+                    color: AppColors.textPrimaryLight,
+                    fontSize: 24,
+                    height: 1.15,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Safety, privacy & support',
+                  style: GoogleFonts.inter(
+                    color: AppColors.textSecondaryLight,
+                    fontSize: 14,
+                    height: 1.3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
+    ).animate().fadeIn(duration: 260.ms).slideY(begin: -.04, end: 0);
+  }
+
+  Widget _buildCategoryNavigation() {
+    return SizedBox(
+      height: 52,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+        scrollDirection: Axis.horizontal,
+        itemCount: _tabs.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        itemBuilder: (context, index) {
+          final tab = _tabs[index];
+          final selected = _selectedTab == index;
+          return Semantics(
+            button: true,
+            selected: selected,
+            label: '${tab.label} tab',
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () => setState(() => _selectedTab = index),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                  constraints: const BoxConstraints(minHeight: 48),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: selected
+                        ? AppColors.primaryLightMode
+                        : AppColors.surfaceLight,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: selected
+                          ? AppColors.primaryLightMode
+                          : AppColors.softLavender,
+                    ),
+                    boxShadow: selected
+                        ? [
+                            BoxShadow(
+                              color: AppColors.primaryLightMode.withValues(
+                                alpha: .12,
+                              ),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ]
+                        : null,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        tab.icon,
+                        size: 17,
+                        color: selected
+                            ? AppColors.surfaceLight
+                            : AppColors.textSecondaryLight,
+                      ),
+                      const SizedBox(width: 7),
+                      Text(
+                        tab.label,
+                        maxLines: 1,
+                        style: GoogleFonts.inter(
+                          color: selected
+                              ? AppColors.surfaceLight
+                              : AppColors.textSecondaryLight,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _tabList(List<Widget> children) {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      children: children,
+    );
+  }
+
+  Widget _buildHowItWorksTab() {
+    return _tabList([
+      _TrustHero(
+        title: 'Trusted Astrology Foundation',
+        subtitle:
+            'Local deterministic astrology calculations shaped for a transparent frontend-only demo.',
+        icon: Icons.auto_awesome_outlined,
+        badges: const ['Verified logic', 'Offline-first', 'Demo mode'],
+      ),
+      const SizedBox(height: 28),
+      const _SectionHeading(
+        eyebrow: 'TRANSPARENT BY DESIGN',
+        title: 'How AstroSaathi works',
+        subtitle: 'Clear explanations without hidden server claims.',
+      ),
+      const SizedBox(height: 14),
+      const TrustInfoCard(
+        icon: Icons.calculate_outlined,
+        title: 'How your chart is calculated',
+        description:
+            'The current demo uses its bundled local calculation and presentation logic. Precision-only fields stay unavailable when canonical astronomy data is not present.',
+        badge: 'Local logic',
+      ),
+      const SizedBox(height: 12),
+      const TrustInfoCard(
+        icon: Icons.badge_outlined,
+        title: 'Your birth details',
+        description:
+            'Your name, date, time, and birthplace provide the local profile context used across astrology screens.',
+      ),
+      const SizedBox(height: 12),
+      const TrustInfoCard(
+        icon: Icons.schedule_outlined,
+        title: 'Why birth time matters',
+        description:
+            'Time-sensitive concepts such as Lagna and houses can change throughout the day. Unknown or approximate times may reduce precision.',
+      ),
+      const SizedBox(height: 12),
+      const TrustInfoCard(
+        icon: Icons.tune_rounded,
+        title: 'How personalization works',
+        description:
+            'The app combines your locally saved profile and focus areas with deterministic demo content to organize relevant guidance.',
+      ),
+    ]);
+  }
+
+  Widget _buildPrivacyTab() {
+    return _tabList([
+      const _TrustHero(
+        title: 'Your data stays close',
+        subtitle:
+            'This frontend-only build keeps profile data in local app preferences and does not sync it to an AstroSaathi server.',
+        icon: Icons.lock_outline_rounded,
+        badges: ['Local profile data', 'No server sync', 'No live payment'],
+      ),
+      const SizedBox(height: 28),
+      const _SectionHeading(
+        eyebrow: 'PRIVACY & SAFETY',
+        title: 'Clear local-data controls',
+        subtitle: 'Know what is stored, why it is used, and how to remove it.',
+      ),
+      const SizedBox(height: 14),
+      const TrustInfoCard(
+        icon: Icons.person_outline_rounded,
+        title: 'Your profile data',
+        description:
+            'Profile names, relationships, birth details, and focus areas are stored in local app preferences on this device.',
+        badge: 'On device',
+      ),
+      const SizedBox(height: 12),
+      const TrustInfoCard(
+        icon: Icons.cake_outlined,
+        title: 'Birth details',
+        description:
+            'Birth information is used to personalize the local astrology experience. This demo does not upload it to a remote AstroSaathi account.',
+      ),
+      const SizedBox(height: 12),
+      const TrustInfoCard(
+        icon: Icons.phonelink_lock_outlined,
+        title: 'Permissions',
+        description:
+            'The Android demo does not declare runtime location, camera, microphone, contacts, or notification permissions.',
+        badge: 'Minimal access',
+      ),
+      const SizedBox(height: 12),
+      const TrustInfoCard(
+        icon: Icons.safety_check_outlined,
+        title: 'Safety',
+        description:
+            'Astrology guidance is presented for reflection and personal exploration. It is not medical, legal, or financial advice.',
+      ),
+      const SizedBox(height: 12),
+      TrustInfoCard(
+        icon: Icons.delete_sweep_outlined,
+        title: 'Delete local data',
+        description:
+            'Use the Account Deletion tab to clear local profiles, onboarding state, preferences, and demo state from this installation.',
+        trailing: const Icon(
+          Icons.arrow_forward_rounded,
+          color: AppColors.primaryLightMode,
+        ),
+        onTap: () => setState(() => _selectedTab = 2),
+      ),
+    ]);
+  }
+
+  Widget _buildDeletionTab() {
+    return _tabList([
+      const _TrustHero(
+        title: 'Clear local app data',
+        subtitle:
+            'This action resets this installation. There is no server account to delete in the frontend-only demo.',
+        icon: Icons.delete_outline_rounded,
+        badges: ['Device only', 'Immediate reset'],
+        warning: true,
+      ),
+      const SizedBox(height: 28),
+      const _SectionHeading(
+        eyebrow: 'BEFORE YOU CONTINUE',
+        title: 'What will be removed',
+        subtitle: 'The reset cannot be undone from inside the app.',
+      ),
+      const SizedBox(height: 14),
+      const _RemovalList(),
+      const SizedBox(height: 20),
+      FilledButton.icon(
+        key: const ValueKey('clear-local-data-button'),
+        onPressed: _handleAccountDeletion,
+        icon: const Icon(Icons.delete_forever_outlined),
+        label: const Text('Clear Local App Data'),
+        style: FilledButton.styleFrom(
+          minimumSize: const Size.fromHeight(48),
+          backgroundColor: AppColors.primaryLightMode,
+          foregroundColor: AppColors.surfaceLight,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          textStyle: GoogleFonts.inter(fontWeight: FontWeight.w700),
+        ),
+      ),
+      const SizedBox(height: 10),
+      TextButton(
+        onPressed: () => setState(() => _selectedTab = 0),
+        style: TextButton.styleFrom(
+          minimumSize: const Size.fromHeight(44),
+          foregroundColor: AppColors.textSecondaryLight,
+        ),
+        child: const Text('Cancel'),
+      ),
+    ]);
+  }
+
+  Widget _buildHelpTab() {
+    return _tabList([
+      const _SectionHeading(
+        eyebrow: 'HELP & SUPPORT',
+        title: 'Answers when you need them',
+        subtitle: 'Browse local-demo guidance or prepare a report to share.',
+      ),
+      const SizedBox(height: 18),
+      Text(
+        'Frequently Asked Questions',
+        style: GoogleFonts.plusJakartaSans(
+          color: AppColors.textPrimaryLight,
+          fontSize: 19,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+      const SizedBox(height: 12),
+      ...List.generate(_faqs.length, (index) {
+        final faq = _faqs[index];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: HelpFaqTile(
+            question: faq.question,
+            answer: faq.answer,
+            expanded: _expandedFaqIndex == index,
+            onTap: () => setState(() {
+              _expandedFaqIndex = _expandedFaqIndex == index ? null : index;
+            }),
+          ),
+        );
+      }),
+      const SizedBox(height: 22),
+      Text(
+        'Report an Issue',
+        style: GoogleFonts.plusJakartaSans(
+          color: AppColors.textPrimaryLight,
+          fontSize: 19,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+      const SizedBox(height: 6),
+      Text(
+        'Found an incorrect placement, calculation, or interface issue? Choose a category and tell us what happened.',
+        style: GoogleFonts.inter(
+          color: AppColors.textSecondaryLight,
+          fontSize: 14,
+          height: 1.45,
+        ),
+      ),
+      const SizedBox(height: 14),
+      Wrap(
+        spacing: 8,
+        runSpacing: 10,
+        children: _reportCategories.map((category) {
+          final selected = _selectedReportCategory == category.label;
+          return IssueCategoryChip(
+            label: category.label,
+            icon: category.icon,
+            selected: selected,
+            onSelected: () => setState(() {
+              _selectedReportCategory = category.label;
+            }),
+          );
+        }).toList(),
+      ),
+      AnimatedSize(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOut,
+        alignment: Alignment.topCenter,
+        child: _selectedReportCategory == null
+            ? const SizedBox.shrink()
+            : Padding(
+                padding: const EdgeInsets.only(top: 18),
+                child: _buildReportForm(),
+              ),
+      ),
+      const SizedBox(height: 26),
+      const _SectionHeading(
+        eyebrow: 'APP INFORMATION',
+        title: 'Frontend-only demo',
+        subtitle:
+            'No fake live chat, server ticket, account sync, or payment processing is represented here.',
+      ),
+      const SizedBox(height: 14),
+      const TrustInfoCard(
+        icon: Icons.info_outline_rounded,
+        title: 'About AstroSaathi',
+        description:
+            'A locally presented astrology demo focused on clear, thoughtful, and transparent product experiences.',
+        badge: 'Demo build',
+      ),
+    ]);
+  }
+
+  Widget _buildReportForm() {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceLight,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppColors.softLavender),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Issue category',
+            style: GoogleFonts.inter(
+              color: AppColors.textSecondaryLight,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            _selectedReportCategory!,
+            style: GoogleFonts.plusJakartaSans(
+              color: AppColors.textPrimaryLight,
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            key: const ValueKey('issue-description-field'),
+            controller: _reportController,
+            minLines: 4,
+            maxLines: 7,
+            textInputAction: TextInputAction.newline,
+            style: GoogleFonts.inter(
+              color: AppColors.textPrimaryLight,
+              fontSize: 14,
+            ),
+            decoration: _inputDecoration(
+              label: 'Description',
+              hint: 'Describe what you expected and what happened.',
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _emailController,
+            keyboardType: TextInputType.emailAddress,
+            style: GoogleFonts.inter(
+              color: AppColors.textPrimaryLight,
+              fontSize: 14,
+            ),
+            decoration: _inputDecoration(
+              label: 'Contact email (optional)',
+              hint: 'name@example.com',
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(
+                Icons.image_outlined,
+                color: AppColors.secondary,
+                size: 18,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'If useful, attach a screenshot after sharing the prepared report through an app on your device.',
+                  style: GoogleFonts.inter(
+                    color: AppColors.textSecondaryLight,
+                    fontSize: 12.5,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          FilledButton.icon(
+            key: const ValueKey('prepare-support-report-button'),
+            onPressed: _prepareSupportReport,
+            icon: const Icon(Icons.content_copy_rounded, size: 18),
+            label: const Text('Prepare Support Report'),
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(48),
+              backgroundColor: AppColors.primaryLightMode,
+              foregroundColor: AppColors.surfaceLight,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              textStyle: GoogleFonts.inter(fontWeight: FontWeight.w700),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Support reporting is available in this demo as a local clipboard draft. Nothing is submitted to a server.',
+            style: GoogleFonts.inter(
+              color: AppColors.textSecondaryLight,
+              fontSize: 12,
+              height: 1.4,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  InputDecoration _inputDecoration({
+    required String label,
+    required String hint,
+  }) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      alignLabelWithHint: true,
+      filled: true,
+      fillColor: AppColors.backgroundLight,
+      labelStyle: const TextStyle(color: AppColors.textSecondaryLight),
+      hintStyle: const TextStyle(color: AppColors.textSecondaryLight),
+      contentPadding: const EdgeInsets.all(16),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: AppColors.softLavender),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(
+          color: AppColors.primaryLightMode,
+          width: 1.4,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _prepareSupportReport() async {
+    final description = _reportController.text.trim();
+    if (description.isEmpty) {
+      CosmicNotification.show(
+        context,
+        message: 'Please describe the issue before preparing the report.',
+        icon: Icons.info_outline_rounded,
+      );
+      return;
+    }
+
+    final email = _emailController.text.trim();
+    final report = StringBuffer()
+      ..writeln('AstroSaathi Demo Support Report')
+      ..writeln('Category: $_selectedReportCategory')
+      ..writeln('Description: $description');
+    if (email.isNotEmpty) report.writeln('Contact: $email');
+    report.writeln('Build: Frontend-only demo');
+
+    await Clipboard.setData(ClipboardData(text: report.toString()));
+    if (!mounted) return;
+    CosmicNotification.show(
+      context,
+      message: 'Local support report copied to clipboard.',
+      icon: Icons.content_copy_rounded,
     );
   }
 
   Future<void> _handleAccountDeletion() async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.surfaceDark,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.surfaceLight,
+        surfaceTintColor: AppColors.surfaceLight,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: AppColors.error, width: 1.2),
+          side: const BorderSide(color: AppColors.highlightSurface),
         ),
         title: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppColors.error.withValues(alpha: 0.15),
+              width: 44,
+              height: 44,
+              decoration: const BoxDecoration(
+                color: AppColors.softLavender,
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.warning_amber_rounded,
-                color: AppColors.error,
-                size: 26,
+                color: AppColors.primaryLightMode,
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Erase All Data?',
-                style: GoogleFonts.outfit(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+                'Clear local app data?',
+                style: GoogleFonts.plusJakartaSans(
+                  color: AppColors.textPrimaryLight,
                   fontSize: 18,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ),
           ],
         ),
         content: Text(
-          'Are you sure you want to permanently erase your primary birth profile, family profiles, saved Kundlis, and local app preferences? This action is immediate and cannot be undone.',
+          'This removes local profiles, onboarding state, focus areas, preferences, demo subscription state, and saved demo sessions from this installation. This cannot be undone.',
           style: GoogleFonts.inter(
-            color: AppColors.textSecondaryDark,
-            fontSize: 13.5,
+            color: AppColors.textSecondaryLight,
+            fontSize: 14,
             height: 1.45,
           ),
         ),
-        actionsPadding: const EdgeInsets.all(16),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(
-              'Cancel',
-              style: GoogleFonts.outfit(
-                color: AppColors.textSecondaryDark,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancel'),
           ),
-          ElevatedButton.icon(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.primaryLightMode,
+              foregroundColor: AppColors.surfaceLight,
             ),
-            icon: const Icon(Icons.delete_forever_rounded, size: 18, color: Colors.white),
-            label: Text(
-              'Permanently Delete',
-              style: GoogleFonts.outfit(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Clear Local Data'),
           ),
         ],
       ),
     );
 
-    if (confirmed == true && mounted) {
-      await ref.read(profilesListProvider.notifier).clearAllProfiles();
-      await ref.read(subscriptionProvider.notifier).cancelSubscription();
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.clear();
-
-      if (mounted) {
-        CosmicNotification.show(
-          context,
-          message: 'Your account and local data have been permanently erased.',
-          icon: Icons.check_circle_rounded,
-        );
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const OnboardingScreen()),
-          (route) => false,
-        );
-      }
-    }
-  }
-
-  void _submitReport() {
-    final msg = _reportController.text.trim();
-    if (msg.isEmpty) {
-      CosmicNotification.show(
-        context,
-        message: 'Please describe the issue before submitting.',
-        icon: Icons.error_outline_rounded,
-      );
-      return;
-    }
-
+    if (confirmed != true || !mounted) return;
+    await ref.read(profilesListProvider.notifier).clearAllProfiles();
+    await ref.read(subscriptionProvider.notifier).cancelSubscription();
+    final preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+    if (!mounted) return;
     CosmicNotification.show(
       context,
-      message: 'Report submitted to Vedic Data Audit team! We will review this issue promptly.',
-      icon: Icons.verified_rounded,
+      message: 'Local AstroSaathi data has been cleared.',
+      icon: Icons.check_circle_outline_rounded,
     );
-    _reportController.clear();
-    _userEmailController.clear();
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const OnboardingScreen()),
+      (_) => false,
+    );
   }
+}
+
+class TrustInfoCard extends StatelessWidget {
+  const TrustInfoCard({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.description,
+    this.badge,
+    this.trailing,
+    this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String description;
+  final String? badge;
+  final Widget? trailing;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundDark,
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.cosmicGradient),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Custom Header Bar
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
-                      onPressed: () => Navigator.maybePop(context),
-                    ),
-                    const SizedBox(width: 4),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primary.withValues(alpha: 0.15),
-                        border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
-                      ),
-                      child: const Icon(Icons.shield_outlined, color: AppColors.primary, size: 20),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Trust & Help Center',
-                            style: GoogleFonts.plusJakartaSans(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 18,
-                            ),
-                          ),
-                          Text(
-                            'Data Safety, Privacy Policy & Support',
-                            style: GoogleFonts.inter(
-                              color: AppColors.textSecondaryDark,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // TabBar Navigation Controls
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  isScrollable: true,
-                  indicator: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.4),
-                        blurRadius: 10,
-                      ),
-                    ],
-                  ),
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  labelColor: Colors.black,
-                  unselectedLabelColor: AppColors.textSecondaryDark,
-                  labelStyle: GoogleFonts.outfit(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                  unselectedLabelStyle: GoogleFonts.outfit(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13,
-                  ),
-                  tabs: const [
-                    Tab(text: 'How It Works'),
-                    Tab(text: 'Privacy & Safety'),
-                    Tab(text: 'Account Deletion'),
-                    Tab(text: 'Help & Support'),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              // Tab View Content
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _buildHowItWorksTab(),
-                    _buildPrivacySafetyTab(),
-                    _buildAccountDeletionTab(),
-                    _buildHelpSupportTab(),
-                  ],
-                ),
+    return Material(
+      color: AppColors.surfaceLight,
+      borderRadius: BorderRadius.circular(22),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(22),
+        child: Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: AppColors.softLavender),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primaryLightMode.withValues(alpha: .05),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  // ── Tab 1: How It Works ──────────────────────────────────────────
-  Widget _buildHowItWorksTab() {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(18),
-      children: [
-        // Gold Banner Header
-        GlassCard(
-          borderRadius: 20,
-          padding: const EdgeInsets.all(18),
-          borderColor: AppColors.primary.withValues(alpha: 0.4),
-          glowColor: AppColors.primary.withValues(alpha: 0.15),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.all(12),
+                width: 48,
+                height: 48,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary.withValues(alpha: 0.2),
+                  color: AppColors.secondaryBackground,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Icon(Icons.auto_awesome, color: AppColors.primary, size: 28),
+                child: Icon(icon, color: AppColors.primaryLightMode, size: 23),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '100% Deterministic Vedic Engine',
-                      style: GoogleFonts.plusJakartaSans(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.5,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      'Chitrapaksha Lahiri Ayanamsa • Real Astronomical Ephemeris',
-                      style: GoogleFonts.inter(
-                        color: AppColors.primary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ).fadeSlideUp(),
-
-        const SizedBox(height: 18),
-
-        _explanationCard(
-          icon: Icons.calculate_outlined,
-          title: 'Mathematical Planetary Calculation',
-          description:
-              'AstroSaathi derives planetary positions, house cusps (Lagna), and Nakshatras mathematically from astronomical ephemeris equations. We never rely on random generators or third-party fortune-telling tools.',
-          delayMs: 100,
-        ),
-        _explanationCard(
-          icon: Icons.shield_outlined,
-          title: 'Local & Encrypted Data Storage',
-          description:
-              'Your profile details (Name, Date, Time, Location) are stored securely on your local device or encrypted with TLS 1.3 standards. Your birth details are used exclusively to render your personalized chart.',
-          delayMs: 200,
-        ),
-        _explanationCard(
-          icon: Icons.cake_outlined,
-          title: 'Why Birth Details Are Required',
-          description:
-              'Vedic Jyotish relies on exact birth timing because the Ascendant (Lagna) sign changes approximately every 2 hours. Accurate birth time ensures exact Dasha periods and precise Moon Nakshatra mapping.',
-          delayMs: 300,
-        ),
-        _explanationCard(
-          icon: Icons.location_on_outlined,
-          title: 'How Location Data Is Used',
-          description:
-              'Coordinates (Latitude & Longitude) are used solely to compute local sidereal time and precise sunrise/sunset times for your birth moment. We NEVER track your GPS in the background.',
-          delayMs: 400,
-        ),
-        _explanationCard(
-          icon: Icons.psychology_outlined,
-          title: 'How AI (Astro Baba) Operates',
-          description:
-              'Our AI assistant translates complex astronomical placements into clear, conversational Vedic insights. The AI interprets calculated planetary positions; it NEVER fabricates birth charts.',
-          delayMs: 500,
-        ),
-
-        const SizedBox(height: 20),
-      ],
-    );
-  }
-
-  // ── Tab 2: Privacy & Data Safety ─────────────────────────────────
-  Widget _buildPrivacySafetyTab() {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(18),
-      children: [
-        // Google Play Data Safety Matrix
-        GlassCard(
-          borderRadius: 20,
-          padding: const EdgeInsets.all(18),
-          borderColor: Colors.white.withValues(alpha: 0.15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.verified_user_rounded, color: Colors.greenAccent, size: 22),
-                  const SizedBox(width: 10),
-                  Text(
-                    'Google Play Data Safety Status',
-                    style: GoogleFonts.plusJakartaSans(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              _dataSafetyRow('Data Shared With 3rd Parties', 'None (0%)', isPositive: true),
-              const Divider(color: Colors.white10, height: 16),
-              _dataSafetyRow('Data Encrypted In Transit', 'HTTPS / TLS 1.3', isPositive: true),
-              const Divider(color: Colors.white10, height: 16),
-              _dataSafetyRow('Data Collection Scope', 'Optional Profile Details', isPositive: true),
-              const Divider(color: Colors.white10, height: 16),
-              _dataSafetyRow('In-App Account Deletion', 'Available (Immediate)', isPositive: true),
-            ],
-          ),
-        ).fadeSlideUp(),
-
-        const SizedBox(height: 20),
-
-        // Full Privacy Summary Box
-        Text(
-          'Privacy Policy Summary',
-          style: GoogleFonts.plusJakartaSans(
-            color: AppColors.primary,
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-          ),
-        ).fadeSlideUp(delay: 100.ms),
-
-        const SizedBox(height: 10),
-
-        GlassCard(
-          borderRadius: 18,
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'AstroSaathi is committed to strictly preserving user privacy and transparent data handling:\n\n'
-                '1. Information Scope: We collect Name, Date of Birth, Birth Time, and Location exclusively for astrological calculation.\n'
-                '2. Location Access: Requested only during birth detail entry to compute coordinates. Background location tracking is disabled.\n'
-                '3. Security Standards: All server sync communications utilize industry-standard TLS encryption.\n'
-                '4. User Autonomy: You retain full rights to inspect, update, or permanently delete your stored data at any time.',
-                style: GoogleFonts.inter(
-                  color: AppColors.textSecondaryDark,
-                  fontSize: 13.5,
-                  height: 1.55,
-                ),
-              ),
-              const SizedBox(height: 14),
-              OutlinedButton.icon(
-                onPressed: () => _launchUrl('https://astrosaathi.app/privacy-policy'),
-                icon: const Icon(Icons.open_in_new_rounded, size: 16, color: AppColors.primary),
-                label: Text(
-                  'Read Full Policy Online',
-                  style: GoogleFonts.outfit(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                ),
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.primary),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-              ),
-            ],
-          ),
-        ).fadeSlideUp(delay: 200.ms),
-
-        const SizedBox(height: 20),
-      ],
-    );
-  }
-
-  // ── Tab 3: Account Deletion ──────────────────────────────────────
-  Widget _buildAccountDeletionTab() {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(18),
-      children: [
-        // Immediate In-App Deletion Card
-        GlassCard(
-          borderRadius: 22,
-          padding: const EdgeInsets.all(20),
-          borderColor: AppColors.error.withValues(alpha: 0.5),
-          glowColor: AppColors.error.withValues(alpha: 0.15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: AppColors.error.withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.delete_sweep_rounded,
-                      color: AppColors.error,
-                      size: 26,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'In-App Data Erasure',
-                          style: GoogleFonts.plusJakartaSans(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
-                          ),
-                        ),
-                        Text(
-                          'Google Play Data Safety Compliant',
-                          style: GoogleFonts.inter(
-                            color: AppColors.error,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 14),
-              Text(
-                'You can instantly wipe all stored birth charts, family profiles, astrological history, and preferences directly from this device.',
-                style: GoogleFonts.inter(
-                  color: AppColors.textSecondaryDark,
-                  fontSize: 13.5,
-                  height: 1.45,
-                ),
-              ),
-              const SizedBox(height: 20),
-              GradientButton(
-                text: 'Delete Account & Clear Local Data',
-                icon: Icons.delete_forever_rounded,
-                onPressed: _handleAccountDeletion,
-              ),
-            ],
-          ),
-        ).fadeSlideUp(),
-
-        const SizedBox(height: 20),
-
-        // External Web Portal Resource
-        GlassCard(
-          borderRadius: 22,
-          padding: const EdgeInsets.all(20),
-          borderColor: Colors.white.withValues(alpha: 0.12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.language_rounded, color: AppColors.primary, size: 24),
-                  const SizedBox(width: 12),
-                  Text(
-                    'External Web Deletion Portal',
-                    style: GoogleFonts.plusJakartaSans(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'If you no longer have the app installed, you can submit an account erasure request via our online web portal:',
-                style: GoogleFonts.inter(
-                  color: AppColors.textSecondaryDark,
-                  fontSize: 13,
-                  height: 1.45,
-                ),
-              ),
-              const SizedBox(height: 14),
-              _webLinkTile('Privacy & Data Rights', 'https://astrosaathi.app/privacy-policy'),
-              const SizedBox(height: 10),
-              _webLinkTile('Submit Deletion Request', 'https://astrosaathi.app/delete-account'),
-            ],
-          ),
-        ).fadeSlideUp(delay: 150.ms),
-
-        const SizedBox(height: 20),
-      ],
-    );
-  }
-
-  // ── Tab 4: Help & Support ────────────────────────────────────────
-  Widget _buildHelpSupportTab() {
-    return ListView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.all(18),
-      children: [
-        // FAQ Section
-        Row(
-          children: [
-            const Icon(Icons.quiz_outlined, color: AppColors.primary, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              'Frequently Asked Questions',
-              style: GoogleFonts.plusJakartaSans(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-              ),
-            ),
-          ],
-        ).fadeSlideUp(),
-
-        const SizedBox(height: 12),
-
-        Column(
-          children: List.generate(_faqs.length, (index) {
-            final faq = _faqs[index];
-            final isExpanded = _expandedFaqIndex == index;
-            return Container(
-              margin: const EdgeInsets.only(bottom: 10),
-              child: GlassCard(
-                borderRadius: 16,
-                padding: EdgeInsets.zero,
-                borderColor: isExpanded
-                    ? AppColors.primary.withValues(alpha: 0.5)
-                    : Colors.white.withValues(alpha: 0.1),
-                onTap: () {
-                  setState(() {
-                    _expandedFaqIndex = isExpanded ? null : index;
-                  });
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              faq['question']!,
-                              style: GoogleFonts.outfit(
-                                color: isExpanded ? AppColors.primary : Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.5,
-                              ),
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: GoogleFonts.plusJakartaSans(
+                              color: AppColors.textPrimaryLight,
+                              fontSize: 16,
+                              height: 1.25,
+                              fontWeight: FontWeight.w800,
                             ),
                           ),
-                          Icon(
-                            isExpanded
-                                ? Icons.keyboard_arrow_up_rounded
-                                : Icons.keyboard_arrow_down_rounded,
-                            color: isExpanded ? AppColors.primary : AppColors.textSecondaryDark,
-                          ),
+                        ),
+                        if (trailing != null) ...[
+                          const SizedBox(width: 8),
+                          trailing!,
                         ],
-                      ),
-                      if (isExpanded) ...[
-                        const SizedBox(height: 10),
-                        const Divider(color: Colors.white10, height: 1),
-                        const SizedBox(height: 10),
-                        Text(
-                          faq['answer']!,
-                          style: GoogleFonts.inter(
-                            color: AppColors.textSecondaryDark,
-                            fontSize: 13,
-                            height: 1.45,
-                          ),
-                        ),
                       ],
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }),
-        ).fadeSlideUp(delay: 100.ms),
-
-        const SizedBox(height: 24),
-
-        // Report Issue Form
-        Text(
-          'Report Issue or Discrepancy',
-          style: GoogleFonts.plusJakartaSans(
-            color: AppColors.primary,
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-          ),
-        ).fadeSlideUp(delay: 200.ms),
-
-        const SizedBox(height: 6),
-
-        Text(
-          'Encountered an unexpected chart placement or app bug? Submit details to our audit team.',
-          style: GoogleFonts.inter(
-            color: AppColors.textSecondaryDark,
-            fontSize: 13,
-          ),
-        ).fadeSlideUp(delay: 250.ms),
-
-        const SizedBox(height: 14),
-
-        // Category Choice Chips
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: _reportCategories.map((cat) {
-            final isSelected = _selectedReportCategory == cat;
-            return ChoiceChip(
-              label: Text(cat),
-              selected: isSelected,
-              selectedColor: AppColors.primary,
-              backgroundColor: Colors.white.withValues(alpha: 0.06),
-              side: BorderSide(
-                color: isSelected ? AppColors.primary : Colors.white.withValues(alpha: 0.12),
-              ),
-              labelStyle: GoogleFonts.outfit(
-                color: isSelected ? Colors.black : Colors.white,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                fontSize: 12.5,
-              ),
-              onSelected: (sel) {
-                if (sel) setState(() => _selectedReportCategory = cat);
-              },
-            );
-          }).toList(),
-        ).fadeSlideUp(delay: 300.ms),
-
-        const SizedBox(height: 14),
-
-        // Message Input Box
-        TextField(
-          controller: _reportController,
-          maxLines: 4,
-          style: GoogleFonts.inter(color: Colors.white, fontSize: 14),
-          decoration: AppDecorations.premiumInput(
-            hintText: 'Describe the issue or calculation discrepancy in detail...',
-          ),
-        ).fadeSlideUp(delay: 350.ms),
-
-        const SizedBox(height: 16),
-
-        GradientButton(
-          text: 'Submit Support Ticket',
-          icon: Icons.send_rounded,
-          onPressed: _submitReport,
-        ).fadeSlideUp(delay: 400.ms),
-
-        const SizedBox(height: 24),
-
-        // Direct Email Support Box
-        GlassCard(
-          borderRadius: 18,
-          padding: const EdgeInsets.all(18),
-          borderColor: AppColors.primary.withValues(alpha: 0.3),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primary.withValues(alpha: 0.15),
-                ),
-                child: const Icon(
-                  Icons.headset_mic_rounded,
-                  color: AppColors.primary,
-                  size: 26,
-                ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Direct Email Support',
-                      style: GoogleFonts.plusJakartaSans(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
                     ),
-                    const SizedBox(height: 2),
-                    GestureDetector(
-                      onTap: () => _launchUrl('mailto:support@astrosaathi.app'),
-                      child: Text(
-                        'support@astrosaathi.app',
-                        style: GoogleFonts.outfit(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                          decoration: TextDecoration.underline,
-                        ),
+                    if (badge != null) ...[
+                      const SizedBox(height: 7),
+                      TrustBadge(label: badge!),
+                    ],
+                    const SizedBox(height: 8),
+                    Text(
+                      description,
+                      style: GoogleFonts.inter(
+                        color: AppColors.textSecondaryLight,
+                        fontSize: 14,
+                        height: 1.45,
                       ),
                     ),
                   ],
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.copy_rounded, color: AppColors.primary, size: 20),
-                onPressed: () => _copyToClipboard('support@astrosaathi.app'),
-              ),
             ],
           ),
-        ).fadeSlideUp(delay: 450.ms),
-
-        const SizedBox(height: 20),
-      ],
-    );
-  }
-
-  Widget _explanationCard({
-    required IconData icon,
-    required String title,
-    required String description,
-    required int delayMs,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: GlassCard(
-        borderRadius: 18,
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.primary.withValues(alpha: 0.12),
-              ),
-              child: Icon(icon, color: AppColors.primary, size: 22),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.plusJakartaSans(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.5,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    description,
-                    style: GoogleFonts.inter(
-                      color: AppColors.textSecondaryDark,
-                      fontSize: 13,
-                      height: 1.45,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
       ),
-    ).fadeSlideUp(delay: Duration(milliseconds: delayMs));
-  }
-
-  Widget _dataSafetyRow(String label, String value, {bool isPositive = false}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Text(
-            label,
-            style: GoogleFonts.inter(
-              color: AppColors.textSecondaryDark,
-              fontSize: 13.5,
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Flexible(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: isPositive ? Colors.green.withValues(alpha: 0.15) : AppColors.primary.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: isPositive ? Colors.green.shade400 : AppColors.primary,
-                width: 0.8,
-              ),
-            ),
-            child: Text(
-              value,
-              style: GoogleFonts.outfit(
-                color: isPositive ? Colors.greenAccent : AppColors.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 12.5,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ),
-      ],
     );
   }
+}
 
-  Widget _webLinkTile(String title, String urlStr) {
+class TrustBadge extends StatelessWidget {
+  const TrustBadge({super.key, required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.04),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        color: AppColors.secondaryBackground,
+        borderRadius: BorderRadius.circular(999),
       ),
-      child: Row(
-        children: [
-          Expanded(
+      child: Text(
+        label,
+        style: GoogleFonts.inter(
+          color: AppColors.primaryLightMode,
+          fontSize: 11.5,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+}
+
+class HelpFaqTile extends StatelessWidget {
+  const HelpFaqTile({
+    super.key,
+    required this.question,
+    required this.answer,
+    required this.expanded,
+    required this.onTap,
+  });
+
+  final String question;
+  final String answer;
+  final bool expanded;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      expanded: expanded,
+      label: question,
+      child: Material(
+        color: AppColors.surfaceLight,
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 210),
+            curve: Curves.easeOut,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: expanded
+                    ? AppColors.highlightSurface
+                    : AppColors.softLavender,
+              ),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: GoogleFonts.outfit(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13.5,
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        question,
+                        style: GoogleFonts.inter(
+                          color: AppColors.textPrimaryLight,
+                          fontSize: 15.5,
+                          height: 1.35,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    AnimatedRotation(
+                      turns: expanded ? .5 : 0,
+                      duration: const Duration(milliseconds: 210),
+                      child: const Icon(
+                        Icons.keyboard_arrow_down_rounded,
+                        color: AppColors.textSecondaryLight,
+                      ),
+                    ),
+                  ],
                 ),
-                SelectableText(
-                  urlStr,
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOut,
+                  alignment: Alignment.topCenter,
+                  child: expanded
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 14),
+                          child: Text(
+                            answer,
+                            style: GoogleFonts.inter(
+                              color: AppColors.textSecondaryLight,
+                              fontSize: 14,
+                              height: 1.45,
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class IssueCategoryChip extends StatelessWidget {
+  const IssueCategoryChip({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: '$label issue category',
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onSelected,
+          borderRadius: BorderRadius.circular(15),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+            constraints: const BoxConstraints(minHeight: 46),
+            padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 10),
+            decoration: BoxDecoration(
+              color: selected
+                  ? AppColors.primaryLightMode
+                  : AppColors.surfaceLight,
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(
+                color: selected
+                    ? AppColors.primaryLightMode
+                    : AppColors.highlightSurface,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  icon,
+                  size: 17,
+                  color: selected
+                      ? AppColors.surfaceLight
+                      : AppColors.primaryLightMode,
+                ),
+                const SizedBox(width: 7),
+                Text(
+                  label,
                   style: GoogleFonts.inter(
-                    color: AppColors.primary,
-                    fontSize: 12,
+                    color: selected
+                        ? AppColors.surfaceLight
+                        : AppColors.textPrimaryLight,
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ],
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.open_in_new_rounded, size: 18, color: AppColors.primary),
-            onPressed: () => _launchUrl(urlStr),
+        ),
+      ),
+    );
+  }
+}
+
+class _TrustHero extends StatelessWidget {
+  const _TrustHero({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.badges,
+    this.warning = false,
+  });
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final List<String> badges;
+  final bool warning;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.secondaryBackground,
+            AppColors.softLavender,
+            AppColors.highlightSurface,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.surfaceLight),
+      ),
+      child: Stack(
+        children: [
+          const Positioned.fill(
+            child: ExcludeSemantics(
+              child: CustomPaint(painter: _TrustSkyPainter()),
+            ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(22),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: const BoxDecoration(
+                    color: AppColors.surfaceLight,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    icon,
+                    color: warning
+                        ? AppColors.actionPurple
+                        : AppColors.primaryLightMode,
+                    size: 26,
+                  ),
+                ),
+                const SizedBox(height: 18),
+                Text(
+                  title,
+                  style: GoogleFonts.plusJakartaSans(
+                    color: AppColors.primaryLightMode,
+                    fontSize: 22,
+                    height: 1.2,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  subtitle,
+                  style: GoogleFonts.inter(
+                    color: AppColors.textSecondaryLight,
+                    fontSize: 14,
+                    height: 1.45,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: badges
+                      .map((label) => TrustBadge(label: label))
+                      .toList(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ).animate().fadeIn(duration: 280.ms).slideY(begin: .03, end: 0);
+  }
+}
+
+class _SectionHeading extends StatelessWidget {
+  const _SectionHeading({
+    required this.eyebrow,
+    required this.title,
+    required this.subtitle,
+  });
+
+  final String eyebrow;
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          eyebrow,
+          style: GoogleFonts.inter(
+            color: AppColors.secondary,
+            fontSize: 10.5,
+            letterSpacing: 1.25,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          title,
+          style: GoogleFonts.plusJakartaSans(
+            color: AppColors.textPrimaryLight,
+            fontSize: 20,
+            height: 1.2,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        const SizedBox(height: 5),
+        Text(
+          subtitle,
+          style: GoogleFonts.inter(
+            color: AppColors.textSecondaryLight,
+            fontSize: 13.5,
+            height: 1.4,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _RemovalList extends StatelessWidget {
+  const _RemovalList();
+
+  static const items = [
+    'Local profiles and birth details',
+    'Onboarding state and focus areas',
+    'Language and local preferences',
+    'Demo subscription state',
+    'Saved demo sessions and local history',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceLight,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppColors.highlightSurface),
+      ),
+      child: Column(
+        children: [
+          for (var index = 0; index < items.length; index++) ...[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 26,
+                  height: 26,
+                  decoration: const BoxDecoration(
+                    color: AppColors.secondaryBackground,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.remove_rounded,
+                    color: AppColors.primaryLightMode,
+                    size: 16,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    items[index],
+                    style: GoogleFonts.inter(
+                      color: AppColors.textPrimaryLight,
+                      fontSize: 14,
+                      height: 1.45,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (index != items.length - 1) const SizedBox(height: 14),
+          ],
         ],
       ),
     );
   }
 }
 
+class _TrustSkyPainter extends CustomPainter {
+  const _TrustSkyPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final orbit = Paint()
+      ..color = AppColors.primaryLightMode.withValues(alpha: .06)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.2;
+    final stars = Paint()
+      ..color = AppColors.secondary.withValues(alpha: .07)
+      ..style = PaintingStyle.fill;
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: Offset(size.width * .88, size.height * .2),
+        width: size.width * .55,
+        height: size.width * .55,
+      ),
+      orbit,
+    );
+    canvas.drawCircle(Offset(size.width * .78, 32), 2.2, stars);
+    canvas.drawCircle(Offset(size.width * .9, size.height * .56), 2.8, stars);
+    canvas.drawCircle(Offset(size.width * .66, size.height * .78), 1.8, stars);
+    final constellation = Path()
+      ..moveTo(size.width * .68, size.height * .3)
+      ..lineTo(size.width * .8, size.height * .4)
+      ..lineTo(size.width * .72, size.height * .55)
+      ..lineTo(size.width * .88, size.height * .66);
+    canvas.drawPath(constellation, orbit);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _TrustTabData {
+  const _TrustTabData(this.label, this.icon);
+  final String label;
+  final IconData icon;
+}
+
+class _IssueCategory {
+  const _IssueCategory(this.label, this.icon);
+  final String label;
+  final IconData icon;
+}
+
+class _FaqData {
+  const _FaqData(this.question, this.answer);
+  final String question;
+  final String answer;
+}

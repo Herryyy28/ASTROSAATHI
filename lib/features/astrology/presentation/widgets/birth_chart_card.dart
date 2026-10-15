@@ -74,15 +74,24 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
   };
 
   final Map<String, String> planetSignifications = {
-    'sun': 'Sun (Surya): Vitality, leadership, self-confidence, fatherly blessings, and soul authority.',
-    'moon': 'Moon (Chandra): Emotional balance, mental peace, motherly care, intuition, and public rapport.',
-    'mars': 'Mars (Mangal): Physical strength, courage, ambition, property, energy, and sibling support.',
-    'mercury': 'Mercury (Budh): Intellect, business analysis, communication, logic, and fast learning.',
-    'jupiter': 'Jupiter (Guru): Supreme wisdom, divine grace, higher spirituality, wealth, and children.',
-    'venus': 'Venus (Shukra): Creative harmony, aesthetic elegance, love partnerships, luxury, and art.',
-    'saturn': 'Saturn (Shani): Discipline, endurance, structure, karmic lessons, and career longevity.',
-    'rahu': 'Rahu (North Node): Ambition, worldly expansion, innovation, technology, and unconventional mastery.',
-    'ketu': 'Ketu (South Node): Moksha, spiritual detachment, occult perception, intuition, and subtle wisdom.',
+    'sun':
+        'Sun (Surya): Vitality, leadership, self-confidence, fatherly blessings, and soul authority.',
+    'moon':
+        'Moon (Chandra): Emotional balance, mental peace, motherly care, intuition, and public rapport.',
+    'mars':
+        'Mars (Mangal): Physical strength, courage, ambition, property, energy, and sibling support.',
+    'mercury':
+        'Mercury (Budh): Intellect, business analysis, communication, logic, and fast learning.',
+    'jupiter':
+        'Jupiter (Guru): Supreme wisdom, divine grace, higher spirituality, wealth, and children.',
+    'venus':
+        'Venus (Shukra): Creative harmony, aesthetic elegance, love partnerships, luxury, and art.',
+    'saturn':
+        'Saturn (Shani): Discipline, endurance, structure, karmic lessons, and career longevity.',
+    'rahu':
+        'Rahu (North Node): Ambition, worldly expansion, innovation, technology, and unconventional mastery.',
+    'ketu':
+        'Ketu (South Node): Moksha, spiritual detachment, occult perception, intuition, and subtle wisdom.',
   };
 
   final Map<String, String> planetLordships = {
@@ -98,9 +107,18 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
   };
 
   final Map<int, String> houseRulers = {
-    1: 'Mars', 2: 'Venus', 3: 'Mercury', 4: 'Moon',
-    5: 'Sun', 6: 'Mercury', 7: 'Venus', 8: 'Mars',
-    9: 'Jupiter', 10: 'Saturn', 11: 'Saturn', 12: 'Jupiter'
+    1: 'Mars',
+    2: 'Venus',
+    3: 'Mercury',
+    4: 'Moon',
+    5: 'Sun',
+    6: 'Mercury',
+    7: 'Venus',
+    8: 'Mars',
+    9: 'Jupiter',
+    10: 'Saturn',
+    11: 'Saturn',
+    12: 'Jupiter',
   };
 
   // ── Polished Planet Details Bottom Sheet ─────────────────────────────
@@ -118,7 +136,8 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
     });
 
     final lower = planetName.toLowerCase();
-    String signification = 'Vedic planetary energy influencing this house placement.';
+    String signification =
+        'Vedic planetary energy influencing this house placement.';
     for (final entry in planetSignifications.entries) {
       if (lower.contains(entry.key)) {
         signification = entry.value;
@@ -134,7 +153,8 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
       }
     }
 
-    final sign = planetData?['sign'] as String? ?? planetData?['rashi'] as String?;
+    final sign =
+        planetData?['sign'] as String? ?? planetData?['rashi'] as String?;
     final house = houseNumber ?? (planetData?['house'] as num?)?.toInt();
     final degree = planetData?['degree'] != null
         ? '${(planetData!['degree'] as num).toStringAsFixed(1)}Â°'
@@ -143,7 +163,8 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
     final pada = planetData?['pada']?.toString();
     final isRetrograde = planetData?['retrograde'] as bool? ?? false;
     final isCombust = planetData?['combust'] as bool? ?? false;
-    final dignity = planetData?['dignity'] as String? ?? planetData?['status'] as String?;
+    final dignity =
+        planetData?['dignity'] as String? ?? planetData?['status'] as String?;
 
     final l10n = AppLocalizations.of(context, ref);
 
@@ -169,7 +190,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
             24,
             12,
             24,
-            MediaQuery.of(ctx).viewInsets.bottom + MediaQuery.of(ctx).padding.bottom + 24,
+            MediaQuery.of(ctx).viewInsets.bottom +
+                MediaQuery.of(ctx).padding.bottom +
+                24,
           ),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -202,7 +225,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: AppColors.primary.withValues(alpha: 0.15),
-                              border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+                              border: Border.all(
+                                color: AppColors.primary.withValues(alpha: 0.4),
+                              ),
                             ),
                             child: const Icon(
                               Icons.auto_awesome_rounded,
@@ -240,7 +265,10 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(ctx),
-                      icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(ctx)),
+                      icon: Icon(
+                        Icons.close_rounded,
+                        color: AppColors.getTextSecondary(ctx),
+                      ),
                     ),
                   ],
                 ),
@@ -277,16 +305,25 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                       ),
                     if (isRetrograde)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.warning.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.warning.withValues(alpha: 0.4)),
+                          border: Border.all(
+                            color: AppColors.warning.withValues(alpha: 0.4),
+                          ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.rotate_left_rounded, size: 13, color: AppColors.warning),
+                            const Icon(
+                              Icons.rotate_left_rounded,
+                              size: 13,
+                              color: AppColors.warning,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               l10n.retrograde,
@@ -301,16 +338,25 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                       ),
                     if (isCombust)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.error.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.error.withValues(alpha: 0.4)),
+                          border: Border.all(
+                            color: AppColors.error.withValues(alpha: 0.4),
+                          ),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.local_fire_department_rounded, size: 13, color: AppColors.error),
+                            const Icon(
+                              Icons.local_fire_department_rounded,
+                              size: 13,
+                              color: AppColors.error,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               l10n.combust,
@@ -325,11 +371,16 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                       ),
                     if (dignity != null && dignity.isNotEmpty)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.primary.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+                          border: Border.all(
+                            color: AppColors.primary.withValues(alpha: 0.4),
+                          ),
                         ),
                         child: Text(
                           dignity,
@@ -358,11 +409,16 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                   const SizedBox(height: 6),
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.primary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.25)),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.25),
+                      ),
                     ),
                     child: Text(
                       lordship,
@@ -437,7 +493,8 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
 
     final planets = activePlanets[houseNumber] ?? [];
     final houseTitle = houseNames[houseNumber] ?? 'House $houseNumber';
-    final houseMeaning = houseMeanings[houseNumber] ?? 'Vedic house governing life energies.';
+    final houseMeaning =
+        houseMeanings[houseNumber] ?? 'Vedic house governing life energies.';
     final houseLord = houseRulers[houseNumber] ?? 'Mars';
     final l10n = AppLocalizations.of(context, ref);
 
@@ -463,7 +520,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
             24,
             12,
             24,
-            MediaQuery.of(ctx).viewInsets.bottom + MediaQuery.of(ctx).padding.bottom + 24,
+            MediaQuery.of(ctx).viewInsets.bottom +
+                MediaQuery.of(ctx).padding.bottom +
+                24,
           ),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -514,7 +573,10 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(ctx),
-                      icon: Icon(Icons.close_rounded, color: AppColors.getTextSecondary(ctx)),
+                      icon: Icon(
+                        Icons.close_rounded,
+                        color: AppColors.getTextSecondary(ctx),
+                      ),
                     ),
                   ],
                 ),
@@ -567,8 +629,14 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                     runSpacing: 8,
                     children: planets.map((p) {
                       return ActionChip(
-                        avatar: const Icon(Icons.info_outline_rounded, size: 14, color: AppColors.primary),
-                        backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+                        avatar: const Icon(
+                          Icons.info_outline_rounded,
+                          size: 14,
+                          color: AppColors.primary,
+                        ),
+                        backgroundColor: AppColors.primary.withValues(
+                          alpha: 0.15,
+                        ),
                         side: BorderSide(
                           color: AppColors.primary.withValues(alpha: 0.4),
                         ),
@@ -586,15 +654,26 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                           if (rawPlanetsList != null) {
                             for (final item in rawPlanetsList) {
                               if (item is Map) {
-                                final pName = (item['name'] ?? item['code'] ?? '').toString().toLowerCase();
-                                if (pName.contains(p.toLowerCase()) || p.toLowerCase().contains(pName)) {
-                                  matchingPlanet = Map<String, dynamic>.from(item);
+                                final pName =
+                                    (item['name'] ?? item['code'] ?? '')
+                                        .toString()
+                                        .toLowerCase();
+                                if (pName.contains(p.toLowerCase()) ||
+                                    p.toLowerCase().contains(pName)) {
+                                  matchingPlanet = Map<String, dynamic>.from(
+                                    item,
+                                  );
                                   break;
                                 }
                               }
                             }
                           }
-                          _showPlanetDetailsBottomSheet(context, p, matchingPlanet, houseNumber);
+                          _showPlanetDetailsBottomSheet(
+                            context,
+                            p,
+                            matchingPlanet,
+                            houseNumber,
+                          );
                         },
                       );
                     }).toList(),
@@ -602,15 +681,24 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                 ] else ...[
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.primary.withValues(alpha: 0.06),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+                      border: Border.all(
+                        color: AppColors.primary.withValues(alpha: 0.2),
+                      ),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.nightlight_round, size: 16, color: AppColors.primary),
+                        const Icon(
+                          Icons.nightlight_round,
+                          size: 16,
+                          color: AppColors.primary,
+                        ),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
@@ -664,7 +752,11 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline_rounded, color: AppColors.error, size: 36),
+                const Icon(
+                  Icons.error_outline_rounded,
+                  color: AppColors.error,
+                  size: 36,
+                ),
                 const SizedBox(height: 10),
                 Text(
                   l10n.unableToLoadChart,
@@ -690,8 +782,10 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   onPressed: () => ref.invalidate(birthChartProvider),
                   icon: const Icon(Icons.refresh_rounded, size: 16),
@@ -705,18 +799,22 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
           ),
         ),
         data: (chartData) {
-          final isCanonical = chartData.containsKey('profileId') &&
+          final isCanonical =
+              chartData.containsKey('profileId') &&
               chartData.containsKey('lagna') &&
               chartData['lagna'] is Map;
 
           final rawLagna = isCanonical
               ? (chartData['lagna']['rashi'] ?? 'Aries')
-              : (chartData['lagna'] as String? ?? chartData['ascendant'] as String? ?? 'Aries');
+              : (chartData['lagna'] as String? ??
+                    chartData['ascendant'] as String? ??
+                    'Aries');
 
           String getNormalizedLagna(String lagna) {
             final l = lagna.toLowerCase();
             for (final item in lagnaList) {
-              if (item.toLowerCase().contains(l) || l.contains(item.toLowerCase().split(' ')[0])) {
+              if (item.toLowerCase().contains(l) ||
+                  l.contains(item.toLowerCase().split(' ')[0])) {
                 return item;
               }
             }
@@ -732,27 +830,39 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
             if (list is List) {
               for (final p in list) {
                 if (p is Map) {
-                  final name = (p['name'] ?? p['code'] ?? p['id'] ?? '').toString().toLowerCase();
+                  final name = (p['name'] ?? p['code'] ?? p['id'] ?? '')
+                      .toString()
+                      .toLowerCase();
                   if (name.contains('moon') || name == 'mo') return p;
                 }
               }
             }
             return null;
           }();
-          final nakshatra = moonPlanet?['nakshatra'] as String? ?? chartData['nakshatra'] as String? ?? '—';
-          final pada = moonPlanet?['pada']?.toString() ?? chartData['pada']?.toString() ?? '—';
+          final nakshatra =
+              moonPlanet?['nakshatra'] as String? ??
+              chartData['nakshatra'] as String? ??
+              '—';
+          final pada =
+              moonPlanet?['pada']?.toString() ??
+              chartData['pada']?.toString() ??
+              '—';
 
           String getRashiName() {
-            if (chartData['rashi'] is Map && chartData['rashi']['name'] != null) {
+            if (chartData['rashi'] is Map &&
+                chartData['rashi']['name'] != null) {
               return chartData['rashi']['name'].toString();
             }
-            if (chartData['rashi'] is String && (chartData['rashi'] as String).isNotEmpty) {
+            if (chartData['rashi'] is String &&
+                (chartData['rashi'] as String).isNotEmpty) {
               return chartData['rashi'].toString();
             }
-            if (chartData['moonSign'] != null && chartData['moonSign'].toString().isNotEmpty) {
+            if (chartData['moonSign'] != null &&
+                chartData['moonSign'].toString().isNotEmpty) {
               return chartData['moonSign'].toString();
             }
-            if (moonPlanet != null && (moonPlanet['rashi'] != null || moonPlanet['sign'] != null)) {
+            if (moonPlanet != null &&
+                (moonPlanet['rashi'] != null || moonPlanet['sign'] != null)) {
               final s = (moonPlanet['rashi'] ?? moonPlanet['sign']).toString();
               if (s.isNotEmpty) return s;
             }
@@ -764,7 +874,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
           }
 
           final rashiName = getRashiName();
-          final calculatedAt = chartData['metadata']?['calculatedAt'] as String? ?? chartData['calculatedAt'] as String?;
+          final calculatedAt =
+              chartData['metadata']?['calculatedAt'] as String? ??
+              chartData['calculatedAt'] as String?;
 
           int getSignIndex(String signName) {
             final s = signName.toLowerCase();
@@ -792,8 +904,10 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
           if (rawPlanets is List) {
             for (var p in rawPlanets) {
               if (p is Map) {
-                final planetName = (p['name'] ?? p['code'] ?? 'Planet').toString();
-                final planetSign = p['rashi'] as String? ?? p['sign'] as String?;
+                final planetName = (p['name'] ?? p['code'] ?? 'Planet')
+                    .toString();
+                final planetSign =
+                    p['rashi'] as String? ?? p['sign'] as String?;
                 int house = (p['house'] as num?)?.toInt() ?? 1;
 
                 if (planetSign != null) {
@@ -811,7 +925,8 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
           } else if (rawPlanets is Map) {
             rawPlanets.forEach((key, value) {
               if (value is Map) {
-                final planetSign = value['sign'] as String? ?? value['rashi'] as String?;
+                final planetSign =
+                    value['sign'] as String? ?? value['rashi'] as String?;
                 int house = 1;
                 if (planetSign != null) {
                   final planetSignIndex = getSignIndex(planetSign);
@@ -846,11 +961,15 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    isExploring ? 'Lagna Explorer' : l10n.birthChart,
+                                    isExploring
+                                        ? 'Lagna Explorer'
+                                        : l10n.birthChart,
                                     style: GoogleFonts.outfit(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w800,
-                                      color: isExploring ? AppColors.secondary : AppColors.getTextPrimary(context),
+                                      color: isExploring
+                                          ? AppColors.secondary
+                                          : AppColors.getTextPrimary(context),
                                       height: 1.25,
                                     ),
                                   ),
@@ -859,7 +978,9 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                                     'Precision planetary alignment & house positions',
                                     style: GoogleFonts.inter(
                                       fontSize: 11.5,
-                                      color: AppColors.getTextSecondary(context),
+                                      color: AppColors.getTextSecondary(
+                                        context,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -869,15 +990,30 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                             IconButton(
                               padding: EdgeInsets.zero,
                               constraints: const BoxConstraints(),
-                              icon: Icon(Icons.bug_report, color: AppColors.getTextMuted(context), size: 18),
+                              icon: Icon(
+                                Icons.bug_report,
+                                color: AppColors.getTextMuted(context),
+                                size: 18,
+                              ),
                               onPressed: () {
                                 showDialog(
                                   context: context,
                                   builder: (_) => AlertDialog(
                                     backgroundColor: AppColors.cardSurface,
-                                    title: const Text('Kundli Data Inspector', style: TextStyle(color: AppColors.primary)),
+                                    title: const Text(
+                                      'Kundli Data Inspector',
+                                      style: TextStyle(
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
                                     content: SingleChildScrollView(
-                                      child: SelectableText(chartData.toString(), style: const TextStyle(color: AppColors.textSecondaryDark, fontSize: 12)),
+                                      child: SelectableText(
+                                        chartData.toString(),
+                                        style: const TextStyle(
+                                          color: AppColors.textSecondaryDark,
+                                          fontSize: 12,
+                                        ),
+                                      ),
                                     ),
                                     actions: [
                                       TextButton(
@@ -907,9 +1043,21 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                           spacing: 8,
                           runSpacing: 6,
                           children: [
-                            _InfoChip(label: l10n.ascendantLagna, value: lagna.split(' ').first, icon: Icons.explore_rounded),
-                            _InfoChip(label: 'Rashi', value: rashiName, icon: Icons.auto_awesome_rounded),
-                            _InfoChip(label: l10n.nakshatra, value: '$nakshatra P$pada', icon: Icons.brightness_3_rounded),
+                            _InfoChip(
+                              label: l10n.ascendantLagna,
+                              value: lagna.split(' ').first,
+                              icon: Icons.explore_rounded,
+                            ),
+                            _InfoChip(
+                              label: 'Rashi',
+                              value: rashiName,
+                              icon: Icons.auto_awesome_rounded,
+                            ),
+                            _InfoChip(
+                              label: l10n.nakshatra,
+                              value: '$nakshatra P$pada',
+                              icon: Icons.brightness_3_rounded,
+                            ),
                           ],
                         ),
                         if (calculatedAt != null) ...[
@@ -927,9 +1075,17 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                         OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppColors.primary,
-                            side: const BorderSide(color: AppColors.primary, width: 1.2),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            side: const BorderSide(
+                              color: AppColors.primary,
+                              width: 1.2,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
                           ),
                           onPressed: () async {
                             final currentLang = ref.read(localeProvider);
@@ -941,10 +1097,16 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                               language: currentLang,
                             );
                           },
-                          icon: const Icon(Icons.picture_as_pdf_rounded, size: 16),
+                          icon: const Icon(
+                            Icons.picture_as_pdf_rounded,
+                            size: 16,
+                          ),
                           label: Text(
                             l10n.generatePdfReport,
-                            style: GoogleFonts.outfit(fontSize: 12.5, fontWeight: FontWeight.bold),
+                            style: GoogleFonts.outfit(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -961,23 +1123,32 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                           });
                         },
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.primary.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.4)),
+                            border: Border.all(
+                              color: AppColors.primary.withValues(alpha: 0.4),
+                            ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
-                                isSouthIndianChart ? Icons.grid_view_rounded : Icons.diamond_outlined,
+                                isSouthIndianChart
+                                    ? Icons.grid_view_rounded
+                                    : Icons.diamond_outlined,
                                 color: AppColors.primary,
                                 size: 13,
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                isSouthIndianChart ? 'South Indian' : 'North Indian',
+                                isSouthIndianChart
+                                    ? 'South Indian'
+                                    : 'North Indian',
                                 style: GoogleFonts.inter(
                                   color: AppColors.primary,
                                   fontSize: 10,
@@ -991,22 +1162,36 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
                       ),
                       const SizedBox(height: 6),
                       Tooltip(
-                        message: 'Interactive Kundli Chart. Tap any planet or house cell.',
+                        message:
+                            'Interactive Kundli Chart. Tap any planet or house cell.',
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.primary.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+                            border: Border.all(
+                              color: AppColors.primary.withValues(alpha: 0.2),
+                            ),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.touch_app_rounded, color: AppColors.primary, size: 12),
+                              const Icon(
+                                Icons.touch_app_rounded,
+                                color: AppColors.primary,
+                                size: 12,
+                              ),
                               const SizedBox(width: 3),
                               Text(
                                 'Interactive',
-                                style: GoogleFonts.inter(color: AppColors.primary, fontSize: 9.5, fontWeight: FontWeight.bold),
+                                style: GoogleFonts.inter(
+                                  color: AppColors.primary,
+                                  fontSize: 9.5,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
@@ -1020,91 +1205,109 @@ class _BirthChartCardState extends ConsumerState<BirthChartCard> {
 
               // ── Interactive Chart Canvas with Accessibility Semantics ────────
               AspectRatio(
-                aspectRatio: 1.0,
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final chartSize = Size(constraints.maxWidth, constraints.maxHeight);
-                    final chartStyle = isSouthIndianChart
-                        ? VedicChartStyle.southIndian
-                        : VedicChartStyle.northIndian;
+                    aspectRatio: 1.0,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        final chartSize = Size(
+                          constraints.maxWidth,
+                          constraints.maxHeight,
+                        );
+                        final chartStyle = isSouthIndianChart
+                            ? VedicChartStyle.southIndian
+                            : VedicChartStyle.northIndian;
 
-                    return Semantics(
-                      label: 'Interactive Vedic Birth Chart for ${activeProfile.name}. Lagna ${lagna.split(' ').first}, Rashi $rashiName. Double tap houses or planets to inspect astrological details.',
-                      button: true,
-                      child: GestureDetector(
-                        onTapUp: (details) {
-                          final local = details.localPosition;
+                        return Semantics(
+                          label:
+                              'Interactive Vedic Birth Chart for ${activeProfile.name}. Lagna ${lagna.split(' ').first}, Rashi $rashiName. Double tap houses or planets to inspect astrological details.',
+                          button: true,
+                          child: GestureDetector(
+                            onTapUp: (details) {
+                              final local = details.localPosition;
 
-                          // 1. First test if user tapped a Planet directly!
-                          final tappedPlanet = VedicChartGeometry.hitTestPlanet(
-                            localPosition: local,
-                            size: chartSize,
-                            style: chartStyle,
-                            lagnaSignIndex: lagnaIndex,
-                            housePlanets: activePlanets,
-                          );
+                              // 1. First test if user tapped a Planet directly!
+                              final tappedPlanet =
+                                  VedicChartGeometry.hitTestPlanet(
+                                    localPosition: local,
+                                    size: chartSize,
+                                    style: chartStyle,
+                                    lagnaSignIndex: lagnaIndex,
+                                    housePlanets: activePlanets,
+                                  );
 
-                          if (tappedPlanet != null) {
-                            Map<String, dynamic>? matchingPlanet;
-                            int? pHouse;
-                            if (rawPlanets is List) {
-                              for (final item in rawPlanets) {
-                                if (item is Map) {
-                                  final pName = (item['name'] ?? item['code'] ?? '').toString().toLowerCase();
-                                  if (pName.contains(tappedPlanet.toLowerCase()) ||
-                                      tappedPlanet.toLowerCase().contains(pName)) {
-                                    matchingPlanet = Map<String, dynamic>.from(item);
-                                    pHouse = (item['house'] as num?)?.toInt();
-                                    break;
+                              if (tappedPlanet != null) {
+                                Map<String, dynamic>? matchingPlanet;
+                                int? pHouse;
+                                if (rawPlanets is List) {
+                                  for (final item in rawPlanets) {
+                                    if (item is Map) {
+                                      final pName =
+                                          (item['name'] ?? item['code'] ?? '')
+                                              .toString()
+                                              .toLowerCase();
+                                      if (pName.contains(
+                                            tappedPlanet.toLowerCase(),
+                                          ) ||
+                                          tappedPlanet.toLowerCase().contains(
+                                            pName,
+                                          )) {
+                                        matchingPlanet =
+                                            Map<String, dynamic>.from(item);
+                                        pHouse = (item['house'] as num?)
+                                            ?.toInt();
+                                        break;
+                                      }
+                                    }
                                   }
                                 }
+                                _showPlanetDetailsBottomSheet(
+                                  context,
+                                  tappedPlanet,
+                                  matchingPlanet,
+                                  pHouse,
+                                );
+                                return;
                               }
-                            }
-                            _showPlanetDetailsBottomSheet(
-                              context,
-                              tappedPlanet,
-                              matchingPlanet,
-                              pHouse,
-                            );
-                            return;
-                          }
 
-                          // 2. Otherwise test if user tapped a House!
-                          final tappedHouse = VedicChartGeometry.hitTestHouse(
-                            localPosition: local,
-                            size: chartSize,
-                            style: chartStyle,
-                            lagnaSignIndex: lagnaIndex,
-                          );
+                              // 2. Otherwise test if user tapped a House!
+                              final tappedHouse =
+                                  VedicChartGeometry.hitTestHouse(
+                                    localPosition: local,
+                                    size: chartSize,
+                                    style: chartStyle,
+                                    lagnaSignIndex: lagnaIndex,
+                                  );
 
-                          if (tappedHouse > 0) {
-                            _showHouseDetailsBottomSheet(
-                              context,
-                              tappedHouse,
-                              activePlanets,
-                              rawPlanets is List ? rawPlanets : null,
-                            );
-                          }
-                        },
-                        child: CustomPaint(
-                          painter: VedicChartPainter(
-                            housePlanets: activePlanets,
-                            context: context,
-                            style: chartStyle,
-                            lagnaSignIndex: lagnaIndex,
-                            selectedHouse: selectedHouse,
-                            selectedPlanet: selectedPlanet,
+                              if (tappedHouse > 0) {
+                                _showHouseDetailsBottomSheet(
+                                  context,
+                                  tappedHouse,
+                                  activePlanets,
+                                  rawPlanets is List ? rawPlanets : null,
+                                );
+                              }
+                            },
+                            child: CustomPaint(
+                              painter: VedicChartPainter(
+                                housePlanets: activePlanets,
+                                context: context,
+                                style: chartStyle,
+                                lagnaSignIndex: lagnaIndex,
+                                selectedHouse: selectedHouse,
+                                selectedPlanet: selectedPlanet,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
-                  .animate(onPlay: (c) => c.repeat(reverse: true))
-                  .shimmer(
-                    duration: 3000.ms,
-                    color: AppColors.primaryLight.withValues(alpha: 0.15),
+                        );
+                      },
+                    ),
+                  )
+                  .animate()
+                  .fadeIn(duration: 320.ms)
+                  .scale(
+                    begin: const Offset(.97, .97),
+                    end: const Offset(1, 1),
+                    duration: 420.ms,
+                    curve: Curves.easeOutCubic,
                   ),
               const SizedBox(height: 16),
               const DashaTimelineWidget(),
@@ -1143,7 +1346,10 @@ class _InfoChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.primary.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.35), width: 1.0),
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.35),
+          width: 1.0,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1152,23 +1358,29 @@ class _InfoChip extends StatelessWidget {
             Icon(icon, size: 13, color: AppColors.primary),
             const SizedBox(width: 5),
           ],
-          Text(
-            '$label: ',
-            style: GoogleFonts.inter(
-              color: AppColors.getTextSecondary(context),
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
           Flexible(
-            child: Text(
-              value,
-              style: GoogleFonts.outfit(
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: '$label: ',
+                    style: const TextStyle(
+                      color: AppColors.textSecondaryLight,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  TextSpan(
+                    text: value,
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ],
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.notoSansDevanagari(
                 color: AppColors.primary,
                 fontSize: 12.5,
-                fontWeight: FontWeight.w700,
               ),
-              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],
@@ -1176,4 +1388,3 @@ class _InfoChip extends StatelessWidget {
     );
   }
 }
-

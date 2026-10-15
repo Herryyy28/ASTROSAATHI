@@ -91,7 +91,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: isLight ? AppColors.surfaceLight : const Color(0xFF090D16),
                     borderRadius: BorderRadius.circular(28),
-                    border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.4), width: 1.5),
+                    border: Border.all(color: AppColors.secondary.withValues(alpha: 0.4), width: 1.5),
                     boxShadow: [
                       BoxShadow(
                         color: const Color(0x40E0A13A),
@@ -126,7 +126,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.8,
-                                color: const Color(0xFFFFD700),
+                                color: AppColors.secondary,
                               ),
                             ),
                           ],
@@ -165,7 +165,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                           color: isLight
                               ? AppColors.getSurfaceSecondary(context)
                               : const Color(0xFF111827),
-                          border: Border.all(color: const Color(0xFFFFD700), width: 4),
+                          border: Border.all(color: AppColors.secondary, width: 4),
                           boxShadow: [
                             BoxShadow(
                               color: const Color(0x60FFD700),
@@ -181,7 +181,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                               style: GoogleFonts.outfit(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xFFFFD700),
+                                color: AppColors.secondary,
                                 height: 1,
                               ),
                             ),
@@ -231,7 +231,7 @@ class ShareableCosmicCardModal extends ConsumerWidget {
                             children: [
                               Text(
                                 '✦ Golden Window ',
-                                style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: const Color(0xFFFFD700)),
+                                style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.secondary),
                               ),
                               Text(
                                 '${gamePlan.bestWindow.start} – ${gamePlan.bestWindow.end}',

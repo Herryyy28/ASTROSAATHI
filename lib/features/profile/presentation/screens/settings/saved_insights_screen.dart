@@ -5,12 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/providers/bookmarks_provider.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/widgets/empty_state_widget.dart';
+import '../../../../../core/widgets/astro_components.dart';
 
 class SavedInsightsScreen extends ConsumerStatefulWidget {
   const SavedInsightsScreen({super.key});
 
   @override
-  ConsumerState<SavedInsightsScreen> createState() => _SavedInsightsScreenState();
+  ConsumerState<SavedInsightsScreen> createState() =>
+      _SavedInsightsScreenState();
 }
 
 class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
@@ -34,33 +36,19 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
         ? bookmarks
         : bookmarks.where((b) => b.category == _selectedCategory).toList();
 
-    return Scaffold(
-      backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : AppColors.backgroundDark,
-      appBar: AppBar(
-        backgroundColor: isLight ? Theme.of(context).scaffoldBackgroundColor : Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'Saved Insights & Bookmarks',
-          style: GoogleFonts.outfit(
-            fontWeight: FontWeight.w600,
-            color: AppColors.getTextPrimary(context),
+    return AstroDetailScaffold(
+      title: 'Saved insights',
+      subtitle: 'Keep the guidance you want to revisit in one place.',
+      scrollable: false,
+      actions: [
+        if (bookmarks.isNotEmpty)
+          IconButton(
+            tooltip: 'Clear All Bookmarks',
+            icon: const Icon(Icons.delete_sweep_outlined),
+            onPressed: () => _confirmClearAll(context),
           ),
-        ),
-        iconTheme: IconThemeData(color: AppColors.getTextPrimary(context)),
-        actions: [
-          if (bookmarks.isNotEmpty)
-            IconButton(
-              tooltip: 'Clear All Bookmarks',
-              icon: const Icon(Icons.delete_sweep_outlined),
-              onPressed: () => _confirmClearAll(context),
-            ),
-        ],
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          color: isLight ? Theme.of(context).scaffoldBackgroundColor : null,
-          gradient: isLight ? null : AppColors.cosmicRadialGradient,
-        ),
+      ],
+      child: Expanded(
         child: Column(
           children: [
             // Category Filter Chips
@@ -80,19 +68,25 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
                       cat,
                       style: GoogleFonts.inter(
                         fontSize: 12.5,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w500,
                         color: isSelected
-                            ? Colors.black
+                            ? AppColors.surfaceLight
                             : AppColors.getTextSecondary(context),
                       ),
                     ),
                     selected: isSelected,
-                    selectedColor: const Color(0xFFF5A623),
-                    backgroundColor: isLight ? Colors.black.withValues(alpha: 0.05) : AppColors.surfaceDark,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    selectedColor: AppColors.primaryLightMode,
+                    backgroundColor: isLight
+                        ? AppColors.secondaryBackground
+                        : AppColors.surfaceDark,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                     side: BorderSide(
                       color: isSelected
-                          ? const Color(0xFFF5A623)
+                          ? AppColors.primaryLightMode
                           : AppColors.getGlassBorder(context),
                     ),
                     onSelected: (val) {
@@ -116,13 +110,13 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
                           : 'No $_selectedCategory Insights',
                       description:
                           'Bookmark important AI guidance, remedies, horoscopes, or astrologers to access them quickly here.',
-                      emoji: '🔖',
                     )
                   : ListView.separated(
                       physics: const BouncingScrollPhysics(),
                       padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
                       itemCount: filtered.length,
-                      separatorBuilder: (context, index) => const SizedBox(height: 12),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 12),
                       itemBuilder: (context, index) {
                         final item = filtered[index];
                         return _buildBookmarkCard(context, item, isLight);
@@ -135,7 +129,11 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
     );
   }
 
-  Widget _buildBookmarkCard(BuildContext context, BookmarkItem item, bool isLight) {
+  Widget _buildBookmarkCard(
+    BuildContext context,
+    BookmarkItem item,
+    bool isLight,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: isLight ? Colors.white : AppColors.surfaceDark,
@@ -163,9 +161,14 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5A623).withValues(alpha: 0.15),
+                        color: AppColors.primaryLightMode.withValues(
+                          alpha: 0.15,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -173,16 +176,21 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
                         style: GoogleFonts.inter(
                           fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFFF5A623),
+                          color: AppColors.primaryLightMode,
                         ),
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.bookmark_remove_outlined, size: 20),
+                      icon: const Icon(
+                        Icons.bookmark_remove_outlined,
+                        size: 20,
+                      ),
                       color: AppColors.getTextSecondary(context),
                       tooltip: 'Remove',
                       onPressed: () {
-                        ref.read(bookmarksProvider.notifier).removeBookmark(item.id);
+                        ref
+                            .read(bookmarksProvider.notifier)
+                            .removeBookmark(item.id);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Removed from saved items'),
@@ -221,7 +229,9 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
                   style: GoogleFonts.inter(
                     fontSize: 13,
                     height: 1.4,
-                    color: AppColors.getTextPrimary(context).withValues(alpha: 0.85),
+                    color: AppColors.getTextPrimary(
+                      context,
+                    ).withValues(alpha: 0.85),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -242,11 +252,15 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: const Color(0xFFF5A623),
+                            color: AppColors.primaryLightMode,
                           ),
                         ),
                         const SizedBox(width: 4),
-                        const Icon(Icons.arrow_forward_rounded, size: 14, color: Color(0xFFF5A623)),
+                        const Icon(
+                          Icons.arrow_forward_rounded,
+                          size: 14,
+                          color: AppColors.primaryLightMode,
+                        ),
                       ],
                     ),
                   ],
@@ -273,7 +287,9 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
         decoration: BoxDecoration(
           color: isLight ? Colors.white : AppColors.surfaceDark,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          border: Border(top: BorderSide(color: AppColors.getGlassBorder(context))),
+          border: Border(
+            top: BorderSide(color: AppColors.getGlassBorder(context)),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,7 +309,7 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFFF5A623).withValues(alpha: 0.15),
+                color: AppColors.primaryLightMode.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
@@ -301,7 +317,7 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
-                  color: const Color(0xFFF5A623),
+                  color: AppColors.primaryLightMode,
                 ),
               ),
             ),
@@ -344,9 +360,11 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
               height: 46,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFF5A623),
-                  foregroundColor: Colors.black87,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  backgroundColor: AppColors.primaryLightMode,
+                  foregroundColor: AppColors.surfaceLight,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                 ),
                 onPressed: () => Navigator.pop(ctx),
                 child: Text(
@@ -366,7 +384,9 @@ class _SavedInsightsScreenState extends ConsumerState<SavedInsightsScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Clear All Bookmarks?'),
-        content: const Text('Are you sure you want to remove all saved insights? This action cannot be undone.'),
+        content: const Text(
+          'Are you sure you want to remove all saved insights? This action cannot be undone.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),

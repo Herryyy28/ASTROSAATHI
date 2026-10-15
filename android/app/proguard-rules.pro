@@ -1,6 +1,3 @@
-# Razorpay ProGuard / R8 Rules
--keep class com.razorpay.** {*;}
--dontwarn com.razorpay.**
 -keepclassmembers class * {
     @android.webkit.JavascriptInterface <methods>;
 }

@@ -8,10 +8,12 @@ import '../../../../core/widgets/glass_card.dart';
 import '../../../../core/widgets/shimmer_loader.dart';
 import '../../../../core/widgets/error_state_widget.dart';
 import '../../../../core/widgets/responsive_layout.dart';
+import '../../../../core/widgets/astro_components.dart';
 import '../../../../core/theme/utils/responsive.dart';
 import '../../../../core/providers/astrology_provider.dart';
 import '../../../../core/providers/profile_provider.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../astrology/presentation/screens/chart_patterns_screen.dart';
 import '../../../astrology/presentation/widgets/birth_chart_card.dart';
 import '../widgets/interactive_dasha_timeline.dart';
 import '../../../profile/presentation/widgets/profile_switcher_modal.dart';
@@ -32,9 +34,11 @@ class KundliScreen extends ConsumerWidget {
 
     final tabs = [
       l10n.tabOverview,
+      'Chart',
       l10n.tabPlanets,
       l10n.tabHouses,
       l10n.tabDasha,
+      'Elements',
       l10n.tabYogas,
       l10n.tabRemedies,
     ];
@@ -70,32 +74,62 @@ class KundliScreen extends ConsumerWidget {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(Icons.account_circle_outlined, size: 56, color: AppColors.primary),
+                                  const Icon(
+                                    Icons.account_circle_outlined,
+                                    size: 56,
+                                    color: AppColors.primary,
+                                  ),
                                   const SizedBox(height: 16),
                                   Text(
                                     'Birth Details Required',
-                                    style: GoogleFonts.outfit(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.getTextPrimary(context),
+                                    ),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
-                                    'Please set up your exact Date of Birth, Time, and Birthplace to generate your authentic personalized Vedic Kundli.',
+                                    'Please set up your exact Date of Birth, Time, and Birthplace to generate your personalized demo Vedic Kundli.',
                                     textAlign: TextAlign.center,
-                                    style: GoogleFonts.inter(fontSize: 14, color: AppColors.getTextSecondary(context)),
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      color: AppColors.getTextSecondary(
+                                        context,
+                                      ),
+                                    ),
                                   ),
                                   const SizedBox(height: 20),
                                   ElevatedButton.icon(
                                     onPressed: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (_) => const NewKundliInputScreen()),
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              const NewKundliInputScreen(),
+                                        ),
                                       );
                                     },
-                                    icon: const Icon(Icons.add_circle_outline_rounded, color: Colors.white),
-                                    label: const Text('Open Profile Setup', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                                    icon: const Icon(
+                                      Icons.add_circle_outline_rounded,
+                                      color: Colors.white,
+                                    ),
+                                    label: const Text(
+                                      'Open Profile Setup',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.primary,
-                                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 24,
+                                        vertical: 12,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -109,11 +143,18 @@ class KundliScreen extends ConsumerWidget {
                             child: ShimmerLoader(itemCount: 4, itemHeight: 100),
                           ),
                           error: (error, stack) => ErrorStateWidget(
-                            message: error.toString().replaceFirst('Exception: ', ''),
+                            message: error.toString().replaceFirst(
+                              'Exception: ',
+                              '',
+                            ),
                             onRetry: () => ref.invalidate(birthChartProvider),
                           ),
                           data: (chartData) => _buildTabContent(
-                            context, ref, selectedTab, chartData, l10n,
+                            context,
+                            ref,
+                            selectedTab,
+                            chartData,
+                            l10n,
                           ),
                         ),
                 ),
@@ -134,22 +175,29 @@ class KundliScreen extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
       child: Row(
         children: [
-          Container(
-            width: 46,
-            height: 46,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              gradient: AppColors.goldGradient,
-              boxShadow: AppColors.goldGlowShadow,
+          if (Navigator.canPop(context)) ...[
+            IconButton(
+              tooltip: 'Back',
+              onPressed: () => Navigator.maybePop(context),
+              icon: const Icon(
+                Icons.chevron_left_rounded,
+                color: AppColors.primaryLightMode,
+              ),
+              style: IconButton.styleFrom(
+                backgroundColor: AppColors.surfaceLight,
+              ),
             ),
-            child: Center(
-              child: Text(
-                profile.name.isNotEmpty ? profile.name[0].toUpperCase() : '✦',
-                style: GoogleFonts.outfit(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.black,
-                ),
+            const SizedBox(width: 8),
+          ],
+          CircleAvatar(
+            radius: 23,
+            backgroundColor: AppColors.highlightSurface,
+            child: Text(
+              profile.name.isNotEmpty ? profile.name[0].toUpperCase() : '✦',
+              style: GoogleFonts.playfairDisplay(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primaryLightMode,
               ),
             ),
           ),
@@ -160,16 +208,16 @@ class KundliScreen extends ConsumerWidget {
               children: [
                 Text(
                   l10n.kundliTitle,
-                  style: GoogleFonts.outfit(
-                    fontSize: 20,
+                  style: GoogleFonts.playfairDisplay(
+                    fontSize: 23,
                     fontWeight: FontWeight.w700,
-                    color: AppColors.getTextPrimary(context),
+                    color: AppColors.primaryLightMode,
                   ),
                 ),
                 Text(
                   profile.name.isNotEmpty
-                      ? '${profile.name} • ${profile.dob}'
-                      : 'Create your Kundli to begin',
+                      ? 'Your complete Vedic birth chart · ${profile.name}'
+                      : 'Your complete Vedic birth chart',
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     color: AppColors.getTextSecondary(context),
@@ -186,12 +234,19 @@ class KundliScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: AppColors.getSurfaceElevated(context),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                border: Border.all(
+                  color: AppColors.getBorder(context),
+                  width: 0.8,
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.swap_vert_rounded, size: 14, color: AppColors.getPrimary(context)),
+                  Icon(
+                    Icons.swap_vert_rounded,
+                    size: 14,
+                    color: AppColors.getPrimary(context),
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     'Switch',
@@ -237,7 +292,9 @@ class KundliScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: isActive
                     ? AppColors.primary.withValues(alpha: 0.15)
-                    : (isLight ? AppColors.surfaceSecondaryLight : AppColors.glassSurface),
+                    : (isLight
+                          ? AppColors.surfaceSecondaryLight
+                          : AppColors.glassSurface),
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(
                   color: isActive
@@ -274,18 +331,138 @@ class KundliScreen extends ConsumerWidget {
       case 0:
         return _buildOverviewTab(context, chartData, l10n);
       case 1:
-        return _buildPlanetsTab(context, chartData, l10n);
+        return _buildChartTab(context);
       case 2:
-        return _buildHousesTab(context, chartData, l10n);
+        return _buildPlanetsTab(context, chartData, l10n);
       case 3:
-        return _buildDashaTab(context, chartData, l10n);
+        return _buildHousesTab(context, chartData, l10n);
       case 4:
-        return _buildYogasTab(context, chartData, l10n);
+        return _buildDashaTab(context, chartData, l10n);
       case 5:
+        return _buildElementsTab(context, chartData);
+      case 6:
+        return _buildYogasTab(context, chartData, l10n);
+      case 7:
         return _buildRemediesTab(context, chartData, l10n);
       default:
         return _buildOverviewTab(context, chartData, l10n);
     }
+  }
+
+  Widget _buildChartTab(BuildContext context) => ListView(
+    physics: const BouncingScrollPhysics(),
+    padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
+    children: [
+      const AstroPageIntro(
+        tag: 'Vedic chart',
+        title: 'Your birth chart',
+        subtitle:
+            'Select a house or planet to explore the placements already calculated for this profile.',
+        icon: Icons.grid_view_rounded,
+      ),
+      const SizedBox(height: 16),
+      const RepaintBoundary(child: BirthChartCard())
+          .animate()
+          .fadeIn(duration: 320.ms)
+          .scale(
+            begin: const Offset(.97, .97),
+            end: const Offset(1, 1),
+            duration: 360.ms,
+            curve: Curves.easeOutCubic,
+          ),
+      const SizedBox(height: 14),
+      AstroSecondaryButton(
+        label: 'Explore current chart & patterns',
+        icon: Icons.hub_outlined,
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CurrentChartScreen()),
+        ),
+      ),
+    ],
+  );
+
+  Widget _buildElementsTab(
+    BuildContext context,
+    Map<String, dynamic> chartData,
+  ) {
+    final raw = chartData['elements'];
+    if (raw is! Map || raw.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(32),
+        child: AstroEmptyState(
+          icon: Icons.donut_large_rounded,
+          title: 'Element analytics are not available yet',
+          subtitle:
+              'This section will use your chart engine’s element data when it is available—no estimated values are shown.',
+        ),
+      );
+    }
+
+    final entries = raw.entries
+        .where((entry) => entry.value is num)
+        .toList(growable: false);
+    final maximum = entries.fold<double>(
+      0,
+      (value, entry) => (entry.value as num).toDouble() > value
+          ? (entry.value as num).toDouble()
+          : value,
+    );
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
+      itemCount: entries.length,
+      separatorBuilder: (_, _) => const SizedBox(height: 10),
+      itemBuilder: (context, index) {
+        final entry = entries[index];
+        final value = (entry.value as num).toDouble();
+        return AstroCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const AstroGlyphIcon(glyph: '✦', size: 38),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      entry.key.toString(),
+                      style: GoogleFonts.outfit(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimaryLight,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    value.toStringAsFixed(
+                      value == value.roundToDouble() ? 0 : 1,
+                    ),
+                    style: GoogleFonts.outfit(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primaryLightMode,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0, end: maximum == 0 ? 0 : value / maximum),
+                duration: const Duration(milliseconds: 420),
+                curve: Curves.easeOutCubic,
+                builder: (_, progress, _) => LinearProgressIndicator(
+                  value: progress,
+                  minHeight: 7,
+                  borderRadius: BorderRadius.circular(8),
+                  backgroundColor: AppColors.secondaryBackground,
+                  color: AppColors.secondary,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   // ── Overview Tab ──────────────────────────────────
@@ -305,12 +482,17 @@ class KundliScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                _buildKeyPlacements(context, chartData, planets),
+                const SizedBox(height: 16),
                 // Birth Chart Visual
                 const BirthChartCard(),
                 const SizedBox(height: 16),
 
                 // Ascendant Summary Card
-                _buildAscendantCard(context, chartData).animate().fadeIn(delay: 100.ms),
+                _buildAscendantCard(
+                  context,
+                  chartData,
+                ).animate().fadeIn(delay: 100.ms),
                 const SizedBox(height: 16),
 
                 // Key Planets Summary
@@ -337,9 +519,90 @@ class KundliScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAscendantCard(BuildContext context, Map<String, dynamic> chartData) {
-    final ascendant = chartData['ascendant'] as String? ?? 'Aries';
-    final ascendantLord = chartData['ascendantLord'] as String? ?? 'Mars';
+  Widget _buildKeyPlacements(
+    BuildContext context,
+    Map<String, dynamic> chartData,
+    List<dynamic> planets,
+  ) {
+    Map<String, dynamic>? planet(String name) {
+      for (final item in planets) {
+        if (item is Map<String, dynamic> &&
+            (item['name'] as String?)?.toLowerCase() == name.toLowerCase()) {
+          return item;
+        }
+      }
+      return null;
+    }
+
+    final sun = planet('Sun');
+    final moon = planet('Moon');
+    final placements = <(String, String, String)>[
+      ('Ascendant', 'ASC', chartData['ascendant']?.toString() ?? '—'),
+      (
+        'Moon sign',
+        AstroSymbols.planet('Moon'),
+        moon?['sign']?.toString() ?? '—',
+      ),
+      ('Sun sign', AstroSymbols.planet('Sun'), sun?['sign']?.toString() ?? '—'),
+      ('Nakshatra', '✦', moon?['nakshatra']?.toString() ?? '—'),
+    ];
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = (constraints.maxWidth - 12) / 2;
+        return Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: placements
+              .map(
+                (item) => SizedBox(
+                  width: width,
+                  child: AstroCard(
+                    padding: const EdgeInsets.all(14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AstroGlyphIcon(
+                          glyph: item.$2,
+                          size: 36,
+                          semanticLabel: item.$1,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          item.$1,
+                          style: GoogleFonts.inter(
+                            fontSize: 10.5,
+                            color: AppColors.textSecondaryLight,
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          item.$3,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.outfit(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimaryLight,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+        );
+      },
+    ).animate().fadeIn(duration: 260.ms).slideY(begin: .04, end: 0);
+  }
+
+  Widget _buildAscendantCard(
+    BuildContext context,
+    Map<String, dynamic> chartData,
+  ) {
+    final ascendant = chartData['ascendant'] as String? ?? 'Not available';
+    final ascendantLord = chartData['ascendantLord'] as String? ?? '—';
 
     return GlassCard(
       borderRadius: 20,
@@ -359,8 +622,11 @@ class KundliScreen extends ConsumerWidget {
             ),
             child: Center(
               child: Text(
-                AppColors.zodiacEmojis[ascendant] ?? '♈',
-                style: const TextStyle(fontSize: 24),
+                AstroSymbols.zodiac(ascendant),
+                style: GoogleFonts.notoSansSymbols2(
+                  fontSize: 24,
+                  color: AppColors.primaryLightMode,
+                ),
               ),
             ),
           ),
@@ -397,11 +663,7 @@ class KundliScreen extends ConsumerWidget {
               ],
             ),
           ),
-          const Icon(
-            Icons.auto_awesome,
-            color: AppColors.primary,
-            size: 20,
-          ),
+          const Icon(Icons.auto_awesome, color: AppColors.primary, size: 20),
         ],
       ),
     );
@@ -420,15 +682,19 @@ class KundliScreen extends ConsumerWidget {
     final nakshatra = planet['nakshatra'] as String? ?? '';
     final retrograde = planet['retrograde'] as bool? ?? false;
     final strength = planet['strength'] as String? ?? 'Moderate';
-    final meaning = planet['meaning'] as String? ?? 'This planet influences your life path.';
+    final meaning =
+        planet['meaning'] as String? ??
+        'This planet influences your life path.';
 
     return _ProgressiveDisclosureCard(
+      leadingGlyph: AstroSymbols.planet(name),
       title: '$name • ${house}th House',
       badge: strength,
       badgeColor: strength == 'Strong'
           ? AppColors.success
           : (strength == 'Weak' ? AppColors.warning : AppColors.tertiary),
-      subtitle: '$sign ${retrograde ? '℞' : ''} · ${degree.toStringAsFixed(1)}°',
+      subtitle:
+          '$sign ${retrograde ? '℞' : ''} · ${degree.toStringAsFixed(1)}°',
       meaningText: meaning,
       technicalDetails: nakshatra.isNotEmpty
           ? 'Nakshatra: $nakshatra • Degree: ${degree.toStringAsFixed(2)}° • Strength: $strength'
@@ -446,6 +712,17 @@ class KundliScreen extends ConsumerWidget {
     AppLocalizations l10n,
   ) {
     final planets = (chartData['planets'] as List<dynamic>?) ?? [];
+    if (planets.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(32),
+        child: AstroEmptyState(
+          icon: Icons.blur_circular_rounded,
+          title: 'Planet placements are not available',
+          subtitle:
+              'Calculated planet cards will appear when the chart provider returns placement data.',
+        ),
+      );
+    }
     final cols = context.responsive(mobile: 1, tablet: 2, desktop: 2);
 
     if (cols > 1) {
@@ -484,6 +761,17 @@ class KundliScreen extends ConsumerWidget {
     AppLocalizations l10n,
   ) {
     final houses = (chartData['houses'] as List<dynamic>?) ?? [];
+    if (houses.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(32),
+        child: AstroEmptyState(
+          icon: Icons.home_work_outlined,
+          title: 'House details are not available',
+          subtitle:
+              'Signs, rulers and resident planets will appear when the chart provider returns house data.',
+        ),
+      );
+    }
     final cols = context.responsive(mobile: 1, tablet: 2, desktop: 2);
 
     if (cols > 1) {
@@ -503,15 +791,24 @@ class KundliScreen extends ConsumerWidget {
           final sign = house['sign'] as String? ?? 'Aries';
           final lord = house['lord'] as String? ?? '';
           final planets = (house['planets'] as List<dynamic>?) ?? [];
-          final meaning = house['meaning'] as String? ?? 'This house governs aspects of your life.';
+          final meaning =
+              house['meaning'] as String? ??
+              'This house governs aspects of your life.';
 
           return _ProgressiveDisclosureCard(
+            leadingGlyph: '$houseNum',
             title: 'House $houseNum • $sign',
-            badge: planets.isNotEmpty ? '${planets.length} Planet${planets.length > 1 ? 's' : ''}' : 'Empty',
-            badgeColor: planets.isNotEmpty ? AppColors.success : AppColors.getTextMuted(context),
-            subtitle: 'Lord: $lord${planets.isNotEmpty ? ' • ${planets.join(", ")}' : ''}',
+            badge: planets.isNotEmpty
+                ? '${planets.length} Planet${planets.length > 1 ? 's' : ''}'
+                : 'Empty',
+            badgeColor: planets.isNotEmpty
+                ? AppColors.success
+                : AppColors.getTextMuted(context),
+            subtitle:
+                'Lord: $lord${planets.isNotEmpty ? ' • ${planets.join(", ")}' : ''}',
             meaningText: meaning,
-            technicalDetails: 'Sign: $sign • Lord: $lord • Planets: ${planets.isNotEmpty ? planets.join(", ") : "None"}',
+            technicalDetails:
+                'Sign: $sign • Lord: $lord • Planets: ${planets.isNotEmpty ? planets.join(", ") : "None"}',
             whatThisMeansLabel: l10n.whatThisMeans,
             viewDetailsLabel: l10n.viewTechnicalDetails,
             index: index,
@@ -530,15 +827,24 @@ class KundliScreen extends ConsumerWidget {
         final sign = house['sign'] as String? ?? 'Aries';
         final lord = house['lord'] as String? ?? '';
         final planets = (house['planets'] as List<dynamic>?) ?? [];
-        final meaning = house['meaning'] as String? ?? 'This house governs aspects of your life.';
+        final meaning =
+            house['meaning'] as String? ??
+            'This house governs aspects of your life.';
 
         return _ProgressiveDisclosureCard(
+          leadingGlyph: '$houseNum',
           title: 'House $houseNum • $sign',
-          badge: planets.isNotEmpty ? '${planets.length} Planet${planets.length > 1 ? 's' : ''}' : 'Empty',
-          badgeColor: planets.isNotEmpty ? AppColors.success : AppColors.getTextMuted(context),
-          subtitle: 'Lord: $lord${planets.isNotEmpty ? ' • ${planets.join(", ")}' : ''}',
+          badge: planets.isNotEmpty
+              ? '${planets.length} Planet${planets.length > 1 ? 's' : ''}'
+              : 'Empty',
+          badgeColor: planets.isNotEmpty
+              ? AppColors.success
+              : AppColors.getTextMuted(context),
+          subtitle:
+              'Lord: $lord${planets.isNotEmpty ? ' • ${planets.join(", ")}' : ''}',
           meaningText: meaning,
-          technicalDetails: 'Sign: $sign • Lord: $lord • Planets: ${planets.isNotEmpty ? planets.join(", ") : "None"}',
+          technicalDetails:
+              'Sign: $sign • Lord: $lord • Planets: ${planets.isNotEmpty ? planets.join(", ") : "None"}',
           whatThisMeansLabel: l10n.whatThisMeans,
           viewDetailsLabel: l10n.viewTechnicalDetails,
           index: index,
@@ -554,12 +860,25 @@ class KundliScreen extends ConsumerWidget {
     AppLocalizations l10n,
   ) {
     final dasha = (chartData['dasha'] as Map<String, dynamic>?) ?? {};
-    final mahadasha = dasha['mahadasha'] as String? ?? 'Jupiter';
-    final antardasha = dasha['antardasha'] as String? ?? 'Venus';
+    if (dasha.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(32),
+        child: AstroEmptyState(
+          icon: Icons.timeline_rounded,
+          title: 'Dasha timeline is not available',
+          subtitle:
+              'Mahadasha and Antardasha periods will appear when calculated data is available for this profile.',
+        ),
+      );
+    }
+    final mahadasha = dasha['mahadasha'] as String? ?? '—';
+    final antardasha = dasha['antardasha'] as String? ?? '—';
     final startDate = dasha['startDate'] as String? ?? '';
     final endDate = dasha['endDate'] as String? ?? '';
-    final progress = (dasha['progress'] as num?)?.toDouble() ?? 0.45;
-    final meaning = dasha['meaning'] as String? ?? 'This period influences your overall life direction and fortune.';
+    final progress = (dasha['progress'] as num?)?.toDouble() ?? 0;
+    final meaning =
+        dasha['meaning'] as String? ??
+        'No interpretation is available for this period.';
 
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
@@ -634,7 +953,8 @@ class KundliScreen extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(6),
                         child: LinearProgressIndicator(
                           value: progress,
-                          backgroundColor: Theme.of(context).brightness == Brightness.light
+                          backgroundColor:
+                              Theme.of(context).brightness == Brightness.light
                               ? AppColors.surfaceSecondaryLight
                               : AppColors.surfaceHighlightDark,
                           color: AppColors.secondary,
@@ -720,7 +1040,11 @@ class KundliScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.auto_awesome, color: AppColors.primary, size: 48),
+              const Icon(
+                Icons.auto_awesome,
+                color: AppColors.primary,
+                size: 48,
+              ),
               const SizedBox(height: 16),
               Text(
                 'Yoga & Dosha analysis will appear here',
@@ -754,7 +1078,9 @@ class KundliScreen extends ConsumerWidget {
             borderRadius: 18,
             padding: const EdgeInsets.all(16),
             borderColor: present
-                ? (isYoga ? AppColors.success.withValues(alpha: 0.4) : AppColors.warning.withValues(alpha: 0.4))
+                ? (isYoga
+                      ? AppColors.success.withValues(alpha: 0.4)
+                      : AppColors.warning.withValues(alpha: 0.4))
                 : AppColors.getGlassBorder(context),
             child: Row(
               children: [
@@ -764,7 +1090,9 @@ class KundliScreen extends ConsumerWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: present
-                        ? (isYoga ? AppColors.success.withValues(alpha: 0.15) : AppColors.warning.withValues(alpha: 0.15))
+                        ? (isYoga
+                              ? AppColors.success.withValues(alpha: 0.15)
+                              : AppColors.warning.withValues(alpha: 0.15))
                         : AppColors.getSurfaceSecondary(context),
                   ),
                   child: Icon(
@@ -805,11 +1133,16 @@ class KundliScreen extends ConsumerWidget {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: present
-                        ? (isYoga ? AppColors.success.withValues(alpha: 0.15) : AppColors.warning.withValues(alpha: 0.15))
+                        ? (isYoga
+                              ? AppColors.success.withValues(alpha: 0.15)
+                              : AppColors.warning.withValues(alpha: 0.15))
                         : AppColors.getSurfaceSecondary(context),
                   ),
                   child: Text(
@@ -846,7 +1179,11 @@ class KundliScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.diamond_rounded, color: AppColors.primary, size: 48),
+              const Icon(
+                Icons.diamond_rounded,
+                color: AppColors.primary,
+                size: 48,
+              ),
               const SizedBox(height: 16),
               Text(
                 'Personalized remedies based on your Kundli will appear here',
@@ -941,6 +1278,7 @@ class KundliScreen extends ConsumerWidget {
 
 // ── Progressive Disclosure Card Widget ───────────────
 class _ProgressiveDisclosureCard extends StatefulWidget {
+  final String? leadingGlyph;
   final String title;
   final String badge;
   final Color badgeColor;
@@ -952,6 +1290,7 @@ class _ProgressiveDisclosureCard extends StatefulWidget {
   final int index;
 
   const _ProgressiveDisclosureCard({
+    this.leadingGlyph,
     required this.title,
     required this.badge,
     required this.badgeColor,
@@ -968,7 +1307,8 @@ class _ProgressiveDisclosureCard extends StatefulWidget {
       _ProgressiveDisclosureCardState();
 }
 
-class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> {
+class _ProgressiveDisclosureCardState
+    extends State<_ProgressiveDisclosureCard> {
   bool _showDetails = false;
 
   @override
@@ -984,6 +1324,14 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
             // ── Primary View ────────────────────────────
             Row(
               children: [
+                if (widget.leadingGlyph != null) ...[
+                  AstroGlyphIcon(
+                    glyph: widget.leadingGlyph!,
+                    size: 42,
+                    semanticLabel: widget.title,
+                  ),
+                  const SizedBox(width: 12),
+                ],
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1139,8 +1487,8 @@ class _ProgressiveDisclosureCardState extends State<_ProgressiveDisclosureCard> 
         ),
       ),
     ).animate().fadeIn(
-          duration: 350.ms,
-          delay: Duration(milliseconds: 60 * widget.index),
-        );
+      duration: 350.ms,
+      delay: Duration(milliseconds: 60 * widget.index),
+    );
   }
 }

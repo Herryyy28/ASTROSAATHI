@@ -2,8 +2,8 @@
 
 This document serves as a deep dive into the architecture of AstroSaathi for developers joining the project. 
 
-## 1. Monorepo Philosophy
-AstroSaathi is built as a logical monorepo. Both the client (`lib/`) and the server (`api/`) live in the same repository. This ensures that frontend data models and backend DTOs (Data Transfer Objects) stay in sync during active development.
+## 1. Current Runtime Mode
+AstroSaathi currently runs as a frontend-only offline demo. The Flutter client in `lib/` uses local deterministic engines and SharedPreferences. The standalone `api/` source remains in the repository for reference but is not connected to the Flutter runtime.
 
 ## 2. Flutter Architecture (Frontend)
 
@@ -28,9 +28,9 @@ We strictly use **Riverpod** (`flutter_riverpod`).
 
 ---
 
-## 3. NestJS Architecture (Backend)
+## 3. Standalone NestJS Source (Inactive)
 
-The NestJS backend strictly follows the standard Nest modular architecture.
+The retained NestJS source follows the standard Nest modular architecture, but it is not a production dependency of the current frontend-only build.
 
 ### Data Flow
 1. **Controller**: Handles incoming HTTP requests and JWT validation. No business logic allowed here.
@@ -44,5 +44,7 @@ Astrology math is expensive. Calculating the personalized "Game Plan" for 100,00
 - Background worker threads process these queues slowly over the night, saving the pre-calculated JSON to Postgres so the frontend can fetch it instantly via a simple `GET` request in the morning.
 
 ## 4. UI / UX Standards
-- **Cosmic Glassmorphism**: The app relies heavily on dark backgrounds (`AppColors.cosmicGradient`) with frosted, semi-transparent glass cards (`BackdropFilter`).
-- **Animations**: DO NOT use basic state changes. If a user clicks a button, or a list loads, use `flutter_animate` to fade, slide, or shimmer the elements. The app must feel like magic.
+- **Lovable light system**: The primary experience uses the fixed light lavender palette in `AppColors`, white rounded cards, restrained shadows, serif display headings, and 150–300 ms transitions.
+- **Primary shell**: Home, Calendar, Ask, Reports, and Profile are hosted in an `IndexedStack` and share `AstroBottomNav`.
+- **Shared components**: New primary UI work should use the `Astro*` widgets in `lib/core/widgets/astro_components.dart`.
+- **Behavior separation**: Presentation code may be replaced without changing Riverpod providers, engines, repositories, API contracts, authentication, persistence, or payment services.

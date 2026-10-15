@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../data/models/astrologer_model.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class LiveAstrologerStreamModal extends StatefulWidget {
   final Astrologer astrologer;
@@ -108,7 +109,7 @@ class _LiveAstrologerStreamModalState extends State<LiveAstrologerStreamModal> {
                           height: 88,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: const Color(0xFFFFB300), width: 3),
+                            border: Border.all(color: AppColors.pink, width: 3),
                             boxShadow: [
                               BoxShadow(
                                 color: a.primaryAccent.withValues(alpha: 0.6),
@@ -140,7 +141,7 @@ class _LiveAstrologerStreamModalState extends State<LiveAstrologerStreamModal> {
                           'Live Consultation & Kundli Guidance',
                           style: GoogleFonts.inter(
                             fontSize: 12,
-                            color: const Color(0xFFFFB300),
+                            color: AppColors.pink,
                           ),
                         ),
                       ],
@@ -242,7 +243,7 @@ class _LiveAstrologerStreamModalState extends State<LiveAstrologerStreamModal> {
                           style: GoogleFonts.inter(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: isYou ? const Color(0xFFFFB300) : const Color(0xFF90CAF9),
+                            color: isYou ? AppColors.pink : const Color(0xFF90CAF9),
                           ),
                         ),
                         Expanded(
@@ -290,7 +291,7 @@ class _LiveAstrologerStreamModalState extends State<LiveAstrologerStreamModal> {
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  icon: const Icon(Icons.send_rounded, color: Color(0xFFFF9800)),
+                  icon: const Icon(Icons.send_rounded, color: AppColors.actionPurple),
                   onPressed: _postComment,
                 ),
                 IconButton(

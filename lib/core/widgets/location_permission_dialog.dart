@@ -89,15 +89,19 @@ class LocationPermissionDialog extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: AppColors.backgroundDark.withValues(alpha: 0.6),
+                  color: AppColors.secondaryBackground,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: AppColors.glassBorder, width: 0.5),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _bulletPoint('Used strictly for local sidereal time & coordinates.'),
-                    _bulletPoint('Your location is NEVER sold or shared with third parties.'),
+                    _bulletPoint(
+                      'Used strictly for local sidereal time & coordinates.',
+                    ),
+                    _bulletPoint(
+                      'Your location is NEVER sold or shared with third parties.',
+                    ),
                     _bulletPoint('Background tracking is NEVER performed.'),
                   ],
                 ),
@@ -125,11 +129,14 @@ class LocationPermissionDialog extends StatelessWidget {
                     onPressed: onAccept,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.black,
+                      foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
                     ),
                     child: Text(
                       'Continue',
@@ -154,11 +161,20 @@ class LocationPermissionDialog extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('• ', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+          const Text(
+            '• ',
+            style: TextStyle(
+              color: AppColors.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           Expanded(
             child: Text(
               text,
-              style: GoogleFonts.inter(color: AppColors.textSecondaryDark, fontSize: 12),
+              style: GoogleFonts.inter(
+                color: AppColors.textSecondaryDark,
+                fontSize: 12,
+              ),
             ),
           ),
         ],
@@ -166,4 +182,3 @@ class LocationPermissionDialog extends StatelessWidget {
     );
   }
 }
-

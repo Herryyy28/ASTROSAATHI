@@ -1,108 +1,20 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../providers/subscription_provider.dart';
 import '../theme/app_colors.dart';
-import '../widgets/glass_card.dart';
+import 'glass_card.dart';
 import '../../features/subscription/presentation/screens/premium_upgrade_modal.dart';
 
-/// AdMob Banner Widget that displays ads on Normal Free Accounts,
-/// but COMPLETELY HIDES ads when the user has an active VIP Subscription.
-class AdMobBannerWidget extends ConsumerStatefulWidget {
-  final AdSize adSize;
-
-  const AdMobBannerWidget({
-    super.key,
-    this.adSize = AdSize.banner,
-  });
+/// Offline replacement for the former network ad slot.
+///
+/// The public widget name is retained so existing screens keep their layout.
+class AdMobBannerWidget extends ConsumerWidget {
+  const AdMobBannerWidget({super.key});
 
   @override
-  ConsumerState<AdMobBannerWidget> createState() => _AdMobBannerWidgetState();
-}
-
-class _AdMobBannerWidgetState extends ConsumerState<AdMobBannerWidget> {
-  BannerAd? _bannerAd;
-  bool _isAdLoaded = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _initAd();
-  }
-
-  void _initAd() {
-    // Do not load ads if user is already premium
-    final isPremium = ref.read(isPremiumProvider);
-    if (isPremium) return;
-
-    if (kIsWeb || (!Platform.isAndroid && !Platform.isIOS)) return;
-
-    final String adUnitId = Platform.isAndroid
-        ? (kDebugMode
-            ? 'ca-app-pub-3940256099942544/6300978111' // Google Android Test Banner ID
-            : 'ca-app-pub-2130675826290872/6020392051') // Production AstroSaathi AdMob Banner ID
-        : 'ca-app-pub-3940256099942544/2934735716';
-
-    try {
-      _bannerAd = BannerAd(
-        adUnitId: adUnitId,
-        size: widget.adSize,
-        request: const AdRequest(),
-        listener: BannerAdListener(
-          onAdLoaded: (ad) {
-            if (mounted) {
-              setState(() {
-                _isAdLoaded = true;
-              });
-            }
-          },
-          onAdFailedToLoad: (ad, error) {
-            ad.dispose();
-            if (mounted) {
-              setState(() {
-                _bannerAd = null;
-                _isAdLoaded = false;
-              });
-            }
-          },
-        ),
-      );
-      _bannerAd?.load();
-    } catch (e) {
-      debugPrint('AdMob load error: $e');
-    }
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // ── CRITICAL SUBSCRIPTION CHECK ─────────────────────────────────────
-    // When user subscribes (VIP / Premium), IMMEDIATELY HIDE ALL ADS!
-    final isPremium = ref.watch(isPremiumProvider);
-    if (isPremium) {
-      return const SizedBox.shrink();
-    }
-
-    // ── NORMAL ACCOUNT: SHOW ADMOB BANNER ──────────────────────────────
-    if (_isAdLoaded && _bannerAd != null) {
-      return Container(
-        alignment: Alignment.center,
-        width: _bannerAd!.size.width.toDouble(),
-        height: _bannerAd!.size.height.toDouble(),
-        margin: const EdgeInsets.symmetric(vertical: 12),
-        child: AdWidget(ad: _bannerAd!),
-      );
-    }
-
-    // Fallback card for normal accounts when ad is loading or on web/test platforms
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (ref.watch(isPremiumProvider)) return const SizedBox.shrink();
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
       child: GlassCard(
@@ -116,10 +28,12 @@ class _AdMobBannerWidgetState extends ConsumerState<AdMobBannerWidget> {
               decoration: BoxDecoration(
                 color: AppColors.primary.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.3),
+                ),
               ),
               child: const Text(
-                'AD',
+                'DEMO',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
@@ -128,13 +42,13 @@ class _AdMobBannerWidgetState extends ConsumerState<AdMobBannerWidget> {
               ),
             ),
             const SizedBox(width: 12),
-            Expanded(
+            const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Text(
-                    'AdMob Sponsored Partner',
+                    'Frontend-only preview',
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
@@ -143,7 +57,7 @@ class _AdMobBannerWidgetState extends ConsumerState<AdMobBannerWidget> {
                   ),
                   SizedBox(height: 2),
                   Text(
-                    'Tap to upgrade to VIP & remove all ads permanently',
+                    'Explore the local premium experience — no ad is loaded.',
                     style: TextStyle(
                       fontSize: 11,
                       color: AppColors.textSecondaryDark,
@@ -155,20 +69,10 @@ class _AdMobBannerWidgetState extends ConsumerState<AdMobBannerWidget> {
               ),
             ),
             const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFD700).withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Text(
-                'Remove Ads 👑',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFFFD700),
-                ),
-              ),
+            const Icon(
+              Icons.workspace_premium_outlined,
+              color: AppColors.secondary,
+              size: 20,
             ),
           ],
         ),
@@ -176,4 +80,3 @@ class _AdMobBannerWidgetState extends ConsumerState<AdMobBannerWidget> {
     );
   }
 }
-

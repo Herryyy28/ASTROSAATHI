@@ -14,7 +14,8 @@ class NewKundliInputScreen extends ConsumerStatefulWidget {
   const NewKundliInputScreen({super.key, this.isEmbedded = false});
 
   @override
-  ConsumerState<NewKundliInputScreen> createState() => _NewKundliInputScreenState();
+  ConsumerState<NewKundliInputScreen> createState() =>
+      _NewKundliInputScreenState();
 }
 
 class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
@@ -22,7 +23,9 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
   late TabController _tabController;
 
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _placeController = TextEditingController(text: 'Agra (027N09, 078E00 +5.5)');
+  final TextEditingController _placeController = TextEditingController(
+    text: 'Agra (027N09, 078E00 +5.5)',
+  );
   final TextEditingController _kpHoraryController = TextEditingController();
 
   DateTime _selectedDate = DateTime(2000, 5, 31);
@@ -32,7 +35,13 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
   bool _shouldSave = true;
 
   String _ayanamsa = 'N.C.Lahiri';
-  final List<String> _ayanamsas = ['N.C.Lahiri', 'B.V. Raman', 'KP Old', 'KP New', 'Sayan'];
+  final List<String> _ayanamsas = [
+    'N.C.Lahiri',
+    'B.V. Raman',
+    'KP Old',
+    'KP New',
+    'Sayan',
+  ];
 
   String _dst = '0';
   final List<String> _dstOptions = ['0', '1'];
@@ -52,7 +61,10 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
       try {
         final parts = active.birthTime.split(':');
         if (parts.length >= 2) {
-          _selectedTime = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+          _selectedTime = TimeOfDay(
+            hour: int.parse(parts[0]),
+            minute: int.parse(parts[1]),
+          );
         }
       } catch (_) {}
       if (active.birthPlace.isNotEmpty) {
@@ -81,7 +93,8 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
 
     if (_shouldSave) {
       final dobStr = DateFormat('yyyy-MM-dd').format(_selectedDate);
-      final timeStr = '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}';
+      final timeStr =
+          '${_selectedTime.hour.toString().padLeft(2, '0')}:${_selectedTime.minute.toString().padLeft(2, '0')}';
       final newProfile = BirthProfileData(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         name: name,
@@ -115,46 +128,49 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
       children: [
         if (!widget.isEmbedded) _buildAppBar(context),
 
-            // ── Tabs: SAVED KUNDLI | NEW KUNDLI ──────────────────
-            _buildTabs(context),
+        // ── Tabs: SAVED KUNDLI | NEW KUNDLI ──────────────────
+        _buildTabs(context),
 
-            // ── Tab Views ──────────────────────────────────────────
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  _buildSavedKundliList(savedProfiles, isLight),
-                  _buildNewKundliForm(context, isLight), // Image 5 Form
-                ],
-              ),
-            ),
-          ],
-        );
+        // ── Tab Views ──────────────────────────────────────────
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            physics: const BouncingScrollPhysics(),
+            children: [
+              _buildSavedKundliList(savedProfiles, isLight),
+              _buildNewKundliForm(context, isLight), // Image 5 Form
+            ],
+          ),
+        ),
+      ],
+    );
 
     if (widget.isEmbedded) {
       return Container(
-        color: isLight ? const Color(0xFFF9F9F9) : AppColors.backgroundDark,
+        color: isLight ? AppColors.backgroundLight : AppColors.backgroundDark,
         child: bodyContent,
       );
     }
 
     return Scaffold(
-      backgroundColor: isLight ? const Color(0xFFF9F9F9) : AppColors.backgroundDark,
-      body: SafeArea(
-        child: bodyContent,
-      ),
+      backgroundColor: isLight
+          ? AppColors.backgroundLight
+          : AppColors.backgroundDark,
+      body: SafeArea(child: bodyContent),
     );
   }
 
   Widget _buildAppBar(BuildContext context) {
     return Container(
-      color: const Color(0xFFF5A623), // AstroSage Golden Yellow
+      color: AppColors.highlightSurface,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.menu_rounded, color: Colors.black87),
+            icon: const Icon(
+              Icons.menu_rounded,
+              color: AppColors.textPrimaryLight,
+            ),
             onPressed: () => NineLanguagesModal.show(context),
           ),
           const SizedBox(width: 4),
@@ -164,12 +180,16 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
               style: GoogleFonts.outfit(
                 fontSize: 20,
                 fontWeight: FontWeight.w800,
-                color: Colors.black87,
+                color: AppColors.textPrimaryLight,
               ),
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.home_outlined, color: Colors.black87, size: 26),
+            icon: const Icon(
+              Icons.home_outlined,
+              color: AppColors.textPrimaryLight,
+              size: 26,
+            ),
             onPressed: () {
               ref.read(mainNavIndexProvider.notifier).state = 0;
               if (Navigator.canPop(context)) Navigator.pop(context);
@@ -185,10 +205,10 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
       color: Colors.white,
       child: TabBar(
         controller: _tabController,
-        indicatorColor: const Color(0xFFFF9800),
+        indicatorColor: AppColors.actionPurple,
         indicatorWeight: 3.5,
-        labelColor: Colors.black87,
-        unselectedLabelColor: Colors.black54,
+        labelColor: Colors.white,
+        unselectedLabelColor: AppColors.textSecondaryLight,
         labelStyle: GoogleFonts.outfit(
           fontSize: 13.5,
           fontWeight: FontWeight.w800,
@@ -221,22 +241,32 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Icon(Icons.person_outline_rounded, color: Colors.black87, size: 24),
+              const Icon(
+                Icons.person_outline_rounded,
+                color: AppColors.textPrimaryLight,
+                size: 24,
+              ),
               const SizedBox(width: 14),
               Expanded(
                 child: TextField(
                   controller: _nameController,
-                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500),
+                  style: GoogleFonts.inter(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                   decoration: const InputDecoration(
                     hintText: 'Enter Name',
                     hintStyle: TextStyle(color: Colors.grey),
                     isDense: true,
                     contentPadding: EdgeInsets.symmetric(vertical: 8),
                     border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFFFB74D)),
+                      borderSide: BorderSide(color: AppColors.pink),
                     ),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFFF9800), width: 1.5),
+                      borderSide: BorderSide(
+                        color: AppColors.actionPurple,
+                        width: 1.5,
+                      ),
                     ),
                   ),
                 ),
@@ -248,7 +278,11 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
           // ── Date & Time Pickers Side-by-Side ───────────────────
           Row(
             children: [
-              const Icon(Icons.calendar_today_outlined, color: Colors.black87, size: 22),
+              const Icon(
+                Icons.calendar_today_outlined,
+                color: AppColors.textPrimaryLight,
+                size: 22,
+              ),
               const SizedBox(width: 14),
               // Date Box
               Expanded(
@@ -271,7 +305,7 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                     decoration: BoxDecoration(
                       color: isLight ? Colors.white : AppColors.surfaceDark,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFFFB74D), width: 1.2),
+                      border: Border.all(color: AppColors.pink, width: 1.2),
                     ),
                     child: Center(
                       child: Text(
@@ -306,7 +340,7 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                     decoration: BoxDecoration(
                       color: isLight ? Colors.white : AppColors.surfaceDark,
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: const Color(0xFFFFB74D), width: 1.2),
+                      border: Border.all(color: AppColors.pink, width: 1.2),
                     ),
                     child: Center(
                       child: Text(
@@ -328,7 +362,11 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
           // ── Place of Birth Field ───────────────────────────────
           Row(
             children: [
-              const Icon(Icons.location_on_outlined, color: Colors.black87, size: 24),
+              const Icon(
+                Icons.location_on_outlined,
+                color: AppColors.textPrimaryLight,
+                size: 24,
+              ),
               const SizedBox(width: 14),
               Expanded(
                 child: Container(
@@ -337,7 +375,7 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                   decoration: BoxDecoration(
                     color: isLight ? Colors.white : AppColors.surfaceDark,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xFFFFB74D), width: 1.2),
+                    border: Border.all(color: AppColors.pink, width: 1.2),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -366,7 +404,11 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
           // ── Gender Toggle: [Male] / [Female] ────────────────────
           Row(
             children: [
-              const Icon(Icons.transgender_rounded, color: Colors.black87, size: 24),
+              const Icon(
+                Icons.transgender_rounded,
+                color: AppColors.textPrimaryLight,
+                size: 24,
+              ),
               const SizedBox(width: 14),
               Expanded(
                 child: Container(
@@ -374,7 +416,7 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                   decoration: BoxDecoration(
                     color: isLight ? Colors.white : AppColors.surfaceDark,
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xFFFFB74D), width: 1.2),
+                    border: Border.all(color: AppColors.pink, width: 1.2),
                   ),
                   child: Row(
                     children: [
@@ -384,9 +426,11 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                           child: Container(
                             decoration: BoxDecoration(
                               color: _gender == 'Male'
-                                  ? const Color(0xFFF5A623) // Active orange/gold
+                                  ? AppColors.secondary
                                   : Colors.transparent,
-                              borderRadius: const BorderRadius.horizontal(left: Radius.circular(7)),
+                              borderRadius: const BorderRadius.horizontal(
+                                left: Radius.circular(7),
+                              ),
                             ),
                             child: Center(
                               child: Text(
@@ -394,7 +438,9 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
-                                  color: _gender == 'Male' ? Colors.white : Colors.black87,
+                                  color: _gender == 'Male'
+                                      ? Colors.white
+                                      : Colors.black87,
                                 ),
                               ),
                             ),
@@ -407,9 +453,11 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                           child: Container(
                             decoration: BoxDecoration(
                               color: _gender == 'Female'
-                                  ? const Color(0xFFF5A623)
+                                  ? AppColors.secondary
                                   : Colors.transparent,
-                              borderRadius: const BorderRadius.horizontal(right: Radius.circular(7)),
+                              borderRadius: const BorderRadius.horizontal(
+                                right: Radius.circular(7),
+                              ),
                             ),
                             child: Center(
                               child: Text(
@@ -417,7 +465,9 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                                 style: GoogleFonts.inter(
                                   fontSize: 13,
                                   fontWeight: FontWeight.w700,
-                                  color: _gender == 'Female' ? Colors.white : Colors.black87,
+                                  color: _gender == 'Female'
+                                      ? Colors.white
+                                      : Colors.black87,
                                 ),
                               ),
                             ),
@@ -441,25 +491,35 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                 height: 24,
                 child: Checkbox(
                   value: _shouldSave,
-                  activeColor: const Color(0xFFE65100),
+                  activeColor: AppColors.actionPurple,
                   onChanged: (val) => setState(() => _shouldSave = val ?? true),
                 ),
               ),
               const SizedBox(width: 8),
               Text(
                 'Save',
-                style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600),
+                style: GoogleFonts.inter(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: const Color(0xFFFFB74D)),
+                  border: Border.all(color: AppColors.pink),
                 ),
                 child: Text(
                   'Settings —',
-                  style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold, color: const Color(0xFFE65100)),
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.actionPurple,
+                  ),
                 ),
               ),
             ],
@@ -475,7 +535,7 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
               color: AppColors.getTextPrimary(context),
             ),
           ),
-          const Divider(thickness: 1, color: Color(0xFFEEEEEE)),
+          const Divider(thickness: 1, color: AppColors.dividerLight),
           const SizedBox(height: 8),
 
           // KP Horary No.
@@ -485,7 +545,10 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                 flex: 4,
                 child: Text(
                   'KP Horary No.',
-                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500),
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               Expanded(
@@ -499,7 +562,7 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                     isDense: true,
                     contentPadding: EdgeInsets.symmetric(vertical: 4),
                     border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color(0xFFFFB74D)),
+                      borderSide: BorderSide(color: AppColors.pink),
                     ),
                   ),
                 ),
@@ -515,7 +578,10 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                 flex: 4,
                 child: Text(
                   'Ayanamsa',
-                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500),
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               Expanded(
@@ -524,7 +590,17 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                   child: DropdownButton<String>(
                     value: _ayanamsa,
                     isDense: true,
-                    items: _ayanamsas.map((a) => DropdownMenuItem(value: a, child: Text(a, style: const TextStyle(fontSize: 13)))).toList(),
+                    items: _ayanamsas
+                        .map(
+                          (a) => DropdownMenuItem(
+                            value: a,
+                            child: Text(
+                              a,
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                          ),
+                        )
+                        .toList(),
                     onChanged: (val) {
                       if (val != null) setState(() => _ayanamsa = val);
                     },
@@ -542,7 +618,10 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                 flex: 4,
                 child: Text(
                   'D.S.T.',
-                  style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500),
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               Expanded(
@@ -551,7 +630,17 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
                   child: DropdownButton<String>(
                     value: _dst,
                     isDense: true,
-                    items: _dstOptions.map((d) => DropdownMenuItem(value: d, child: Text(d, style: const TextStyle(fontSize: 13)))).toList(),
+                    items: _dstOptions
+                        .map(
+                          (d) => DropdownMenuItem(
+                            value: d,
+                            child: Text(
+                              d,
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                          ),
+                        )
+                        .toList(),
                     onChanged: (val) {
                       if (val != null) setState(() => _dst = val);
                     },
@@ -567,10 +656,14 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
             height: 48,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFE65100), // AstroSage Bright Orange
+                backgroundColor: const Color(
+                  0xFFE65100,
+                ), // AstroSage Bright Orange
                 foregroundColor: Colors.white,
                 elevation: 1,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
               onPressed: _onGetHoroscope,
               child: Text(
@@ -594,11 +687,18 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.person_search_rounded, size: 54, color: Colors.grey),
+            const Icon(
+              Icons.person_search_rounded,
+              size: 54,
+              color: Colors.grey,
+            ),
             const SizedBox(height: 12),
             Text(
               'No Saved Kundlis',
-              style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.bold),
+              style: GoogleFonts.outfit(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 6),
             Text(
@@ -625,19 +725,28 @@ class _NewKundliInputScreenState extends ConsumerState<NewKundliInputScreen>
           clipBehavior: Clip.antiAlias,
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: const Color(0xFFFFF3E0),
+              backgroundColor: AppColors.secondaryBackground,
               child: Text(
                 p.name.substring(0, 1).toUpperCase(),
-                style: const TextStyle(color: Color(0xFFE65100), fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  color: AppColors.actionPurple,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            title: Text(p.name, style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
+            title: Text(
+              p.name,
+              style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+            ),
             subtitle: Text('${p.dob} • ${p.birthPlace}'),
             trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
             onTap: () {
               ref.read(activeProfileIndexProvider.notifier).state = index;
               ref.read(mainNavIndexProvider.notifier).state = 1;
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const KundliScreen()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const KundliScreen()),
+              );
             },
           ),
         );

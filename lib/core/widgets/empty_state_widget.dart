@@ -4,8 +4,7 @@ import '../theme/app_colors.dart';
 import '../theme/design_tokens.dart';
 import 'glass_card.dart';
 
-/// A reusable empty state widget — fully theme-adaptive (Light & Dark).
-/// Provides human-readable context, cosmic iconography, and an optional CTA.
+/// Shared light empty state for secondary and legacy routes.
 class EmptyStateWidget extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -54,23 +53,16 @@ class EmptyStateWidget extends StatelessWidget {
                 ),
                 child: Center(
                   child: emoji != null
-                      ? Text(
-                          emoji!,
-                          style: const TextStyle(fontSize: 30),
-                        )
-                      : Icon(
-                          icon,
-                          color: primaryColor,
-                          size: 30,
-                        ),
+                      ? Text(emoji!, style: const TextStyle(fontSize: 30))
+                      : Icon(icon, color: primaryColor, size: 30),
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.outfit(
-                  fontSize: 17,
+                style: GoogleFonts.inter(
+                  fontSize: 18,
                   fontWeight: FontWeight.w700,
                   color: textPrimary,
                   height: 1.25,
@@ -90,15 +82,15 @@ class EmptyStateWidget extends StatelessWidget {
                 const SizedBox(height: AppSpacing.xl),
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor,
-                    foregroundColor: Colors.black,
+                    backgroundColor: AppColors.primaryLightMode,
+                    foregroundColor: Colors.white,
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 12,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: AppRadius.borderCard,
+                      borderRadius: AppRadius.borderButton,
                     ),
                     minimumSize: const Size(0, 44),
                   ),
@@ -106,7 +98,7 @@ class EmptyStateWidget extends StatelessWidget {
                   icon: const Icon(Icons.add_rounded, size: 18),
                   label: Text(
                     buttonText!,
-                    style: GoogleFonts.outfit(
+                    style: GoogleFonts.inter(
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                     ),
@@ -120,4 +112,3 @@ class EmptyStateWidget extends StatelessWidget {
     );
   }
 }
-

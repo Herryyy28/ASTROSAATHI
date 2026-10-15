@@ -1,4 +1,4 @@
-﻿import 'dart:math' as math;
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -50,8 +50,8 @@ class BiWheelChartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLight = AppColors.isLight(context);
-    final natalColor = isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700);
-    final transitColor = isLight ? const Color(0xFF00897B) : const Color(0xFF00E5FF);
+    final natalColor = isLight ? const Color(0xFFB87308) : AppColors.secondary;
+    final transitColor = isLight ? const Color(0xFF00897B) : AppColors.primaryLightMode;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -158,7 +158,7 @@ class BiWheelChartWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildLegendItem('Trine (120Â°)', isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF), context),
+        _buildLegendItem('Trine (120Â°)', isLight ? const Color(0xFF00796B) : AppColors.primaryLightMode, context),
         const SizedBox(width: 12),
         _buildLegendItem('Square (90Â°)', isLight ? const Color(0xFFC62828) : const Color(0xFFFF1744), context),
         const SizedBox(width: 12),
@@ -227,7 +227,7 @@ class BiWheelChartPainter extends CustomPainter {
     final Map<String, Offset> planetPositions = {};
 
     // Inner Ring Planets (Natal: Gold/Amber)
-    final natalColor = isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700);
+    final natalColor = isLight ? const Color(0xFFB87308) : AppColors.secondary;
     final textStyleInner = GoogleFonts.outfit(color: natalColor, fontSize: 10, fontWeight: FontWeight.bold);
     for (var p in innerPlanets) {
       final rad = (p.longitude - 90) * (math.pi / 180);
@@ -240,7 +240,7 @@ class BiWheelChartPainter extends CustomPainter {
     }
 
     // Outer Ring Planets (Transits: Cyan/Teal)
-    final transitColor = isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF);
+    final transitColor = isLight ? const Color(0xFF00796B) : AppColors.primaryLightMode;
     final textStyleOuter = GoogleFonts.outfit(color: transitColor, fontSize: 10, fontWeight: FontWeight.bold);
     for (var p in outerPlanets) {
       final rad = (p.longitude - 90) * (math.pi / 180);

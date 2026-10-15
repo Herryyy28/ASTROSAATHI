@@ -1,29 +1,18 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import '../../../../core/config/app_config.dart';
-import '../../../../core/services/firebase_service.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>(
   (ref) => AuthRepository(),
 );
 
-final userSessionProvider = StateNotifierProvider<UserSessionNotifier, UserSessionState>(
-  (ref) => UserSessionNotifier(ref.watch(authRepositoryProvider)),
-);
+final userSessionProvider =
+    StateNotifierProvider<UserSessionNotifier, UserSessionState>(
+      (ref) => UserSessionNotifier(ref.watch(authRepositoryProvider)),
+    );
 
 class UserSessionState {
-  final bool isAuthenticated;
-  final String? userId;
-  final String? email;
-  final String? name;
-  final String? token;
-  final String? photoUrl;
-
   const UserSessionState({
     this.isAuthenticated = false,
     this.userId,
@@ -33,344 +22,172 @@ class UserSessionState {
     this.photoUrl,
   });
 
-  UserSessionState copyWith({
-    bool? isAuthenticated,
-    String? userId,
-    String? email,
-    String? name,
-    String? token,
-    String? photoUrl,
-  }) {
-    return UserSessionState(
-      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-      userId: userId ?? this.userId,
-      email: email ?? this.email,
-      name: name ?? this.name,
-      token: token ?? this.token,
-      photoUrl: photoUrl ?? this.photoUrl,
-    );
-  }
+  final bool isAuthenticated;
+  final String? userId;
+  final String? email;
+  final String? name;
+  final String? token;
+  final String? photoUrl;
 }
 
 class UserSessionNotifier extends StateNotifier<UserSessionState> {
-  final AuthRepository _repo;
-
-  UserSessionNotifier(this._repo) : super(const UserSessionState()) {
+  UserSessionNotifier(this._repository) : super(const UserSessionState()) {
     _loadSession();
   }
 
-  Future<void> _loadSession() async {
-    final token = await _repo.getAuthToken();
-    final prefs = await SharedPreferences.getInstance();
-    final email = prefs.getString('auth_user_email');
-    final name = prefs.getString('auth_user_name');
-    final userId = prefs.getString('auth_user_id');
-    final photoUrl = prefs.getString('auth_user_photo');
+  final AuthRepository _repository;
 
-    if (token != null && token.isNotEmpty) {
-      state = UserSessionState(
-        isAuthenticated: true,
-        token: token,
-        email: email,
-        name: name,
-        userId: userId,
-        photoUrl: photoUrl,
-      );
-    }
+  Future<void> _loadSession() async {
+    final session = await _repository.readSession();
+    if (session != null) state = session;
   }
 
   Future<bool> login(String email, String password) async {
-    try {
-      final res = await _repo.signInWithEmail(email, password);
-      if (res['success'] == true) {
-        final token = res['token'] ?? 'mock_jwt_token';
-        final userId = res['userId'] ?? 'user_${DateTime.now().millisecondsSinceEpoch}';
-        final userName = res['name'] ?? email.split('@').first;
-
-        await _repo.persistLocalSession(
-          token: token,
-          email: email,
-          name: userName,
-          userId: userId,
-        );
-
-        state = UserSessionState(
-          isAuthenticated: true,
-          token: token,
-          email: email,
-          name: userName,
-          userId: userId,
-        );
-        return true;
-      }
-    } catch (_) {}
-    return false;
+    final result = await _repository.signInWithEmail(email, password);
+    return _accept(result);
   }
 
   Future<bool> register(String name, String email, String password) async {
-    try {
-      final res = await _repo.signUpWithEmail(name, email, password);
-      if (res['success'] == true) {
-        return await login(email, password);
-      }
-    } catch (_) {}
-    return false;
+    await _repository.signUpWithEmail(name, email, password);
+    final result = await _repository.signInWithEmail(
+      email,
+      password,
+      displayName: name,
+    );
+    return _accept(result);
   }
 
-  Future<bool> loginWithGoogle({String? customEmail, String? customName}) async {
-    try {
-      final res = await _repo.signInWithGoogle(customEmail: customEmail, customName: customName);
-      if (res['success'] == true) {
-        final token = res['token'] ?? 'google_jwt_token_${DateTime.now().millisecondsSinceEpoch}';
-        final userId = res['userId'] ?? 'google_usr_${DateTime.now().millisecondsSinceEpoch}';
-        final email = res['email'] ?? 'google.user@gmail.com';
-        final userName = res['name'] ?? 'Google User';
-        final photoUrl = res['photoUrl'];
+  Future<bool> loginWithGoogle({
+    String? customEmail,
+    String? customName,
+  }) async {
+    final result = await _repository.signInWithGoogle(
+      customEmail: customEmail,
+      customName: customName,
+    );
+    return _accept(result);
+  }
 
-        await _repo.persistLocalSession(
-          token: token,
-          email: email,
-          name: userName,
-          userId: userId,
-          photoUrl: photoUrl,
-        );
-
-        state = UserSessionState(
-          isAuthenticated: true,
-          token: token,
-          email: email,
-          name: userName,
-          userId: userId,
-          photoUrl: photoUrl,
-        );
-        return true;
-      }
-    } catch (e) {
-      debugPrint('Google Sign-In Error: $e');
-    }
-    return false;
+  Future<bool> _accept(Map<String, dynamic> result) async {
+    if (result['success'] != true) return false;
+    final session = UserSessionState(
+      isAuthenticated: true,
+      token: result['token'] as String?,
+      email: result['email'] as String?,
+      name: result['name'] as String?,
+      userId: result['userId'] as String?,
+      photoUrl: result['photoUrl'] as String?,
+    );
+    await _repository.persistLocalSession(session);
+    state = session;
+    return true;
   }
 
   Future<void> logout() async {
-    await _repo.clearLocalSession();
+    await _repository.clearLocalSession();
     state = const UserSessionState();
   }
 }
 
+/// Local-only demo authentication and onboarding persistence.
 class AuthRepository {
-  final String baseUrl = AppConfig.apiBaseUrl;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  static const _sessionKey = 'demo_auth_session_v1';
 
-  FirebaseAuth? get _firebaseAuth => FirebaseService.instance.auth;
-
-  Future<void> signInAnonymously() async {
-    try {
-      await _firebaseAuth?.signInAnonymously();
-    } catch (e) {
-      debugPrint('Anonymous Auth warning: $e');
-    }
-  }
-
-  Future<Map<String, dynamic>> signInWithGoogle({String? customEmail, String? customName}) async {
-    try {
-      final fbAuth = _firebaseAuth;
-      if (fbAuth != null) {
-        final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-        if (googleUser != null) {
-          final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-          final AuthCredential credential = GoogleAuthProvider.credential(
-            accessToken: googleAuth.accessToken,
-            idToken: googleAuth.idToken,
-          );
-
-          final UserCredential userCredential = await fbAuth.signInWithCredential(credential);
-          final User? firebaseUser = userCredential.user;
-
-          if (firebaseUser != null) {
-            final idToken = await firebaseUser.getIdToken() ?? 'fb_token_${firebaseUser.uid}';
-            
-            await _logToDeveloperSqlLedger(
-              actionType: 'GOOGLE_SIGNIN_SUCCESS',
-              userId: firebaseUser.uid,
-              email: firebaseUser.email ?? '',
-              name: firebaseUser.displayName ?? 'Google User',
-            );
-
-            return {
-              'success': true,
-              'token': idToken,
-              'userId': firebaseUser.uid,
-              'email': firebaseUser.email,
-              'name': firebaseUser.displayName ?? 'Google User',
-              'photoUrl': firebaseUser.photoURL,
-            };
-          }
-        }
-      }
-    } catch (e) {
-      debugPrint('Live Firebase Google Auth exception (falling back to dev mock mode): $e');
-    }
-
-    final email = customEmail ?? 'user.google_${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}@gmail.com';
-    final name = customName ?? 'Astro Saathi VIP User';
-    final userId = 'goog_${email.hashCode.abs()}';
-    final mockToken = 'google_jwt_${DateTime.now().millisecondsSinceEpoch}';
-
-    await _logToDeveloperSqlLedger(
-      actionType: 'GOOGLE_SIGNIN_MOCK',
-      userId: userId,
+  Future<Map<String, dynamic>> signInWithGoogle({
+    String? customEmail,
+    String? customName,
+  }) async {
+    final email = customEmail ?? 'demo@astrosaathi.local';
+    return _demoResult(
       email: email,
-      name: name,
+      name: customName ?? 'AstroSaathi Demo',
+      provider: 'google-preview',
     );
-
-    return {
-      'success': true,
-      'token': mockToken,
-      'userId': userId,
-      'email': email,
-      'name': name,
-    };
   }
 
-  Future<Map<String, dynamic>> signInWithEmail(String email, String password) async {
-    try {
-      final fbAuth = _firebaseAuth;
-      if (fbAuth != null) {
-        final UserCredential userCredential = await fbAuth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        if (userCredential.user != null) {
-          final token = await userCredential.user!.getIdToken() ?? 'token_${userCredential.user!.uid}';
-          await _logToDeveloperSqlLedger(
-            actionType: 'EMAIL_LOGIN_SUCCESS',
-            userId: userCredential.user!.uid,
-            email: email,
-            name: userCredential.user!.displayName ?? email.split('@').first,
-          );
-          return {
-            'success': true,
-            'token': token,
-            'userId': userCredential.user!.uid,
-            'name': userCredential.user!.displayName ?? email.split('@').first,
-          };
-        }
-      }
-    } catch (_) {}
-
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/auth/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email, 'password': password}),
-      ).timeout(const Duration(seconds: 3));
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return jsonDecode(response.body);
-      }
-    } catch (_) {}
-
-    final userId = 'usr_${email.hashCode.abs()}';
-    await _logToDeveloperSqlLedger(
-      actionType: 'EMAIL_LOGIN_MOCK',
-      userId: userId,
-      email: email,
-      name: email.split('@').first,
+  Future<Map<String, dynamic>> signInWithEmail(
+    String email,
+    String password, {
+    String? displayName,
+  }) async {
+    return _demoResult(
+      email: email.trim().isEmpty ? 'demo@astrosaathi.local' : email.trim(),
+      name: displayName ?? _displayNameFromEmail(email),
+      provider: 'email-preview',
     );
-
-    return {
-      'success': true,
-      'token': 'jwt_mock_token_${DateTime.now().millisecondsSinceEpoch}',
-      'userId': userId,
-      'name': email.split('@').first,
-    };
   }
 
-  Future<Map<String, dynamic>> signUpWithEmail(String name, String email, String password) async {
-    try {
-      final fbAuth = _firebaseAuth;
-      if (fbAuth != null) {
-        final UserCredential userCredential = await fbAuth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        if (userCredential.user != null) {
-          await userCredential.user!.updateDisplayName(name);
-          await _logToDeveloperSqlLedger(
-            actionType: 'EMAIL_REGISTER_SUCCESS',
-            userId: userCredential.user!.uid,
-            email: email,
-            name: name,
-          );
-          return {
-            'success': true,
-            'message': 'User registered successfully with Firebase',
-          };
-        }
-      }
-    } catch (_) {}
+  Future<Map<String, dynamic>> signUpWithEmail(
+    String name,
+    String email,
+    String password,
+  ) async => const {'success': true, 'message': 'Demo account ready'};
 
-    await _logToDeveloperSqlLedger(
-      actionType: 'EMAIL_REGISTER_MOCK',
-      userId: 'usr_${email.hashCode.abs()}',
-      email: email,
-      name: name,
-    );
-
-    return {
-      'success': true,
-      'message': 'User registered successfully',
-    };
-  }
-
-  Future<void> persistLocalSession({
-    required String token,
+  Map<String, dynamic> _demoResult({
     required String email,
     required String name,
-    required String userId,
-    String? photoUrl,
-  }) async {
+    required String provider,
+  }) => {
+    'success': true,
+    'token': 'frontend_demo_session',
+    'userId': 'demo_${email.hashCode.abs()}',
+    'email': email,
+    'name': name,
+    'provider': provider,
+  };
+
+  String _displayNameFromEmail(String email) {
+    final local = email.split('@').first.trim();
+    if (local.isEmpty) return 'AstroSaathi Demo';
+    return local
+        .split(RegExp(r'[._-]+'))
+        .where((part) => part.isNotEmpty)
+        .map((part) => '${part[0].toUpperCase()}${part.substring(1)}')
+        .join(' ');
+  }
+
+  Future<void> signInAnonymously() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('auth_token', token);
-    await prefs.setString('auth_user_email', email);
-    await prefs.setString('auth_user_name', name);
-    await prefs.setString('auth_user_id', userId);
-    if (photoUrl != null) {
-      await prefs.setString('auth_user_photo', photoUrl);
+    await prefs.setBool('demo_guest_session', true);
+  }
+
+  Future<void> persistLocalSession(UserSessionState session) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      _sessionKey,
+      jsonEncode({
+        'userId': session.userId,
+        'email': session.email,
+        'name': session.name,
+        'token': session.token,
+        'photoUrl': session.photoUrl,
+      }),
+    );
+  }
+
+  Future<UserSessionState?> readSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString(_sessionKey);
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      final json = jsonDecode(raw) as Map<String, dynamic>;
+      return UserSessionState(
+        isAuthenticated: true,
+        userId: json['userId'] as String?,
+        email: json['email'] as String?,
+        name: json['name'] as String?,
+        token: json['token'] as String?,
+        photoUrl: json['photoUrl'] as String?,
+      );
+    } catch (_) {
+      return null;
     }
   }
 
   Future<void> clearLocalSession() async {
-    try {
-      await _googleSignIn.signOut();
-      await _firebaseAuth?.signOut();
-    } catch (_) {}
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('auth_token');
-    await prefs.remove('auth_user_email');
-    await prefs.remove('auth_user_name');
-    await prefs.remove('auth_user_id');
-    await prefs.remove('auth_user_photo');
-  }
-
-  Future<void> _logToDeveloperSqlLedger({
-    required String actionType,
-    required String userId,
-    required String email,
-    required String name,
-  }) async {
-    try {
-      await http.post(
-        Uri.parse('$baseUrl/admin/log-event'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'actionType': actionType,
-          'userId': userId,
-          'userEmail': email,
-          'name': name,
-          'timestamp': DateTime.now().toIso8601String(),
-        }),
-      ).timeout(const Duration(seconds: 2));
-    } catch (_) {}
+    await prefs.remove(_sessionKey);
+    await prefs.remove('demo_guest_session');
   }
 
   Future<void> saveProfileData({
@@ -382,33 +199,23 @@ class AuthRepository {
     required double longitude,
     required String timeZone,
     required Map<String, double> focusWeights,
+    String? gender,
+    String? astrologyPreference,
   }) async {
-    try {
-      final token = await getAuthToken() ?? 'mock_jwt_token';
-      await http.post(
-        Uri.parse('$baseUrl/users/profile'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-        body: jsonEncode({
-          'fullName': name,
-          'dateOfBirth': dob,
-          'timeOfBirth': time,
-          'placeOfBirth': place,
-          'latitude': latitude,
-          'longitude': longitude,
-          'timeZone': timeZone,
-          'focusWeights': focusWeights,
-        }),
-      ).timeout(const Duration(seconds: 4));
-    } catch (_) {}
-  }
-
-  Future<String?> getAuthToken() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('auth_token');
+    await prefs.setString('user_name', name);
+    await prefs.setString('user_dob', dob);
+    await prefs.setString('user_time', time);
+    await prefs.setString('user_place', place);
+    await prefs.setDouble('user_lat', latitude);
+    await prefs.setDouble('user_lon', longitude);
+    await prefs.setString('user_tz', timeZone);
+    await prefs.setStringList('user_focus_areas', focusWeights.keys.toList());
+    if (gender != null) await prefs.setString('user_gender', gender);
+    if (astrologyPreference != null) {
+      await prefs.setString('user_astrology_preference', astrologyPreference);
+    }
   }
+
+  Future<String?> getAuthToken() async => (await readSession())?.token;
 }
-
-

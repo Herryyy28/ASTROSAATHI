@@ -30,25 +30,45 @@ class VedicChartGeometry {
     final h = size.height;
     switch (house) {
       case 1:
-        return [Offset(w / 2, 0), Offset(3 * w / 4, h / 4), Offset(w / 2, h / 2), Offset(w / 4, h / 4)];
+        return [
+          Offset(w / 2, 0),
+          Offset(3 * w / 4, h / 4),
+          Offset(w / 2, h / 2),
+          Offset(w / 4, h / 4),
+        ];
       case 2:
         return [Offset(0, 0), Offset(w / 2, 0), Offset(w / 4, h / 4)];
       case 3:
         return [Offset(0, 0), Offset(w / 4, h / 4), Offset(0, h / 2)];
       case 4:
-        return [Offset(0, h / 2), Offset(w / 4, h / 4), Offset(w / 2, h / 2), Offset(w / 4, 3 * h / 4)];
+        return [
+          Offset(0, h / 2),
+          Offset(w / 4, h / 4),
+          Offset(w / 2, h / 2),
+          Offset(w / 4, 3 * h / 4),
+        ];
       case 5:
         return [Offset(0, h / 2), Offset(w / 4, 3 * h / 4), Offset(0, h)];
       case 6:
         return [Offset(0, h), Offset(w / 4, 3 * h / 4), Offset(w / 2, h)];
       case 7:
-        return [Offset(w / 2, h / 2), Offset(3 * w / 4, 3 * h / 4), Offset(w / 2, h), Offset(w / 4, 3 * h / 4)];
+        return [
+          Offset(w / 2, h / 2),
+          Offset(3 * w / 4, 3 * h / 4),
+          Offset(w / 2, h),
+          Offset(w / 4, 3 * h / 4),
+        ];
       case 8:
         return [Offset(w / 2, h), Offset(3 * w / 4, 3 * h / 4), Offset(w, h)];
       case 9:
         return [Offset(w, h / 2), Offset(3 * w / 4, 3 * h / 4), Offset(w, h)];
       case 10:
-        return [Offset(w / 2, h / 2), Offset(3 * w / 4, h / 4), Offset(w, h / 2), Offset(3 * w / 4, 3 * h / 4)];
+        return [
+          Offset(w / 2, h / 2),
+          Offset(3 * w / 4, h / 4),
+          Offset(w, h / 2),
+          Offset(3 * w / 4, 3 * h / 4),
+        ];
       case 11:
         return [Offset(w, 0), Offset(3 * w / 4, h / 4), Offset(w, h / 2)];
       case 12:
@@ -115,8 +135,10 @@ class VedicChartGeometry {
     required VedicChartStyle style,
     required int lagnaSignIndex,
   }) {
-    if (localPosition.dx < 0 || localPosition.dx > size.width ||
-        localPosition.dy < 0 || localPosition.dy > size.height) {
+    if (localPosition.dx < 0 ||
+        localPosition.dx > size.width ||
+        localPosition.dy < 0 ||
+        localPosition.dy > size.height) {
       return 0;
     }
 
@@ -223,19 +245,19 @@ class VedicChartPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final double width = size.width;
     final double height = size.height;
-    final isLight = AppColors.isLight(context);
-
-    // Fixed Chart Background: #FFFFFF (Light) / #111827 (Dark)
+    // Authoritative light chart surface.
     final bgPaint = Paint()
-      ..color = isLight ? const Color(0xFFFFFFFF) : const Color(0xFF111827)
+      ..color = AppColors.surfaceLight
       ..style = PaintingStyle.fill;
     canvas.drawRRect(
-      RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, width, height), const Radius.circular(14)),
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, width, height),
+        const Radius.circular(14),
+      ),
       bgPaint,
     );
 
-    // Fixed Chart Lines: #D9901A (Light) / #E0A13A (Dark)
-    final lineColor = isLight ? const Color(0xFFD9901A) : const Color(0xFFE0A13A);
+    final lineColor = AppColors.primaryLightMode;
 
     final paint = Paint()
       ..color = lineColor
@@ -249,7 +271,10 @@ class VedicChartPainter extends CustomPainter {
 
     // Outer box
     final Rect outerRect = Rect.fromLTWH(0, 0, width, height);
-    final RRect outerRRect = RRect.fromRectAndRadius(outerRect, const Radius.circular(14));
+    final RRect outerRRect = RRect.fromRectAndRadius(
+      outerRect,
+      const Radius.circular(14),
+    );
 
     // ── Selected House Highlight ─────────────────────────────
     if (selectedHouse != null && selectedHouse! >= 1 && selectedHouse! <= 12) {
@@ -275,7 +300,10 @@ class VedicChartPainter extends CustomPainter {
           }
         }
       } else {
-        final polygon = VedicChartGeometry.getNorthIndianHousePolygon(selectedHouse!, size);
+        final polygon = VedicChartGeometry.getNorthIndianHousePolygon(
+          selectedHouse!,
+          size,
+        );
         if (polygon.isNotEmpty) {
           final path = Path()..moveTo(polygon[0].dx, polygon[0].dy);
           for (int i = 1; i < polygon.length; i++) {
@@ -314,10 +342,10 @@ class VedicChartPainter extends CustomPainter {
         canvas.drawLine(Offset(c * colW, 0), Offset(c * colW, height), paint);
       }
 
-      // Fill center 2x2 box with subtle dark tint
+      // Fill center 2x2 box with a subtle palette surface.
       final centerRect = Rect.fromLTWH(colW, rowH, 2 * colW, 2 * rowH);
       final centerPaint = Paint()
-        ..color = isLight ? const Color(0xFFF3F4F6) : const Color(0xFF0F172A)
+        ..color = AppColors.secondaryBackground
         ..style = PaintingStyle.fill;
       canvas.drawRect(centerRect, centerPaint);
 
@@ -335,19 +363,40 @@ class VedicChartPainter extends CustomPainter {
       textPainter.layout(maxWidth: 2 * colW);
       textPainter.paint(
         canvas,
-        Offset(width / 2 - textPainter.width / 2, height / 2 - textPainter.height / 2),
+        Offset(
+          width / 2 - textPainter.width / 2,
+          height / 2 - textPainter.height / 2,
+        ),
       );
 
       final Map<int, List<int>> southIndianGridMap = {
-        12: [0, 0], 1: [1, 0], 2: [2, 0], 3: [3, 0],
-        4: [3, 1], 5: [3, 2], 6: [3, 3], 7: [2, 3],
-        8: [1, 3], 9: [0, 3], 10: [0, 2], 11: [0, 1],
+        12: [0, 0],
+        1: [1, 0],
+        2: [2, 0],
+        3: [3, 0],
+        4: [3, 1],
+        5: [3, 2],
+        6: [3, 3],
+        7: [2, 3],
+        8: [1, 3],
+        9: [0, 3],
+        10: [0, 2],
+        11: [0, 1],
       };
 
       final signLabels = {
-        1: 'Mesha (Ar)', 2: 'Vrish (Ta)', 3: 'Mith (Ge)', 4: 'Kark (Ca)',
-        5: 'Simh (Le)', 6: 'Kany (Vi)', 7: 'Tula (Li)', 8: 'Vrisch (Sc)',
-        9: 'Dhan (Sg)', 10: 'Maka (Cp)', 11: 'Kumb (Aq)', 12: 'Meen (Pi)',
+        1: 'Mesha (Ar)',
+        2: 'Vrish (Ta)',
+        3: 'Mith (Ge)',
+        4: 'Kark (Ca)',
+        5: 'Simh (Le)',
+        6: 'Kany (Vi)',
+        7: 'Tula (Li)',
+        8: 'Vrisch (Sc)',
+        9: 'Dhan (Sg)',
+        10: 'Maka (Cp)',
+        11: 'Kumb (Aq)',
+        12: 'Meen (Pi)',
       };
 
       southIndianGridMap.forEach((sign, pos) {
@@ -360,7 +409,9 @@ class VedicChartPainter extends CustomPainter {
         final isLagna = house == 1;
 
         // Draw Sign Header & House / ASC
-        final headerText = isLagna ? '★ Lagna (H1)' : 'H$house ${signLabels[sign]!.split(' ').last}';
+        final headerText = isLagna
+            ? '★ Lagna (H1)'
+            : 'H$house ${signLabels[sign]!.split(' ').last}';
         textPainter.text = TextSpan(
           text: headerText,
           style: TextStyle(
@@ -370,7 +421,10 @@ class VedicChartPainter extends CustomPainter {
           ),
         );
         textPainter.layout(maxWidth: colW - 6);
-        textPainter.paint(canvas, Offset(cellLeft + (colW - textPainter.width) / 2, cellTop + 4));
+        textPainter.paint(
+          canvas,
+          Offset(cellLeft + (colW - textPainter.width) / 2, cellTop + 4),
+        );
 
         // Draw Planets residing in this house
         final planets = housePlanets[house] ?? [];
@@ -387,7 +441,10 @@ class VedicChartPainter extends CustomPainter {
           textPainter.layout(maxWidth: colW - 8);
           textPainter.paint(
             canvas,
-            Offset(cellLeft + (colW - textPainter.width) / 2, cellTop + rowH / 2 - textPainter.height / 2 + 3),
+            Offset(
+              cellLeft + (colW - textPainter.width) / 2,
+              cellTop + rowH / 2 - textPainter.height / 2 + 3,
+            ),
           );
         }
       });
@@ -436,7 +493,10 @@ class VedicChartPainter extends CustomPainter {
         textPainter.layout();
         textPainter.paint(
           canvas,
-          Offset(center.dx - textPainter.width / 2, center.dy - textPainter.height / 2 - 12),
+          Offset(
+            center.dx - textPainter.width / 2,
+            center.dy - textPainter.height / 2 - 12,
+          ),
         );
       }
 
@@ -459,7 +519,10 @@ class VedicChartPainter extends CustomPainter {
         textPainter.layout(maxWidth: width / 3.8);
         textPainter.paint(
           canvas,
-          Offset(center.dx - textPainter.width / 2, center.dy - textPainter.height / 2 + 2),
+          Offset(
+            center.dx - textPainter.width / 2,
+            center.dy - textPainter.height / 2 + 2,
+          ),
         );
       }
     }
@@ -498,4 +561,3 @@ class VedicChartPainter extends CustomPainter {
       oldDelegate.selectedHouse != selectedHouse ||
       oldDelegate.selectedPlanet != selectedPlanet;
 }
-

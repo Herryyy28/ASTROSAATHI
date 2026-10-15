@@ -145,7 +145,7 @@ class SubscriptionNotifier extends StateNotifier<SubscriptionState> {
   }
 
   Future<void> grantPremiumAccess(PlanTier tier, String orderId) async {
-    // Only called after real server-side verification succeeds
+    // Local-only demo entitlement; no purchase or verification is performed.
     await upgradeToTier(tier);
   }
 

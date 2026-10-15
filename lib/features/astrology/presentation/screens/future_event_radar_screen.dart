@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/glass_card.dart';
@@ -22,8 +22,9 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
       'title': 'Jupiter Transit into 11th House of Gains',
       'category': 'Major Transit',
       'icon': Icons.stars_rounded,
-      'color': Colors.amberAccent,
-      'description': 'Jupiter moves into your 11th House, opening a 6-month window of heightened financial opportunities, network expansion, and business growth.',
+      'color': AppColors.pink,
+      'description':
+          'Jupiter moves into your 11th House, opening a 6-month window of heightened financial opportunities, network expansion, and business growth.',
     },
     {
       'date': '21 Sep 2026',
@@ -31,8 +32,9 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
       'title': 'Vimshottari Dasha Synergy Shift',
       'category': 'Dasha Transition',
       'icon': Icons.timeline_rounded,
-      'color': Colors.cyanAccent,
-      'description': 'Transition into Mercury Antardasha under Jupiter Mahadasha. Favorable for contract negotiations, strategic planning, and intellectual achievements.',
+      'color': AppColors.primaryLightMode,
+      'description':
+          'Transition into Mercury Antardasha under Jupiter Mahadasha. Favorable for contract negotiations, strategic planning, and intellectual achievements.',
     },
     {
       'date': '05 Oct 2026',
@@ -40,8 +42,9 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
       'title': 'Mercury Direct in 10th House',
       'category': 'Planetary Direct',
       'icon': Icons.rotate_right_rounded,
-      'color': Colors.greenAccent,
-      'description': 'Mercury goes direct in your House of Career, clearing past communication delays and favoring public presentations or product launches.',
+      'color': AppColors.secondary,
+      'description':
+          'Mercury goes direct in your House of Career, clearing past communication delays and favoring public presentations or product launches.',
     },
     {
       'date': '18 Oct 2026',
@@ -50,7 +53,8 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
       'category': 'Benefic Aspect',
       'icon': Icons.favorite_rounded,
       'color': Colors.pinkAccent,
-      'description': 'Venus forms a 120-degree trine with your natal Moon, enhancing personal charm, emotional harmony, and relationship milestones.',
+      'description':
+          'Venus forms a 120-degree trine with your natal Moon, enhancing personal charm, emotional harmony, and relationship milestones.',
     },
     {
       'date': '10 Nov 2026',
@@ -58,15 +62,18 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
       'title': 'Sun Enters Scorpio (Scorpio Ingress)',
       'category': 'Solar Ingress',
       'icon': Icons.wb_sunny_rounded,
-      'color': Colors.orangeAccent,
-      'description': 'Sun enters your 8th House of transformation and research. Excellent period for introspection, deep financial auditing, and spiritual practice.',
+      'color': AppColors.actionPurple,
+      'description':
+          'Sun enters your 8th House of transformation and research. Excellent period for introspection, deep financial auditing, and spiritual practice.',
     },
   ];
 
   @override
   Widget build(BuildContext context) {
     final isLight = Theme.of(context).brightness == Brightness.light;
-    final filteredEvents = _allRadarEvents.where((e) => (e['daysAway'] as int) <= _selectedFilterDays).toList();
+    final filteredEvents = _allRadarEvents
+        .where((e) => (e['daysAway'] as int) <= _selectedFilterDays)
+        .toList();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -80,7 +87,10 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
             children: [
               // Header App Bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -89,9 +99,16 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                         decoration: BoxDecoration(
                           color: AppColors.getSurfaceElevated(context),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                          border: Border.all(
+                            color: AppColors.getBorder(context),
+                            width: 0.8,
+                          ),
                         ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.getTextPrimary(context),
+                          size: 18,
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -116,7 +133,10 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                               ),
                               const SizedBox(width: 6),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
                                   gradient: AppColors.goldGradient,
                                   borderRadius: BorderRadius.circular(6),
@@ -126,7 +146,7 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                   style: GoogleFonts.outfit(
                                     fontSize: 9,
                                     fontWeight: FontWeight.w900,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -158,12 +178,15 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                       child: ChoiceChip(
                         showCheckmark: false,
                         selected: isSelected,
-                        onSelected: (_) => setState(() => _selectedFilterDays = days),
+                        onSelected: (_) =>
+                            setState(() => _selectedFilterDays = days),
                         label: Text(
                           'Next $days Days',
                           style: GoogleFonts.outfit(
                             fontSize: 12,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                            fontWeight: isSelected
+                                ? FontWeight.bold
+                                : FontWeight.w500,
                             color: isSelected
                                 ? Colors.black
                                 : AppColors.getTextPrimary(context),
@@ -178,7 +201,9 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                               ? AppColors.primary
                               : AppColors.getBorder(context),
                         ),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                       ),
                     );
                   }).toList(),
@@ -195,7 +220,9 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                   itemBuilder: (context, index) {
                     final item = filteredEvents[index];
                     final color = item['color'] as Color;
-                    final displayAccentColor = isLight ? AppColors.getPrimary(context) : color;
+                    final displayAccentColor = isLight
+                        ? AppColors.getPrimary(context)
+                        : color;
 
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 12),
@@ -210,28 +237,49 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: displayAccentColor.withValues(alpha: 0.18),
+                                    color: displayAccentColor.withValues(
+                                      alpha: 0.18,
+                                    ),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Icon(item['icon'] as IconData, size: 16, color: displayAccentColor),
+                                  child: Icon(
+                                    item['icon'] as IconData,
+                                    size: 16,
+                                    color: displayAccentColor,
+                                  ),
                                 ),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
                                     item['date'] as String,
-                                    style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: displayAccentColor),
+                                    style: GoogleFonts.outfit(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: displayAccentColor,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: AppColors.getSurfaceSecondary(context),
+                                    color: AppColors.getSurfaceSecondary(
+                                      context,
+                                    ),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
                                     'In ${item['daysAway']}d',
-                                    style: GoogleFonts.inter(fontSize: 10, fontWeight: FontWeight.w600, color: AppColors.getTextSecondary(context)),
+                                    style: GoogleFonts.inter(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.getTextSecondary(
+                                        context,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -240,12 +288,20 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
 
                             Text(
                               item['title'] as String,
-                              style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                              style: GoogleFonts.outfit(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.getTextPrimary(context),
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               item['description'] as String,
-                              style: GoogleFonts.inter(fontSize: 11.5, color: AppColors.getTextSecondary(context), height: 1.35),
+                              style: GoogleFonts.inter(
+                                fontSize: 11.5,
+                                color: AppColors.getTextSecondary(context),
+                                height: 1.35,
+                              ),
                             ),
                             const SizedBox(height: 12),
 
@@ -254,16 +310,33 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                 Expanded(
                                   child: OutlinedButton.icon(
                                     style: OutlinedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(vertical: 8),
-                                      side: BorderSide(color: displayAccentColor.withValues(alpha: 0.6)),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8,
+                                      ),
+                                      side: BorderSide(
+                                        color: displayAccentColor.withValues(
+                                          alpha: 0.6,
+                                        ),
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
                                     ),
-                                    icon: Icon(Icons.event_note_rounded, size: 14, color: displayAccentColor),
+                                    icon: Icon(
+                                      Icons.event_note_rounded,
+                                      size: 14,
+                                      color: displayAccentColor,
+                                    ),
                                     label: Text(
                                       'Schedule Event',
-                                      style: GoogleFonts.outfit(fontSize: 11, color: displayAccentColor, fontWeight: FontWeight.bold),
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 11,
+                                        color: displayAccentColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                    onPressed: () => AddEventModal.show(context),
+                                    onPressed: () =>
+                                        AddEventModal.show(context),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -271,25 +344,41 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                   child: ElevatedButton.icon(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: isLight
-                                          ? AppColors.getSurfaceSecondary(context)
-                                          : displayAccentColor.withValues(alpha: 0.2),
+                                          ? AppColors.getSurfaceSecondary(
+                                              context,
+                                            )
+                                          : displayAccentColor.withValues(
+                                              alpha: 0.2,
+                                            ),
                                       foregroundColor: isLight
                                           ? AppColors.getTextPrimary(context)
                                           : Colors.white,
                                       elevation: 0,
-                                      padding: const EdgeInsets.symmetric(vertical: 8),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
-                                        side: BorderSide(color: displayAccentColor.withValues(alpha: 0.6)),
+                                        side: BorderSide(
+                                          color: displayAccentColor.withValues(
+                                            alpha: 0.6,
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    icon: Icon(Icons.smart_toy_rounded, size: 14, color: displayAccentColor),
+                                    icon: Icon(
+                                      Icons.smart_toy_rounded,
+                                      size: 14,
+                                      color: displayAccentColor,
+                                    ),
                                     label: Text(
                                       'Ask AI',
                                       style: GoogleFonts.outfit(
                                         fontSize: 11,
                                         fontWeight: FontWeight.bold,
-                                        color: isLight ? AppColors.getTextPrimary(context) : Colors.white,
+                                        color: isLight
+                                            ? AppColors.getTextPrimary(context)
+                                            : Colors.white,
                                       ),
                                     ),
                                     onPressed: () {
@@ -297,7 +386,8 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (_) => AstroBabaScreen(
-                                            initialMessage: 'Explain how ${item['title']} on ${item['date']} will impact my natal chart.',
+                                            initialMessage:
+                                                'Explain how ${item['title']} on ${item['date']} will impact my natal chart.',
                                           ),
                                         ),
                                       );
@@ -320,4 +410,3 @@ class _FutureEventRadarScreenState extends State<FutureEventRadarScreen> {
     );
   }
 }
-

@@ -13,10 +13,12 @@ class PrivacyDashboardScreen extends ConsumerStatefulWidget {
   const PrivacyDashboardScreen({super.key});
 
   @override
-  ConsumerState<PrivacyDashboardScreen> createState() => _PrivacyDashboardScreenState();
+  ConsumerState<PrivacyDashboardScreen> createState() =>
+      _PrivacyDashboardScreenState();
 }
 
-class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen> {
+class _PrivacyDashboardScreenState
+    extends ConsumerState<PrivacyDashboardScreen> {
   bool _isAiIsolated = false;
   bool _isLoading = true;
 
@@ -75,7 +77,10 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
                 ),
                 child: Text(
                   jsonStr,
-                  style: GoogleFonts.firaCode(fontSize: 10, color: Colors.greenAccent),
+                  style: GoogleFonts.firaCode(
+                    fontSize: 10,
+                    color: AppColors.secondary,
+                  ),
                 ),
               ),
             ],
@@ -93,13 +98,17 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
               CosmicNotification.showSuccess(
                 context,
                 title: 'Data Export Copied 🔒',
-                message: 'Your encrypted profile data export was copied to clipboard.',
+                message:
+                    'Your encrypted profile data export was copied to clipboard.',
               );
             },
-            icon: const Icon(Icons.copy_rounded, color: Colors.black, size: 16),
+            icon: const Icon(Icons.copy_rounded, color: Colors.white, size: 16),
             label: Text(
               'Copy Data',
-              style: GoogleFonts.outfit(fontWeight: FontWeight.bold, color: Colors.black),
+              style: GoogleFonts.outfit(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
@@ -124,7 +133,10 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
             children: [
               // App Bar
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -133,9 +145,16 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
                         decoration: BoxDecoration(
                           color: AppColors.getSurfaceElevated(context),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                          border: Border.all(
+                            color: AppColors.getBorder(context),
+                            width: 0.8,
+                          ),
                         ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.getTextPrimary(context),
+                          size: 18,
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -177,13 +196,19 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
                           // 1. Storage Breakdown Card
                           GlassCard(
                             padding: const EdgeInsets.all(16),
-                            borderColor: AppColors.primary.withValues(alpha: 0.4),
+                            borderColor: AppColors.primary.withValues(
+                              alpha: 0.4,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(Icons.privacy_tip_rounded, color: AppColors.primary, size: 20),
+                                    const Icon(
+                                      Icons.privacy_tip_rounded,
+                                      color: AppColors.primary,
+                                      size: 20,
+                                    ),
                                     const SizedBox(width: 8),
                                     Text(
                                       'DATA PRIVACY COMPLIANCE',
@@ -244,7 +269,9 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
                               value: _isAiIsolated,
                               activeThumbColor: AppColors.primary,
                               onChanged: (val) async {
-                                await SecureStorageService.setAiDataIsolated(val);
+                                await SecureStorageService.setAiDataIsolated(
+                                  val,
+                                );
                                 setState(() => _isAiIsolated = val);
                               },
                             ),
@@ -269,18 +296,22 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             'Export Saved Astrological Data',
                                             style: GoogleFonts.outfit(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
-                                              color: AppColors.getTextPrimary(context),
+                                              color: AppColors.getTextPrimary(
+                                                context,
+                                              ),
                                             ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
@@ -290,7 +321,9 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
                                             '${profiles.length} Profiles • Kundlis • Notes',
                                             style: GoogleFonts.inter(
                                               fontSize: 11,
-                                              color: AppColors.getTextMuted(context),
+                                              color: AppColors.getTextMuted(
+                                                context,
+                                              ),
                                             ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
@@ -302,16 +335,24 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
                                     ElevatedButton.icon(
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: AppColors.primary,
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
                                       ),
                                       onPressed: _exportUserData,
-                                      icon: const Icon(Icons.download_rounded, color: Colors.black, size: 16),
+                                      icon: const Icon(
+                                        Icons.download_rounded,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
                                       label: Text(
                                         'Export',
                                         style: GoogleFonts.outfit(
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.black,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
@@ -331,4 +372,3 @@ class _PrivacyDashboardScreenState extends ConsumerState<PrivacyDashboardScreen>
     );
   }
 }
-

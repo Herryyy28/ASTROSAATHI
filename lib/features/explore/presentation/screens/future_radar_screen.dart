@@ -1,233 +1,168 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/astro_components.dart';
 
 class FutureRadarScreen extends StatelessWidget {
   const FutureRadarScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isLight = AppColors.isLight(context);
-    final primaryTextColor = AppColors.getTextPrimary(context);
     final now = DateTime.now();
-    final f = DateFormat('MMM d');
-
-    final events = [
-      {
-        'day': '${f.format(now.add(const Duration(days: 4)))} (+4d)',
-        'title': 'Jupiter Trine Natal Sun',
-        'category': 'Transit',
-        'rating': 'Favorable',
-        'desc': 'High confidence & expansion window for contract negotiations and executive leadership decisions.',
-        'color': isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF),
-      },
-      {
-        'day': '${f.format(now.add(const Duration(days: 14)))} (+14d)',
-        'title': 'Mercury Antardasha Shift',
-        'category': 'Dasha',
-        'rating': 'High Impact',
-        'desc': 'New 4-month sub-period activating intellect, trading, and strategic media opportunities.',
-        'color': isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700),
-      },
-      {
-        'day': '${f.format(now.add(const Duration(days: 28)))} (+28d)',
-        'title': 'Solar Eclipse in 10th House',
-        'category': 'Eclipse',
-        'rating': 'Caution',
-        'desc': 'Avoid impulsive career announcements; focus on strategic observation.',
-        'color': isLight ? const Color(0xFFC62828) : const Color(0xFFFF1744),
-      },
-      {
-        'day': '${f.format(now.add(const Duration(days: 45)))} (+45d)',
-        'title': 'Venus Trine Natal Moon',
-        'category': 'Relationship',
-        'rating': 'Favorable',
-        'desc': 'Peak emotional alignment & relationship harmony window.',
-        'color': isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF),
-      },
-      {
-        'day': '${f.format(now.add(const Duration(days: 65)))} (+65d)',
-        'title': 'Mars Transit 10th House',
-        'category': 'Career',
-        'rating': 'High Impact',
-        'desc': 'High drive & execution speed. Channel energy productively to avoid friction.',
-        'color': isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700),
-      },
-      {
-        'day': '${f.format(now.add(const Duration(days: 82)))} (+82d)',
-        'title': 'Saturn Direct Gochar',
-        'category': 'Transit',
-        'rating': 'Favorable',
-        'desc': 'Structural clarity returns; long-term delayed plans gain steady momentum.',
-        'color': isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF),
-      },
+    final format = DateFormat('MMM d');
+    final events = <_RadarEvent>[
+      _RadarEvent(
+        day: '${format.format(now.add(const Duration(days: 4)))} · +4d',
+        title: 'Jupiter trine natal Sun',
+        rating: 'Favorable',
+        description:
+            'A confidence and expansion window for negotiations and leadership decisions.',
+        color: AppColors.secondary,
+      ),
+      _RadarEvent(
+        day: '${format.format(now.add(const Duration(days: 14)))} · +14d',
+        title: 'Mercury antardasha shift',
+        rating: 'High impact',
+        description:
+            'A new sub-period activates intellect, trading, and strategic communication.',
+        color: AppColors.actionPurple,
+      ),
+      _RadarEvent(
+        day: '${format.format(now.add(const Duration(days: 28)))} · +28d',
+        title: 'Solar eclipse in 10th house',
+        rating: 'Careful',
+        description:
+            'Observe career developments before making an impulsive announcement.',
+        color: AppColors.pink,
+      ),
+      _RadarEvent(
+        day: '${format.format(now.add(const Duration(days: 45)))} · +45d',
+        title: 'Venus trine natal Moon',
+        rating: 'Favorable',
+        description:
+            'Emotional alignment and relationship harmony come into focus.',
+        color: AppColors.secondary,
+      ),
+      _RadarEvent(
+        day: '${format.format(now.add(const Duration(days: 65)))} · +65d',
+        title: 'Mars transit 10th house',
+        rating: 'High impact',
+        description:
+            'Channel increased drive carefully to avoid unnecessary friction.',
+        color: AppColors.actionPurple,
+      ),
+      _RadarEvent(
+        day: '${format.format(now.add(const Duration(days: 82)))} · +82d',
+        title: 'Saturn direct gochar',
+        rating: 'Favorable',
+        description: 'Long-delayed plans regain clarity and steady momentum.',
+        color: AppColors.secondary,
+      ),
     ];
 
-    return Scaffold(
-      backgroundColor: AppColors.getBackground(context),
-      appBar: AppBar(
-        backgroundColor: AppColors.getSurface(context),
-        elevation: 0,
-        title: Text(
-          '90-Day Future Radar',
-          style: GoogleFonts.outfit(
-            color: primaryTextColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 17,
+    return AstroDetailScaffold(
+      title: '90-day future radar',
+      subtitle: 'A timeline of the strongest upcoming planetary windows.',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const AstroPageIntro(
+            icon: Icons.radar_rounded,
+            tag: 'NEXT 90 DAYS',
+            title: '6 key events detected',
+            subtitle:
+                'Four favorable windows, one higher-impact shift, and one period to approach carefully.',
           ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Radar Hero Card
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.getSurfaceElevated(context),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.getBorder(context)),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.radar_rounded, color: isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF), size: 28),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Next 90 Days Timeline',
-                          style: GoogleFonts.outfit(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: primaryTextColor,
-                          ),
-                        ),
-                        Text(
-                          '6 Key Planetary Events Detected • 4 Favorable, 1 Caution',
-                          style: GoogleFonts.outfit(
-                            fontSize: 11,
-                            color: AppColors.getTextSecondary(context),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            // Timeline Items
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: events.length,
-              itemBuilder: (context, index) {
-                final item = events[index];
-                final Color itemCol = item['color'] as Color;
-
-                return IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Timeline Indicator Column
-                      Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: itemCol.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              item['day'] as String,
-                              style: GoogleFonts.outfit(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: itemCol,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              width: 2,
-                              color: AppColors.getBorder(context),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 14),
-
-                      // Event Card
-                      Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 14),
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            color: AppColors.getSurface(context),
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: itemCol.withValues(alpha: 0.3)),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      item['title'] as String,
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: itemCol,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      color: itemCol.withValues(alpha: 0.12),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      item['rating'] as String,
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 9.5,
-                                        fontWeight: FontWeight.w700,
-                                        color: itemCol,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                item['desc'] as String,
-                                style: GoogleFonts.outfit(
-                                  fontSize: 12,
-                                  color: AppColors.getTextSecondary(context),
-                                  height: 1.35,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
+          const SizedBox(height: 24),
+          const AstroSectionHeader(title: 'Your timeline'),
+          const SizedBox(height: 12),
+          ...events.map((event) => _RadarEventCard(event: event)),
+        ],
       ),
     );
   }
 }
 
+class _RadarEvent {
+  const _RadarEvent({
+    required this.day,
+    required this.title,
+    required this.rating,
+    required this.description,
+    required this.color,
+  });
+  final String day;
+  final String title;
+  final String rating;
+  final String description;
+  final Color color;
+}
+
+class _RadarEventCard extends StatelessWidget {
+  const _RadarEventCard({required this.event});
+  final _RadarEvent event;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: AstroCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              _Pill(label: event.day, color: AppColors.primaryLightMode),
+              _Pill(label: event.rating, color: event.color),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            event.title,
+            style: GoogleFonts.inter(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimaryLight,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            event.description,
+            style: GoogleFonts.inter(
+              fontSize: 13,
+              height: 1.45,
+              color: AppColors.textSecondaryLight,
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+class _Pill extends StatelessWidget {
+  const _Pill({required this.label, required this.color});
+  final String label;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+    decoration: BoxDecoration(
+      color: color.withValues(alpha: 0.1),
+      borderRadius: BorderRadius.circular(99),
+    ),
+    child: Text(
+      label,
+      style: GoogleFonts.inter(
+        fontSize: 10,
+        fontWeight: FontWeight.w700,
+        color: color,
+      ),
+    ),
+  );
+}

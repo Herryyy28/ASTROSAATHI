@@ -321,7 +321,7 @@ class _RemedyHubScreenState extends ConsumerState<RemedyHubScreen> {
                           selectedColor: AppColors.primary,
                           backgroundColor: AppColors.getSurfaceSecondary(context),
                           labelStyle: TextStyle(
-                            color: isSelected ? Colors.black : AppColors.getTextPrimary(context),
+                            color: isSelected ? Colors.white : AppColors.getTextPrimary(context),
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
                           ),

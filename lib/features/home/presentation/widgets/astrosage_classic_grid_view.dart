@@ -24,7 +24,7 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'Kundli',
         'icon': Icons.grid_goldenratio_rounded,
-        'color': const Color(0xFFFF9800),
+        'color': AppColors.actionPurple,
         'onTap': () {
           if (onSelectTab != null) {
             onSelectTab!(3);
@@ -39,7 +39,7 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'Matching',
         'icon': Icons.favorite_rounded,
-        'color': const Color(0xFFFF5722),
+        'color': AppColors.pink,
         'onTap': () {
           Navigator.push(
             context,
@@ -50,7 +50,7 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'Horoscope',
         'icon': Icons.balance_rounded,
-        'color': const Color(0xFFFF9800),
+        'color': AppColors.actionPurple,
         'onTap': () {
           if (onSelectTab != null) {
             onSelectTab!(3);
@@ -62,14 +62,16 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'Predictions',
         'icon': Icons.description_rounded,
-        'color': const Color(0xFFFF6D00),
+        'color': AppColors.actionPurple,
         'onTap': () {
           if (onSelectTab != null) {
             onSelectTab!(1);
           } else {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const PredictionsReportsScreen()),
+              MaterialPageRoute(
+                builder: (_) => const PredictionsReportsScreen(),
+              ),
             );
           }
         },
@@ -77,7 +79,7 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'Panchang',
         'icon': Icons.wb_sunny_rounded,
-        'color': const Color(0xFFFF9800),
+        'color': AppColors.actionPurple,
         'onTap': () {
           if (onSelectTab != null) {
             onSelectTab!(2);
@@ -92,14 +94,16 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'KP System',
         'icon': Icons.star_half_rounded,
-        'color': const Color(0xFFFF5722),
+        'color': AppColors.pink,
         'onTap': () {
           if (onSelectTab != null) {
             onSelectTab!(1);
           } else {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const PredictionsReportsScreen()),
+              MaterialPageRoute(
+                builder: (_) => const PredictionsReportsScreen(),
+              ),
             );
           }
         },
@@ -107,14 +111,16 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'Lal Kitab',
         'icon': Icons.menu_book_rounded,
-        'color': const Color(0xFFE65100),
+        'color': AppColors.actionPurple,
         'onTap': () {
           if (onSelectTab != null) {
             onSelectTab!(1);
           } else {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const PredictionsReportsScreen()),
+              MaterialPageRoute(
+                builder: (_) => const PredictionsReportsScreen(),
+              ),
             );
           }
         },
@@ -122,14 +128,16 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'Varshphal',
         'icon': Icons.calendar_month_rounded,
-        'color': const Color(0xFFFF9800),
+        'color': AppColors.actionPurple,
         'onTap': () {
           if (onSelectTab != null) {
             onSelectTab!(1);
           } else {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const PredictionsReportsScreen()),
+              MaterialPageRoute(
+                builder: (_) => const PredictionsReportsScreen(),
+              ),
             );
           }
         },
@@ -137,7 +145,7 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'Porutham',
         'icon': Icons.all_inclusive_rounded,
-        'color': const Color(0xFFFF6D00),
+        'color': AppColors.actionPurple,
         'onTap': () {
           Navigator.push(
             context,
@@ -148,7 +156,7 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'Calendar 2026',
         'icon': Icons.event_note_rounded,
-        'color': const Color(0xFFFF9800),
+        'color': AppColors.actionPurple,
         'onTap': () {
           if (onSelectTab != null) {
             onSelectTab!(2);
@@ -163,21 +171,27 @@ class AstrosageClassicGridView extends ConsumerWidget {
       {
         'title': 'AstroSaathi AI',
         'icon': Icons.psychology_rounded,
-        'color': const Color(0xFFE65100),
+        'color': AppColors.actionPurple,
         'onTap': () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const TalkToAiAstrologersScreen()),
+            MaterialPageRoute(
+              builder: (_) => const TalkToAiAstrologersScreen(),
+            ),
           );
         },
       },
       {
         'title': 'Astro Shop',
         'icon': Icons.shopping_bag_rounded,
-        'color': const Color(0xFFFF5722),
+        'color': AppColors.pink,
         'onTap': () {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Opening AstroSaathi Vedic Gemstones & Yantra Mall...')),
+            const SnackBar(
+              content: Text(
+                'Opening AstroSaathi Vedic Gemstones & Yantra Mall...',
+              ),
+            ),
           );
         },
       },
@@ -188,7 +202,7 @@ class AstrosageClassicGridView extends ConsumerWidget {
         color: isLight ? Colors.white : AppColors.surfaceDark,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isLight ? const Color(0xFFEEEEEE) : AppColors.borderDark,
+          color: isLight ? AppColors.borderLight : AppColors.borderDark,
           width: 1,
         ),
       ),
@@ -207,7 +221,9 @@ class AstrosageClassicGridView extends ConsumerWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isLight ? const Color(0xFFF5F5F5) : AppColors.borderDark,
+                  color: isLight
+                      ? AppColors.dividerLight
+                      : AppColors.borderDark,
                   width: 0.5,
                 ),
               ),

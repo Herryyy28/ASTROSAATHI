@@ -86,10 +86,10 @@ class WhatChangedTodayCard extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: (isPositive ? Colors.greenAccent : Colors.orangeAccent).withValues(alpha: 0.15),
+                  color: (isPositive ? AppColors.secondary : AppColors.actionPurple).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: (isPositive ? Colors.greenAccent : Colors.orangeAccent).withValues(alpha: 0.5),
+                    color: (isPositive ? AppColors.secondary : AppColors.actionPurple).withValues(alpha: 0.5),
                   ),
                 ),
                 child: Text(
@@ -97,7 +97,7 @@ class WhatChangedTodayCard extends ConsumerWidget {
                   style: GoogleFonts.outfit(
                     fontSize: 10.5,
                     fontWeight: FontWeight.bold,
-                    color: isPositive ? Colors.greenAccent : Colors.orangeAccent,
+                    color: isPositive ? AppColors.secondary : AppColors.actionPurple,
                   ),
                 ),
               ),

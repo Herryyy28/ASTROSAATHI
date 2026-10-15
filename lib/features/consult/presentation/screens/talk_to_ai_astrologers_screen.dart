@@ -11,10 +11,12 @@ class TalkToAiAstrologersScreen extends ConsumerStatefulWidget {
   const TalkToAiAstrologersScreen({super.key});
 
   @override
-  ConsumerState<TalkToAiAstrologersScreen> createState() => _TalkToAiAstrologersScreenState();
+  ConsumerState<TalkToAiAstrologersScreen> createState() =>
+      _TalkToAiAstrologersScreenState();
 }
 
-class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersScreen> {
+class _TalkToAiAstrologersScreenState
+    extends ConsumerState<TalkToAiAstrologersScreen> {
   String _selectedCategory = 'All';
 
   final List<Map<String, String>> _categories = const [
@@ -33,13 +35,28 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
     if (_selectedCategory == 'All') return list;
 
     if (_selectedCategory == 'Love') {
-      return list.where((a) => a.category == AstrologerCategory.love || a.id == 'swami_ji').toList();
+      return list
+          .where(
+            (a) => a.category == AstrologerCategory.love || a.id == 'swami_ji',
+          )
+          .toList();
     }
     if (_selectedCategory == 'Career') {
-      return list.where((a) => a.category == AstrologerCategory.career || a.id == 'swami_ji').toList();
+      return list
+          .where(
+            (a) =>
+                a.category == AstrologerCategory.career || a.id == 'swami_ji',
+          )
+          .toList();
     }
     if (_selectedCategory == 'Marriage') {
-      return list.where((a) => a.category == AstrologerCategory.love || a.category == AstrologerCategory.vedic).toList();
+      return list
+          .where(
+            (a) =>
+                a.category == AstrologerCategory.love ||
+                a.category == AstrologerCategory.vedic,
+          )
+          .toList();
     }
     return list;
   }
@@ -52,27 +69,51 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: Row(
           children: [
-            const Icon(Icons.account_balance_wallet_rounded, color: Color(0xFFFF9800)),
+            const Icon(
+              Icons.account_balance_wallet_rounded,
+              color: AppColors.actionPurple,
+            ),
             const SizedBox(width: 10),
-            Text('Astro Wallet', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
+            Text(
+              'Astro Wallet',
+              style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+            ),
           ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Available Balance', style: GoogleFonts.inter(fontSize: 12, color: Colors.grey)),
+            Text(
+              'Available Balance',
+              style: GoogleFonts.inter(fontSize: 12, color: Colors.grey),
+            ),
             const SizedBox(height: 4),
-            Text('₹$_walletBalance', style: GoogleFonts.outfit(fontSize: 32, fontWeight: FontWeight.bold, color: const Color(0xFFFF9800))),
+            Text(
+              '₹$_walletBalance',
+              style: GoogleFonts.outfit(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: AppColors.actionPurple,
+              ),
+            ),
             const SizedBox(height: 16),
-            Text('Quick Recharge Pack:', style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600)),
+            Text(
+              'Quick Recharge Pack:',
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [100, 250, 500].map((amt) {
                 return OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   onPressed: () {
                     setState(() => _walletBalance += amt);
@@ -111,7 +152,9 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
     final isLight = Theme.of(context).brightness == Brightness.light;
 
     return Scaffold(
-      backgroundColor: isLight ? const Color(0xFFFAF9F6) : AppColors.backgroundDark,
+      backgroundColor: isLight
+          ? const Color(0xFFFAF9F6)
+          : AppColors.backgroundDark,
       body: SafeArea(
         child: Column(
           children: [
@@ -144,7 +187,12 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.getSurface(context),
-        border: Border(bottom: BorderSide(color: AppColors.getGlassBorder(context), width: 0.8)),
+        border: Border(
+          bottom: BorderSide(
+            color: AppColors.getGlassBorder(context),
+            width: 0.8,
+          ),
+        ),
       ),
       child: Row(
         children: [
@@ -157,7 +205,11 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
           ] else ...[
             const Padding(
               padding: EdgeInsets.only(left: 6, right: 6),
-              child: Icon(Icons.auto_awesome, color: Color(0xFFFF9800), size: 22),
+              child: Icon(
+                Icons.auto_awesome,
+                color: AppColors.actionPurple,
+                size: 22,
+              ),
             ),
           ],
           Expanded(
@@ -179,19 +231,23 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
               decoration: BoxDecoration(
                 color: const Color(0xFFFFF3E0),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFFFFB74D), width: 1),
+                border: Border.all(color: AppColors.pink, width: 1),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.account_balance_wallet_outlined, size: 14, color: Color(0xFFE65100)),
+                  const Icon(
+                    Icons.account_balance_wallet_outlined,
+                    size: 14,
+                    color: AppColors.actionPurple,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     '₹$_walletBalance',
                     style: GoogleFonts.inter(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFFE65100),
+                      color: AppColors.actionPurple,
                     ),
                   ),
                 ],
@@ -208,7 +264,7 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
             constraints: const BoxConstraints(),
             padding: const EdgeInsets.all(6),
           ),
-          
+
           // Search Icon
           IconButton(
             icon: const Icon(Icons.search_rounded, size: 22),
@@ -256,18 +312,27 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
             child: GestureDetector(
               onTap: () => setState(() => _selectedCategory = cat['name']!),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFFFF9800) : AppColors.getSurface(context),
+                  color: isSelected
+                      ? AppColors.actionPurple
+                      : AppColors.getSurface(context),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: isSelected ? const Color(0xFFFF9800) : AppColors.getGlassBorder(context),
+                    color: isSelected
+                        ? AppColors.actionPurple
+                        : AppColors.getGlassBorder(context),
                     width: 1,
                   ),
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: const Color(0xFFFF9800).withValues(alpha: 0.35),
+                            color: AppColors.actionPurple.withValues(
+                              alpha: 0.35,
+                            ),
                             blurRadius: 6,
                             offset: const Offset(0, 2),
                           ),
@@ -281,8 +346,12 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
                       cat['name']!,
                       style: GoogleFonts.inter(
                         fontSize: 12.5,
-                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                        color: isSelected ? Colors.white : AppColors.getTextPrimary(context),
+                        fontWeight: isSelected
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                        color: isSelected
+                            ? Colors.white
+                            : AppColors.getTextPrimary(context),
                       ),
                     ),
                   ],
@@ -326,7 +395,7 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
-                    colors: [a.primaryAccent, const Color(0xFFFF8F00)],
+                    colors: [a.primaryAccent, AppColors.actionPurple],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -364,15 +433,22 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
                 top: -4,
                 right: -4,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFF6D00),
+                    color: AppColors.actionPurple,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.white, width: 1.5),
                   ),
                   child: Text(
                     'AI',
-                    style: GoogleFonts.inter(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: GoogleFonts.inter(
+                      fontSize: 9,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -427,13 +503,17 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
                   style: GoogleFonts.outfit(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xFFE65100),
+                    color: AppColors.actionPurple,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    const Icon(Icons.star_rounded, size: 14, color: Color(0xFFFFB300)),
+                    const Icon(
+                      Icons.star_rounded,
+                      size: 14,
+                      color: AppColors.pink,
+                    ),
                     Text(
                       ' ${a.rating} (${a.reviewCount})',
                       style: GoogleFonts.inter(
@@ -453,10 +533,15 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
             padding: const EdgeInsets.only(top: 8, left: 6),
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF6D00),
+                backgroundColor: AppColors.actionPurple,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 8,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 elevation: 0,
               ),
               onPressed: () {
@@ -464,7 +549,8 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
                   context,
                   MaterialPageRoute(
                     builder: (_) => AstroBabaScreen(
-                      initialMessage: 'Pranam ${a.name}, please guide me on my horoscope.',
+                      initialMessage:
+                          'Pranam ${a.name}, please guide me on my horoscope.',
                     ),
                   ),
                 );
@@ -472,7 +558,10 @@ class _TalkToAiAstrologersScreenState extends ConsumerState<TalkToAiAstrologersS
               icon: const Icon(Icons.chat_bubble_rounded, size: 14),
               label: Text(
                 'AI Chat',
-                style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.bold),
+                style: GoogleFonts.inter(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

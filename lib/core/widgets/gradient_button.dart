@@ -1,8 +1,8 @@
-﻿import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../theme/design_tokens.dart';
 
-/// A premium gradient CTA button with gold shimmer and press animation.
+/// Primary AstroSaathi CTA with the shared purple treatment and press motion.
 class GradientButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
@@ -37,9 +37,10 @@ class _GradientButtonState extends State<GradientButton>
       vsync: this,
       duration: const Duration(milliseconds: 150),
     );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 0.96).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.96,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
@@ -62,23 +63,21 @@ class _GradientButtonState extends State<GradientButton>
       child: AnimatedBuilder(
         animation: _scaleAnimation,
         builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
-            child: child,
-          );
+          return Transform.scale(scale: _scaleAnimation.value, child: child);
         },
         child: Container(
           width: widget.width ?? double.infinity,
+          constraints: const BoxConstraints(minHeight: 52),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           decoration: BoxDecoration(
             gradient: widget.gradient ?? AppColors.goldGradient,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(AppRadius.button),
             boxShadow: [
               BoxShadow(
-                color: AppColors.goldGlow,
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-                spreadRadius: -2,
+                color: AppColors.secondary.withValues(alpha: 0.22),
+                blurRadius: 18,
+                offset: const Offset(0, 8),
+                spreadRadius: -4,
               ),
             ],
           ),
@@ -89,7 +88,7 @@ class _GradientButtonState extends State<GradientButton>
                     width: 18,
                     child: CircularProgressIndicator(
                       strokeWidth: 2.2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   ),
                 )
@@ -98,18 +97,17 @@ class _GradientButtonState extends State<GradientButton>
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     if (widget.icon != null) ...[
-                      Icon(widget.icon, color: Colors.black, size: 18),
+                      Icon(widget.icon, color: Colors.white, size: 18),
                       const SizedBox(width: 8),
                     ],
                     Flexible(
                       child: Text(
                         widget.text,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.plusJakartaSans(
-                          color: Colors.black,
-                          fontSize: 14.5,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          letterSpacing: 0.3,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -122,4 +120,3 @@ class _GradientButtonState extends State<GradientButton>
     );
   }
 }
-

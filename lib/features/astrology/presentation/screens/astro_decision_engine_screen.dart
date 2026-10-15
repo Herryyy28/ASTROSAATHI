@@ -11,10 +11,26 @@ import '../widgets/show_me_calculation_modal.dart';
 
 enum DecisionCategory {
   career('Career & Job Switch', Icons.work_rounded, Color(0xFF4A90E2)),
-  business('Business & Contracts', Icons.business_center_rounded, Color(0xFFFFD700)),
-  finance('Property & Finance', Icons.account_balance_wallet_rounded, Color(0xFF50E3C2)),
-  relationship('Marriage & Relationship', Icons.favorite_rounded, Color(0xFFFF6B6B)),
-  travel('Travel & Relocation', Icons.flight_takeoff_rounded, Color(0xFFBD10E0));
+  business(
+    'Business & Contracts',
+    Icons.business_center_rounded,
+    AppColors.secondary,
+  ),
+  finance(
+    'Property & Finance',
+    Icons.account_balance_wallet_rounded,
+    Color(0xFF50E3C2),
+  ),
+  relationship(
+    'Marriage & Relationship',
+    Icons.favorite_rounded,
+    Color(0xFFFF6B6B),
+  ),
+  travel(
+    'Travel & Relocation',
+    Icons.flight_takeoff_rounded,
+    Color(0xFFBD10E0),
+  );
 
   final String label;
   final IconData icon;
@@ -27,10 +43,12 @@ class AstroDecisionEngineScreen extends ConsumerStatefulWidget {
   const AstroDecisionEngineScreen({super.key});
 
   @override
-  ConsumerState<AstroDecisionEngineScreen> createState() => _AstroDecisionEngineScreenState();
+  ConsumerState<AstroDecisionEngineScreen> createState() =>
+      _AstroDecisionEngineScreenState();
 }
 
-class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineScreen> {
+class _AstroDecisionEngineScreenState
+    extends ConsumerState<AstroDecisionEngineScreen> {
   DecisionCategory _selectedCategory = DecisionCategory.career;
   final TextEditingController _questionController = TextEditingController(
     text: 'Should I schedule my job interview or salary talk this week?',
@@ -61,7 +79,10 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
             children: [
               // Header
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -70,9 +91,16 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                         decoration: BoxDecoration(
                           color: AppColors.getSurfaceElevated(context),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                          border: Border.all(
+                            color: AppColors.getBorder(context),
+                            width: 0.8,
+                          ),
                         ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.getTextPrimary(context),
+                          size: 18,
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -97,7 +125,10 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                               ),
                               const SizedBox(width: 6),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
                                   gradient: AppColors.goldGradient,
                                   borderRadius: BorderRadius.circular(6),
@@ -107,7 +138,7 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                                   style: GoogleFonts.outfit(
                                     fontSize: 9,
                                     fontWeight: FontWeight.w900,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -130,7 +161,10 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
               // Content Body
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   physics: const BouncingScrollPhysics(),
                   children: [
                     // Category Selector Chips
@@ -141,29 +175,47 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                         children: DecisionCategory.values.map((cat) {
                           final isSel = cat == _selectedCategory;
                           return GestureDetector(
-                            onTap: () => setState(() => _selectedCategory = cat),
+                            onTap: () =>
+                                setState(() => _selectedCategory = cat),
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 200),
                               margin: const EdgeInsets.only(right: 8),
-                              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 9,
+                              ),
                               decoration: BoxDecoration(
-                                color: isSel ? cat.color.withValues(alpha: 0.18) : AppColors.getSurfaceSecondary(context),
+                                color: isSel
+                                    ? cat.color.withValues(alpha: 0.18)
+                                    : AppColors.getSurfaceSecondary(context),
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
-                                  color: isSel ? cat.color : AppColors.getGlassBorder(context),
+                                  color: isSel
+                                      ? cat.color
+                                      : AppColors.getGlassBorder(context),
                                   width: isSel ? 1.5 : 0.8,
                                 ),
                               ),
                               child: Row(
                                 children: [
-                                  Icon(cat.icon, size: 15, color: isSel ? cat.color : AppColors.getTextSecondary(context)),
+                                  Icon(
+                                    cat.icon,
+                                    size: 15,
+                                    color: isSel
+                                        ? cat.color
+                                        : AppColors.getTextSecondary(context),
+                                  ),
                                   const SizedBox(width: 6),
                                   Text(
                                     cat.label,
                                     style: GoogleFonts.outfit(
                                       fontSize: 12,
-                                      fontWeight: isSel ? FontWeight.bold : FontWeight.w500,
-                                      color: isSel ? cat.color : AppColors.getTextSecondary(context),
+                                      fontWeight: isSel
+                                          ? FontWeight.bold
+                                          : FontWeight.w500,
+                                      color: isSel
+                                          ? cat.color
+                                          : AppColors.getTextSecondary(context),
                                     ),
                                   ),
                                 ],
@@ -198,13 +250,22 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                               color: AppColors.getTextPrimary(context),
                             ),
                             decoration: InputDecoration(
-                              hintText: 'Enter your decision (e.g. Should I sign the contract today?)',
-                              hintStyle: TextStyle(color: AppColors.getTextMuted(context), fontSize: 13),
+                              hintText:
+                                  'Enter your decision (e.g. Should I sign the contract today?)',
+                              hintStyle: TextStyle(
+                                color: AppColors.getTextMuted(context),
+                                fontSize: 13,
+                              ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: AppColors.getGlassBorder(context)),
+                                borderSide: BorderSide(
+                                  color: AppColors.getGlassBorder(context),
+                                ),
                               ),
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 12,
+                              ),
                             ),
                           ),
                         ],
@@ -231,14 +292,22 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.black,
+                              foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(vertical: 14),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
                             ),
-                            icon: const Icon(Icons.event_available_rounded, size: 18),
+                            icon: const Icon(
+                              Icons.event_available_rounded,
+                              size: 18,
+                            ),
                             label: Text(
                               'Save to Event Planner',
-                              style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold),
+                              style: GoogleFonts.outfit(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             onPressed: () {
                               AddEventModal.show(context);
@@ -250,13 +319,25 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                           child: OutlinedButton.icon(
                             style: OutlinedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 14),
-                              side: BorderSide(color: AppColors.getGlassBorder(context)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                              side: BorderSide(
+                                color: AppColors.getGlassBorder(context),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
                             ),
-                            icon: const Icon(Icons.smart_toy_rounded, size: 18, color: AppColors.primary),
+                            icon: const Icon(
+                              Icons.smart_toy_rounded,
+                              size: 18,
+                              color: AppColors.primary,
+                            ),
                             label: Text(
                               'Ask Astro Baba',
-                              style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                              style: GoogleFonts.outfit(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.getTextPrimary(context),
+                              ),
                             ),
                             onPressed: () {
                               Navigator.push(
@@ -300,7 +381,11 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                         color: _selectedCategory.color.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(_selectedCategory.icon, size: 18, color: _selectedCategory.color),
+                      child: Icon(
+                        _selectedCategory.icon,
+                        size: 18,
+                        color: _selectedCategory.color,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -321,18 +406,23 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
               ),
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
-                  color: Colors.greenAccent.withValues(alpha: 0.15),
+                  color: AppColors.secondary.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.greenAccent.withValues(alpha: 0.5)),
+                  border: Border.all(
+                    color: AppColors.secondary.withValues(alpha: 0.5),
+                  ),
                 ),
                 child: Text(
                   'HIGHLY FAVORABLE (8.6/10)',
                   style: GoogleFonts.outfit(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
-                    color: Colors.greenAccent,
+                    color: AppColors.secondary,
                   ),
                 ),
               ),
@@ -364,13 +454,17 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
   Widget _buildBestWindowCard(BuildContext context) {
     return GlassCard(
       padding: const EdgeInsets.all(18),
-      borderColor: const Color(0xFFFFD700).withValues(alpha: 0.4),
+      borderColor: AppColors.secondary.withValues(alpha: 0.4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.timer_rounded, color: Color(0xFFFFD700), size: 18),
+              const Icon(
+                Icons.timer_rounded,
+                color: AppColors.secondary,
+                size: 18,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -379,7 +473,7 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.0,
-                    color: const Color(0xFFFFD700),
+                    color: AppColors.secondary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -394,9 +488,11 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFFFD700).withValues(alpha: 0.1),
+                    color: AppColors.secondary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: const Color(0xFFFFD700).withValues(alpha: 0.3)),
+                    border: Border.all(
+                      color: AppColors.secondary.withValues(alpha: 0.3),
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -412,7 +508,10 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                       const SizedBox(height: 2),
                       Text(
                         'Abhijit Muhurat + Amrita Siddhi Yoga',
-                        style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context)),
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: AppColors.getTextSecondary(context),
+                        ),
                       ),
                     ],
                   ),
@@ -423,12 +522,20 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
           const SizedBox(height: 10),
           Row(
             children: [
-              const Icon(Icons.warning_amber_rounded, size: 14, color: Colors.orangeAccent),
+              const Icon(
+                Icons.warning_amber_rounded,
+                size: 14,
+                color: AppColors.actionPurple,
+              ),
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
                   'Avoid 01:30 PM – 03:00 PM (Rahu Kaal Window)',
-                  style: GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.orangeAccent),
+                  style: GoogleFonts.inter(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.actionPurple,
+                  ),
                 ),
               ),
             ],
@@ -450,7 +557,11 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
               Expanded(
                 child: Row(
                   children: [
-                    const Icon(Icons.calculate_rounded, color: AppColors.primary, size: 18),
+                    const Icon(
+                      Icons.calculate_rounded,
+                      color: AppColors.primary,
+                      size: 18,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -470,7 +581,8 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
               ),
               const SizedBox(width: 8),
               GestureDetector(
-                onTap: () => setState(() => _showMathDetails = !_showMathDetails),
+                onTap: () =>
+                    setState(() => _showMathDetails = !_showMathDetails),
                 child: Text(
                   _showMathDetails ? 'Hide Ledger' : 'View Ledger',
                   style: GoogleFonts.outfit(
@@ -485,13 +597,33 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
           const SizedBox(height: 12),
 
           // Factor Breakdown
-          _buildMathRow(context, 'Jupiter 10th House Transit Weight', '+3.2 pts', Colors.greenAccent),
+          _buildMathRow(
+            context,
+            'Jupiter 10th House Transit Weight',
+            '+3.2 pts',
+            AppColors.secondary,
+          ),
           const SizedBox(height: 6),
-          _buildMathRow(context, 'Active Jupiter-Mercury Dasha Synergy', '+2.8 pts', Colors.greenAccent),
+          _buildMathRow(
+            context,
+            'Active Jupiter-Mercury Dasha Synergy',
+            '+2.8 pts',
+            AppColors.secondary,
+          ),
           const SizedBox(height: 6),
-          _buildMathRow(context, 'Moon in Pushya Nakshatra Alignment', '+1.6 pts', Colors.greenAccent),
+          _buildMathRow(
+            context,
+            'Moon in Pushya Nakshatra Alignment',
+            '+1.6 pts',
+            AppColors.secondary,
+          ),
           const SizedBox(height: 6),
-          _buildMathRow(context, 'Rahu Kaal Deduction Window', '-1.0 pts', Colors.redAccent),
+          _buildMathRow(
+            context,
+            'Rahu Kaal Deduction Window',
+            '-1.0 pts',
+            AppColors.pink,
+          ),
           const Divider(height: 20),
 
           Row(
@@ -499,12 +631,20 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
               Expanded(
                 child: Text(
                   'CALCULATED SCORE',
-                  style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                  style: GoogleFonts.outfit(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.getTextPrimary(context),
+                  ),
                 ),
               ),
               Text(
                 '8.6 / 10.0',
-                style: GoogleFonts.outfit(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.primary),
+                style: GoogleFonts.outfit(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                ),
               ),
             ],
           ),
@@ -515,13 +655,25 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
             child: OutlinedButton.icon(
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                side: BorderSide(color: AppColors.primary.withValues(alpha: 0.5)),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                side: BorderSide(
+                  color: AppColors.primary.withValues(alpha: 0.5),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
-              icon: const Icon(Icons.calculate_rounded, size: 16, color: AppColors.primary),
+              icon: const Icon(
+                Icons.calculate_rounded,
+                size: 16,
+                color: AppColors.primary,
+              ),
               label: Text(
                 'Show Full Math Calculation Ledger',
-                style: GoogleFonts.outfit(fontSize: 11.5, fontWeight: FontWeight.bold, color: AppColors.primary),
+                style: GoogleFonts.outfit(
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                ),
               ),
               onPressed: () => ShowMeCalculationModal.show(context),
             ),
@@ -540,12 +692,34 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
                 children: [
                   Text(
                     'METADATA & ALGORITHMIC BASIS',
-                    style: GoogleFonts.outfit(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.getTextMuted(context)),
+                    style: GoogleFonts.outfit(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.getTextMuted(context),
+                    ),
                   ),
                   const SizedBox(height: 6),
-                  Text('• Ayanamsa: Chitrapaksha / Lahiri Precise', style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context))),
-                  Text('• Chart Scheme: D1 Natal + D9 Navamsha Confirmation', style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context))),
-                  Text('• Calculation Method: Deterministic Planetary Degrees', style: GoogleFonts.inter(fontSize: 11, color: AppColors.getTextSecondary(context))),
+                  Text(
+                    '• Ayanamsa: Chitrapaksha / Lahiri Precise',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: AppColors.getTextSecondary(context),
+                    ),
+                  ),
+                  Text(
+                    '• Chart Scheme: D1 Natal + D9 Navamsha Confirmation',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: AppColors.getTextSecondary(context),
+                    ),
+                  ),
+                  Text(
+                    '• Calculation Method: Deterministic Planetary Degrees',
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: AppColors.getTextSecondary(context),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -555,24 +729,35 @@ class _AstroDecisionEngineScreenState extends ConsumerState<AstroDecisionEngineS
     );
   }
 
-  Widget _buildMathRow(BuildContext context, String factor, String points, Color color) {
+  Widget _buildMathRow(
+    BuildContext context,
+    String factor,
+    String points,
+    Color color,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
           child: Text(
             factor,
-            style: GoogleFonts.inter(fontSize: 12, color: AppColors.getTextPrimary(context)),
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              color: AppColors.getTextPrimary(context),
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
         ),
         Text(
           points,
-          style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: color),
+          style: GoogleFonts.outfit(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
         ),
       ],
     );
   }
 }
-

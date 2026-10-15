@@ -30,7 +30,10 @@ class AstroWorkspaceScreen extends ConsumerWidget {
             children: [
               // Header
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   children: [
                     IconButton(
@@ -39,9 +42,16 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: AppColors.getSurfaceElevated(context),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.getBorder(context), width: 0.8),
+                          border: Border.all(
+                            color: AppColors.getBorder(context),
+                            width: 0.8,
+                          ),
                         ),
-                        child: Icon(Icons.arrow_back_rounded, color: AppColors.getTextPrimary(context), size: 18),
+                        child: Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppColors.getTextPrimary(context),
+                          size: 18,
+                        ),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -66,7 +76,10 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                               ),
                               const SizedBox(width: 6),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
                                   gradient: AppColors.goldGradient,
                                   borderRadius: BorderRadius.circular(6),
@@ -76,7 +89,7 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                                   style: GoogleFonts.outfit(
                                     fontSize: 9,
                                     fontWeight: FontWeight.w900,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -98,9 +111,15 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: AppColors.primary.withValues(alpha: 0.18),
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.primary.withValues(alpha: 0.5)),
+                          border: Border.all(
+                            color: AppColors.primary.withValues(alpha: 0.5),
+                          ),
                         ),
-                        child: const Icon(Icons.bolt_rounded, color: AppColors.primary, size: 18),
+                        child: const Icon(
+                          Icons.bolt_rounded,
+                          color: AppColors.primary,
+                          size: 18,
+                        ),
                       ),
                       onPressed: () => AstroCommandCenterModal.show(context),
                     ),
@@ -120,18 +139,38 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                         Expanded(
                           child: GlassCard(
                             padding: const EdgeInsets.all(16),
-                            borderColor: AppColors.primary.withValues(alpha: 0.4),
+                            borderColor: AppColors.primary.withValues(
+                              alpha: 0.4,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('TODAY SCORE', style: GoogleFonts.outfit(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primary)),
+                                Text(
+                                  'TODAY SCORE',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
                                 const SizedBox(height: 6),
                                 Text(
                                   '${plan?.dayScore.toStringAsFixed(1) ?? "8.2"} / 10',
-                                  style: GoogleFonts.outfit(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.getTextPrimary(context),
+                                  ),
                                 ),
                                 const SizedBox(height: 2),
-                                Text('▲ +0.8 vs Yesterday', style: GoogleFonts.inter(fontSize: 10, color: Colors.greenAccent, fontWeight: FontWeight.bold)),
+                                Text(
+                                  '▲ +0.8 vs Yesterday',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 10,
+                                    color: AppColors.secondary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -140,18 +179,37 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                         Expanded(
                           child: GlassCard(
                             padding: const EdgeInsets.all(16),
-                            borderColor: AppColors.secondary.withValues(alpha: 0.4),
+                            borderColor: AppColors.secondary.withValues(
+                              alpha: 0.4,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('CURRENT CHAPTER', style: GoogleFonts.outfit(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.secondary)),
+                                Text(
+                                  'CURRENT CHAPTER',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.secondary,
+                                  ),
+                                ),
                                 const SizedBox(height: 6),
                                 Text(
                                   'Jupiter Dasha',
-                                  style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.getTextPrimary(context),
+                                  ),
                                 ),
                                 const SizedBox(height: 2),
-                                Text('Career & Expansion Period', style: GoogleFonts.inter(fontSize: 10, color: AppColors.getTextSecondary(context))),
+                                Text(
+                                  'Career & Expansion Period',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 10,
+                                    color: AppColors.getTextSecondary(context),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -166,25 +224,74 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('FLAGSHIP COMMAND SUITE', style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary)),
+                          Text(
+                            'FLAGSHIP COMMAND SUITE',
+                            style: GoogleFonts.outfit(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
                           const SizedBox(height: 12),
                           Row(
                             children: [
-                              _buildActionItem(context, Icons.bolt_rounded, 'Command Box', 'Universal Search', () => AstroCommandCenterModal.show(context)),
-                              _buildActionItem(context, Icons.timer_rounded, 'Best Time', 'Muhurat Engine', () {
-                                Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroDecisionEngineScreen()));
-                              }),
+                              _buildActionItem(
+                                context,
+                                Icons.bolt_rounded,
+                                'Command Box',
+                                'Universal Search',
+                                () => AstroCommandCenterModal.show(context),
+                              ),
+                              _buildActionItem(
+                                context,
+                                Icons.timer_rounded,
+                                'Best Time',
+                                'Muhurat Engine',
+                                () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const AstroDecisionEngineScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                           const SizedBox(height: 8),
                           Row(
                             children: [
-                              _buildActionItem(context, Icons.science_rounded, 'Simulator', 'Scenario Lab', () {
-                                Navigator.push(context, MaterialPageRoute(builder: (_) => const AstroScenarioSimulatorScreen()));
-                              }),
-                              _buildActionItem(context, Icons.radar_rounded, 'Event Radar', 'Next 90 Days', () {
-                                Navigator.push(context, MaterialPageRoute(builder: (_) => const FutureEventRadarScreen()));
-                              }),
+                              _buildActionItem(
+                                context,
+                                Icons.science_rounded,
+                                'Simulator',
+                                'Scenario Lab',
+                                () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const AstroScenarioSimulatorScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
+                              _buildActionItem(
+                                context,
+                                Icons.radar_rounded,
+                                'Event Radar',
+                                'Next 90 Days',
+                                () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) =>
+                                          const FutureEventRadarScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ],
@@ -201,14 +308,39 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('MY ASTRO GOALS (ACTIVE)', style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: AppColors.primary)),
-                              Text('4 Active', style: GoogleFonts.inter(fontSize: 10, color: AppColors.getTextMuted(context))),
+                              Text(
+                                'MY ASTRO GOALS (ACTIVE)',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              Text(
+                                '4 Active',
+                                style: GoogleFonts.inter(
+                                  fontSize: 10,
+                                  color: AppColors.getTextMuted(context),
+                                ),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 12),
-                          _buildGoalTile(context, '💼 Executive Career Shift', 'Peak Window: Sep 12 – Oct 05', 0.85, Colors.amberAccent),
+                          _buildGoalTile(
+                            context,
+                            '💼 Executive Career Shift',
+                            'Peak Window: Sep 12 – Oct 05',
+                            0.85,
+                            AppColors.pink,
+                          ),
                           const SizedBox(height: 8),
-                          _buildGoalTile(context, '🚀 Start New Venture', 'Peak Window: Oct 18 – Nov 10', 0.65, Colors.cyanAccent),
+                          _buildGoalTile(
+                            context,
+                            '🚀 Start New Venture',
+                            'Peak Window: Oct 18 – Nov 10',
+                            0.65,
+                            AppColors.primaryLightMode,
+                          ),
                         ],
                       ),
                     ),
@@ -222,26 +354,51 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                         children: [
                           CircleAvatar(
                             radius: 20,
-                            backgroundColor: AppColors.primary.withValues(alpha: 0.2),
-                            child: const Icon(Icons.smart_toy_rounded, color: AppColors.primary, size: 20),
+                            backgroundColor: AppColors.primary.withValues(
+                              alpha: 0.2,
+                            ),
+                            child: const Icon(
+                              Icons.smart_toy_rounded,
+                              color: AppColors.primary,
+                              size: 20,
+                            ),
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Astro Baba AI Co-Pilot', style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context))),
-                                Text('Ask anything about your goals or chart', style: GoogleFonts.inter(fontSize: 10, color: AppColors.getTextSecondary(context))),
+                                Text(
+                                  'Astro Baba AI Co-Pilot',
+                                  style: GoogleFonts.outfit(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.getTextPrimary(context),
+                                  ),
+                                ),
+                                Text(
+                                  'Ask anything about your goals or chart',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 10,
+                                    color: AppColors.getTextSecondary(context),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.arrow_forward_rounded, color: AppColors.primary),
+                            icon: const Icon(
+                              Icons.arrow_forward_rounded,
+                              color: AppColors.primary,
+                            ),
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => const AstroBabaScreen(initialMessage: 'Analyze my current workspace goals and planetary alignment.'),
+                                  builder: (_) => const AstroBabaScreen(
+                                    initialMessage:
+                                        'Analyze my current workspace goals and planetary alignment.',
+                                  ),
                                 ),
                               );
                             },
@@ -260,7 +417,13 @@ class AstroWorkspaceScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildActionItem(BuildContext context, IconData icon, String title, String subtitle, VoidCallback onTap) {
+  Widget _buildActionItem(
+    BuildContext context,
+    IconData icon,
+    String title,
+    String subtitle,
+    VoidCallback onTap,
+  ) {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -282,13 +445,20 @@ class AstroWorkspaceScreen extends ConsumerWidget {
                   children: [
                     Text(
                       title,
-                      style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)),
+                      style: GoogleFonts.outfit(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.getTextPrimary(context),
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       subtitle,
-                      style: GoogleFonts.inter(fontSize: 9.5, color: AppColors.getTextSecondary(context)),
+                      style: GoogleFonts.inter(
+                        fontSize: 9.5,
+                        color: AppColors.getTextSecondary(context),
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -302,7 +472,13 @@ class AstroWorkspaceScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildGoalTile(BuildContext context, String goal, String timing, double progress, Color color) {
+  Widget _buildGoalTile(
+    BuildContext context,
+    String goal,
+    String timing,
+    double progress,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -316,14 +492,36 @@ class AstroWorkspaceScreen extends ConsumerWidget {
           Row(
             children: [
               Expanded(
-                child: Text(goal, style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold, color: AppColors.getTextPrimary(context)), maxLines: 1, overflow: TextOverflow.ellipsis),
+                child: Text(
+                  goal,
+                  style: GoogleFonts.outfit(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.getTextPrimary(context),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               const SizedBox(width: 8),
-              Text('${(progress * 100).toInt()}% Aligned', style: GoogleFonts.outfit(fontSize: 11, fontWeight: FontWeight.bold, color: color)),
+              Text(
+                '${(progress * 100).toInt()}% Aligned',
+                style: GoogleFonts.outfit(
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 4),
-          Text(timing, style: GoogleFonts.inter(fontSize: 10.5, color: AppColors.getTextSecondary(context))),
+          Text(
+            timing,
+            style: GoogleFonts.inter(
+              fontSize: 10.5,
+              color: AppColors.getTextSecondary(context),
+            ),
+          ),
           const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
@@ -339,4 +537,3 @@ class AstroWorkspaceScreen extends ConsumerWidget {
     );
   }
 }
-

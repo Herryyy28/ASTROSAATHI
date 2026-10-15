@@ -28,21 +28,21 @@ class _SkyNowScreenState extends State<SkyNowScreen> {
   ];
 
   final List<BiWheelAspectLine> _aspects = [
-    BiWheelAspectLine(p1Name: 'Sun', p2Name: 'Sun', aspectType: 'Conjunction', color: const Color(0xFFFFD700)),
-    BiWheelAspectLine(p1Name: 'Moon', p2Name: 'Moon', aspectType: 'Conjunction', color: const Color(0xFFFFD700)),
-    BiWheelAspectLine(p1Name: 'Jupiter', p2Name: 'Saturn', aspectType: 'Trine', color: const Color(0xFF00E5FF)),
+    BiWheelAspectLine(p1Name: 'Sun', p2Name: 'Sun', aspectType: 'Conjunction', color: AppColors.secondary),
+    BiWheelAspectLine(p1Name: 'Moon', p2Name: 'Moon', aspectType: 'Conjunction', color: AppColors.secondary),
+    BiWheelAspectLine(p1Name: 'Jupiter', p2Name: 'Saturn', aspectType: 'Trine', color: AppColors.primaryLightMode),
     BiWheelAspectLine(p1Name: 'Mars', p2Name: 'Venus', aspectType: 'Square', color: const Color(0xFFFF1744)),
   ];
 
   Color _getAdaptiveColor(Color darkColor, BuildContext context) {
     if (!AppColors.isLight(context)) return darkColor;
-    if (darkColor == const Color(0xFF00E5FF) || darkColor == Colors.cyan) {
+    if (darkColor == AppColors.primaryLightMode || darkColor == Colors.cyan) {
       return const Color(0xFF00796B); // High-contrast Deep Teal
     }
     if (darkColor == const Color(0xFFFF1744) || darkColor == Colors.red) {
       return const Color(0xFFC62828); // High-contrast Deep Crimson
     }
-    if (darkColor == const Color(0xFFFFD700) || darkColor == Colors.amber || darkColor == Colors.green) {
+    if (darkColor == AppColors.secondary || darkColor == Colors.amber || darkColor == Colors.green) {
       return const Color(0xFFB87308); // High-contrast Deep Amber
     }
     return darkColor;
@@ -52,7 +52,7 @@ class _SkyNowScreenState extends State<SkyNowScreen> {
   Widget build(BuildContext context) {
     final isLight = AppColors.isLight(context);
     final primaryTextColor = AppColors.getTextPrimary(context);
-    final accentGold = isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700);
+    final accentGold = isLight ? const Color(0xFFB87308) : AppColors.secondary;
 
     return Scaffold(
       backgroundColor: AppColors.getBackground(context),
@@ -64,7 +64,7 @@ class _SkyNowScreenState extends State<SkyNowScreen> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.radar_rounded, color: isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF), size: 20),
+              Icon(Icons.radar_rounded, color: isLight ? const Color(0xFF00796B) : AppColors.primaryLightMode, size: 20),
               const SizedBox(width: 6),
               Text(
                 'Sky Now & Live Transits',
@@ -135,7 +135,7 @@ class _SkyNowScreenState extends State<SkyNowScreen> {
             _buildPatternCard(
               'Grand Trine in Fire (Sun, Moon, Mars)',
               'Harmonic triangle linking Leo Moon and Aries Sun fostering high creative momentum.',
-              const Color(0xFF00E5FF),
+              AppColors.primaryLightMode,
               Icons.change_history_rounded,
             ),
             const SizedBox(height: 10),
@@ -184,7 +184,7 @@ class _SkyNowScreenState extends State<SkyNowScreen> {
 
   Widget _buildCalculationInspector() {
     final isLight = AppColors.isLight(context);
-    final goldAccent = isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700);
+    final goldAccent = isLight ? const Color(0xFFB87308) : AppColors.secondary;
 
     return Container(
       padding: const EdgeInsets.all(16),

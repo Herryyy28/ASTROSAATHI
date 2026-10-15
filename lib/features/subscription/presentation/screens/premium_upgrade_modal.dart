@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+import '../../../../demo/demo_payment_gateway.dart';
 
 import '../../../../core/providers/subscription_provider.dart';
-import '../../../../core/services/razorpay_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../auth/data/auth_repository.dart';
 import '../../../auth/presentation/screens/auth_screen.dart';
@@ -25,7 +24,7 @@ class PremiumUpgradeModal extends ConsumerStatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withValues(alpha: 0.75),
+      barrierColor: AppColors.textPrimaryLight.withValues(alpha: 0.32),
       builder: (context) => const PremiumUpgradeModal(),
     );
   }
@@ -45,9 +44,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
     super.initState();
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       _razorpay = Razorpay();
-      _razorpay!.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-      _razorpay!.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-      _razorpay!.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+      _razorpay!.on(Razorpay.eventPaymentSuccess, _handlePaymentSuccess);
+      _razorpay!.on(Razorpay.eventPaymentError, _handlePaymentError);
+      _razorpay!.on(Razorpay.eventExternalWallet, _handleExternalWallet);
     }
   }
 
@@ -61,10 +60,8 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   Widget build(BuildContext context) {
     final subState = ref.watch(subscriptionProvider);
     final isAlreadyVip = subState.isPremium;
-    final isLight = Theme.of(context).brightness == Brightness.light;
-
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(36)),
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
         child: Container(
@@ -72,20 +69,14 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
             maxHeight: MediaQuery.of(context).size.height * 0.9,
           ),
           decoration: BoxDecoration(
-            color: isLight
-                ? AppColors.surfaceLight.withValues(alpha: 0.96)
-                : const Color(0xF20F141C),
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(36)),
-            border: Border.all(
-              color: const Color(0xFFFFD700).withValues(alpha: 0.4),
-              width: 1.2,
-            ),
+            color: AppColors.surfaceLight.withValues(alpha: 0.98),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+            border: Border.all(color: AppColors.borderLight),
             boxShadow: const [
               BoxShadow(
-                color: Color(0x60D4AF37),
-                blurRadius: 40,
-                spreadRadius: -5,
-                offset: Offset(0, -10),
+                color: Color(0x0D25283A),
+                blurRadius: 24,
+                offset: Offset(0, -8),
               ),
             ],
           ),
@@ -119,7 +110,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 2.0,
-                          color: const Color(0xFFFFD700),
+                          color: AppColors.primaryLightMode,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -143,16 +134,18 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                     children: [
                       // Outer Celestial Orbit Ring
                       Container(
-                        width: 105,
-                        height: 105,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xFFFFD700).withValues(alpha: 0.35),
-                            width: 1.2,
-                          ),
-                        ),
-                      )
+                            width: 105,
+                            height: 105,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: AppColors.secondary.withValues(
+                                  alpha: 0.35,
+                                ),
+                                width: 1.2,
+                              ),
+                            ),
+                          )
                           .animate(onPlay: (c) => c.repeat())
                           .scale(
                             duration: 2200.ms,
@@ -163,19 +156,21 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
                       // Outer Pulsing Gold Aura
                       Container(
-                        width: 88,
-                        height: 88,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: RadialGradient(
-                            colors: [
-                              const Color(0xFFFFD700).withValues(alpha: 0.45),
-                              const Color(0xFFD4AF37).withValues(alpha: 0.15),
-                              Colors.transparent,
-                            ],
-                          ),
-                        ),
-                      )
+                            width: 88,
+                            height: 88,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: RadialGradient(
+                                colors: [
+                                  AppColors.secondary.withValues(alpha: 0.32),
+                                  AppColors.actionPurple.withValues(
+                                    alpha: 0.12,
+                                  ),
+                                  Colors.transparent,
+                                ],
+                              ),
+                            ),
+                          )
                           .animate(onPlay: (c) => c.repeat(reverse: true))
                           .scale(
                             duration: 1800.ms,
@@ -185,37 +180,41 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
 
                       // Inner 3D Metallic Emblem Box
                       Container(
-                        padding: const EdgeInsets.all(18),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: isLight
-                                ? [
-                                    const Color(0xFFFFF8EA),
-                                    const Color(0xFFFEEDC9),
-                                    const Color(0xFFFFF0D3),
-                                  ]
-                                : [
-                                    const Color(0xFF382909),
-                                    const Color(0xFF241A06),
-                                    const Color(0xFF161003),
-                                  ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          border: Border.all(
-                            color: const Color(0xFFFFD700),
-                            width: 2.2,
-                          ),
-                          boxShadow: const [
-                            BoxShadow(color: Color(0x80FFD700), blurRadius: 24, spreadRadius: 2),
-                          ],
-                        ),
-                        child: const Text('👑', style: TextStyle(fontSize: 44)),
-                      )
+                            padding: const EdgeInsets.all(18),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: const LinearGradient(
+                                colors: [
+                                  AppColors.surfaceLight,
+                                  AppColors.highlightSurface,
+                                  AppColors.softLavender,
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              border: Border.all(
+                                color: AppColors.secondary,
+                                width: 2.2,
+                              ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x267668D8),
+                                  blurRadius: 24,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                            ),
+                            child: const Text(
+                              '👑',
+                              style: TextStyle(fontSize: 44),
+                            ),
+                          )
                           .animate(onPlay: (c) => c.repeat(reverse: true))
                           .shake(duration: 2000.ms, hz: 2)
-                          .shimmer(duration: 3000.ms, color: Colors.white.withValues(alpha: 0.5)),
+                          .shimmer(
+                            duration: 3000.ms,
+                            color: Colors.white.withValues(alpha: 0.5),
+                          ),
                     ],
                   ),
                 ),
@@ -252,9 +251,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isLight
-                        ? AppColors.getSurfaceSecondary(context)
-                        : Colors.white.withValues(alpha: 0.04),
+                    color: AppColors.secondaryBackground,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: AppColors.getGlassBorder(context),
@@ -269,7 +266,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1.2,
-                          color: const Color(0xFFFFD700),
+                          color: AppColors.primaryLightMode,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -383,10 +380,14 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                             width: double.infinity,
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: (subState.tier.isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700)).withValues(alpha: 0.1),
+                              color: (subState.tier.isProTier
+                                  ? AppColors.highlightSurface
+                                  : AppColors.softLavender),
                               borderRadius: BorderRadius.circular(18),
                               border: Border.all(
-                                color: subState.tier.isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700),
+                                color: subState.tier.isProTier
+                                    ? AppColors.actionPurple
+                                    : AppColors.secondary,
                               ),
                             ),
                             child: Column(
@@ -395,7 +396,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     AnimatedVipBadge(
-                                      label: subState.tier.isProTier ? 'PRO' : 'VIP',
+                                      label: subState.tier.isProTier
+                                          ? 'PRO'
+                                          : 'VIP',
                                       isProfessional: subState.tier.isProTier,
                                     ),
                                     const SizedBox(width: 8),
@@ -404,7 +407,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                                       style: GoogleFonts.outfit(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
-                                        color: subState.tier.isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700),
+                                        color: subState.tier.isProTier
+                                            ? AppColors.actionPurple
+                                            : AppColors.secondary,
                                       ),
                                     ),
                                   ],
@@ -414,7 +419,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                                   '$remainingDays Days Remaining • Non-Recurring Pass',
                                   style: GoogleFonts.outfit(
                                     fontSize: 13,
-                                    color: Colors.white70,
+                                    color: AppColors.textSecondaryLight,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -427,7 +432,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                             child: OutlinedButton.icon(
                               style: OutlinedButton.styleFrom(
                                 side: const BorderSide(
-                                  color: Color(0xFFFFD700),
+                                  color: AppColors.secondary,
                                 ),
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 14,
@@ -438,14 +443,14 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                               ),
                               icon: const Icon(
                                 Icons.add_shopping_cart_rounded,
-                                color: Color(0xFFFFD700),
+                                color: AppColors.secondary,
                               ),
                               label: Text(
-                                'RE-BUY / EXTEND VIP PASS',
+                                'EXTEND DEMO VIP PREVIEW',
                                 style: GoogleFonts.outfit(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
-                                  color: const Color(0xFFFFD700),
+                                  color: AppColors.secondary,
                                 ),
                               ),
                               onPressed: _handleSubscribe,
@@ -481,7 +486,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                                   width: 24,
                                   height: 24,
                                   child: CircularProgressIndicator(
-                                    color: Color(0xFF1E1705),
+                                    color: Colors.white,
                                     strokeWidth: 2.5,
                                   ),
                                 )
@@ -496,11 +501,11 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                                       ),
                                       const SizedBox(width: 10),
                                       Text(
-                                        'BUY IT - Unlock ${_selectedTier.displayName}',
+                                        'DEMO ONLY - Preview ${_selectedTier.displayName}',
                                         style: GoogleFonts.outfit(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w800,
-                                          color: const Color(0xFF1B1403),
+                                          color: Colors.white,
                                           letterSpacing: 0.5,
                                         ),
                                       ),
@@ -539,7 +544,9 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                       ),
                       Text(
                         '•',
-                        style: TextStyle(color: AppColors.getTextMuted(context)),
+                        style: TextStyle(
+                          color: AppColors.getTextMuted(context),
+                        ),
                       ),
                       TextButton(
                         onPressed: () {},
@@ -588,14 +595,18 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected
-                ? (isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700))
+                ? (isProTier ? AppColors.primaryLightMode : AppColors.secondary)
                 : AppColors.getGlassBorder(context),
             width: isSelected ? 2.0 : 1.0,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: (isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700)).withValues(alpha: 0.25),
+                    color:
+                        (isProTier
+                                ? AppColors.primaryLightMode
+                                : AppColors.secondary)
+                            .withValues(alpha: 0.25),
                     blurRadius: 16,
                     spreadRadius: -2,
                   ),
@@ -606,10 +617,13 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           children: [
             // ignore: deprecated_member_use
             Radio<PlanTier>(
+              // ignore: deprecated_member_use
               value: tier,
               // ignore: deprecated_member_use
               groupValue: _selectedTier,
-              activeColor: isProTier ? const Color(0xFF00E5FF) : const Color(0xFFFFD700),
+              activeColor: isProTier
+                  ? AppColors.primaryLightMode
+                  : AppColors.secondary,
               // ignore: deprecated_member_use
               onChanged: (val) {
                 if (val != null) setState(() => _selectedTier = val);
@@ -656,7 +670,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
                 fontSize: 15,
                 fontWeight: FontWeight.w800,
                 color: isSelected
-                    ? const Color(0xFFFFD700)
+                    ? AppColors.secondary
                     : AppColors.getTextPrimary(context),
               ),
             ),
@@ -677,7 +691,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: const Color(0xFFFFD700), size: 20),
+          Icon(icon, color: AppColors.secondary, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -708,36 +722,32 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
   }
 
   Future<void> _handleSubscribe() async {
-    final session = ref.read(userSessionProvider);
-    if (!session.isAuthenticated) {
-      _showAuthRequiredSheet(context);
-      return;
-    }
-
-    // Development Mode Bypass: Directly upgrade to premium without Razorpay
+    // Frontend-only preview: no payment is initiated or processed.
     await ref.read(subscriptionProvider.notifier).upgradeToTier(_selectedTier);
     if (!mounted) return;
-    
+
     Navigator.pop(context); // Close the modal
-    
+
     double amount = 199.0;
     if (_selectedTier == PlanTier.weeklyVip) amount = 19.0;
     if (_selectedTier == PlanTier.monthlyVip) amount = 49.0;
     if (_selectedTier == PlanTier.yearlyVip) amount = 199.0;
-    
+
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => PaymentSuccessScreen(
           amount: amount,
           planName: _selectedTier.displayName,
-          transactionId: 'DEV_MODE_${DateTime.now().millisecondsSinceEpoch}',
+          transactionId: 'DEMO_PREVIEW',
           dateStr: DateFormat('MMM dd, yyyy - HH:mm').format(DateTime.now()),
         ),
       ),
     );
   }
 
+  // Retained for the authenticated purchase flow used on mobile builds.
+  // ignore: unused_element
   void _showAuthRequiredSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -1008,6 +1018,7 @@ class _PremiumUpgradeModalState extends ConsumerState<PremiumUpgradeModal> {
           .grantPremiumAccess(_selectedTier, _currentOrderId);
 
       if (!mounted) return;
+
       Navigator.pop(context); // Close VIP upgrade modal
 
       Navigator.push(
@@ -1147,9 +1158,9 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
   void initState() {
     super.initState();
     _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    _razorpay.on(Razorpay.eventPaymentSuccess, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.eventPaymentError, _handlePaymentError);
+    _razorpay.on(Razorpay.eventExternalWallet, _handleExternalWallet);
   }
 
   @override
@@ -1202,7 +1213,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Payment Failed: ${response.message ?? 'Unknown error'}'),
-        backgroundColor: Colors.redAccent,
+        backgroundColor: AppColors.pink,
       ),
     );
     setState(() {
@@ -1260,10 +1271,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
         'name': RazorpayConfig.merchantName,
         'order_id': _razorpayOrderId,
         'description': 'Payment for ${widget.planName}',
-        'prefill': {
-          'contact': '9876543210',
-          'email': widget.userEmail,
-        },
+        'prefill': {'contact': '9876543210', 'email': widget.userEmail},
         'theme': {'color': '#0066FF'},
         'send_sms_hash': true,
       };
@@ -1365,14 +1373,16 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
           decoration: BoxDecoration(
             color: isLight ? const Color(0xFFEBF3FF) : const Color(0xFF0C192E),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFF0066FF).withValues(alpha: 0.4)),
+            border: Border.all(
+              color: AppColors.primaryLightMode.withValues(alpha: 0.4),
+            ),
           ),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0066FF),
+                  color: AppColors.primaryLightMode,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Text('⚡', style: TextStyle(fontSize: 18)),
@@ -1391,7 +1401,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                           fontSize: 12,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.0,
-                          color: const Color(0xFF0066FF),
+                          color: AppColors.primaryLightMode,
                         ),
                       ),
                     ),
@@ -1414,7 +1424,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                   vertical: 5,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFD700),
+                  color: AppColors.secondary,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -1438,7 +1448,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
             fontSize: 11,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.8,
-            color: const Color(0xFF0066FF),
+            color: AppColors.primaryLightMode,
           ),
         ),
         const SizedBox(height: 12),
@@ -1489,7 +1499,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                 children: [
                   const Icon(
                     Icons.credit_card_rounded,
-                    color: Color(0xFF0066FF),
+                    color: AppColors.primaryLightMode,
                     size: 20,
                   ),
                   const SizedBox(width: 8),
@@ -1633,7 +1643,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                 height: 24,
                 child: Checkbox(
                   value: _acceptedPolicy,
-                  activeColor: const Color(0xFF0066FF),
+                  activeColor: AppColors.primaryLightMode,
                   checkColor: Colors.white,
                   onChanged: (v) =>
                       setState(() => _acceptedPolicy = v ?? false),
@@ -1661,7 +1671,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
           height: 52,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0066FF),
+              backgroundColor: AppColors.primaryLightMode,
               foregroundColor: Colors.white,
               elevation: 4,
               shape: RoundedRectangleBorder(
@@ -1715,12 +1725,12 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
           decoration: BoxDecoration(
             color: isSelected
-                ? const Color(0xFF0066FF).withValues(alpha: 0.12)
+                ? AppColors.primaryLightMode.withValues(alpha: 0.12)
                 : AppColors.getSurfaceSecondary(context),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
               color: isSelected
-                  ? const Color(0xFF0066FF)
+                  ? AppColors.primaryLightMode
                   : AppColors.getGlassBorder(context),
               width: isSelected ? 1.8 : 1.0,
             ),
@@ -1730,7 +1740,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
               Icon(
                 icon,
                 color: isSelected
-                    ? const Color(0xFF0066FF)
+                    ? AppColors.primaryLightMode
                     : AppColors.getPrimary(context),
                 size: 20,
               ),
@@ -1741,7 +1751,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
                   display,
                   style: GoogleFonts.outfit(
                     color: isSelected
-                        ? const Color(0xFF0066FF)
+                        ? AppColors.primaryLightMode
                         : AppColors.getTextSecondary(context),
                     fontSize: 10,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
@@ -1765,7 +1775,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
             width: 48,
             height: 48,
             child: CircularProgressIndicator(
-              color: Color(0xFF0066FF),
+              color: AppColors.primaryLightMode,
               strokeWidth: 3.5,
             ),
           ),
@@ -1805,7 +1815,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
             ),
             child: const Icon(
               Icons.shield_outlined,
-              color: Color(0xFF0066FF),
+              color: AppColors.primaryLightMode,
               size: 36,
             ),
           ),
@@ -1814,7 +1824,7 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
             width: 32,
             height: 32,
             child: CircularProgressIndicator(
-              color: Color(0xFF0066FF),
+              color: AppColors.primaryLightMode,
               strokeWidth: 3,
             ),
           ),
@@ -1906,4 +1916,3 @@ class _PaymentGatewaySheetState extends State<_PaymentGatewaySheet> {
     );
   }
 }
-

@@ -7,7 +7,8 @@ class SynastryCompositeScreen extends StatefulWidget {
   const SynastryCompositeScreen({super.key});
 
   @override
-  State<SynastryCompositeScreen> createState() => _SynastryCompositeScreenState();
+  State<SynastryCompositeScreen> createState() =>
+      _SynastryCompositeScreenState();
 }
 
 class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
@@ -21,14 +22,34 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
   final List<BiWheelPlanet> _personBPlanets = [
     BiWheelPlanet(name: 'Sun', longitude: 125.0, sign: 'Leo', isOuter: true),
     BiWheelPlanet(name: 'Moon', longitude: 28.0, sign: 'Aries', isOuter: true),
-    BiWheelPlanet(name: 'Venus', longitude: 302.0, sign: 'Aquarius', isOuter: true),
+    BiWheelPlanet(
+      name: 'Venus',
+      longitude: 302.0,
+      sign: 'Aquarius',
+      isOuter: true,
+    ),
     BiWheelPlanet(name: 'Mars', longitude: 42.0, sign: 'Taurus', isOuter: true),
   ];
 
   final List<BiWheelAspectLine> _aspects = [
-    BiWheelAspectLine(p1Name: 'Sun', p2Name: 'Moon', aspectType: 'Trine', color: const Color(0xFF00E5FF)),
-    BiWheelAspectLine(p1Name: 'Venus', p2Name: 'Mars', aspectType: 'Conjunction', color: const Color(0xFFFFD700)),
-    BiWheelAspectLine(p1Name: 'Mars', p2Name: 'Venus', aspectType: 'Conjunction', color: const Color(0xFFFFD700)),
+    BiWheelAspectLine(
+      p1Name: 'Sun',
+      p2Name: 'Moon',
+      aspectType: 'Trine',
+      color: AppColors.secondary,
+    ),
+    BiWheelAspectLine(
+      p1Name: 'Venus',
+      p2Name: 'Mars',
+      aspectType: 'Conjunction',
+      color: AppColors.actionPurple,
+    ),
+    BiWheelAspectLine(
+      p1Name: 'Mars',
+      p2Name: 'Venus',
+      aspectType: 'Conjunction',
+      color: AppColors.actionPurple,
+    ),
   ];
 
   final List<Map<String, String>> _matrixItems = [
@@ -36,27 +57,29 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
       'pair': 'Person A Sun â†” Person B Moon',
       'aspect': 'Trine (120Â°)',
       'score': '95% Soul Harmony',
-      'desc': 'Deep emotional nurturing. Person A provides clarity and purpose, Person B provides safety and emotional security.',
+      'desc':
+          'Deep emotional nurturing. Person A provides clarity and purpose, Person B provides safety and emotional security.',
     },
     {
       'pair': 'Person A Venus â†” Person B Mars',
       'aspect': 'Conjunction (0Â°)',
       'score': '92% Attraction',
-      'desc': 'Intense romantic magnetism and mutual passion. High physical alignment and shared artistic preferences.',
+      'desc':
+          'Intense romantic magnetism and mutual passion. High physical alignment and shared artistic preferences.',
     },
     {
       'pair': 'Person A Saturn â†” Person B Venus',
       'aspect': 'Trine (120Â°)',
       'score': '88% Commitment',
-      'desc': 'Long-term structural stability. High loyalty and mutual financial responsibility over time.',
+      'desc':
+          'Long-term structural stability. High loyalty and mutual financial responsibility over time.',
     },
   ];
 
   @override
   Widget build(BuildContext context) {
-    final isLight = AppColors.isLight(context);
     final primaryTextColor = AppColors.getTextPrimary(context);
-    final accentGold = isLight ? const Color(0xFFB87308) : const Color(0xFFFFD700);
+    const accentGold = AppColors.primaryLightMode;
 
     return Scaffold(
       backgroundColor: AppColors.getBackground(context),
@@ -181,7 +204,10 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
                           decoration: BoxDecoration(
                             color: accentGold.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(8),
@@ -203,7 +229,7 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
                       style: GoogleFonts.outfit(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
-                        color: isLight ? const Color(0xFF00796B) : const Color(0xFF00E5FF),
+                        color: AppColors.secondary,
                       ),
                     ),
                     const SizedBox(height: 6),
@@ -225,4 +251,3 @@ class _SynastryCompositeScreenState extends State<SynastryCompositeScreen> {
     );
   }
 }
-

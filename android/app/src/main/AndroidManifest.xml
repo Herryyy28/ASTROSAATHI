@@ -1,11 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:installLocation="internalOnly">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <application android:label="AstroSaathi" android:name=".MainApplication" android:icon="@mipmap/ic_launcher" android:requestLegacyExternalStorage="true" android:hardwareAccelerated="true" android:enableOnBackInvokedCallback="true">
 
         <!-- Disable only WorkManager startup to prevent WorkDatabase IO errors -->
@@ -28,8 +22,6 @@
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data android:name="flutterEmbedding" android:value="2" />
 
-        <!-- AdMob Application ID (AstroSaathi) -->
-        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-2130675826290872~6020392051"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
@@ -41,20 +33,6 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
-        <!-- Razorpay UPI & Payment App Intent Discovery -->
-        <intent>
-            <action android:name="android.intent.action.VIEW" />
-            <data android:scheme="upi" />
-        </intent>
-        <package android:name="com.google.android.apps.nbu.paisa.user" />
-        <package android:name="com.phonepe.app" />
-        <package android:name="net.one97.paytm" />
-        <package android:name="in.org.npci.upiapp" />
-        <package android:name="com.dreamplug.androidapp" />
         <package android:name="com.whatsapp" />
-        <package android:name="in.amazon.mShop.android.shopping" />
-        <package android:name="com.freecharge.android" />
-        <package android:name="com.mobikwik_new" />
-        <package android:name="com.csam.icici.bank.imobile" />
     </queries>
 </manifest>

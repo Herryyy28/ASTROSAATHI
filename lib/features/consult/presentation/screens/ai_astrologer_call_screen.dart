@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../data/models/astrologer_model.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class AiAstrologerCallScreen extends StatefulWidget {
   final Astrologer astrologer;
@@ -118,7 +119,7 @@ class _AiAstrologerCallScreenState extends State<AiAstrologerCallScreen>
                           height: 8,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: _isConnected ? const Color(0xFF00E676) : const Color(0xFFFFB300),
+                            color: _isConnected ? const Color(0xFF00E676) : AppColors.pink,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -174,7 +175,7 @@ class _AiAstrologerCallScreenState extends State<AiAstrologerCallScreen>
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFFFFB300).withValues(alpha: 0.5),
+                            color: AppColors.pink.withValues(alpha: 0.5),
                             width: 2,
                           ),
                         ),
@@ -188,7 +189,7 @@ class _AiAstrologerCallScreenState extends State<AiAstrologerCallScreen>
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
-                        colors: [a.primaryAccent, const Color(0xFFFF8F00)],
+                        colors: [a.primaryAccent, AppColors.actionPurple],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
@@ -231,7 +232,7 @@ class _AiAstrologerCallScreenState extends State<AiAstrologerCallScreen>
               a.specialty,
               style: GoogleFonts.inter(
                 fontSize: 13,
-                color: const Color(0xFFFFB300),
+                color: AppColors.pink,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -260,12 +261,12 @@ class _AiAstrologerCallScreenState extends State<AiAstrologerCallScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.graphic_eq_rounded, color: Color(0xFFFFB300), size: 18),
+                      const Icon(Icons.graphic_eq_rounded, color: AppColors.pink, size: 18),
                       const SizedBox(width: 8),
                       Text(
                         'AI Vedic Audio Stream',
                         style: GoogleFonts.outfit(
-                          color: const Color(0xFFFFB300),
+                          color: AppColors.pink,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -303,7 +304,7 @@ class _AiAstrologerCallScreenState extends State<AiAstrologerCallScreen>
                               height: h,
                               margin: const EdgeInsets.symmetric(horizontal: 2),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFFF9800).withValues(alpha: 0.8),
+                                color: AppColors.actionPurple.withValues(alpha: 0.8),
                                 borderRadius: BorderRadius.circular(2),
                               ),
                             );
@@ -404,12 +405,12 @@ class _AiAstrologerCallScreenState extends State<AiAstrologerCallScreen>
               shape: BoxShape.circle,
               color: isActive ? Colors.white.withValues(alpha: 0.25) : Colors.white.withValues(alpha: 0.10),
               border: Border.all(
-                color: isActive ? const Color(0xFFFFB300) : Colors.white.withValues(alpha: 0.15),
+                color: isActive ? AppColors.pink : Colors.white.withValues(alpha: 0.15),
               ),
             ),
             child: Icon(
               icon,
-              color: isActive ? const Color(0xFFFFB300) : Colors.white,
+              color: isActive ? AppColors.pink : Colors.white,
               size: 24,
             ),
           ),

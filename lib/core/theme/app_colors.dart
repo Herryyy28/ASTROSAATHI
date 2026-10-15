@@ -1,216 +1,135 @@
 import 'package:flutter/material.dart';
 
-/// Single Source of Truth Color Architecture for AstroSaathi.
-/// Implements the exact fixed Light (#F7F7F5) and Dark (#090D16) semantic palettes.
-class AppColors {
-  // ── Light Theme Palette Tokens (Fixed Warm Neutral) ───────────────
-  static const Color backgroundLight = Color(0xFFF7F7F5);
+/// Authoritative Lovable palette for AstroSaathi.
+abstract final class AppColors {
+  static const Color backgroundLight = Color(0xFFF7F7FC);
+  static const Color secondaryBackground = Color(0xFFEEF0FA);
+  static const Color softLavender = Color(0xFFE6E7F5);
   static const Color surfaceLight = Color(0xFFFFFFFF);
-  static const Color surfaceElevatedLight = Color(0xFFF1F2F4);
-  static const Color surfaceSecondaryLight = Color(0xFFF1F2F4);
-  static const Color primaryLightMode = Color(0xFFD9901A);
-  static const Color primaryDarkLightMode = Color(0xFFB87308);
-  static const Color primarySoftLight = Color(0xFFFFF0D3);
-  static const Color textPrimaryLight = Color(0xFF172033);
-  static const Color textSecondaryLight = Color(0xFF424B5A);
-  static const Color textMutedLight = Color(0xFF545E6E);
-  static const Color borderLight = Color(0xFFDEE2E7);
-  static const Color dividerLight = Color(0xFFE8EAED);
-  static const Color successLight = Color(0xFF2E8B68);
-  static const Color warningLight = Color(0xFFC58A1A);
-  static const Color errorLight = Color(0xFFC95353);
-  static const Color infoLight = Color(0xFF4D78A8);
+  static const Color highlightSurface = Color(0xFFD7DBF4);
+  static const Color primaryLightMode = Color(0xFF3F4DB8);
+  static const Color secondary = Color(0xFF7668D8);
+  static const Color actionPurple = Color(0xFFA75BEA);
+  static const Color pink = Color(0xFFE96AC5);
+  static const Color textPrimaryLight = Color(0xFF25283A);
+  static const Color textSecondaryLight = Color(0xFF6F748D);
 
-  // ── Dark Theme Palette Tokens (AstroSaathi Premium Palette) ───────────
-  static const Color backgroundDark = Color(0xFF17121F);
-  static const Color surfaceDark = Color(0xFF241C2D);
-  static const Color surfaceSecondaryDark = Color(0xFF1D1726);
-  static const Color surfaceElevatedDark = Color(0xFF2C2237);
-  static const Color primaryDarkMode = Color(0xFFD8B56A); // Champagne Gold
-  static const Color primaryDarkDarkMode = Color(0xFFB5934A);
-  static const Color primarySoftDark = Color(0xFF3B2E24);
-  static const Color premiumPlum = Color(0xFF6B3A68); // Premium Plum for interactive elements
-  static const Color textPrimaryDark = Color(0xFFF7F3F8);
-  static const Color textSecondaryDark = Color(0xFFB9AEBE);
-  static const Color textMutedDark = Color(0xFF887D92);
-  static const Color borderDark = Color(0xFF382C45);
-  static const Color dividerDark = Color(0xFF2E2439);
-  static const Color successDark = Color(0xFF45A77D);
-  static const Color warningDark = Color(0xFFD8B56A);
-  static const Color errorDark = Color(0xFFDE6B6B);
-  static const Color infoDark = Color(0xFF70A0D4);
+  static const Color surfaceElevatedLight = secondaryBackground;
+  static const Color surfaceSecondaryLight = softLavender;
+  static const Color borderLight = softLavender;
+  static const Color dividerLight = softLavender;
+  static const Color textMutedLight = textSecondaryLight;
+  static const Color primaryDarkLightMode = primaryLightMode;
+  static const Color primarySoftLight = highlightSurface;
+  static const Color successLight = secondary;
+  static const Color warningLight = pink;
+  static const Color errorLight = pink;
+  static const Color infoLight = secondary;
 
-  // ── Static Brand & Backward Compatibility Constants ────────────────
-  static const Color primary = Color(0xFFD8B56A); // Champagne Gold
-  static const Color primaryLight = Color(0xFFE2C482);
-  static const Color secondary = Color(0xFF6B3A68); // Premium Plum
-  static const Color secondaryLight = Color(0xFF844D80);
-  static const Color secondaryBackground = Color(0xFF1D1726);
-  static const Color cardSurface = Color(0xFF241C2D);
-  static const Color cardHighlight = Color(0xFF2C2237);
-  static const Color surfaceElevated = Color(0xFF2C2237);
-  static const Color surfaceHighlightDark = Color(0xFF2C2237);
-  static const Color glassSurface = Color(0xFF241C2D);
-  static const Color glassBorder = Color(0xFF382C45);
-  static const Color glassHighlight = Color(0x1AFFFFFF);
+  // Compatibility aliases keep older feature widgets on the same palette.
+  static const Color backgroundDark = backgroundLight;
+  static const Color surfaceDark = surfaceLight;
+  static const Color surfaceSecondaryDark = secondaryBackground;
+  static const Color surfaceElevatedDark = softLavender;
+  static const Color primaryDarkMode = primaryLightMode;
+  static const Color primaryDarkDarkMode = primaryLightMode;
+  static const Color primarySoftDark = highlightSurface;
+  static const Color premiumPlum = secondary;
+  static const Color textPrimaryDark = textPrimaryLight;
+  static const Color textSecondaryDark = textSecondaryLight;
+  static const Color textMutedDark = textSecondaryLight;
+  static const Color borderDark = softLavender;
+  static const Color dividerDark = softLavender;
+  static const Color successDark = successLight;
+  static const Color warningDark = warningLight;
+  static const Color errorDark = errorLight;
+  static const Color infoDark = infoLight;
+  static const Color primary = primaryLightMode;
+  static const Color primaryLight = secondary;
+  static const Color cardSurface = surfaceLight;
+  static const Color cardHighlight = highlightSurface;
+  static const Color surfaceElevated = softLavender;
+  static const Color surfaceHighlightDark = highlightSurface;
+  static const Color glassSurface = surfaceLight;
+  static const Color glassBorder = softLavender;
+  static const Color glassHighlight = Color(0x66FFFFFF);
+  static const Color goldGlow = Color(0x263F4DB8);
+  static const Color purpleGlow = Color(0x267668D8);
+  static const Color textTertiaryDark = textSecondaryLight;
+  static const Color textTertiaryLight = textSecondaryLight;
+  static const Color success = successLight;
+  static const Color warning = warningLight;
+  static const Color error = errorLight;
+  static const Color info = infoLight;
+  static const Color tertiary = actionPurple;
 
-  static const Color goldGlow = Color(0x1CD8B56A);
-  static const Color purpleGlow = Color(0x1C6B3A68);
-
-  static const Color textTertiaryDark = Color(0xFF737E91);
-  static const Color textTertiaryLight = Color(0xFF545E6E);
-
-  static const Color success = Color(0xFF45A77D);
-  static const Color warning = Color(0xFFD6A044);
-  static const Color error = Color(0xFFDE6B6B);
-  static const Color info = Color(0xFF70A0D4);
-  static const Color tertiary = Color(0xFF70A0D4);
-
-  // ── Centralized Dynamic Token Getters ──────────────────────────────
-  static bool isLight(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.light;
-
-  static Color getBackground(BuildContext context) =>
-      isLight(context) ? backgroundLight : backgroundDark;
-
-  static Color getSurface(BuildContext context) =>
-      isLight(context) ? surfaceLight : surfaceDark;
-
-  static Color getGlassSurface(BuildContext context) =>
-      isLight(context) ? surfaceLight : glassSurface;
-
-  static Color getGlassBorder(BuildContext context) =>
-      isLight(context) ? borderLight : glassBorder;
-
-  static Color getDynamicSurface(BuildContext context) => getSurface(context);
-
-  static Color getSurfaceElevated(BuildContext context) =>
-      isLight(context) ? surfaceElevatedLight : surfaceElevatedDark;
-
+  static bool isLight(BuildContext context) => true;
+  static Color getBackground(BuildContext context) => backgroundLight;
+  static Color getSurface(BuildContext context) => surfaceLight;
+  static Color getGlassSurface(BuildContext context) => surfaceLight;
+  static Color getGlassBorder(BuildContext context) => borderLight;
+  static Color getDynamicSurface(BuildContext context) => surfaceLight;
+  static Color getSurfaceElevated(BuildContext context) => surfaceElevatedLight;
   static Color getSurfaceSecondary(BuildContext context) =>
-      isLight(context) ? surfaceSecondaryLight : surfaceSecondaryDark;
+      surfaceSecondaryLight;
+  static Color getBorder(BuildContext context) => borderLight;
+  static Color getDivider(BuildContext context) => dividerLight;
+  static Color getPrimary(BuildContext context) => primaryLightMode;
+  static Color getPrimaryDarkToken(BuildContext context) => primaryLightMode;
+  static Color getPrimarySoft(BuildContext context) => primarySoftLight;
+  static Color getAccentSoft(BuildContext context) => primarySoftLight;
+  static Color getTextPrimary(BuildContext context) => textPrimaryLight;
+  static Color getDynamicTextPrimary(BuildContext context) => textPrimaryLight;
+  static Color getTextSecondary(BuildContext context) => textSecondaryLight;
+  static Color getDynamicTextSecondary(BuildContext context) =>
+      textSecondaryLight;
+  static Color getTextMuted(BuildContext context) => textMutedLight;
+  static Color getSuccess(BuildContext context) => successLight;
+  static Color getWarning(BuildContext context) => warningLight;
+  static Color getError(BuildContext context) => errorLight;
+  static Color getInfo(BuildContext context) => infoLight;
 
-  static Color getBorder(BuildContext context) =>
-      isLight(context) ? borderLight : borderDark;
-
-  static Color getDivider(BuildContext context) =>
-      isLight(context) ? dividerLight : dividerDark;
-
-  static Color getPrimary(BuildContext context) =>
-      isLight(context) ? primaryLightMode : primaryDarkMode;
-
-  static Color getPrimaryDarkToken(BuildContext context) =>
-      isLight(context) ? primaryDarkLightMode : primaryDarkDarkMode;
-
-  static Color getPrimarySoft(BuildContext context) =>
-      isLight(context) ? primarySoftLight : primarySoftDark;
-
-  static Color getAccentSoft(BuildContext context) => getPrimarySoft(context);
-
-  static Color getTextPrimary(BuildContext context) =>
-      isLight(context) ? textPrimaryLight : textPrimaryDark;
-
-  static Color getDynamicTextPrimary(BuildContext context) => getTextPrimary(context);
-
-  static Color getTextSecondary(BuildContext context) =>
-      isLight(context) ? textSecondaryLight : textSecondaryDark;
-
-  static Color getDynamicTextSecondary(BuildContext context) => getTextSecondary(context);
-
-  static Color getTextMuted(BuildContext context) =>
-      isLight(context) ? textMutedLight : textMutedDark;
-
-  static Color getSuccess(BuildContext context) =>
-      isLight(context) ? successLight : successDark;
-
-  static Color getWarning(BuildContext context) =>
-      isLight(context) ? warningLight : warningDark;
-
-  static Color getError(BuildContext context) =>
-      isLight(context) ? errorLight : errorDark;
-
-  static Color getInfo(BuildContext context) =>
-      isLight(context) ? infoLight : infoDark;
-
-  static LinearGradient getDynamicCosmicGradient(BuildContext context) {
-    if (isLight(context)) {
-      return const LinearGradient(
-        colors: [Color(0xFFF7F7F5), Color(0xFFF1F2F4), Color(0xFFFFFFFF)],
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-      );
-    }
-    return cosmicGradient;
-  }
-
-  // ── Simple Controlled Gradients ───────────────────────────────────
   static const LinearGradient cosmicGradient = LinearGradient(
-    colors: [Color(0xFF090D16), Color(0xFF111827), Color(0xFF090D16)],
+    colors: [backgroundLight, secondaryBackground, backgroundLight],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
   );
-
+  static const LinearGradient cosmicRadialGradient = LinearGradient(
+    colors: [backgroundLight, secondaryBackground],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
   static const LinearGradient goldGradient = LinearGradient(
-    colors: [Color(0xFFE0A13A), Color(0xFFD9901A)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
+    colors: [secondary, actionPurple],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
   );
-
   static const LinearGradient goldSubtleGradient = LinearGradient(
-    colors: [Color(0x1CE0A13A), Color(0x0DD9901A)],
+    colors: [highlightSurface, softLavender],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-
   static const LinearGradient premiumGradient = LinearGradient(
-    colors: [Color(0xFF090D16), Color(0xFF111827), Color(0xFF182132)],
+    colors: [highlightSurface, softLavender],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-
   static const LinearGradient purpleGradient = LinearGradient(
-    colors: [Color(0xFFE0A13A), Color(0xFFD9901A)],
+    colors: [secondary, actionPurple],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-
   static const LinearGradient cardGradient = LinearGradient(
-    colors: [Color(0xFF111827), Color(0xFF182132)],
+    colors: [surfaceLight, secondaryBackground],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
-
-  static LinearGradient getCardGradient(BuildContext context) {
-    if (isLight(context)) {
-      return const LinearGradient(
-        colors: [Color(0xFFFFFFFF), Color(0xFFF1F2F4)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      );
-    }
-    return cardGradient;
-  }
-
-  static const RadialGradient cosmicRadialGradient = RadialGradient(
-    center: Alignment.topRight,
-    radius: 1.5,
-    colors: [Color(0xFF182132), Color(0xFF111827), Color(0xFF090D16)],
-  );
-
-  // ── Minimal Ambient Shadows ───────────────────────────────────────
-  static List<BoxShadow> get goldGlowShadow => [
-    const BoxShadow(color: Color(0x1CE0A13A), blurRadius: 10, spreadRadius: 0),
+  static LinearGradient getDynamicCosmicGradient(BuildContext context) =>
+      cosmicGradient;
+  static LinearGradient getCardGradient(BuildContext context) => cardGradient;
+  static const List<BoxShadow> goldGlowShadow = [
+    BoxShadow(color: Color(0x183F4DB8), blurRadius: 18, offset: Offset(0, 8)),
   ];
-
-  static List<BoxShadow> get cardShadow => [
-    BoxShadow(
-      color: Colors.black.withValues(alpha: 0.04),
-      blurRadius: 6,
-      offset: const Offset(0, 2),
-    ),
-  ];
-
-  // ── Zodiac Emoji Map ──────────────────────────────────────────────
   static const Map<String, String> zodiacEmojis = {
     'Aries': '♈',
     'Taurus': '♉',
@@ -225,15 +144,12 @@ class AppColors {
     'Aquarius': '♒',
     'Pisces': '♓',
   };
-
-  // ── Muhurat Category Icons ────────────────────────────────────────
   static const Map<String, IconData> muhuratIcons = {
-    'Business': Icons.business_center_rounded,
-    'Meeting': Icons.groups_rounded,
-    'Travel': Icons.flight_takeoff_rounded,
-    'Investment': Icons.trending_up_rounded,
-    'Contract': Icons.description_rounded,
-    'Marriage': Icons.favorite_rounded,
-    'Property': Icons.home_work_rounded,
+    'Marriage': Icons.favorite_outline,
+    'Business': Icons.business_center_outlined,
+    'Travel': Icons.flight_takeoff_outlined,
+    'Property': Icons.home_work_outlined,
+    'Education': Icons.school_outlined,
+    'Health': Icons.health_and_safety_outlined,
   };
 }

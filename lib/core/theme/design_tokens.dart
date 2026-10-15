@@ -18,20 +18,29 @@ class AppSpacing {
   static const double xl6 = 80.0;
 
   static const EdgeInsets cardPadding = EdgeInsets.all(16.0);
-  static const EdgeInsets screenPadding = EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0);
-  static const EdgeInsets inputPadding = EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0);
-  static const EdgeInsets sectionPadding = EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0);
+  static const EdgeInsets screenPadding = EdgeInsets.symmetric(
+    horizontal: 20.0,
+    vertical: 16.0,
+  );
+  static const EdgeInsets inputPadding = EdgeInsets.symmetric(
+    horizontal: 16.0,
+    vertical: 14.0,
+  );
+  static const EdgeInsets sectionPadding = EdgeInsets.symmetric(
+    horizontal: 20.0,
+    vertical: 16.0,
+  );
 }
 
 /// Centralized Border Radius Scale for AstroSaathi (Single Source of Truth)
 class AppRadius {
   static const double xs = 8.0;
   static const double chip = 10.0;
-  static const double button = 12.0;
-  static const double input = 12.0;
-  static const double card = 16.0;
-  static const double featureCard = 20.0;
-  static const double modal = 24.0;
+  static const double button = 28.0;
+  static const double input = 20.0;
+  static const double card = 22.0;
+  static const double featureCard = 26.0;
+  static const double modal = 28.0;
   static const double full = 999.0;
 
   static const double sm = 10.0;
@@ -46,7 +55,8 @@ class AppRadius {
   static BorderRadius get borderButton => BorderRadius.circular(button);
   static BorderRadius get borderInput => BorderRadius.circular(input);
   static BorderRadius get borderCard => BorderRadius.circular(card);
-  static BorderRadius get borderFeatureCard => BorderRadius.circular(featureCard);
+  static BorderRadius get borderFeatureCard =>
+      BorderRadius.circular(featureCard);
   static BorderRadius get borderModal => BorderRadius.circular(modal);
   static BorderRadius get borderFull => BorderRadius.circular(full);
   static BorderRadius get borderXL2 => BorderRadius.circular(xl2);
@@ -54,9 +64,10 @@ class AppRadius {
   static BorderRadius get borderPill => BorderRadius.circular(pill);
 }
 
-/// Blinkit-Inspired Compact Typography Scale for AstroSaathi (Single Source of Truth)
+/// Typography hierarchy mirrored from the Lovable reference.
 class AppTypography {
-  static TextStyle display({required Color color}) => GoogleFonts.outfit(
+  static TextStyle display({required Color color}) =>
+      GoogleFonts.playfairDisplay(
         fontSize: 32,
         fontWeight: FontWeight.w700,
         letterSpacing: -0.5,
@@ -64,43 +75,44 @@ class AppTypography {
         color: color,
       );
 
-  static TextStyle headline({required Color color}) => GoogleFonts.outfit(
-        fontSize: 24,
+  static TextStyle headline({required Color color}) =>
+      GoogleFonts.playfairDisplay(
+        fontSize: 27,
         fontWeight: FontWeight.w700,
         letterSpacing: -0.3,
         height: 1.25,
         color: color,
       );
 
-  static TextStyle title({required Color color}) => GoogleFonts.outfit(
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        letterSpacing: -0.2,
-        height: 1.3,
-        color: color,
-      );
+  static TextStyle title({required Color color}) => GoogleFonts.inter(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    letterSpacing: -0.2,
+    height: 1.3,
+    color: color,
+  );
 
   static TextStyle body({required Color color}) => GoogleFonts.inter(
-        fontSize: 15,
-        fontWeight: FontWeight.w400,
-        height: 1.4,
-        color: color,
-      );
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+    height: 1.4,
+    color: color,
+  );
 
-  static TextStyle label({required Color color}) => GoogleFonts.outfit(
-        fontSize: 13.5,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0.2,
-        height: 1.3,
-        color: color,
-      );
+  static TextStyle label({required Color color}) => GoogleFonts.inter(
+    fontSize: 13.5,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.2,
+    height: 1.3,
+    color: color,
+  );
 
   static TextStyle caption({required Color color}) => GoogleFonts.inter(
-        fontSize: 12,
-        fontWeight: FontWeight.w400,
-        height: 1.3,
-        color: color,
-      );
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    height: 1.3,
+    color: color,
+  );
 }
 
 /// Centralized Icon Sizing Scale for AstroSaathi (Single Source of Truth)
@@ -114,9 +126,15 @@ class AppIconSize {
 
 /// Centralized Control Height Standards for AstroSaathi (Single Source of Truth)
 class AppControlHeight {
-  static const double button = 48.0;
+  static const double button = 54.0;
   static const double compactButton = 36.0;
-  static const double input = 48.0;
+  static const double input = 56.0;
   static const double searchBar = 44.0;
-  static const double bottomNav = 64.0;
+  static const double bottomNav = 72.0;
+}
+
+class AppMotion {
+  static const Duration fast = Duration(milliseconds: 150);
+  static const Duration standard = Duration(milliseconds: 220);
+  static const Duration slow = Duration(milliseconds: 300);
 }
